@@ -135,10 +135,10 @@ public:
 	 */
 	int loadChunk(const ChunkPos& pos, BlockStateRegistry& block_registry, Chunk& chunk);
 
-private:
-	std::string filename;
+    std::string filename;
+    RegionPos regionpos, regionpos_original;
 	RegionPos regionpos, regionpos_original;
-
+    // rotation of the region file
 	// rotation of the region file
 	int rotation;
 	// and possible boundaries of the world
@@ -146,7 +146,7 @@ private:
 
 	// a set with all available chunks
 	ChunkMap containing_chunks;
-
+    // indexes of the following arrays are chunk coordinates: z*32 + x
 	// indexes of the following arrays are chunk coordinates: z*32 + x
 	// where x and z are the original local chunk coordinates -- not the rotated ones
 
@@ -159,7 +159,7 @@ private:
 	// actual chunk data with compression type
 	uint8_t chunk_data_compression[1024];
 	std::vector<uint8_t> chunk_data[1024];
-
+    /**
 	/**
 	 * Reads the headers of a region file.
 	 */
@@ -172,7 +172,7 @@ private:
 	size_t getChunkIndex(const mc::ChunkPos& chunkpos) const;
 };
 
-}
-}
+} // namespace mc
+} // namespace mapcrafter
 
 #endif /* REGION_H_ */

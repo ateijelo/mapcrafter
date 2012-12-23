@@ -36,7 +36,7 @@ namespace fs = boost::filesystem;
 // evil, I know
 using namespace mapcrafter;
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
 
 	try {
 		std::string locale = std::locale("").name();
@@ -81,19 +81,19 @@ int main(int argc, char** argv) {
 
 	po::options_description all("Allowed options");
 	all.add(general).add(logging).add(renderer);
-
-	po::variables_map vm;
-	try {
-		po::store(po::parse_command_line(argc, argv, all), vm);
+    try {
+        po::store(po::parse_command_line(argc, argv, all), vm);
+    } catch (po::error &ex) {
+        std::cerr << "There is a problem parsing the command line arguments: " << ex.what()
 	} catch (po::error& ex) {
 		std::cerr << "There is a problem parsing the command line arguments: "
 				<< ex.what() << std::endl;
 		std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
-		return 1;
-	}
 
-	po::notify(vm);
+    po::notify(vm);
 
+    if (arg_color == "true")
+        util::setcolor::setEnabled(util::TerminalColorStates::ENABLED);
 	if (arg_color == "true")
 		util::setcolor::setEnabled(util::TerminalColorStates::ENABLED);
 	else if (arg_color == "false")
@@ -107,12 +107,12 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	if (vm.count("help")) {
+        std::cout << "Mapcrafter online documentation: <http://docs.mapcrafter.org>" << std::endl;
 		std::cout << all << std::endl;
 		std::cout << "Mapcrafter online documentation: <http://docs.mapcrafter.org>" << std::endl;
 		return 0;
-	}
-
+    if (vm.count("version")) {
+        std::cout << "Mapcrafter version: " << MAPCRAFTER_VERSION;
         if (strlen(MAPCRAFTER_GITVERSION))
 		std::cout << "Mapcrafter version: " << MAPCRAFTER_VERSION;
 		if (strlen(MAPCRAFTER_GITVERSION))
@@ -164,9 +164,9 @@ int main(int argc, char** argv) {
 	if (!vm.count("config")) {
 		std::cerr << "You have to specify a configuration file!" << std::endl;
 		std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
-		return 1;
-	}
-
+        std::cerr << "You have to specify a configuration file!" << std::endl;
+        std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
+        return 1;
 	opts.config = arg_config;
 	opts.skip_all = vm.count("render-reset");
 	opts.force_all = vm.count("render-force-all");
@@ -197,7 +197,7 @@ int main(int argc, char** argv) {
 		LOG(WARNING) << "Please have a look at the documentation.";
 	}
 	if (validation.isCritical())
-		return 1;
+    }
 
 	// parse global logging configuration file and configure logging
 	config::LoggingConfig::configureLogging(opts.logging_config);
@@ -209,5 +209,7 @@ int main(int argc, char** argv) {
 	manager.setRenderBehaviors(renderer::RenderBehaviors::fromRenderOpts(config, opts));
 	if (!manager.run(opts.jobs, opts.batch))
 		return 1;
-	return 0;
+    if (!manager.run(opts.jobs, opts.batch))
+        return 1;
+    return 0;
 }

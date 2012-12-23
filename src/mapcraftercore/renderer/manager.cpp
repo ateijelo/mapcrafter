@@ -652,5 +652,5 @@ void RenderManager::increaseMaxZoom(const fs::path& dir,
 		base.writeJPEG((dir / "base.jpg").string(), jpeg_quality);
 }
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter

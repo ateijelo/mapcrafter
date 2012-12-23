@@ -147,7 +147,7 @@ public:
 	void blendPixel(RGBAPixel color, int x, int y);
 
 	void fill(RGBAPixel color, int x1, int y1, int w, int h);
-	void clear();
+    void clear();
 
 	RGBAImage clip(int x, int y, int width, int height) const;
 	RGBAImage colorize(double r, double g, double b, double a = 1) const;
@@ -184,8 +184,8 @@ public:
 	 */
 	void blur(RGBAImage& dest, int radius) const;
 
-	bool readPNG(const std::string& filename);
-	bool writePNG(const std::string& filename) const;
+    bool readPNG(const std::string &filename);
+    bool writePNG(const std::string &filename) const;
 	bool writeIndexedPNG(const std::string& filename, int palette_bits = 8, bool dithered = true) const;
 
 	bool readJPEG(const std::string& filename);
@@ -244,7 +244,7 @@ void Image<Pixel>::setSize(int width, int height) {
 	data.resize(width * height);
 }
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* IMAGE_H_ */

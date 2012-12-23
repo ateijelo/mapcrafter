@@ -20,6 +20,7 @@
 #ifndef BLOCKIMAGES_H_
 #define BLOCKIMAGES_H_
 
+#include "../mc/pos.h"
 #include "blocktextures.h"
 #include "image.h"
 #include "../mc/pos.h"
@@ -188,7 +189,7 @@ private:
 	std::unordered_set<uint16_t> unknown_block_ids;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* BLOCKIMAGES_H_ */

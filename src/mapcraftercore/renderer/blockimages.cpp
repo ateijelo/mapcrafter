@@ -891,5 +891,5 @@ void RenderedBlockImages::runBenchmark() {
 	exit(0);
 }
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter

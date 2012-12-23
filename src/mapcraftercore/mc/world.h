@@ -25,6 +25,7 @@
 #include "region.h"
 #include "worldcrop.h"
 
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -55,9 +56,9 @@ std::ostream& operator<<(std::ostream& out, Dimension dimension);
  */
 // TODO maybe a better, not so trivial hash function?
 struct hash_function {
-	long operator()(const RegionPos& region) const {
-		return (region.x+4096) * 2048 + region.z + 4096;
-	}
+    long operator()(const RegionPos &region) const {
+        return (region.x + 4096) * 2048 + region.z + 4096;
+    }
 };
 
 /**
@@ -67,7 +68,7 @@ struct hash_function {
  * files possible. If you want full reading access to the world, use the WorldCache class.
  */
 class World {
-public:
+  public:
 	typedef std::unordered_set<RegionPos, hash_function> RegionSet;
 	typedef std::unordered_map<RegionPos, std::string, hash_function> RegionMap;
 
@@ -77,7 +78,7 @@ public:
 	 * try to find the right region directory.
 	 */
 	World(std::string world_dir = "", Dimension dimension = Dimension::OVERWORLD);
-	~World();
+    ~World();
 
 	/**
 	 * Returns the directory of the world.
@@ -126,7 +127,7 @@ public:
 	/**
 	 * Returns whether a specific region exists.
 	 */
-	bool hasRegion(const RegionPos& pos) const;
+    bool hasRegion(const RegionPos &pos) const;
 
 	/**
 	 * Returns the path of a region file. Returns an empty path if the region does
@@ -138,7 +139,7 @@ public:
 	 * Creates the Region-object for a specific region and assigns the supplied reference
 	 * 'region' to it. Returns false if the region does not exist.
 	 */
-	bool getRegion(const RegionPos& pos, RegionFile& region) const;
+    bool getRegion(const RegionPos &pos, RegionFile &region) const;
 
 	/**
 	 * Returns the Minecraft version ID the world is running with. Returns -1 if no
@@ -178,7 +179,7 @@ private:
 	bool readRegions(const fs::path& region_dir);
 };
 
-}
-}
+} // namespace mc
+} // namespace mapcrafter
 
 #endif /* WORLD_H_ */

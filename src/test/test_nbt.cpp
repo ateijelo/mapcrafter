@@ -19,10 +19,10 @@
 
 #include "../mapcraftercore/mc/nbt.h"
 
-#include <vector>
+#include <boost/test/unit_test.hpp>
 #include <map>
 #include <sstream>
-#include <boost/test/unit_test.hpp>
+#include <vector>
 
 namespace nbt = mapcrafter::mc::nbt;
 

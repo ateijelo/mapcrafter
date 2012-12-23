@@ -59,35 +59,35 @@ World::World(std::string world_dir, Dimension dimension)
 	}
 }
 
-World::~World() {
-}
+World::~World() {}
 
+bool World::readRegions(const fs::path &region_dir) {
 bool World::readRegions(const fs::path& region_dir) {
-	if(!fs::exists(region_dir))
-		return false;
-	std::string ending = ".mca";
+        return false;
+    std::string ending = ".mca";
+    for (fs::directory_iterator it(region_dir); it != fs::directory_iterator(); ++it) {
 	for(fs::directory_iterator it(region_dir); it != fs::directory_iterator(); ++it) {
-		std::string region_file = (*it).path().string();
+        std::string filename = BOOST_FS_FILENAME((*it).path());
 		std::string filename = BOOST_FS_FILENAME((*it).path());
 
-		if(!std::equal(ending.rbegin(), ending.rend(), filename.rbegin()))
-			continue;
-		int x = 0;
-		int z = 0;
-		if(sscanf(filename.c_str(), "r.%d.%d.mca", &x, &z) != 2)
-			continue;
-		RegionPos pos(x, z);
+            continue;
+        int x = 0;
+        int z = 0;
+        if (sscanf(filename.c_str(), "r.%d.%d.mca", &x, &z) != 2)
+            continue;
+        RegionPos pos(x, z);
+        // check if we should not crop this region
 		// check if we should not crop this region
             continue;
 			continue;
 		if (rotation)
 			pos.rotate(rotation);
-		available_regions.insert(pos);
-		region_files[pos] = it->path().string();
-	}
-	return true;
+        region_files[pos] = it->path().string();
+    }
+    return true;
 }
 
+fs::path World::getWorldDir() const { return world_dir; }
 fs::path World::getWorldDir() const {
 	return world_dir;
 }
@@ -149,7 +149,7 @@ fs::path World::getRegionPath(const RegionPos& pos) const {
 	return fs::path(region_files.at(pos));
 }
 
-bool World::getRegion(const RegionPos& pos, RegionFile& region) const {
+    region.setWorldCrop(world_crop);
 	RegionMap::const_iterator it = region_files.find(pos);
 	if (it == region_files.end())
 		return false;
@@ -182,5 +182,6 @@ int World::getMinecraftVersion() const {
 	}
 }
 
-}
-}
+
+} // namespace mc
+} // namespace mapcrafter

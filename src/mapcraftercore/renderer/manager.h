@@ -27,11 +27,11 @@
 #include "../mc/world.h"
 #include "../mc/worldcache.h"
 
+#include <boost/filesystem.hpp>
 #include <ctime>
 #include <map>
 #include <set>
 #include <vector>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -53,7 +53,7 @@ struct RenderOpts {
 	fs::path config;
 	std::vector<std::string> render_skip, render_auto, render_force;
 	bool skip_all, force_all;
-	int jobs;
+    int jobs;
 };
 
 /**
@@ -166,7 +166,7 @@ private:
 	 * Copies a file from the template directory to the output directory and replaces the
 	 * variables from the map (every "{key}" in the file becomes "value").
 	 */
-	bool copyTemplateFile(const std::string& filename,
+    bool copyTemplateFile(const std::string &filename,
 			const std::map<std::string, std::string>& vars) const;
 
 	/**
@@ -218,7 +218,7 @@ private:
 	std::vector<std::pair<std::string, std::set<int> > > required_maps;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* MANAGER_H_ */

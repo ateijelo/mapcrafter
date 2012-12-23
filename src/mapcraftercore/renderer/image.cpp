@@ -23,6 +23,7 @@
 
 #include "image.h"
 
+#include "../util.h"
 #include "image/dithering.h"
 #include "image/quantization.h"
 #include "image/scaling.h"
@@ -30,8 +31,9 @@
 
 #include <jpeglib.h>
 #include <algorithm>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <jpeglib.h>
 
 namespace mapcrafter {
 namespace renderer {
@@ -62,7 +64,7 @@ RGBAPixel rgba_multiply(RGBAPixel value, double r, double g, double b, double a)
 	uint8_t green = rgba_green(value);
 	uint8_t blue = rgba_blue(value);
 	uint8_t alpha = rgba_alpha(value);
-	return rgba(red * r, green * g, blue * b, alpha * a);
+    return rgba(red * r, green * g, blue * b, alpha * a);
 }
 
 int rgba_distance2(RGBAPixel value1, RGBAPixel value2) {
@@ -87,74 +89,77 @@ int rgba_distance2(RGBAPixel value1, RGBAPixel value2) {
  * https://github.com/equalpants/pigmap (rgba.cpp)
  */
 void blend(RGBAPixel& dest, const RGBAPixel& source) {
-	// if source is transparent, there's nothing to do
-	if (source <= 0xffffff)
-		return;
-	// if source is opaque, or if destination is transparent, just copy it over
-	else if (source >= 0xff000000 || dest <= 0xffffff)
-		dest = source;
-	// if source is translucent and dest is opaque, the color channels need to be blended,
-	//  but the new pixel will be opaque
-	else if (dest >= 0xff000000) {
-		// get sa and sainv in the range 1-256; this way, the possible results of blending 8-bit color channels sc and dc
-		//  (using sc*sa + dc*sainv) span the range 0x0000-0xffff, so we can just truncate and shift
+    // if source is transparent, there's nothing to do
+    if (source <= 0xffffff)
+        return;
+    // if source is opaque, or if destination is transparent, just copy it over
+    else if (source >= 0xff000000 || dest <= 0xffffff)
+        dest = source;
+    // if source is translucent and dest is opaque, the color channels need to be blended,
+    //  but the new pixel will be opaque
+    else if (dest >= 0xff000000) {
+        // get sa and sainv in the range 1-256; this way, the possible results of blending 8-bit
+        // color channels sc and dc
 		int64_t sa = rgba_alpha(source) + 1;
-		int64_t sainv = 257 - sa;
-		// compute the new RGB channels
-		int64_t d = dest, s = source;
-		d = ((d << 16) & UINT64_C(0xff00000000)) | ((d << 8) & 0xff0000) | (d & 0xff);
-		s = ((s << 16) & UINT64_C(0xff00000000)) | ((s << 8) & 0xff0000) | (s & 0xff);
-		int64_t newrgb = s * sa + d * sainv;
-		// destination alpha remains 100%; combine everything and write it out
-		dest = 0xff000000 | ((newrgb >> 24) & 0xff0000) | ((newrgb >> 16) & 0xff00)
-		        | ((newrgb >> 8) & 0xff);
+        int64_t sa = rgba_alpha(source) + 1;
+        int64_t sainv = 257 - sa;
+        // compute the new RGB channels
+        int64_t d = dest, s = source;
+        d = ((d << 16) & UINT64_C(0xff00000000)) | ((d << 8) & 0xff0000) | (d & 0xff);
+        s = ((s << 16) & UINT64_C(0xff00000000)) | ((s << 8) & 0xff0000) | (s & 0xff);
+        int64_t newrgb = s * sa + d * sainv;
+        // destination alpha remains 100%; combine everything and write it out
+        dest = 0xff000000 | ((newrgb >> 24) & 0xff0000) | ((newrgb >> 16) & 0xff00) |
+               ((newrgb >> 8) & 0xff);
 
-		// both source and dest are translucent; we need the whole deal
-	} else {
-		// get sa and sainv in the range 1-256; this way, the possible results of blending 8-bit color channels sc and dc
-		//  (using sc*sa + dc*sainv) span the range 0x0000-0xffff, so we can just truncate and shift
+        // both source and dest are translucent; we need the whole deal
+    } else {
+        // get sa and sainv in the range 1-256; this way, the possible results of blending 8-bit
 		int64_t sa = rgba_alpha(source) + 1;
-		int64_t sainv = 257 - sa;
-		// compute the new RGB channels
-		int64_t d = dest, s = source;
-		d = ((d << 16) & UINT64_C(0xff00000000)) | ((d << 8) & 0xff0000) | (d & 0xff);
-		s = ((s << 16) & UINT64_C(0xff00000000)) | ((s << 8) & 0xff0000) | (s & 0xff);
-		int64_t newrgb = s * sa + d * sainv;
-		// compute the new alpha channel
+        //  (using sc*sa + dc*sainv) span the range 0x0000-0xffff, so we can just truncate and shift
+        int64_t sa = rgba_alpha(source) + 1;
+        int64_t sainv = 257 - sa;
+        // compute the new RGB channels
+        int64_t d = dest, s = source;
+        d = ((d << 16) & UINT64_C(0xff00000000)) | ((d << 8) & 0xff0000) | (d & 0xff);
+        s = ((s << 16) & UINT64_C(0xff00000000)) | ((s << 8) & 0xff0000) | (s & 0xff);
 		int64_t dainv = 256 - rgba_alpha(dest);
-		int64_t newa = sainv * dainv; // result is from 1-0x10000
-		newa = (newa - 1) >> 8; // result is from 0-0xff
-		newa = 255 - newa; // final result; if either input was 255, so is this, so opacity is preserved
-		// combine everything and write it out
-		dest = (newa << 24) | ((newrgb >> 24) & 0xff0000) | ((newrgb >> 16) & 0xff00)
-		        | ((newrgb >> 8) & 0xff);
-	}
+        // compute the new alpha channel
+        int64_t dainv = 256 - rgba_alpha(dest);
+        int64_t newa = sainv * dainv; // result is from 1-0x10000
+        newa = (newa - 1) >> 8;       // result is from 0-0xff
+        newa = 255 -
+               newa; // final result; if either input was 255, so is this, so opacity is preserved
+        // combine everything and write it out
+        dest = (newa << 24) | ((newrgb >> 24) & 0xff0000) | ((newrgb >> 16) & 0xff00) |
+               ((newrgb >> 8) & 0xff);
+    }
 }
 
 /**
  * http://www.piko3d.com/tutorials/libpng-tutorial-loading-png-files-from-streams
  */
 void pngReadData(png_structp pngPtr, png_bytep data, png_size_t length) {
-	//Here we get our IO pointer back from the read struct.
-	//This is the parameter we passed to the png_set_read_fn() function.
-	//Our std::istream pointer.
-	png_voidp a = png_get_io_ptr(pngPtr);
-	//Cast the pointer to std::istream* and read 'length' bytes into 'data'
-	((std::istream*) a)->read((char*) data, length);
+    // Here we get our IO pointer back from the read struct.
+    // This is the parameter we passed to the png_set_read_fn() function.
+    // Our std::istream pointer.
+    png_voidp a = png_get_io_ptr(pngPtr);
+    // Cast the pointer to std::istream* and read 'length' bytes into 'data'
+    ((std::istream *)a)->read((char *)data, length);
 }
 
 void pngWriteData(png_structp pngPtr, png_bytep data, png_size_t length) {
-	png_voidp a = png_get_io_ptr(pngPtr);
-	((std::ostream*) a)->write((char*) data, length);
+    png_voidp a = png_get_io_ptr(pngPtr);
+    ((std::ostream *)a)->write((char *)data, length);
 }
 
 RGBAImage::RGBAImage(int width, int height)
 	: Image<RGBAPixel>(width, height) {
-}
+RGBAImage::~RGBAImage() {}
 
 RGBAImage::~RGBAImage() {
-}
-
+    if (x >= width || y >= height)
+        return;
 void RGBAImage::simpleBlit(const RGBAImage& image, int x, int y) {
 	if (x >= width || y >= height)
 		return;
@@ -170,23 +175,23 @@ void RGBAImage::simpleBlit(const RGBAImage& image, int x, int y) {
 }
 
 void RGBAImage::simpleAlphaBlit(const RGBAImage& image, int x, int y) {
-	if (x >= width || y >= height)
-		return;
-
+    /*
+    int dx = MAX(x, 0);
+    int sx = MAX(0, -x);
 	/*
-	int dx = MAX(x, 0);
-	int sx = MAX(0, -x);
-	for (; sx < image.width && dx < width; sx++, dx++) {
-		int dy = MAX(y, 0);
-		int sy = MAX(0, -y);
-		for (; sy < image.height && dy < height; sy++, dy++) {
-			//blend(data[dy*width+dx], image.data[sy*image.width+sx]);
+            int dy = MAX(y, 0);
+            int sy = MAX(0, -y);
+            for (; sy < image.height && dy < height; sy++, dy++) {
+                    //blend(data[dy*width+dx], image.data[sy*image.width+sx]);
 
-			if (ALPHA(image.data[sy*image.width+sx]) != 0) {
-				data[dy * width + dx] = image.data[sy * image.width + sx];
-			}
-		}
-	}
+                    if (ALPHA(image.data[sy*image.width+sx]) != 0) {
+                            data[dy * width + dx] = image.data[sy * image.width + sx];
+                    }
+            }
+    }
+    */
+
+    int sx = std::max(0, -x);
 	*/
 
 	int sx = std::max(0, -x);
@@ -199,22 +204,22 @@ void RGBAImage::simpleAlphaBlit(const RGBAImage& image, int x, int y) {
 			}
 		}
 	}
-}
-
+    if (x >= width || y >= height)
+        return;
 void RGBAImage::alphaBlit(const RGBAImage& image, int x, int y) {
-	if (x >= width || y >= height)
-		return;
-
+    /*
+    int dx = MAX(x, 0);
+    int sx = MAX(0, -x);
 	/*
-	int dx = MAX(x, 0);
-	int sx = MAX(0, -x);
-	for (; sx < image.width && dx < width; sx++, dx++) {
-		int dy = MAX(y, 0);
-		int sy = MAX(0, -y);
-		for (; sy < image.height && dy < height; sy++, dy++) {
-			blend(data[dy * width + dx], image.data[sy * image.width + sx]);
-		}
-	}
+            int dy = MAX(y, 0);
+            int sy = MAX(0, -y);
+            for (; sy < image.height && dy < height; sy++, dy++) {
+                    blend(data[dy * width + dx], image.data[sy * image.width + sx]);
+            }
+    }
+    */
+
+    int sx = std::max(0, -x);
 	*/
 
 	int sx = std::max(0, -x);
@@ -228,23 +233,23 @@ void RGBAImage::alphaBlit(const RGBAImage& image, int x, int y) {
 }
 
 void RGBAImage::blendPixel(RGBAPixel color, int x, int y) {
-	if (x >= 0 && y >= 0 && x < width && y < height)
-		blend(data[y * width + x], color);
+    if (x >= 0 && y >= 0 && x < width && y < height)
+        blend(data[y * width + x], color);
 }
 
 void RGBAImage::fill(RGBAPixel color, int x, int y, int w, int h) {
-	if (x >= width || y >= height)
-		return;
+    if (x >= width || y >= height)
+        return;
 
 	int dx = std::max(x, 0);
 	int sx = std::max(0, -x);
-	for (; sx < w && dx < width; sx++, dx++) {
+    for (; sx < w && dx < width; sx++, dx++) {
 		int dy = std::max(y, 0);
 		int sy = std::max(0, -y);
-		for (; sy < h && dy < height; sy++, dy++) {
-			data[dy * width + dx] = color;
-		}
-	}
+        for (; sy < h && dy < height; sy++, dy++) {
+            data[dy * width + dx] = color;
+        }
+    }
 }
 
 void RGBAImage::clear() {
@@ -255,20 +260,20 @@ RGBAImage RGBAImage::clip(int x, int y, int width, int height) const {
 	RGBAImage image(width, height);
 	for (int xx = 0; xx < width && xx + x < this->width; xx++) {
 		for (int yy = 0; yy < height && yy + y < this->height; yy++) {
-			image.setPixel(xx, yy, getPixel(x + xx, y + yy));
-		}
-	}
-	return image;
+            image.setPixel(xx, yy, getPixel(x + xx, y + yy));
+        }
+    }
+    return image;
 }
 
 RGBAImage RGBAImage::colorize(double r, double g, double b, double a) const {
 	RGBAImage img(width, height);
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
-			img.setPixel(x, y, rgba_multiply(getPixel(x, y), r, g, b, a));
-		}
-	}
-	return img;
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            img.setPixel(x, y, rgba_multiply(getPixel(x, y), r, g, b, a));
+        }
+    }
+    return img;
 }
 
 RGBAImage RGBAImage::colorize(uint8_t r, uint8_t g, uint8_t b, uint8_t a) const {
@@ -285,59 +290,59 @@ RGBAImage RGBAImage::rotate(int rotation) const {
 	// TODO rotate by rotation % 4?
 	if (rotation == 0)
 		return *this;
-	int newWidth = rotation == ROTATE_90 || rotation == ROTATE_270 ? height : width;
-	int newHeight = rotation == ROTATE_90 || rotation == ROTATE_270 ? width : height;
+    int newWidth = rotation == ROTATE_90 || rotation == ROTATE_270 ? height : width;
+    int newHeight = rotation == ROTATE_90 || rotation == ROTATE_270 ? width : height;
 	RGBAImage copy(newWidth, newHeight);
-	for (int x = 0; x < width; x++) {
-		for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
 			RGBAPixel pixel = 0;
-			if (rotation == ROTATE_90)
-				pixel = getPixel(y, width - x - 1);
-			else if (rotation == ROTATE_180)
-				pixel = getPixel(width - x - 1, height - y - 1);
-			else if (rotation == ROTATE_270)
-				pixel = getPixel(height - y - 1, x);
-			copy.setPixel(x, y, pixel);
-		}
-	}
-	return copy;
+            if (rotation == ROTATE_90)
+                pixel = getPixel(y, width - x - 1);
+            else if (rotation == ROTATE_180)
+                pixel = getPixel(width - x - 1, height - y - 1);
+            else if (rotation == ROTATE_270)
+                pixel = getPixel(height - y - 1, x);
+            copy.setPixel(x, y, pixel);
+        }
+    }
+    return copy;
 }
 
 RGBAImage RGBAImage::flip(bool flipX, bool flipY) const {
 	RGBAImage copy(width, height);
-	for (int x = 0; x < width; x++) {
-		for (int y = 0; y < height; y++) {
-			int xx = flipX ? width - x - 1 : x;
-			int yy = flipY ? height - y - 1 : y;
-			copy.setPixel(x, y, getPixel(xx, yy));
-		}
-	}
-	return copy;
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            int xx = flipX ? width - x - 1 : x;
+            int yy = flipY ? height - y - 1 : y;
+            copy.setPixel(x, y, getPixel(xx, yy));
+        }
+    }
+    return copy;
 }
 
 RGBAImage RGBAImage::move(int xOffset, int yOffset) const {
 	RGBAImage img(width, height);
-	for (int y = 0; y < height && y + yOffset < height; y++) {
-		for (int x = 0; x < width && x + xOffset < width; x++) {
-			img.setPixel(x + xOffset, y + yOffset, getPixel(x, y));
-		}
-	}
-	return img;
+    for (int y = 0; y < height && y + yOffset < height; y++) {
+        for (int x = 0; x < width && x + xOffset < width; x++) {
+            img.setPixel(x + xOffset, y + yOffset, getPixel(x, y));
+        }
+    }
+    return img;
 }
 
 void RGBAImage::resize(RGBAImage& dest, int width, int height, InterpolationType interpolation) const {
 	if (width == getWidth() && height == getHeight()) {
-		dest = *this;
-		return;
-	}
+    if (width == getWidth() && height == getHeight()) {
+        dest = *this;
+        return;
 	if (interpolation == InterpolationType::AUTO) {
 		interpolation = InterpolationType::BILINEAR;
 		if (width > getWidth() || height > getWidth())
 			interpolation = InterpolationType::NEAREST;
 		if (width == getWidth() / 2 && height == getHeight() / 2)
 			interpolation = InterpolationType::HALF;
-	}
-
+            interpolation = InterpolationType::HALF;
+    }
 	if (interpolation == InterpolationType::NEAREST) {
 		imageResizeSimple(*this, dest, width, height);
 	} else if (interpolation == InterpolationType::BILINEAR) {
@@ -347,7 +352,8 @@ void RGBAImage::resize(RGBAImage& dest, int width, int height, InterpolationType
 	} else {
 		// should not happen
 		assert(false);
-	}
+        assert(false);
+    }
 }
 
 RGBAImage RGBAImage::resize(int width, int height, InterpolationType interpolation) const {
@@ -429,37 +435,37 @@ void RGBAImage::blur(RGBAImage& dest, int radius) const {
 }
 
 bool RGBAImage::readPNG(const std::string& filename) {
-	std::ifstream file(filename.c_str(), std::ios::binary);
-	if (!file) {
-		return false;
-	}
+    if (!file) {
+        return false;
+    }
 
-	uint8_t png_signature[8];
-	file.read((char*) &png_signature, 8);
-	if (png_sig_cmp(png_signature, 0, 8) != 0)
-		return false;
+    uint8_t png_signature[8];
+    file.read((char *)&png_signature, 8);
+    if (png_sig_cmp(png_signature, 0, 8) != 0)
+        return false;
 
-	png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if (!png) {
-		return false;
-	}
+    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png) {
+        return false;
+    }
 
-	png_infop info = png_create_info_struct(png);
-	if (!info) {
-		png_destroy_read_struct(&png, NULL, NULL);
-		return false;
-	}
+    png_infop info = png_create_info_struct(png);
+    if (!info) {
+        png_destroy_read_struct(&png, NULL, NULL);
+        return false;
+    }
 
-	if (setjmp(png_jmpbuf(png))) {
-		png_destroy_read_struct(&png, &info, NULL);
-		return false;
-	}
+    if (setjmp(png_jmpbuf(png))) {
+        png_destroy_read_struct(&png, &info, NULL);
+        return false;
+    }
 
-	png_set_read_fn(png, (png_voidp) &file, pngReadData);
-	png_set_sig_bytes(png, 8);
+    png_set_read_fn(png, (png_voidp)&file, pngReadData);
+    png_set_sig_bytes(png, 8);
 
-	png_read_info(png, info);
-	int color = png_get_color_type(png, info);
+    png_read_info(png, info);
+    int color = png_get_color_type(png, info);
+    int bit_depth = png_get_bit_depth(png, info);
 	int bit_depth = png_get_bit_depth(png, info);
 
 	// strip down images of 16 bits per channel to 8 bits per channel
@@ -481,70 +487,69 @@ bool RGBAImage::readPNG(const std::string& filename) {
 	if ((color & PNG_COLOR_MASK_ALPHA) == 0)
 		png_set_add_alpha(png, 0xff, PNG_FILLER_AFTER);
 
-	setSize(png_get_image_width(png, info), png_get_image_height(png, info));
 
-	png_set_interlace_handling(png);
-	png_read_update_info(png, info);
+    png_set_interlace_handling(png);
+    png_read_update_info(png, info);
 
+    png_bytep *rows = (png_bytep *)png_malloc(png, height * sizeof(png_bytep));
 	png_bytep* rows = (png_bytep*) png_malloc(png, height * sizeof(png_bytep));
-	uint32_t* p = &data[0];
-	for (int32_t i = 0; i < height; i++, p += width)
-		rows[i] = (png_bytep) p;
+    for (int32_t i = 0; i < height; i++, p += width)
+        rows[i] = (png_bytep)p;
 
+    if (mapcrafter::util::isBigEndian()) {
 	if (mapcrafter::util::isBigEndian()) {
-		png_set_bgr(png);
-		png_set_swap_alpha(png);
-	}
-	png_read_image(png, rows);
-	png_read_end(png, NULL);
+        png_set_swap_alpha(png);
+    }
+    png_read_image(png, rows);
+    png_read_end(png, NULL);
+
 	
 	png_free(png, rows);
-	png_destroy_read_struct(&png, &info, NULL);
 
-	return true;
+
 }
 
+bool RGBAImage::writePNG(const std::string &filename) const {
 bool RGBAImage::writePNG(const std::string& filename) const {
-	std::ofstream file(filename.c_str(), std::ios::binary);
-	if (!file) {
-		return false;
-	}
+    if (!file) {
+        return false;
+    }
 
-	png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if (png == NULL)
-		return false;
+    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (png == NULL)
+        return false;
 
-	png_infop info = png_create_info_struct(png);
-	if (info == NULL) {
-		png_destroy_write_struct(&png, NULL);
-		return false;
-	}
+    png_infop info = png_create_info_struct(png);
+    if (info == NULL) {
+        png_destroy_write_struct(&png, NULL);
+        return false;
+    }
 
-	if (setjmp(png_jmpbuf(png))) {
-		png_destroy_write_struct(&png, &info);
-		return false;
-	}
+    if (setjmp(png_jmpbuf(png))) {
+        png_destroy_write_struct(&png, &info);
+        return false;
+    }
 
-	png_set_write_fn(png, (png_voidp) &file, pngWriteData, NULL);
-	png_set_IHDR(png, info, width, height, 8, PNG_COLOR_TYPE_RGB_ALPHA,
-	        PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_set_write_fn(png, (png_voidp)&file, pngWriteData, NULL);
+    png_set_IHDR(png, info, width, height, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
+    png_bytep *rows = (png_bytep *)png_malloc(png, height * sizeof(png_bytep));
 	png_bytep* rows = (png_bytep*) png_malloc(png, height * sizeof(png_bytep));
-	const uint32_t* p = &data[0];
-	for (int32_t i = 0; i < height; i++, p += width)
-		rows[i] = (png_bytep) p;
+    for (int32_t i = 0; i < height; i++, p += width)
+        rows[i] = (png_bytep)p;
 
-	png_set_rows(png, info, rows);
+    png_set_rows(png, info, rows);
 
+    if (mapcrafter::util::isBigEndian())
 	if (mapcrafter::util::isBigEndian())
-		png_write_png(png, info, PNG_TRANSFORM_BGR | PNG_TRANSFORM_SWAP_ALPHA, NULL);
-	else
-		png_write_png(png, info, PNG_TRANSFORM_IDENTITY, NULL);
+    else
+        png_write_png(png, info, PNG_TRANSFORM_IDENTITY, NULL);
 
-	file.close();
+    file.close();
+    png_free(png, rows);
 	png_free(png, rows);
-	png_destroy_write_struct(&png, &info);
-	return true;
+    return true;
 }
 
 namespace {
@@ -665,8 +670,9 @@ bool RGBAImage::writeIndexedPNG(const std::string& filename, int palette_bits, b
 	png_free(png, palette);
 	png_free(png, palette_alpha);
 	delete octree;
-	png_destroy_write_struct(&png, &info);
-	return true;
+    delete octree;
+    png_destroy_write_struct(&png, &info);
+    return true;
 }
 
 /*

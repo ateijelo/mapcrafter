@@ -58,18 +58,18 @@ int WorldCache::getRegionCacheIndex(const RegionPos& pos) const {
  * Calculates the position of a chunk position in the cache.
  */
 int WorldCache::getChunkCacheIndex(const ChunkPos& pos) const {
-	//                4096*32
+    //                4096*32
 	return (((pos.x + 131072) & CMASK) * CWIDTH + (pos.z + 131072)) & CMASK;
 }
 
-RegionFile* WorldCache::getRegion(const RegionPos& pos) {
-	CacheEntry<RegionPos, RegionFile>& entry = regioncache[getRegionCacheIndex(pos)];
+RegionFile *WorldCache::getRegion(const RegionPos &pos) {
+    CacheEntry<RegionPos, RegionFile> &entry = regioncache[getRegionCacheIndex(pos)];
 
 	// check if region is already in cache
-	if (entry.used && entry.key == pos) {
-		//regionstats.hits++;
-		return &entry.value;
-	}
+    if (entry.used && entry.key == pos) {
+        // regionstats.hits++;
+        return &entry.value;
+    }
 
 	// if not try to load the region
 	// but make sure we did not already try to load the region file and it was broken
@@ -82,32 +82,32 @@ RegionFile* WorldCache::getRegion(const RegionPos& pos) {
 
 	if (!entry.value.read()) {
 		// the region is not valid, region in cache was probably modified
-		entry.used = false;
+        entry.used = false;
 		// remember this region as broken and do not try to load it again
 		regions_broken.insert(pos);
 		return nullptr;
-	}
+    }
 
-	entry.used = true;
-	entry.key = pos;
-	//regionstats.misses++;
-	return &entry.value;
+    entry.used = true;
+    entry.key = pos;
+    // regionstats.misses++;
+    return &entry.value;
 }
 
-Chunk* WorldCache::getChunk(const ChunkPos& pos) {
-	CacheEntry<ChunkPos, Chunk>& entry = chunkcache[getChunkCacheIndex(pos)];
+Chunk *WorldCache::getChunk(const ChunkPos &pos) {
+    CacheEntry<ChunkPos, Chunk> &entry = chunkcache[getChunkCacheIndex(pos)];
 	// check if chunk is already in cache
-	if (entry.used && entry.key == pos) {
-		//chunkstats.hits++;
-		return &entry.value;
-	}
+    if (entry.used && entry.key == pos) {
+        // chunkstats.hits++;
+        return &entry.value;
+    }
 
 	// if not try to get the region of the chunk from the cache
-	RegionFile* region = getRegion(pos.getRegion());
+    RegionFile *region = getRegion(pos.getRegion());
 	if (region == nullptr) {
-		//chunkstats.unavailable++;
+        // chunkstats.unavailable++;
 		return nullptr;
-	}
+    }
 
 	// then try to load the chunk
 	// but make sure we did not already try to load the chunk and it was broken
@@ -120,18 +120,18 @@ Chunk* WorldCache::getChunk(const ChunkPos& pos) {
 		return nullptr;
 
 	if (status != RegionFile::CHUNK_OK) {
-		//chunkstats.unavailable++;
+        // chunkstats.unavailable++;
 		// the chunk is not valid, chunk in cache was probably modified
-		entry.used = false;
+        entry.used = false;
 		// remember this chunk as broken and do not try to load it again
 		chunks_broken.insert(pos);
 		return nullptr;
-	}
+    }
 
-	entry.used = true;
-	entry.key = pos;
-	//chunkstats.misses++;
-	return &entry.value;
+    entry.used = true;
+    entry.key = pos;
+    // chunkstats.misses++;
+    return &entry.value;
 }
 
 Block WorldCache::getBlock(const mc::BlockPos& pos, const mc::Chunk* chunk, int get) {
@@ -171,13 +171,9 @@ Block WorldCache::getBlock(const mc::BlockPos& pos, const mc::Chunk* chunk, int 
 	}
 }
 
-const CacheStats& WorldCache::getRegionCacheStats() const {
-	return regionstats;
-}
+const CacheStats &WorldCache::getRegionCacheStats() const { return regionstats; }
 
-const CacheStats& WorldCache::getChunkCacheStats() const {
-	return chunkstats;
-}
+const CacheStats &WorldCache::getChunkCacheStats() const { return chunkstats; }
 
-}
-}
+} // namespace mc
+} // namespace mapcrafter

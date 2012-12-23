@@ -20,6 +20,7 @@
 #ifndef TILE_H_
 #define TILE_H_
 
+#include <boost/filesystem.hpp>
 #include <map>
 #include <set>
 #include <vector>
@@ -71,28 +72,28 @@ namespace renderer {
  * This class represents the position of a tile in the quadtree.
  */
 class TilePos {
-public:
+  public:
 	TilePos(int x = 0, int y = 0);
 
 	/**
 	 * Returns x tile coordinate.
 	 */
-	int getX() const;
+    int getX() const;
 
 	/**
 	 * Returns the y tile coordinate.
 	 */
-	int getY() const;
+    int getY() const;
 
 	// some operations with tile positions
-	TilePos& operator+=(const TilePos& p);
-	TilePos& operator-=(const TilePos& p);
-	TilePos operator+(const TilePos& p2) const;
-	TilePos operator-(const TilePos& p2) const;
+    TilePos &operator+=(const TilePos &p);
+    TilePos &operator-=(const TilePos &p);
+    TilePos operator+(const TilePos &p2) const;
+    TilePos operator-(const TilePos &p2) const;
 
-	bool operator==(const TilePos& other) const;
+    bool operator==(const TilePos &other) const;
 	bool operator!=(const TilePos& other) const;
-	bool operator<(const TilePos& other) const;
+    bool operator<(const TilePos &other) const;
 
 private:
 	// actual coordinates
@@ -107,14 +108,14 @@ std::ostream& operator<<(std::ostream& stream, const TilePos& tile);
  * The length of the path is the zoom level of the tile.
  */
 class TilePath {
-public:
+  public:
 	TilePath();
 	~TilePath();
 
 	/**
 	 * Returns the zoom level of the path.
 	 */
-	int getDepth() const;
+    int getDepth() const;
 
 	/**
 	 * Returns the path.
@@ -130,7 +131,7 @@ public:
 	/**
 	 * Calculates the tile position of the path.
 	 */
-	TilePos getTilePos() const;
+    TilePos getTilePos() const;
 
 	/**
 	 * Adds a node to the path.
@@ -145,7 +146,7 @@ public:
 	/**
 	 * Returns the string representation of the path, for example "1/2/3/4".
 	 */
-	std::string toString() const;
+    std::string toString() const;
 
 	/**
 	 * Constructs a path (with a specified zoom level) to a tile position.
@@ -315,7 +316,7 @@ private:
 	void updateContainingRenderTiles();
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* TILE_H_ */

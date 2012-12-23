@@ -37,21 +37,23 @@ RegionFile::RegionFile(const std::string& filename)
 	regionpos = regionpos_original;
 }
 
-RegionFile::~RegionFile() {
+RegionFile::RegionFile(const std::string &filename) : filename(filename), rotation(0) {
+    regionpos_original = RegionPos::byFilename(filename);
+    regionpos = regionpos_original;
 }
 
 bool RegionFile::readHeaders(std::ifstream& file, uint32_t chunk_offsets[1024]) {
-	if (!file)
-		return false;
 
+bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) {
+    if (!file)
 	containing_chunks.clear();
-	for (int i = 0; i < 1024; i++) {
-		chunk_offsets[i] = 0;
-		chunk_exists[i] = false;
-		chunk_timestamps[i] = 0;
-		chunk_data_compression[i] = 0;
-	}
 
+    containing_chunks.clear();
+		chunk_exists[i] = false;
+        chunk_offsets[i] = 0;
+		chunk_data_compression[i] = 0;
+        chunk_timestamps[i] = 0;
+        chunk_data_compression[i] = 0;
 	file.seekg(0, std::ios::end);
 	size_t filesize = file.tellg();
 	file.seekg(0, std::ios::beg);
@@ -61,13 +63,13 @@ bool RegionFile::readHeaders(std::ifstream& file, uint32_t chunk_offsets[1024]) 
 		return false;
 	}
 
-	for (int x = 0; x < 32; x++) {
-		for (int z = 0; z < 32; z++) {
-			file.seekg(4 * (x + z * 32), std::ios::beg);
-			int tmp;
+    }
+
+    for (int x = 0; x < 32; x++) {
+        for (int z = 0; z < 32; z++) {
 			file.read(reinterpret_cast<char*>(&tmp), 4);
-			if (tmp == 0)
-				continue;
+            int tmp;
+            file.read(reinterpret_cast<char *>(&tmp), 4);
 			uint32_t offset = util::bigEndian32(tmp << 8) * 4096;
 			if (filesize < offset + 5) {
 				LOG(ERROR) << "Corrupt region '" << filename << "': Invalid offset of chunk "
@@ -75,12 +77,12 @@ bool RegionFile::readHeaders(std::ifstream& file, uint32_t chunk_offsets[1024]) 
 				return false;
 			}
 			//uint8_t sectors = ((uint8_t*) &tmp)[3];
-
-			file.seekg(4096, std::ios::cur);
+            }
+            // uint8_t sectors = ((uint8_t*) &tmp)[3];
 			uint32_t timestamp;
 			file.read(reinterpret_cast<char*>(&timestamp), 4);
 			timestamp = util::bigEndian32(timestamp);
-
+            file.read(reinterpret_cast<char *>(&timestamp), 4);
 			// get the original (not rotated) position of the chunk
 			ChunkPos chunkpos(x + regionpos_original.x * 32, z + regionpos_original.z * 32);
 			// check if this chunk is not cropped
@@ -93,14 +95,16 @@ bool RegionFile::readHeaders(std::ifstream& file, uint32_t chunk_offsets[1024]) 
 			
 			chunk_exists[z * 32 + x] = true;
 			containing_chunks.insert(chunkpos);
-
+            chunk_exists[z * 32 + x] = true;
 			// set offset and timestamp of this chunk
 			// now with the original coordinates again
-			chunk_offsets[z * 32 + x] = offset;
-			chunk_timestamps[z * 32 + x] = timestamp;
-		}
-	}
-	return true;
+            // set offset and timestamp of this chunk
+            // now with the original coordinates again
+            chunk_offsets[z * 32 + x] = offset;
+            chunk_timestamps[z * 32 + x] = timestamp;
+        }
+    }
+    return true;
 }
 
 size_t RegionFile::getChunkIndex(const mc::ChunkPos& chunkpos) const {
@@ -125,13 +129,13 @@ void RegionFile::setWorldCrop(const WorldCrop& world_crop) {
 }
 
 bool RegionFile::read() {
-	std::ifstream file(filename.c_str(), std::ios_base::binary);
+    std::ifstream file(filename.c_str(), std::ios_base::binary);
 	uint32_t chunk_offsets[1024];
 	if (!readHeaders(file, chunk_offsets))
-		return false;
-	file.seekg(0, std::ios::end);
+        return false;
+    file.seekg(0, std::ios::end);
 	size_t filesize = file.tellg();
-	file.seekg(0, std::ios::beg);
+    file.seekg(0, std::ios::beg);
 
 	std::vector<uint8_t> regiondata(filesize);
 	file.read(reinterpret_cast<char*>(&regiondata[0]), filesize);
@@ -166,11 +170,11 @@ bool RegionFile::read() {
 		std::copy(&regiondata[offset+5], &regiondata[offset+5+size], chunk_data[i].begin());
 	}
 
-	return true;
+    return true;
 }
 
 bool RegionFile::readOnlyHeaders() {
-	std::ifstream file(filename.c_str(), std::ios_base::binary);
+    std::ifstream file(filename.c_str(), std::ios_base::binary);
 	uint32_t chunk_offsets[1024];
 	return readHeaders(file, chunk_offsets);
 }
@@ -236,13 +240,9 @@ bool RegionFile::write(std::string filename) const {
 	return !out.fail();
 }
 
-const std::string& RegionFile::getFilename() const {
-	return filename;
-}
+const std::string &RegionFile::getFilename() const { return filename; }
 
-const RegionPos& RegionFile::getPos() const {
-	return regionpos;
-}
+const RegionPos &RegionFile::getPos() const { return regionpos; }
 
 int RegionFile::getContainingChunksCount() const {
 	return containing_chunks.size();
@@ -252,7 +252,7 @@ const RegionFile::ChunkMap& RegionFile::getContainingChunks() const {
 	return containing_chunks;
 }
 
-bool RegionFile::hasChunk(const ChunkPos& chunk) const {
+bool RegionFile::hasChunk(const ChunkPos &chunk) const {
 	return chunk_exists[getChunkIndex(chunk)];
 }
 
@@ -310,15 +310,16 @@ int RegionFile::loadChunk(const ChunkPos& pos, BlockStateRegistry& block_registr
 	chunk.setRotation(rotation);
     chunk.setWorldCrop(world_crop);
 	// try to load the chunk
-	try {
+    try {
 		if (!chunk.readNBT(block_registry, reinterpret_cast<char*>(&chunk_data[index][0]), size, comp))
 			return CHUNK_DATA_INVALID;
-	} catch (const nbt::NBTError& err) {
+            return CHUNK_DATA_INVALID;
 		LOG(ERROR) << "Unable to read chunk at " << pos << ": " << err.what();
-		return CHUNK_NBT_ERROR;
-	}
-	return CHUNK_OK;
+        LOG(ERROR) << "Unable to read chunk at " << pos << ": " << err.what();
+        return CHUNK_NBT_ERROR;
+    }
+    return CHUNK_OK;
 }
 
-}
-}
+} // namespace mc
+} // namespace mapcrafter

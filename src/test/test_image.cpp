@@ -19,8 +19,8 @@
 
 #include "../mapcraftercore/renderer/image.h"
 
-#include <cstdlib>
 #include <boost/test/unit_test.hpp>
+#include <cstdlib>
 
 namespace renderer = mapcrafter::renderer;
 
@@ -28,25 +28,25 @@ BOOST_AUTO_TEST_CASE(image_testIO) {
 	renderer::RGBAImage src(400, 200);
 	renderer::RGBAImage dest;
 
-	for(int x = 0; x < src.getWidth(); x++) {
-		for(int y = 0; y < src.getHeight(); y++) {
+    for (int x = 0; x < src.getWidth(); x++) {
+        for (int y = 0; y < src.getHeight(); y++) {
 			src.setPixel(x, y, renderer::rgba(rand() % 256, rand() % 256,
 					rand() % 256, rand() % 256));
-		}
-	}
+        }
+    }
 
-	if(!src.writePNG("test.png"))
-		BOOST_ERROR("Unable to write image!");
-	if(!dest.readPNG("test.png"))
-		BOOST_ERROR("Unable to read image!");
+    if (!src.writePNG("test.png"))
+        BOOST_ERROR("Unable to write image!");
+    if (!dest.readPNG("test.png"))
+        BOOST_ERROR("Unable to read image!");
 
-	BOOST_CHECK_EQUAL(dest.getWidth(), src.getWidth());
-	BOOST_CHECK_EQUAL(dest.getHeight(), src.getHeight());
+    BOOST_CHECK_EQUAL(dest.getWidth(), src.getWidth());
+    BOOST_CHECK_EQUAL(dest.getHeight(), src.getHeight());
 
-	for(int x = 0; x < dest.getWidth(); x++) {
-		for(int y = 0; y < dest.getHeight(); y++) {
-			if(src.getPixel(x, y) != dest.getPixel(x, y))
+    for (int x = 0; x < dest.getWidth(); x++) {
+        for (int y = 0; y < dest.getHeight(); y++) {
+            if (src.getPixel(x, y) != dest.getPixel(x, y))
 				BOOST_ERROR("Images aren't equal!");
-		}
-	}
+        }
+    }
 }
