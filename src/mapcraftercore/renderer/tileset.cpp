@@ -93,23 +93,23 @@ TilePath TilePath::parent() const {
 }
 
 TilePos TilePath::getTilePos() const {
-	// calculate the radius of all tiles on the top zoom level (2^zoomlevel / 2)
-	int radius = pow(2, path.size()) / 2;
-	// the startpoint is top left
-	int x = -radius;
-	int y = -radius;
+    // calculate the radius of all tiles on the top zoom level (2^zoomlevel / 2)
+    int radius = pow(2, path.size()) / 2;
+    // the startpoint is top left
+    int x = -radius;
+    int y = -radius;
     for (size_t i = 0; i < path.size(); i++) {
-		// now for every zoom level:
-		// get the current tile
+        // now for every zoom level:
+        // get the current tile
         int tile = path[i];
-		// increase x by the radius if this tile is on the right side (2 or 4)
+        // increase x by the radius if this tile is on the right side (2 or 4)
         if (tile == 2 || tile == 4)
-			x += radius;
+            x += radius;
         // increase y by the radius if this tile is on the bottom side (3 or 4)
         if (tile == 3 || tile == 4)
-			y += radius;
-		// divide size by two, because the next zoom level has only the half radius
-		radius /= 2;
+            y += radius;
+        // divide size by two, because the next zoom level has only the half radius
+        radius /= 2;
     }
     return TilePos(x, y);
 }
@@ -143,34 +143,34 @@ std::string TilePath::toString() const {
 TilePath TilePath::byTilePos(const TilePos &tile, int depth) {
     TilePath path;
 
-	// at first calculate the radius in tiles of this zoom level
+    // at first calculate the radius in tiles of this zoom level
     int radius = pow(2, depth) / 2;
-	// check if the tile is in this bounds
+    // check if the tile is in this bounds
     if (tile.getX() > radius || tile.getY() > radius || tile.getX() < -radius ||
         tile.getY() < -radius)
         throw std::runtime_error("Invalid tile position " + util::str(tile.getX()) + ":" +
                                  util::str(tile.getY()) + " on depth " + util::str(depth));
-	// the tactic is here to calculate the bounds where the tile is inside
+    // the tactic is here to calculate the bounds where the tile is inside
     int bounds_left = -radius;
     int bounds_right = radius;
     int bounds_top = radius;
     int bounds_bottom = -radius;
 
     for (int level = 1; level <= depth; level++) {
-		// for each zoom level (but we already have the 1st zoom level):
-		// calculate the midpoint in the bounds
+        // for each zoom level (but we already have the 1st zoom level):
+        // calculate the midpoint in the bounds
         int middle_x = (bounds_right + bounds_left) / 2;
         int middle_y = (bounds_top + bounds_bottom) / 2;
-		// with this midpoint we can decide what the next part in the path is
-		// when tile x < midpoint x:
-		//   and tile y < midpoint y -> top left tile
-		//   and tile y >= midpoint y -> bottom left tile
-		// when tile y >= midpoint y:
-		//   and tile y < midpoint y -> top right tile
-		//   and tile y >= midpoint y -> bottom right tile
+        // with this midpoint we can decide what the next part in the path is
+        // when tile x < midpoint x:
+        //   and tile y < midpoint y -> top left tile
+        //   and tile y >= midpoint y -> bottom left tile
+        // when tile y >= midpoint y:
+        //   and tile y < midpoint y -> top right tile
+        //   and tile y >= midpoint y -> bottom right tile
 
-		// if we have a midpoint, we update the bounds with the midpoint
-		// the (smaller) bounds are now the part of the path, we found out
+        // if we have a midpoint, we update the bounds with the midpoint
+        // the (smaller) bounds are now the part of the path, we found out
         if (tile.getX() < middle_x) {
             if (tile.getY() < middle_y) {
                 path += 1;
