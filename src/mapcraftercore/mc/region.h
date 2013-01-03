@@ -144,7 +144,7 @@ class RegionFile {
     WorldCrop world_crop;
 
     // a set with all available chunks
-	// a set with all available chunks
+    ChunkMap containing_chunks;
 
     // indexes of the following arrays are chunk coordinates: z*32 + x
     // where x and z are the original local chunk coordinates -- not the rotated ones
@@ -153,7 +153,7 @@ class RegionFile {
     bool chunk_exists[1024];
 
     // timestamps of the chunks
-	// timestamps of the chunks
+    uint32_t chunk_timestamps[1024];
 
     // actual chunk data with compression type
     uint8_t chunk_data_compression[1024];

@@ -65,13 +65,13 @@ int WorldCache::getChunkCacheIndex(const ChunkPos& pos) const {
 RegionFile *WorldCache::getRegion(const RegionPos &pos) {
     CacheEntry<RegionPos, RegionFile> &entry = regioncache[getRegionCacheIndex(pos)];
 
-	// check if region is already in cache
+    // check if region is already in cache
     if (entry.used && entry.key == pos) {
         // regionstats.hits++;
         return &entry.value;
     }
 
-	// if not try to load the region
+    // if not try to load the region
     // but make sure we did not already try to load the region file and it was broken
     if (regions_broken.count(pos))
         return nullptr;
@@ -96,20 +96,20 @@ RegionFile *WorldCache::getRegion(const RegionPos &pos) {
 
 Chunk *WorldCache::getChunk(const ChunkPos &pos) {
     CacheEntry<ChunkPos, Chunk> &entry = chunkcache[getChunkCacheIndex(pos)];
-	// check if chunk is already in cache
+    // check if chunk is already in cache
     if (entry.used && entry.key == pos) {
         // chunkstats.hits++;
         return &entry.value;
     }
 
-	// if not try to get the region of the chunk from the cache
+    // if not try to get the region of the chunk from the cache
     RegionFile *region = getRegion(pos.getRegion());
 	if (region == nullptr) {
         // chunkstats.unavailable++;
 		return nullptr;
     }
 
-	// then try to load the chunk
+    // then try to load the chunk
 	// but make sure we did not already try to load the chunk and it was broken
 	if (chunks_broken.count(pos))
 		return nullptr;

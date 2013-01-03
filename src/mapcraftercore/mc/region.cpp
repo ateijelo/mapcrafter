@@ -295,7 +295,7 @@ int RegionFile::loadChunk(const ChunkPos &pos, BlockStateRegistry &block_registr
     // set the chunk rotation
     chunk.setRotation(rotation);
     chunk.setWorldCrop(world_crop);
-	// try to load the chunk
+    // try to load the chunk
     try {
         if (!chunk.readNBT(block_registry, reinterpret_cast<char *>(&chunk_data[index][0]), size,
 			return CHUNK_DATA_INVALID;
