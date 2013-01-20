@@ -140,10 +140,10 @@ public:
 	RegionPos regionpos, regionpos_original;
     // rotation of the region file
 	// rotation of the region file
-	int rotation;
+    // and possible boundaries of the world
 	// and possible boundaries of the world
 
-
+    // a set with all available chunks
 	// a set with all available chunks
 	ChunkMap containing_chunks;
     // indexes of the following arrays are chunk coordinates: z*32 + x

@@ -49,7 +49,7 @@ class RegionPos {
 
     static RegionPos byFilename(const std::string &filename);
 
-	void rotate(int count);
+    void rotate(int count);
 };
 
 class BlockPos;
@@ -75,7 +75,7 @@ class ChunkPos {
     int getCol() const;
     static ChunkPos byRowCol(int row, int col);
 
-	void rotate(int count);
+    void rotate(int count);
 };
 
 class LocalBlockPos;

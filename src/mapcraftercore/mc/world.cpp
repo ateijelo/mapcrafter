@@ -80,8 +80,8 @@ bool World::readRegions(const fs::path& region_dir) {
 		// check if we should not crop this region
             continue;
 			continue;
-		if (rotation)
-			pos.rotate(rotation);
+            pos.rotate(rotation);
+        available_regions.insert(pos);
         region_files[pos] = it->path().string();
     }
     return true;

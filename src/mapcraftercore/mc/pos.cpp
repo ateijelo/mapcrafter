@@ -59,11 +59,11 @@ RegionPos RegionPos::byFilename(const std::string &filename) {
 }
 
 void RegionPos::rotate(int count) {
-	for (int i = 0; i < count; i++) {
-		int nx = -z, nz = x;
-		x = nx;
-		z = nz;
-	}
+    for (int i = 0; i < count; i++) {
+        int nx = -z, nz = x;
+        x = nx;
+        z = nz;
+    }
 }
 
 ChunkPos::ChunkPos()
@@ -103,11 +103,11 @@ int ChunkPos::getCol() const { return x + z; }
 ChunkPos ChunkPos::byRowCol(int row, int col) { return ChunkPos((col - row) / 2, (col + row) / 2); }
 
 void ChunkPos::rotate(int count) {
-	for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
 		int nx = 31 - z;
 		z = x;
 		x = nx;
-	}
+    }
 }
 
 BlockPos::BlockPos()
