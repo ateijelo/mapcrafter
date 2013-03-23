@@ -68,7 +68,7 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
             if (filesize < offset + 5) {
                 LOG(ERROR) << "Corrupt region '" << filename << "': Invalid offset of chunk " << x
                            << ":" << z << ".";
-			//uint8_t sectors = ((uint8_t*) &tmp)[3];
+                return false;
             }
             // uint8_t sectors = ((uint8_t*) &tmp)[3];
 
@@ -292,9 +292,9 @@ int RegionFile::loadChunk(const ChunkPos &pos, BlockStateRegistry &block_registr
 	// get compression type and size of the data
 	uint8_t compression = chunk_data_compression[index];
     nbt::Compression comp = nbt::Compression::NO_COMPRESSION;
-	if (compression == 1)
+    if (compression == 1)
         comp = nbt::Compression::GZIP;
-	else if (compression == 2)
+    else if (compression == 2)
         comp = nbt::Compression::ZLIB;
     size_t size = chunk_data[index].size();
 

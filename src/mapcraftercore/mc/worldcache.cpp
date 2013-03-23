@@ -51,7 +51,7 @@ const World& WorldCache::getWorld() const {
  * Calculates the position of a region position in the cache.
  */
 int WorldCache::getRegionCacheIndex(const RegionPos& pos) const {
-	return (((pos.x + 4096) & RMASK) * RWIDTH + (pos.z + 4096)) & RMASK;
+    return (((pos.x + 4096) & RMASK) * RWIDTH + (pos.z + 4096)) & RMASK;
 }
 
 /**
@@ -59,7 +59,7 @@ int WorldCache::getRegionCacheIndex(const RegionPos& pos) const {
  */
 int WorldCache::getChunkCacheIndex(const ChunkPos& pos) const {
     //                4096*32
-	return (((pos.x + 131072) & CMASK) * CWIDTH + (pos.z + 131072)) & CMASK;
+    return (((pos.x + 131072) & CMASK) * CWIDTH + (pos.z + 131072)) & CMASK;
 }
 
 RegionFile *WorldCache::getRegion(const RegionPos &pos) {
