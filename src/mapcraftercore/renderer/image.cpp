@@ -247,8 +247,8 @@ void RGBAImage::clear() { std::fill(data.begin(), data.end(), 0); }
 
 RGBAImage RGBAImage::clip(int x, int y, int width, int height) const {
     RGBAImage image(width, height);
-	for (int xx = 0; xx < width && xx + x < this->width; xx++) {
-		for (int yy = 0; yy < height && yy + y < this->height; yy++) {
+    for (int xx = 0; xx < width && xx + x < this->width; xx++) {
+        for (int yy = 0; yy < height && yy + y < this->height; yy++) {
             image.setPixel(xx, yy, getPixel(x + xx, y + yy));
         }
     }
@@ -475,7 +475,7 @@ bool RGBAImage::readPNG(const std::string &filename) {
 	// add alpha channel if not existing
 	if ((color & PNG_COLOR_MASK_ALPHA) == 0)
 		png_set_add_alpha(png, 0xff, PNG_FILLER_AFTER);
-
+    setSize(png_get_image_width(png, info), png_get_image_height(png, info));
 
     png_set_interlace_handling(png);
     png_read_update_info(png, info);
@@ -495,7 +495,7 @@ bool RGBAImage::readPNG(const std::string &filename) {
 	
 	png_free(png, rows);
 
-
+    return true;
 }
 
 bool RGBAImage::writePNG(const std::string &filename) const {
