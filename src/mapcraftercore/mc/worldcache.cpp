@@ -76,12 +76,12 @@ RegionFile *WorldCache::getRegion(const RegionPos &pos) {
     if (regions_broken.count(pos))
         return nullptr;
 
-	// region does not exist, region in cache was not modified
-	if (!world.getRegion(pos, entry.value))
+    // region does not exist, region in cache was not modified
+    if (!world.getRegion(pos, entry.value))
 		return nullptr;
 
     if (!entry.value.read()) {
-		// the region is not valid, region in cache was probably modified
+        // the region is not valid, region in cache was probably modified
         entry.used = false;
         // remember this region as broken and do not try to load it again
         regions_broken.insert(pos);
@@ -115,13 +115,13 @@ Chunk *WorldCache::getChunk(const ChunkPos &pos) {
 		return nullptr;
 
     int status = region->loadChunk(pos, block_registry, entry.value);
-	// the chunk does not exist, chunk in cache was not modified
+    // the chunk does not exist, chunk in cache was not modified
 	if (status == RegionFile::CHUNK_DOES_NOT_EXIST)
 		return nullptr;
 
-	if (status != RegionFile::CHUNK_OK) {
+    if (status != RegionFile::CHUNK_OK) {
         // chunkstats.unavailable++;
-		// the chunk is not valid, chunk in cache was probably modified
+        //  the chunk is not valid, chunk in cache was probably modified
         entry.used = false;
 		// remember this chunk as broken and do not try to load it again
 		chunks_broken.insert(pos);
