@@ -110,7 +110,7 @@ Chunk *WorldCache::getChunk(const ChunkPos &pos) {
 
     int status = region->loadChunk(pos, block_registry, entry.value);
     // the chunk does not exist, chunk in cache was not modified
-	if (status == RegionFile::CHUNK_DOES_NOT_EXIST)
+    if (status == RegionFile::CHUNK_DOES_NOT_EXIST)
         return nullptr;
 
     if (status != RegionFile::CHUNK_OK) {
