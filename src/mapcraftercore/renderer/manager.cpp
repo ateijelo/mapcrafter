@@ -425,9 +425,9 @@ bool RenderManager::run(int threads, bool batch) {
 				<< progress_maps << "." << progress_rotations_all << "] "
 				<< "Rendering rotation " << config::ROTATION_NAMES[*rotation_it]
 				<< " took " << took << " seconds.";
-		}
-	}
-
+                      << took << " seconds.";
+        }
+    }
 	std::time_t took_all = std::time(nullptr) - time_start_all;
 	LOG(INFO) << "Rendering all worlds took " << took_all << " seconds.";
 	LOG(INFO) << "Finished.....aaand it's gone!";
@@ -456,7 +456,7 @@ bool RenderManager::copyTemplateFile(const std::string &filename,
         return false;
     out << data;
     out.close();
-	return true;
+    return true;
 }
 
 bool RenderManager::copyTemplateFile(const std::string &filename) const {

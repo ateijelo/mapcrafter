@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
         if (configs.size() == 0)
             std::cout << "  Nothing found." << std::endl;
         return 0;
-	if (!vm.count("config")) {
+    }
 
     if (!vm.count("config")) {
         std::cerr << "You have to specify a configuration file!" << std::endl;
@@ -170,7 +170,7 @@ int main(int argc, char **argv) {
     }
 
     opts.config = arg_config;
-	opts.batch = vm.count("batch");
+    opts.skip_all = vm.count("render-reset");
     opts.force_all = vm.count("render-force-all");
     opts.batch = vm.count("batch");
     if (!vm.count("logging-config"))
