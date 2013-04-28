@@ -175,13 +175,13 @@ class RenderManager {
     /**
      * Writes the index.html template file (replaces some template special variables).
      */
-	bool writeTemplateIndexHtml() const;
+    bool writeTemplateIndexHtml() const;
 
     /**
      * Copies all template files to the output directory (including special handling for
      * index.html, markers-generated.js, etc.).
      */
-	void writeTemplates() const;
+    void writeTemplates() const;
 
     /**
      * Does some basic initialization work of a map (check if max zoom level of already
