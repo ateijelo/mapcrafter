@@ -152,8 +152,8 @@ bool RenderManager::initialize() {
     if (!fs::is_directory(config.getOutputDir()) &&
         !fs::create_directories(config.getOutputDir())) {
         LOG(FATAL) << "Error: Unable to create output directory!";
-	}
-
+        return false;
+    }
 
     // read parameters of already rendered maps
     return web_config.readConfigJS();
