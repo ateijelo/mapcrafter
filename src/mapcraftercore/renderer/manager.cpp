@@ -253,7 +253,7 @@ bool RenderManager::scanWorlds() {
 
 		// clean up render view
 		delete render_view;
-	}
+        delete render_view;
 
 	// set calculated max zoom of tile sets
 	for (auto tile_set_it = needed_tile_sets.begin();

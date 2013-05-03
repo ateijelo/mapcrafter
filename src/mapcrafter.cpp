@@ -69,16 +69,16 @@ int main(int argc, char **argv) {
         "config,c", po::value<std::string>(&arg_config),
         "the path to the configuration file to use (required)")(
         "render-skip,s", po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
-			"skips rendering the specified map(s)")
+        "skips rendering the specified map(s)")("render-reset,r", "skips rendering all maps")(
 		("render-reset,r", "skips rendering all maps")
         "renders the specified map(s)")(
-			"renders the specified map(s)")
+        "render-force,f", po::value<std::vector<std::string>>(&opts.render_force)->multitoken(),
         "renders the specified map(s) completely")("render-force-all,F", "force renders all maps")(
 			"renders the specified map(s) completely")
 		("render-force-all,F", "force renders all maps")
 
     po::options_description all("Allowed options");
-
+    all.add(general).add(logging).add(renderer);
 
     po::variables_map vm;
     try {
