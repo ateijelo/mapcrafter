@@ -70,11 +70,11 @@ int main(int argc, char **argv) {
         "the path to the configuration file to use (required)")(
         "render-skip,s", po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
         "skips rendering the specified map(s)")("render-reset,r", "skips rendering all maps")(
-		("render-reset,r", "skips rendering all maps")
+        "render-auto,a", po::value<std::vector<std::string>>(&opts.render_auto)->multitoken(),
         "renders the specified map(s)")(
         "render-force,f", po::value<std::vector<std::string>>(&opts.render_force)->multitoken(),
         "renders the specified map(s) completely")("render-force-all,F", "force renders all maps")(
-			"renders the specified map(s) completely")
+        "jobs,j", po::value<int>(&opts.jobs)->default_value(1),
 		("render-force-all,F", "force renders all maps")
 
     po::options_description all("Allowed options");
@@ -168,7 +168,7 @@ int main(int argc, char **argv) {
         std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
         return 1;
     }
-	opts.skip_all = vm.count("render-reset");
+
 	opts.force_all = vm.count("render-force-all");
 	opts.batch = vm.count("batch");
     opts.force_all = vm.count("render-force-all");
