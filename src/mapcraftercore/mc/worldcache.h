@@ -42,8 +42,8 @@ struct Block {
 	// which block does this data belong to (set by getBlock-method)
 	mc::BlockPos pos;
     uint16_t id;
-	uint8_t biome;
-	uint8_t block_light, sky_light;
+    uint8_t biome;
+    uint8_t block_light, sky_light;
 	// which of the fields above are set? (set by getBlock-method)
 	int fields_set;
 };
@@ -139,8 +139,8 @@ class WorldCache {
     CacheStats regionstats;
     CacheStats chunkstats;
 
-	int getRegionCacheIndex(const RegionPos& pos) const;
-	int getChunkCacheIndex(const ChunkPos& pos) const;
+    int getRegionCacheIndex(const RegionPos &pos) const;
+    int getChunkCacheIndex(const ChunkPos &pos) const;
 
   public:
     WorldCache(mc::BlockStateRegistry &block_registry, const World &world);

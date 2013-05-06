@@ -44,14 +44,14 @@ const World &WorldCache::getWorld() const { return world; }
 /**
  * Calculates the position of a region position in the cache.
  */
-int WorldCache::getRegionCacheIndex(const RegionPos& pos) const {
+int WorldCache::getRegionCacheIndex(const RegionPos &pos) const {
     return (((pos.x + 4096) & RMASK) * RWIDTH + (pos.z + 4096)) & RMASK;
 }
 
 /**
  * Calculates the position of a chunk position in the cache.
  */
-int WorldCache::getChunkCacheIndex(const ChunkPos& pos) const {
+int WorldCache::getChunkCacheIndex(const ChunkPos &pos) const {
     //                4096*32
     return (((pos.x + 131072) & CMASK) * CWIDTH + (pos.z + 131072)) & CMASK;
 }
@@ -128,41 +128,41 @@ Chunk *WorldCache::getChunk(const ChunkPos &pos) {
     return &entry.value;
 }
 
-Block WorldCache::getBlock(const mc::BlockPos& pos, const mc::Chunk* chunk, int get) {
-	// this can happen when we check for the bottom block shadow edges
+Block WorldCache::getBlock(const mc::BlockPos &pos, const mc::Chunk *chunk, int get) {
+    // this can happen when we check for the bottom block shadow edges
 	if (pos.y < CHUNK_LOW*16)
-		return Block();
+        return Block();
 
-	mc::ChunkPos chunk_pos(pos);
-	const mc::Chunk* mychunk = chunk;
+    mc::ChunkPos chunk_pos(pos);
+    const mc::Chunk *mychunk = chunk;
 	if (chunk == nullptr || chunk_pos != chunk->getPos())
-		mychunk = getChunk(chunk_pos);
+        mychunk = getChunk(chunk_pos);
 	// chunk may be nullptr
 	if (mychunk == nullptr) {
-		return Block();
-	// otherwise get all required block data
-	} else {
-		mc::LocalBlockPos local(pos);
-		Block block;
+        return Block();
+        // otherwise get all required block data
+    } else {
+        mc::LocalBlockPos local(pos);
+        Block block;
 		block.pos = pos;
 		if (get & GET_ID) {
-			block.id = mychunk->getBlockID(local);
+            block.id = mychunk->getBlockID(local);
 			block.fields_set |= GET_ID;
         }
         if (get & GET_BIOME) {
-			block.biome = mychunk->getBiomeAt(local);
+            block.biome = mychunk->getBiomeAt(local);
 			block.fields_set |= GET_BIOME;
         }
         if (get & GET_BLOCK_LIGHT) {
-			block.block_light = mychunk->getBlockLight(local);
+            block.block_light = mychunk->getBlockLight(local);
 			block.fields_set |= GET_BLOCK_LIGHT;
         }
         if (get & GET_SKY_LIGHT) {
-			block.sky_light = mychunk->getSkyLight(local);
+            block.sky_light = mychunk->getSkyLight(local);
 			block.fields_set |= GET_SKY_LIGHT;
 		}
-		return block;
-	}
+        return block;
+    }
 }
 
 const CacheStats &WorldCache::getRegionCacheStats() const { return regionstats; }

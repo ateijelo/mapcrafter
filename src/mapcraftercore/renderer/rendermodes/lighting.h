@@ -142,7 +142,7 @@ private:
 	 */
 	void doSmoothLight(RGBAImage& image, const BlockImage& block_image, const mc::BlockPos& pos,
 			uint16_t id, bool use_bottom_corners);
-
+                       uint16_t id, bool use_bottom_corners);
 	/**
 	 * Applies a simple lighting to a block by coloring the whole block with the lighting
 	 * color of the block.
@@ -150,7 +150,7 @@ private:
 	void doSimpleLight(RGBAImage& image, const BlockImage& block_image, const mc::BlockPos& pos, uint16_t id);
 };
 
-} /* namespace render */
+} // namespace renderer
 } /* namespace mapcrafter */
 
 #endif /* RENDERMODES_LIGHTING_H_ */

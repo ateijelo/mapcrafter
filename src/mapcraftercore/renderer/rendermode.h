@@ -54,7 +54,7 @@ class RGBAImage;
  * A simple interface to implement different render modes.
  */
 class RenderMode {
-public:
+  public:
 	virtual ~RenderMode() {}
 
 	/**
@@ -182,7 +182,7 @@ std::ostream &operator<<(std::ostream &out, OverlayType overlay);
 RenderMode *createRenderMode(const config::WorldSection &world_config,
 		const config::MapSection& map_config, int rotation);
 
-} /* namespace render */
+} // namespace renderer
 } /* namespace mapcrafter */
 
 #endif /* RENDERMODE_H_ */

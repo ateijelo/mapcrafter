@@ -193,5 +193,14 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
     } else if (overlay == OverlayType::SPAWNNIGHT) {
 }
 
-} /* namespace render */
+        // this shouldn't happen
+        delete render_mode;
+        assert(false);
+        return nullptr;
+    }
+
+    return render_mode;
+}
+
+} // namespace renderer
 } /* namespace mapcrafter */
