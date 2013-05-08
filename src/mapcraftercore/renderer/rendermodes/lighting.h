@@ -99,8 +99,8 @@ public:
 	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data);
     virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
                       uint16_t id);
-private:
-	bool day;
+
+  private:
     bool day;
 	bool simulate_sun_light;
     bool simulate_sun_light;

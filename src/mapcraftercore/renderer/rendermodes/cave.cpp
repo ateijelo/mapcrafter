@@ -19,6 +19,7 @@
 
 #include "cave.h"
 
+#include "../../mc/chunk.h"
 #include "../blockimages.h"
 #include "../image.h"
 #include "../../mc/chunk.h"
@@ -38,12 +39,12 @@ bool CaveRenderMode::isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t dat
 }
 
 bool CaveRenderMode::isHidden(const mc::BlockPos& pos, const BlockImage& block_image) {
-	mc::BlockPos directions[6] = {
+    mc::BlockPos directions[6] = {mc::DIR_NORTH, mc::DIR_SOUTH, mc::DIR_EAST,
 		mc::DIR_NORTH, mc::DIR_SOUTH, mc::DIR_EAST, mc::DIR_WEST,
 		mc::DIR_TOP, mc::DIR_BOTTOM
-	};
-	// check if this block touches sky light
-	for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++) {
+        if (getBlock(pos + directions[i], mc::GET_SKY_LIGHT).sky_light > 0) {
+            return true;
 		if (getBlock(pos + directions[i], mc::GET_SKY_LIGHT).sky_light > 0) {
 			return true;
 		}
@@ -51,10 +52,10 @@ bool CaveRenderMode::isHidden(const mc::BlockPos& pos, const BlockImage& block_i
 
 	// TODO some ice blocks are still rendered though
 	// water, ice and blocks under water are a special case
-	// because water is transparent, the renderer thinks this is a visible part of a cave
-	// we need to check if there is sunlight on the surface of the water
-	// if yes => no cave, hide block
-	// if no  => lake in a cave, show it
+    // because water is transparent, the renderer thinks this is a visible part of a cave
+    // we need to check if there is sunlight on the surface of the water
+    // if yes => no cave, hide block
+    // if no  => lake in a cave, show it
 	mc::Block top = getBlock(pos + mc::DIR_TOP,
     const BlockImage *top_image = &block_images->getBlockImage(top.id);
 	const BlockImage* top_image = &block_images->getBlockImage(top.id);
@@ -65,13 +66,13 @@ bool CaveRenderMode::isHidden(const mc::BlockPos& pos, const BlockImage& block_i
 		while (top_image->is_full_water || top_image->is_waterlogged || top_image->is_ice) {
             top = getBlock(p, mc::GET_ID | mc::GET_SKY_LIGHT);
 			top_image = &block_images->getBlockImage(top.id);
-			p.y++;
-		}
+            p.y++;
+        }
 
 		if (top.sky_light > 0) {
-			return true;
+            return true;
 		}
-	}
+    }
 
     // so we show all block which aren't touched by sunlight...
     // and also only the ones that have a transparent block (or air)
@@ -81,8 +82,8 @@ bool CaveRenderMode::isHidden(const mc::BlockPos& pos, const BlockImage& block_i
             return false;
 		}
 	}
-	return true;
+    return true;
 }
 
-} /* namespace render */
+} // namespace renderer
 } /* namespace mapcrafter */

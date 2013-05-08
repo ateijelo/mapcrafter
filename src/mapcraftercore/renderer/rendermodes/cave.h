@@ -30,7 +30,7 @@ namespace mapcrafter {
 namespace renderer {
 
 class CaveRenderMode : public BaseRenderMode {
-public:
+  public:
     CaveRenderMode(const std::vector<mc::BlockPos> &hidden_dirs);
 	virtual ~CaveRenderMode();
 
@@ -48,6 +48,6 @@ protected:
     std::vector<mc::BlockPos> hidden_dirs;
 };
 
-} /* namespace render */
+} // namespace renderer
 } /* namespace mapcrafter */
 #endif /* RENDERMODES_CAVE_H_ */

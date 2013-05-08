@@ -191,8 +191,8 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
     } else if (overlay == OverlayType::SPAWNDAY) {
         render_mode->addRenderMode(new SpawnOverlay(true));
     } else if (overlay == OverlayType::SPAWNNIGHT) {
-}
-
+        render_mode->addRenderMode(new SpawnOverlay(false));
+    } else {
         // this shouldn't happen
         delete render_mode;
         assert(false);
