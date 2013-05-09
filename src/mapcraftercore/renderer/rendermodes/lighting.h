@@ -103,7 +103,7 @@ private:
 	bool day;
     bool day;
 	bool simulate_sun_light;
-
+    bool simulate_sun_light;
 	/**
 	 * Calculates the color of the light of a block.
 	 *

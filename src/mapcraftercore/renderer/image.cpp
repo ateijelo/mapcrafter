@@ -178,7 +178,7 @@ void RGBAImage::simpleAlphaBlit(const RGBAImage &image, int x, int y) {
     /*
     int dx = MAX(x, 0);
     int sx = MAX(0, -x);
-	/*
+    for (; sx < image.width && dx < width; sx++, dx++) {
             int dy = MAX(y, 0);
             int sy = MAX(0, -y);
             for (; sy < image.height && dy < height; sy++, dy++) {
@@ -192,25 +192,25 @@ void RGBAImage::simpleAlphaBlit(const RGBAImage &image, int x, int y) {
     */
 
     int sx = std::max(0, -x);
-	*/
-
+    int sy;
+    for (; sx < image.width && sx + x < width; sx++) {
 	int sx = std::max(0, -x);
-	int sy;
-	for (; sx < image.width && sx+x < width; sx++) {
+        for (; sy < image.height && sy + y < height; sy++) {
+            if (rgba_alpha(image.data[sy * image.width + sx]) != 0) {
 		sy = std::max(0, -y);
-		for (; sy < image.height && sy+y < height; sy++) {
+            }
 			if (rgba_alpha(image.data[sy*image.width+sx]) != 0) {
-				data[(sy+y) * width + (sx+x)] = image.data[sy * image.width + sx];
-			}
-		}
-	}
+    }
+}
+
+void RGBAImage::alphaBlit(const RGBAImage &image, int x, int y) {
     if (x >= width || y >= height)
         return;
 
     /*
     int dx = MAX(x, 0);
     int sx = MAX(0, -x);
-	/*
+    for (; sx < image.width && dx < width; sx++, dx++) {
             int dy = MAX(y, 0);
             int sy = MAX(0, -y);
             for (; sy < image.height && dy < height; sy++, dy++) {
@@ -220,16 +220,13 @@ void RGBAImage::simpleAlphaBlit(const RGBAImage &image, int x, int y) {
     */
 
     int sx = std::max(0, -x);
-	*/
-
+    int sy;
+    for (; sx < image.width && sx + x < width; sx++) {
 	int sx = std::max(0, -x);
-	int sy;
-	for (; sx < image.width && sx+x < width; sx++) {
+        for (; sy < image.height && sy + y < height; sy++) {
+            blend(data[(sy + y) * width + (sx + x)], image.data[sy * image.width + sx]);
 		sy = std::max(0, -y);
-		for (; sy < image.height && sy+y < height; sy++) {
-			blend(data[(sy+y) * width + (sx+x)], image.data[sy * image.width + sx]);
-		}
-	}
+    }
 }
 
 void RGBAImage::blendPixel(RGBAPixel color, int x, int y) {

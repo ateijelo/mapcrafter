@@ -63,24 +63,22 @@ const int GET_LIGHT = GET_BLOCK_LIGHT | GET_SKY_LIGHT;
  */
 struct CacheStats {
     CacheStats() : hits(0), misses(0), region_not_found(0), not_found(0), invalid(0) {}
-			: hits(0), misses(0), region_not_found(0), not_found(0), invalid(0) {
+
     void print(const std::string &name) const {
         std::cout << name << ":" << std::endl;
         std::cout << "  hits: " << hits << std::endl
-		std::cout << name << ":" << std::endl;
-		std::cout << "  hits: " << hits << std::endl
-				  << "  misses: " << misses << std::endl
-				  << "  region_not_found: " << region_not_found << std::endl
-				  << "  not_found: " << not_found << std::endl
-				  << "  invalid: " << invalid << std::endl;
+                  << "  misses: " << misses << std::endl
+                  << "  region_not_found: " << region_not_found << std::endl
+                  << "  not_found: " << not_found << std::endl
+                  << "  invalid: " << invalid << std::endl;
+    }
+
     int hits;
     int misses;
 
     int region_not_found;
-
-	int region_not_found;
-	int not_found;
-	int invalid;
+    int not_found;
+    int invalid;
 };
 
 /**
