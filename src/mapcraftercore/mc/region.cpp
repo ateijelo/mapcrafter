@@ -59,7 +59,7 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
 
     for (int x = 0; x < 32; x++) {
         for (int z = 0; z < 32; z++) {
-			file.read(reinterpret_cast<char*>(&tmp), 4);
+            file.seekg(4 * (x + z * 32), std::ios::beg);
             int tmp;
             file.read(reinterpret_cast<char *>(&tmp), 4);
             if (tmp == 0)
@@ -72,7 +72,7 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
             }
             // uint8_t sectors = ((uint8_t*) &tmp)[3];
 
-			file.read(reinterpret_cast<char*>(&timestamp), 4);
+            file.seekg(4096, std::ios::cur);
             uint32_t timestamp;
             file.read(reinterpret_cast<char *>(&timestamp), 4);
             timestamp = util::bigEndian32(timestamp);
@@ -130,7 +130,7 @@ bool RegionFile::read() {
     file.seekg(0, std::ios::beg);
 
 	std::vector<uint8_t> regiondata(filesize);
-	file.read(reinterpret_cast<char*>(&regiondata[0]), filesize);
+    file.read(reinterpret_cast<char *>(&regiondata[0]), filesize);
 
 	for (int i = 0; i < 1024; i++) {
 		// get the offsets, where the chunk data starts
