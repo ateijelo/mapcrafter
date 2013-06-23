@@ -44,13 +44,13 @@ namespace renderer {
  * The addPos-method is used to move all these neighbors in a specified direction.
  */
 struct CornerNeighbors {
-	mc::BlockPos pos1, pos2, pos3, pos4;
-	mc::BlockPos dir1, dir2;
-	
-	CornerNeighbors();
-	CornerNeighbors(const mc::BlockPos& pos1, const mc::BlockPos& dir1, const mc::BlockPos& dir2);
-	
-	CornerNeighbors addPos(const mc::BlockPos& pos) const;
+    mc::BlockPos pos1, pos2, pos3, pos4;
+    mc::BlockPos dir1, dir2;
+
+    CornerNeighbors();
+    CornerNeighbors(const mc::BlockPos &pos1, const mc::BlockPos &dir1, const mc::BlockPos &dir2);
+
+    CornerNeighbors addPos(const mc::BlockPos &pos) const;
 };
 
 /**
@@ -60,10 +60,10 @@ struct CornerNeighbors {
  * calculated by moving this corner to the directions of his neighbors.
  */
 struct FaceCorners {
-	CornerNeighbors corner1, corner2, corner3, corner4;
-	
-	FaceCorners();
-	FaceCorners(const CornerNeighbors& corner1);
+    CornerNeighbors corner1, corner2, corner3, corner4;
+
+    FaceCorners();
+    FaceCorners(const CornerNeighbors &corner1);
 };
 
 extern const FaceCorners CORNERS_LEFT, CORNERS_RIGHT, CORNERS_TOP, CORNERS_BOTTOM;
