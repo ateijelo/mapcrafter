@@ -69,9 +69,7 @@ enum class TagType : int8_t {
     TAG_LONG_ARRAY = 12,
 };
 
-enum class Compression {
-	NO_COMPRESSION = 0, GZIP = 1, ZLIB = 2
-};
+enum class Compression { NO_COMPRESSION = 0, GZIP = 1, ZLIB = 2 };
 
 static const char* TAG_NAMES[] = {
 	"TAG_End",
