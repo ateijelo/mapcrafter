@@ -178,46 +178,21 @@ template <> void write<std::string>(std::ostream &stream, std::string value) {
 }
 } // namespace nbtstream
 
-int8_t Tag::getType() const {
-	return type;
-}
+Tag::Tag(int8_t type) : type(type), named(false), write_type(true) {}
 
-bool Tag::isWriteType() const {
-	return write_type;
-}
+Tag::~Tag() {}
 
-void Tag::setWriteType(bool write_type) {
-	this->write_type = write_type;
-}
+int8_t Tag::getType() const { return type; }
 
-bool Tag::isNamed() const {
-	return named;
-}
+bool Tag::isWriteType() const { return write_type; }
 
-void Tag::setNamed(bool named) {
-	this->named = named;
-}
+void Tag::setWriteType(bool write_type) { this->write_type = write_type; }
 
-const std::string& Tag::getName() const {
-	return name;
-}
+bool Tag::isNamed() const { return named; }
 
-void Tag::setName(const std::string& name, bool set_named) {
-	if (set_named)
-		this->named = true;
-	this->name = name;
-}
+void Tag::setNamed(bool named) { this->named = named; }
 
-Tag& Tag::read(std::istream& stream) {
-	return *this;
-}
-
-void Tag::write(std::ostream& stream) const {
-	if (write_type)
-		nbtstream::write<int8_t>(stream, type);
-	if (named)
-		nbtstream::write<std::string>(stream, name);
-}
+const std::string &Tag::getName() const { return name; }
 
 void Tag::setName(const std::string &name, bool set_named) {
     if (set_named)
@@ -234,14 +209,9 @@ void Tag::write(std::ostream &stream) const {
         nbtstream::write<std::string>(stream, name);
 }
 
-void TagString::write(std::ostream& stream) const {
-	Tag::write(stream);
-	nbtstream::write<std::string>(stream, payload);
-}
+void Tag::dump(std::ostream &stream, const std::string &indendation) const {}
 
-void TagString::dump(std::ostream& stream, const std::string& indendation) const {
-	dumpTag(stream, indendation, *this);
-}
+Tag *Tag::clone() const { return new Tag(*this); }
 
 Tag &TagString::read(std::istream &stream) {
     payload = nbtstream::read<std::string>(stream);
@@ -257,8 +227,7 @@ TagList::TagList(const TagList& other)
 	*this = other;
 }
 
-TagList::~TagList() {
-}
+Tag *TagString::clone() const { return new TagString(*this); }
 
 void TagList::operator=(const TagList& other) {
 	name = other.name;

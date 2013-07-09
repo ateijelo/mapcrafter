@@ -237,9 +237,7 @@ class TagString : public Tag {
 
     std::string payload;
 
-	std::string payload;
-	
-	static const int8_t TAG_TYPE = (int8_t) TagType::TAG_STRING;
+    static const int8_t TAG_TYPE = (int8_t)TagType::TAG_STRING;
 };
 
 // use shared_ptr in gcc <= 4.5.* instead of unique_ptr,
