@@ -26,13 +26,17 @@
 
 namespace nbt = mapcrafter::mc::nbt;
 
-#define REQUIRE_TAG(found, name) if(!found) { BOOST_ERROR("Tag '" + std::string(name) + "' not found!"); return; }
+#define REQUIRE_TAG(found, name)                                                                   \
+    if (!found) {                                                                                  \
+        BOOST_ERROR("Tag '" + std::string(name) + "' not found!");                                 \
+        return;                                                                                    \
+    }
 
 BOOST_AUTO_TEST_CASE(nbt_testIO) {
-	std::vector<std::string> list_data = {"This", "is", "a", "test", "list", "."};
-	std::vector<int32_t> intarray_data = {1, 1, 2, 3, 5, 8, 13, 21};
-	std::vector<int8_t> bytearray_data = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!'};
-	
+    std::vector<std::string> list_data = {"This", "is", "a", "test", "list", "."};
+    std::vector<int32_t> intarray_data = {1, 1, 2, 3, 5, 8, 13, 21};
+    std::vector<int8_t> bytearray_data = {'H', 'e', 'l', 'l', 'o', ' ',
+                                          'W', 'o', 'r', 'l', 'd', '!'};
 	nbt::Compression compressions[] = {
 		nbt::Compression::NO_COMPRESSION,
 		nbt::Compression::GZIP,
@@ -41,10 +45,10 @@ BOOST_AUTO_TEST_CASE(nbt_testIO) {
 	for (size_t i = 0; i < 3; i++) {
 		nbt::Compression compression = compressions[i];
                                 ? "out compression."
-		
-		std::stringstream stream;
-		
-		nbt::NBTFile out("TestNBTFile");
+                                : (compression == nbt::Compression::GZIP ? " Gzip compression."
+                                                                         : " Zlib compression.")));
+
+        std::stringstream stream;
 		out.addTag("byte", nbt::TagByte(42));
 		out.addTag("short", nbt::TagShort(1337));
 		out.addTag("int", nbt::TagInt(-23));
@@ -54,7 +58,7 @@ BOOST_AUTO_TEST_CASE(nbt_testIO) {
 		out.addTag("string", nbt::TagString("foobar"));
 
 		nbt::TagList list(nbt::TagString::TAG_TYPE);
-		for (size_t i = 0; i < list_data.size(); i++)
+        BOOST_CHECK_EQUAL(in.findTag<nbt::TagShort>("short").payload, 1337);
 			list.payload.push_back(nbt::TagPtr(new nbt::TagString(list_data[i])));
 		out.addTag("list", list);
 		out.addTag("bytearray", nbt::TagByteArray(bytearray_data));
@@ -64,24 +68,14 @@ BOOST_AUTO_TEST_CASE(nbt_testIO) {
 		//out.dump(std::cout);
 		out.writeNBT(stream, compression);
 
-		stream.seekg(0, std::ios_base::beg);
-		nbt::NBTFile in;
-		in.readNBT(stream, compression);
+        nbt::TagList &tag_list = in.findTag<nbt::TagList>("list");
+        for (size_t i = 0; i < list_data.size(); i++) {
+            BOOST_CHECK(tag_list.payload[i]->getType() == nbt::TagString::TAG_TYPE);
 		//in.dump(std::cout);
-		
-		REQUIRE_TAG(in.hasTag<nbt::TagByte>("byte"), "byte");
-		REQUIRE_TAG(in.hasTag<nbt::TagShort>("short"), "short");
-		REQUIRE_TAG(in.hasTag<nbt::TagInt>("int"), "int");
-		REQUIRE_TAG(in.hasTag<nbt::TagLong>("long"), "long");
-		REQUIRE_TAG(in.hasTag<nbt::TagFloat>("float"), "float");
-		REQUIRE_TAG(in.hasTag<nbt::TagDouble>("double"), "double");
-		REQUIRE_TAG(in.hasTag<nbt::TagString>("string"), "string");
-		REQUIRE_TAG(in.hasList<nbt::TagString>("list", list_data.size()), "list");
-		REQUIRE_TAG(in.hasArray<nbt::TagByteArray>("bytearray", bytearray_data.size()), "bytearray");
-		REQUIRE_TAG(in.hasArray<nbt::TagIntArray>("intarray", intarray_data.size()), "intarray");
+        }
 
-		BOOST_CHECK_EQUAL(in.findTag<nbt::TagByte>("byte").payload, 42);
-		BOOST_CHECK_EQUAL(in.findTag<nbt::TagShort>("short").payload, 1337);
+        BOOST_CHECK(bytearray_data == in.findTag<nbt::TagByteArray>("bytearray").payload);
+        BOOST_CHECK(intarray_data == in.findTag<nbt::TagIntArray>("intarray").payload);
 		BOOST_CHECK_EQUAL(in.findTag<nbt::TagInt>("int").payload, -23);
 		BOOST_CHECK_EQUAL(in.findTag<nbt::TagLong>("long").payload, 123456);
 		BOOST_CHECK_CLOSE(in.findTag<nbt::TagFloat>("float").payload, 3.1415926, 0.0001);
