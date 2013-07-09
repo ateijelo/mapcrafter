@@ -49,22 +49,22 @@ int16_t read<int16_t>(std::istream& stream) {
 }
 
 template <> int8_t read<int8_t>(std::istream &stream) {
-int32_t read<int32_t>(std::istream& stream) {
-	int32_t value;
+    int8_t value;
+    stream.read(reinterpret_cast<char *>(&value), sizeof(value));
 	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
 	return util::bigEndian32(value);
 }
 
 template <> int16_t read<int16_t>(std::istream &stream) {
-int64_t read<int64_t>(std::istream& stream) {
-	int64_t value;
+    int16_t value;
+    stream.read(reinterpret_cast<char *>(&value), sizeof(value));
 	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
 	return util::bigEndian64(value);
 }
 
 template <> int32_t read<int32_t>(std::istream &stream) {
-float read<float>(std::istream& stream) {
-	union {
+    int32_t value;
+    stream.read(reinterpret_cast<char *>(&value), sizeof(value));
 		int32_t tmp;
 		float myfloat;
 	};
@@ -74,8 +74,8 @@ float read<float>(std::istream& stream) {
 }
 
 template <> int64_t read<int64_t>(std::istream &stream) {
-double read<double>(std::istream& stream) {
-	union {
+    int64_t value;
+    stream.read(reinterpret_cast<char *>(&value), sizeof(value));
 		int64_t tmp;
 		double mydouble;
 	};
@@ -85,21 +85,31 @@ double read<double>(std::istream& stream) {
 }
 
 template <> float read<float>(std::istream &stream) {
-std::string read<std::string>(std::istream& stream) {
-	std::string value;
-	int16_t length = read<int16_t>(stream);
-	value.resize(length);
-	stream.read(&value[0], length);
-	return value;
+    union {
+        int32_t tmp;
+        float myfloat;
+    };
+    stream.read(reinterpret_cast<char *>(&tmp), sizeof(int32_t));
+    tmp = util::bigEndian32(tmp);
+    return myfloat;
 }
 
 template <> double read<double>(std::istream &stream) {
-void write(std::ostream& stream, T value) {
+    union {
+        int64_t tmp;
+        double mydouble;
+    };
+    stream.read(reinterpret_cast<char *>(&tmp), sizeof(int64_t));
+    tmp = util::bigEndian64(tmp);
+    return mydouble;
 }
 
 template <> std::string read<std::string>(std::istream &stream) {
-void write<int8_t>(std::ostream& stream, int8_t value) {
-	stream.write(reinterpret_cast<char*>(&value), sizeof(value));
+    std::string value;
+    int16_t length = read<int16_t>(stream);
+    value.resize(length);
+    stream.read(&value[0], length);
+    return value;
 }
 
 template <>
@@ -115,13 +125,13 @@ void write<int32_t>(std::ostream& stream, int32_t value) {
 }
 
 template <> void write<int16_t>(std::ostream &stream, int16_t value) {
-void write<int64_t>(std::ostream& stream, int64_t value) {
+    int16_t tmp = util::bigEndian16(value);
 	int64_t tmp = util::bigEndian64(value);
 	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
 }
 
 template <> void write<int32_t>(std::ostream &stream, int32_t value) {
-void write<float>(std::ostream& stream, float value) {
+    int32_t tmp = util::bigEndian32(value);
 	union {
 		int32_t tmp;
 		float myfloat;
@@ -132,7 +142,7 @@ void write<float>(std::ostream& stream, float value) {
 }
 
 template <> void write<int64_t>(std::ostream &stream, int64_t value) {
-void write<double>(std::ostream& stream, double value) {
+    int64_t tmp = util::bigEndian64(value);
 	union {
 		int64_t tmp;
 		double myfloat;
@@ -143,20 +153,28 @@ void write<double>(std::ostream& stream, double value) {
 }
 
 template <> void write<float>(std::ostream &stream, float value) {
-void write<std::string>(std::ostream& stream, std::string value) {
-	write<int16_t>(stream, value.size());
-	stream.write(value.c_str(), value.size());
+    union {
+        int32_t tmp;
+        float myfloat;
     };
     myfloat = value;
     tmp = util::bigEndian32(tmp);
     stream.write(reinterpret_cast<char *>(&tmp), sizeof(int32_t));
 }
 
-Tag::Tag(int8_t type)
-	: type(type), named(false), write_type(true) {
+template <> void write<double>(std::ostream &stream, double value) {
+    union {
+        int64_t tmp;
+        double myfloat;
+    };
+    myfloat = value;
+    tmp = util::bigEndian64(tmp);
+    stream.write(reinterpret_cast<char *>(&tmp), sizeof(int64_t));
 }
 
-Tag::~Tag() {
+template <> void write<std::string>(std::ostream &stream, std::string value) {
+    write<int16_t>(stream, value.size());
+    stream.write(value.c_str(), value.size());
 }
 } // namespace nbtstream
 
@@ -201,15 +219,18 @@ void Tag::write(std::ostream& stream) const {
 		nbtstream::write<std::string>(stream, name);
 }
 
-void Tag::dump(std::ostream& stream, const std::string& indendation) const {
+void Tag::setName(const std::string &name, bool set_named) {
+    if (set_named)
+        this->named = true;
+    this->name = name;
 }
 
 Tag* Tag::clone() const {
 	return new Tag(*this);
 }
 
-Tag& TagString::read(std::istream& stream) {
-	payload = nbtstream::read<std::string>(stream);
+void Tag::write(std::ostream &stream) const {
+    if (write_type)
         nbtstream::write<int8_t>(stream, type);
     if (named)
         nbtstream::write<std::string>(stream, name);
@@ -251,8 +272,8 @@ void TagList::operator=(const TagList& other) {
 		payload.push_back(TagPtr((*it)->clone()));
 }
 
-Tag& TagList::read(std::istream& stream) {
-	tag_type = nbtstream::read<int8_t>(stream);
+void TagList::operator=(const TagList &other) {
+    name = other.name;
 	int32_t length = nbtstream::read<int32_t>(stream);
 	for (int32_t i = 0; i < length; i++) {
 		Tag* tag = createTag(tag_type);
@@ -333,7 +354,7 @@ Tag& TagCompound::read(std::istream& stream) {
 }
 
 void TagCompound::operator=(const TagCompound &other) {
-	Tag::write(stream);
+    name = other.name;
 	for (auto it = payload.begin(); it != payload.end(); ++it) {
 		it->second->setWriteType(true);
 		it->second->setNamed(true);
@@ -344,11 +365,11 @@ void TagCompound::operator=(const TagCompound &other) {
 
     payload.clear();
     for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
-	if (named)
+        payload[it->first] = TagPtr(it->second->clone());
 }
 
 Tag &TagCompound::read(std::istream &stream) {
-	for (auto it = payload.begin(); it != payload.end(); ++it)
+    while (1) {
         int8_t tag_type = nbtstream::read<int8_t>(stream);
         if (tag_type == TagEnd::TAG_TYPE)
             break;
@@ -357,8 +378,8 @@ Tag* TagCompound::clone() const {
 	return new TagCompound(*this);
 }
                            util::str(static_cast<int>(tag_type)) +
-bool TagCompound::hasTag(const std::string& name) const {
-	return payload.count(name);
+                           ". NBT data stream may be corrupted.");
+        tag->read(stream);
         tag->setName(name);
         tag->setWriteType(true);
 Tag& TagCompound::findTag(const std::string& name) {

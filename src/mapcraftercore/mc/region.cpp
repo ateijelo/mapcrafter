@@ -299,11 +299,11 @@ int RegionFile::loadChunk(const ChunkPos &pos, BlockStateRegistry &block_registr
 
 	// get compression type and size of the data
 	uint8_t compression = chunk_data_compression[index];
-	nbt::Compression comp = nbt::Compression::NO_COMPRESSION;
+    nbt::Compression comp = nbt::Compression::NO_COMPRESSION;
 	if (compression == 1)
-		comp = nbt::Compression::GZIP;
+        comp = nbt::Compression::GZIP;
 	else if (compression == 2)
-		comp = nbt::Compression::ZLIB;
+        comp = nbt::Compression::ZLIB;
 	size_t size = chunk_data[index].size();
 
     // set the chunk rotation
