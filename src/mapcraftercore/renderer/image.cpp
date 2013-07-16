@@ -27,7 +27,6 @@
 #include "image/dithering.h"
 #include "image/quantization.h"
 #include "image/scaling.h"
-#include "../util.h"
 
 #include <jpeglib.h>
 #include <algorithm>
