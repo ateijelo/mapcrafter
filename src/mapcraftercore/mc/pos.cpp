@@ -25,7 +25,6 @@
 #include <boost/filesystem.hpp>
 #include <cmath>
 #include <cstdio>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -51,7 +50,7 @@ bool RegionPos::operator<(const RegionPos &other) const {
 }
 
 RegionPos RegionPos::byFilename(const std::string &filename) {
-	std::string name = BOOST_FS_FILENAME(fs::path(filename));
+    std::string name = BOOST_FS_FILENAME(fs::path(filename));
 
     int x, z;
     if (sscanf(name.c_str(), "r.%d.%d.mca", &x, &z) != 2)

@@ -68,7 +68,7 @@ bool World::readRegions(const fs::path& region_dir) {
     for (fs::directory_iterator it(region_dir); it != fs::directory_iterator(); ++it) {
 	for(fs::directory_iterator it(region_dir); it != fs::directory_iterator(); ++it) {
         std::string filename = BOOST_FS_FILENAME((*it).path());
-		std::string filename = BOOST_FS_FILENAME((*it).path());
+
 
             continue;
         int x = 0;
