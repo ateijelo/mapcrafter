@@ -163,7 +163,7 @@ template <typename T, TagType tag_type> class ScalarTag : public Tag {
 
     virtual void dump(std::ostream &stream, const std::string &indendation = "") const {
         if (std::is_same<T, int8_t>::value)
-		if (std::is_same<T, int8_t>::value)
+            dumpTag(stream, indendation, *this, static_cast<int>(payload));
         else
             dumpTag(stream, indendation, *this);
     }
@@ -194,7 +194,7 @@ template <typename T, TagType tag_type> class TagArray : public Tag {
         int32_t length = nbtstream::read<int32_t>(stream);
         payload.resize(length);
         if (std::is_same<T, int8_t>::value)
-		if (std::is_same<T, int8_t>::value)
+            stream.read(reinterpret_cast<char *>(&payload[0]), length * sizeof(T));
         else {
             for (int32_t i = 0; i < length; i++)
                 payload[i] = nbtstream::read<T>(stream);
@@ -206,7 +206,7 @@ template <typename T, TagType tag_type> class TagArray : public Tag {
         Tag::write(stream);
         nbtstream::write<int32_t>(stream, payload.size());
         if (std::is_same<T, int8_t>::value)
-		if (std::is_same<T, int8_t>::value)
+            stream.write(reinterpret_cast<const char *>(&payload[0]), payload.size() * sizeof(T));
         else {
             for (size_t i = 0; i < payload.size(); i++)
                 nbtstream::write<T>(stream, payload[i]);
@@ -272,7 +272,7 @@ class TagList : public Tag {
     virtual Tag *clone() const;
 
     int8_t tag_type;
-	std::vector<TagPtr> payload;
+    std::vector<TagPtr> payload;
 
     static const int8_t TAG_TYPE = (int8_t)TagType::TAG_LIST;
 };
@@ -301,7 +301,7 @@ class TagCompound : public Tag {
     template <typename T> bool hasArray(const std::string &name, int32_t len = -1) const {
         static_assert(
             std::is_same<T, TagByteArray>::value || std::is_same<T, TagIntArray>::value ||
-		static_assert(std::is_same<T, TagByteArray>::value
+                std::is_same<T, TagLongArray>::value,
 				|| std::is_same<T, TagIntArray>::value
 				|| std::is_same<T, TagLongArray>::value,
             return false;
