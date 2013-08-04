@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
         po::store(po::parse_command_line(argc, argv, all), vm);
     } catch (po::error &ex) {
         std::cerr << "There is a problem parsing the command line arguments: " << ex.what()
-	} catch (po::error& ex) {
+                  << std::endl;
 		std::cerr << "There is a problem parsing the command line arguments: "
 				<< ex.what() << std::endl;
 		std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
