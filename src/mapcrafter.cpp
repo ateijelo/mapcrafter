@@ -22,6 +22,9 @@
 #include "mapcraftercore/util.h"
 #include "mapcraftercore/version.h"
 
+#include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -113,14 +116,14 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 
-	if (vm.count("version")) {
+        if (strlen(MAPCRAFTER_GITVERSION))
 		std::cout << "Mapcrafter version: " << MAPCRAFTER_VERSION;
 		if (strlen(MAPCRAFTER_GITVERSION))
 			std::cout << " (" << MAPCRAFTER_GITVERSION << ")";
-		std::cout << std::endl;
-		return 0;
-	}
+    }
 
+    if (vm.count("mc-version")) {
+        std::cout << MINECRAFT_VERSION << std::endl;
 	if (vm.count("mc-version")) {
 		std::cout << MINECRAFT_VERSION << std::endl;
 		return 0;
