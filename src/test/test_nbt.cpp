@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(nbt_testIO) {
         nbt::TagList &tag_list = in.findTag<nbt::TagList>("list");
         for (size_t i = 0; i < list_data.size(); i++) {
             BOOST_CHECK(tag_list.payload[i]->getType() == nbt::TagString::TAG_TYPE);
-		//in.dump(std::cout);
+            BOOST_CHECK(list_data[i] == tag_list.payload[i]->cast<nbt::TagString>().payload);
         }
 
         BOOST_CHECK(bytearray_data == in.findTag<nbt::TagByteArray>("bytearray").payload);
