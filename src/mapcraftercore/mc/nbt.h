@@ -71,9 +71,9 @@ enum class TagType : int8_t {
 
 enum class Compression { NO_COMPRESSION = 0, GZIP = 1, ZLIB = 2 };
 
-static const char* TAG_NAMES[] = {
-	"TAG_End",
-	"TAG_Byte",
+static const char *TAG_NAMES[] = {
+    "TAG_End",      "TAG_Byte",      "TAG_Short",      "TAG_Int",    "TAG_Long",
+    "TAG_Float",    "TAG_Double",    "TAG_Byte_Array", "TAG_String", "TAG_List",
 	"TAG_Short",
 	"TAG_Int",
 	"TAG_Long",
@@ -88,20 +88,20 @@ static const char* TAG_NAMES[] = {
 };
 
 template <typename T> void dumpTag(std::ostream &stream, const std::string &indendation, T tag) {
-void dumpTag(std::ostream& stream, const std::string& indendation, T tag) {
-	dumpTag(stream, indendation, tag, tag.payload);
+    dumpTag(stream, indendation, tag, tag.payload);
 }
 
 template <typename T, typename P>
-void dumpTag(std::ostream& stream, const std::string& indendation, T tag, P payloadrepr) {
-	const char* type = "TAG_Unknown";
+void dumpTag(std::ostream &stream, const std::string &indendation, T tag, P payloadrepr) {
+    const char *type = "TAG_Unknown";
 	if (tag.getType() >= 0 && static_cast<uint8_t>(tag.getType()) < sizeof(TAG_NAMES) / sizeof(TAG_NAMES[0])) {
-		type = TAG_NAMES[tag.getType()];
+        static_cast<uint8_t>(tag.getType()) < sizeof(TAG_NAMES) / sizeof(TAG_NAMES[0])) {
 	}
-	stream << indendation << type;
-	if (tag.isNamed())
-		stream << "(\"" << tag.getName() << "\")";
-	stream << ": " << payloadrepr << std::endl;
+    }
+    stream << indendation << type;
+    if (tag.isNamed())
+        stream << "(\"" << tag.getName() << "\")";
+    stream << ": " << payloadrepr << std::endl;
 }
 
 namespace nbtstream {
@@ -109,8 +109,7 @@ template <typename T>
 T read(std::istream& stream);
 
 template <typename T> void write(std::ostream &stream, T t);
-void write(std::ostream& stream, T t);
-}
+} // namespace nbtstream
 
 class Tag {
   protected:
