@@ -132,11 +132,11 @@ int main(int argc, char **argv) {
         util::PathList resources = util::findResourceDirs(mapcrafter_bin);
         std::cout << "Resource directories:" << std::endl;
         for (size_t i = 0; i < resources.size(); i++)
-		std::cout << "Resource directories:" << std::endl;
-		for (size_t i = 0; i < resources.size(); i++)
-			std::cout << "  " << i+1 << ". " << BOOST_FS_ABSOLUTE1(resources[i]).string() << std::endl;
-		if (resources.size() == 0)
-			std::cout << "  Nothing found." << std::endl;
+            std::cout << "  " << i + 1 << ". " << BOOST_FS_ABSOLUTE1(resources[i]).string()
+                      << std::endl;
+        if (resources.size() == 0)
+            std::cout << "  Nothing found." << std::endl;
+
         util::PathList templates = util::findTemplateDirs(mapcrafter_bin);
         std::cout << "Template directories:" << std::endl;
         for (size_t i = 0; i < templates.size(); i++)
