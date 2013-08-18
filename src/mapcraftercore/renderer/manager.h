@@ -170,7 +170,7 @@ class RenderManager {
     /**
      * Copes a file from the template directory to the output directory.
      */
-	bool copyTemplateFile(const std::string& filename) const;
+    bool copyTemplateFile(const std::string &filename) const;
 
     /**
      * Writes the index.html template file (replaces some template special variables).
