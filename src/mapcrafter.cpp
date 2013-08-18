@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
 
     if (vm.count("find-resources")) {
         fs::path mapcrafter_bin = util::findExecutablePath();
-	if (vm.count("find-resources")) {
+        std::cout << "Your home directory: " << util::findHomeDir().string() << std::endl;
         std::cout << "Mapcrafter binary: " << mapcrafter_bin.string() << std::endl;
 
         util::PathList resources = util::findResourceDirs(mapcrafter_bin);
@@ -137,13 +137,13 @@ int main(int argc, char **argv) {
 			std::cout << "  " << i+1 << ". " << BOOST_FS_ABSOLUTE1(resources[i]).string() << std::endl;
 		if (resources.size() == 0)
 			std::cout << "  Nothing found." << std::endl;
-
+        util::PathList templates = util::findTemplateDirs(mapcrafter_bin);
         std::cout << "Template directories:" << std::endl;
-		std::cout << "Template directories:" << std::endl;
-		for (size_t i = 0; i < templates.size(); i++)
-			std::cout << "  " << i+1 << ". " << BOOST_FS_ABSOLUTE1(templates[i]).string() << std::endl;
-		if (templates.size() == 0)
-			std::cout << "  Nothing found." << std::endl;
+        for (size_t i = 0; i < templates.size(); i++)
+            std::cout << "  " << i + 1 << ". " << BOOST_FS_ABSOLUTE1(templates[i]).string()
+                      << std::endl;
+        if (templates.size() == 0)
+            std::cout << "  Nothing found." << std::endl;
 
 		util::PathList blocks = util::findBlockDirs(mapcrafter_bin);
 		std::cout << "Block directories:" << std::endl;
@@ -158,9 +158,9 @@ int main(int argc, char **argv) {
 			std::cout << "  " << i+1 << ". " << BOOST_FS_ABSOLUTE1(configs[i]).string() << std::endl;
 		if (configs.size() == 0)
 			std::cout << "  Nothing found." << std::endl;
-		return 0;
-	}
-
+        if (configs.size() == 0)
+            std::cout << "  Nothing found." << std::endl;
+        return 0;
 	if (!vm.count("config")) {
 
     if (!vm.count("config")) {
