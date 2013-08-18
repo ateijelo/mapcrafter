@@ -46,15 +46,15 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
         chunk_exists[i] = false;
         chunk_timestamps[i] = 0;
         chunk_data_compression[i] = 0;
-	file.seekg(0, std::ios::end);
+    }
 
-	file.seekg(0, std::ios::beg);
-	// make sure the region file has a header
-	if (filesize < 8192) {
+    file.seekg(0, std::ios::end);
+    size_t filesize = file.tellg();
+    file.seekg(0, std::ios::beg);
 		LOG(ERROR) << "Corrupt region '" << filename << "': Header is too short.";
-		return false;
-	}
-
+    if (filesize < 8192) {
+        LOG(ERROR) << "Corrupt region '" << filename << "': Header is too short.";
+        return false;
     }
 
     for (int x = 0; x < 32; x++) {
