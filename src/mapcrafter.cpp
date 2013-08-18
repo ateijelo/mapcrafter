@@ -27,9 +27,6 @@
 #include <cstring>
 #include <iostream>
 #include <string>
-#include <cstring>
-#include <boost/program_options.hpp>
-#include <boost/filesystem.hpp>
 
 #include <locale.h>
 
