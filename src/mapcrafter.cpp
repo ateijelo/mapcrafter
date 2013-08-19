@@ -115,8 +115,8 @@ int main(int argc, char **argv) {
         std::cout << "Mapcrafter version: " << MAPCRAFTER_VERSION;
         if (strlen(MAPCRAFTER_GITVERSION))
             std::cout << " (" << MAPCRAFTER_GITVERSION << ")";
-		if (strlen(MAPCRAFTER_GITVERSION))
-			std::cout << " (" << MAPCRAFTER_GITVERSION << ")";
+        std::cout << std::endl;
+        return 0;
     }
 
     if (vm.count("mc-version")) {
@@ -127,18 +127,18 @@ int main(int argc, char **argv) {
     if (vm.count("find-resources")) {
         fs::path mapcrafter_bin = util::findExecutablePath();
 	if (vm.count("find-resources")) {
-		fs::path mapcrafter_bin = util::findExecutablePath();
-		std::cout << "Your home directory: " << util::findHomeDir().string() << std::endl;
+        std::cout << "Mapcrafter binary: " << mapcrafter_bin.string() << std::endl;
+
         util::PathList resources = util::findResourceDirs(mapcrafter_bin);
         std::cout << "Resource directories:" << std::endl;
-		util::PathList resources = util::findResourceDirs(mapcrafter_bin);
+        for (size_t i = 0; i < resources.size(); i++)
 		std::cout << "Resource directories:" << std::endl;
 		for (size_t i = 0; i < resources.size(); i++)
 			std::cout << "  " << i+1 << ". " << BOOST_FS_ABSOLUTE1(resources[i]).string() << std::endl;
 		if (resources.size() == 0)
 			std::cout << "  Nothing found." << std::endl;
 
-		util::PathList templates = util::findTemplateDirs(mapcrafter_bin);
+        std::cout << "Template directories:" << std::endl;
 		std::cout << "Template directories:" << std::endl;
 		for (size_t i = 0; i < templates.size(); i++)
 			std::cout << "  " << i+1 << ". " << BOOST_FS_ABSOLUTE1(templates[i]).string() << std::endl;
