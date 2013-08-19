@@ -35,37 +35,25 @@ template <typename T> T read(std::istream &stream) {}
 template <> int8_t read<int8_t>(std::istream &stream) {
     int8_t value;
     stream.read(reinterpret_cast<char *>(&value), sizeof(value));
-	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-	return util::bigEndian32(value);
+    return value;
 }
 
 template <> int16_t read<int16_t>(std::istream &stream) {
     int16_t value;
     stream.read(reinterpret_cast<char *>(&value), sizeof(value));
-	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-	return util::bigEndian64(value);
+    return util::bigEndian16(value);
 }
 
 template <> int32_t read<int32_t>(std::istream &stream) {
     int32_t value;
     stream.read(reinterpret_cast<char *>(&value), sizeof(value));
-		int32_t tmp;
-		float myfloat;
-	};
-	stream.read(reinterpret_cast<char*>(&tmp), sizeof(int32_t));
-	tmp = util::bigEndian32(tmp);
-	return myfloat;
+    return util::bigEndian32(value);
 }
 
 template <> int64_t read<int64_t>(std::istream &stream) {
     int64_t value;
     stream.read(reinterpret_cast<char *>(&value), sizeof(value));
-		int64_t tmp;
-		double mydouble;
-	};
-	stream.read(reinterpret_cast<char*>(&tmp), sizeof(int64_t));
-	tmp = util::bigEndian64(tmp);
-	return mydouble;
+    return util::bigEndian64(value);
 }
 
 template <> float read<float>(std::istream &stream) {
@@ -99,37 +87,22 @@ template <> std::string read<std::string>(std::istream &stream) {
 template <typename T> void write(std::ostream &stream, T value) {}
 
 template <> void write<int8_t>(std::ostream &stream, int8_t value) {
-void write<int32_t>(std::ostream& stream, int32_t value) {
-	int32_t tmp = util::bigEndian32(value);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
+    stream.write(reinterpret_cast<char *>(&value), sizeof(value));
 }
 
 template <> void write<int16_t>(std::ostream &stream, int16_t value) {
     int16_t tmp = util::bigEndian16(value);
-	int64_t tmp = util::bigEndian64(value);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
+    stream.write(reinterpret_cast<char *>(&tmp), sizeof(value));
 }
 
 template <> void write<int32_t>(std::ostream &stream, int32_t value) {
     int32_t tmp = util::bigEndian32(value);
-	union {
-		int32_t tmp;
-		float myfloat;
-	};
-	myfloat = value;
-	tmp = util::bigEndian32(tmp);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(int32_t));
+    stream.write(reinterpret_cast<char *>(&tmp), sizeof(value));
 }
 
 template <> void write<int64_t>(std::ostream &stream, int64_t value) {
     int64_t tmp = util::bigEndian64(value);
-	union {
-		int64_t tmp;
-		double myfloat;
-	};
-	myfloat = value;
-	tmp = util::bigEndian64(tmp);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(int64_t));
+    stream.write(reinterpret_cast<char *>(&tmp), sizeof(value));
 }
 
 template <> void write<float>(std::ostream &stream, float value) {
