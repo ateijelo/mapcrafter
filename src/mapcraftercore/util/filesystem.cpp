@@ -21,8 +21,8 @@
 
 #include "../util.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 #if defined(__APPLE__)
   #include <mach-o/dyld.h>
@@ -35,45 +35,45 @@
 namespace mapcrafter {
 namespace util {
 
-bool copyFile(const fs::path& from, const fs::path& to) {
+bool copyFile(const fs::path &from, const fs::path &to) {
 	std::ifstream in(from.string().c_str(), std::ios::binary);
-	if (!in)
-		return false;
+    if (!in)
+        return false;
 	std::ofstream out(to.string().c_str(), std::ios::binary);
-	if (!out)
-		return false;
+    if (!out)
+        return false;
 
-	out << in.rdbuf();
+    out << in.rdbuf();
 	if (out.bad())
-		return false;
-	in.close();
-	out.close();
-	return true;
+        return false;
+    in.close();
+    out.close();
+    return true;
 }
 
-bool copyDirectory(const fs::path& from, const fs::path& to) {
-	if (!fs::exists(from) || !fs::is_directory(from))
-		return false;
-	if (!fs::exists(to) && !fs::create_directories(to))
-		return false;
-	fs::directory_iterator end;
-	for (fs::directory_iterator it(from); it != end; ++it) {
-		if (fs::is_regular_file(*it)) {
-			if (!copyFile(*it, to / it->path().filename()))
-				return false;
-		} else if (fs::is_directory(*it)) {
-			if (!copyDirectory(*it, to / it->path().filename()))
-				return false;
-		}
-	}
-	return true;
+bool copyDirectory(const fs::path &from, const fs::path &to) {
+    if (!fs::exists(from) || !fs::is_directory(from))
+        return false;
+    if (!fs::exists(to) && !fs::create_directories(to))
+        return false;
+    fs::directory_iterator end;
+    for (fs::directory_iterator it(from); it != end; ++it) {
+        if (fs::is_regular_file(*it)) {
+            if (!copyFile(*it, to / it->path().filename()))
+                return false;
+        } else if (fs::is_directory(*it)) {
+            if (!copyDirectory(*it, to / it->path().filename()))
+                return false;
+        }
+    }
+    return true;
 }
 
-bool moveFile(const fs::path& from, const fs::path& to) {
-	if (!fs::exists(from) || (fs::exists(to) && !fs::remove(to)))
-		return false;
-	fs::rename(from, to);
-	return true;
+bool moveFile(const fs::path &from, const fs::path &to) {
+    if (!fs::exists(from) || (fs::exists(to) && !fs::remove(to)))
+        return false;
+    fs::rename(from, to);
+    return true;
 }
 
 fs::path findHomeDir() {
@@ -83,14 +83,14 @@ fs::path findHomeDir() {
 #else
 	path = getenv("HOME");
 #endif
-	if (path != nullptr)
-		return fs::path(path);
-	return fs::path("");
+    if (path != nullptr)
+        return fs::path(path);
+    return fs::path("");
 }
 
 // see also http://stackoverflow.com/questions/12468104/multi-os-get-executable-path
 fs::path findExecutablePath() {
-	char buf[1024];
+    char buf[1024];
 #if defined(__APPLE__)
 	uint32_t size = sizeof(buf);
 	if (_NSGetExecutablePath(buf, &size) == 0) {
@@ -102,13 +102,13 @@ fs::path findExecutablePath() {
 	}
 #elif defined(__FreeBSD__)
 	int mib[4];
-	mib[0] = CTL_KERN;
-	mib[1] = KERN_PROC;
-	mib[2] = KERN_PROC_PATHNAME;
-	mib[3] = -1;
+    mib[0] = CTL_KERN;
+    mib[1] = KERN_PROC;
+    mib[2] = KERN_PROC_PATHNAME;
+    mib[3] = -1;
 	size_t size = sizeof(buf);
 	sysctl(mib, 4, buf, &size, NULL, 0);
-	return fs::path(std::string(buf));
+    return fs::path(std::string(buf));
 #elif defined(unix) || defined(__unix) || defined(__unix__) || defined(__linux__)
 	int len;
 	if ((len = readlink("/proc/self/exe", buf, sizeof(buf))) != -1)
@@ -117,9 +117,9 @@ fs::path findExecutablePath() {
 	GetModuleFileName(NULL, buf, 1024);
 	return fs::path(std::string(buf));
 #else
-	static_assert(0, "Unable to find the executable's path!");
+    static_assert(0, "Unable to find the executable's path!");
 #endif
-	return fs::path("");
+    return fs::path("");
 }
 
 fs::path findExecutableMapcrafterDir(fs::path executable) {
@@ -154,10 +154,21 @@ PathList findResourceDirs(const fs::path& executable) {
 
 PathList findTemplateDirs(const fs::path& executable) {
 	PathList templates, resources = findResourceDirs(executable);
-	for (PathList::iterator it = resources.begin(); it != resources.end(); ++it)
-		if (fs::is_directory(*it / "template"))
-			templates.push_back(*it / "template");
-	return templates;
+    PathList resources = {
+        mapcrafter_dir.parent_path() / "share" / "mapcrafter",
+        mapcrafter_dir / "data",
+    };
+    fs::path home = findHomeDir();
+    if (!home.empty())
+        resources.insert(resources.begin(), home / ".mapcrafter");
+
+    for (PathList::iterator it = resources.begin(); it != resources.end();) {
+        if (!fs::is_directory(*it))
+            resources.erase(it);
+        else
+            ++it;
+    }
+    return resources;
 }
 
 PathList findTemplateDirs(const fs::path &executable) {

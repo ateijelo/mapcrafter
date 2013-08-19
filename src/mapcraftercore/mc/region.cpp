@@ -81,7 +81,7 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
             // uint8_t sectors = ((uint8_t*) &tmp)[3];
 			uint32_t timestamp;
 			file.read(reinterpret_cast<char*>(&timestamp), 4);
-			timestamp = util::bigEndian32(timestamp);
+            uint32_t timestamp;
             file.read(reinterpret_cast<char *>(&timestamp), 4);
 			// get the original (not rotated) position of the chunk
 			ChunkPos chunkpos(x + regionpos_original.x * 32, z + regionpos_original.z * 32);

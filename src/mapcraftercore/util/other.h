@@ -20,8 +20,8 @@
 #ifndef OTHER_H_
 #define OTHER_H_
 
+#include <boost/filesystem.hpp>
 #include <map>
-#include <string>
 #include <sstream>
 #include <boost/filesystem.hpp>
 
@@ -36,10 +36,9 @@ int32_t bigEndian32(int32_t x);
 int64_t bigEndian64(int64_t x);
 
 template <typename T> std::string str(T value) {
-std::string str(T value) {
-	std::stringstream ss;
-	ss << value;
-	return ss.str();
+    std::stringstream ss;
+    ss << value;
+    return ss.str();
 }
 
 template <>
@@ -55,11 +54,11 @@ std::string str(bool value);
  * checked whether the whole string was processed (eof bit of string stream set).
  */
 template <typename T> T as(const std::string &from) {
-T as(const std::string& from) {
-	T to;
-	std::stringstream ss(from);
-	ss << from;
-	ss >> to;
+    T to;
+    std::stringstream ss(from);
+    ss << from;
+    ss >> to;
+    if (!ss || !ss.eof())
 	if (!ss || !ss.eof())
 		throw std::invalid_argument("Unable to parse '" + from + "'");
 	return to;

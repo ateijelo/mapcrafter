@@ -19,6 +19,7 @@
 
 #include "progress.h"
 
+#include "../compat/nullptr.h"
 #include "logging.h"
 #include "other.h"
 
@@ -27,6 +28,8 @@
 #include <cmath>
 #include <cstdio>
 #include <ctime>
+#include <iomanip>
+#include <iostream>
 #if defined(HAVE_SYS_IOCTL_H) && defined(HAVE_UNISTD_H)
 #  include <sys/ioctl.h> // ioctl, TIOCGWINSZ
 #  include <unistd.h> // STDOUT_FILENO
@@ -137,7 +140,7 @@ void AbstractOutputProgressHandler::setValue(int value) {
 	double percentage = value / (double) max * 100.;
 	if (last_update + 1 > now && !(last_percentage != max && value == max)) {
 		this->value = value;
-		return;
+        return;
 	}
 
 	// now calculate the average speed

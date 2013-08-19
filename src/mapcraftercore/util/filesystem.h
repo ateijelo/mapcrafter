@@ -20,17 +20,17 @@
 #ifndef FILESYSTEM_H_
 #define FILESYSTEM_H_
 
-#include <vector>
 #include <boost/filesystem.hpp>
+#include <vector>
 
 namespace fs = boost::filesystem;
 
 namespace mapcrafter {
 namespace util {
 
-bool copyFile(const fs::path& from, const fs::path& to);
-bool copyDirectory(const fs::path& from, const fs::path& to);
-bool moveFile(const fs::path& from, const fs::path& to);
+bool copyFile(const fs::path &from, const fs::path &to);
+bool copyDirectory(const fs::path &from, const fs::path &to);
+bool moveFile(const fs::path &from, const fs::path &to);
 
 /**
  * Returns the home directory of the current user.

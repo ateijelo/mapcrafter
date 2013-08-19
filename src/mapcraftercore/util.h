@@ -34,9 +34,9 @@
 #include "util/filesystem.h"
 #include "util/json.h"
 #include "util/logging.h"
-#include "util/progress.h"
 #include "util/math.h"
 #include "util/other.h"
+#include "util/progress.h"
 #include "util/terminal.h"
 
 #endif /* UTIL_H_ */

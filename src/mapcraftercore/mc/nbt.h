@@ -212,7 +212,7 @@ template <typename T, TagType tag_type> class TagArray : public Tag {
 
     virtual void dump(std::ostream &stream, const std::string &indendation = "") const {
         dumpTag(stream, indendation, *this, util::str(payload.size()) + " entries");
-		dumpTag(stream, indendation, *this, util::str(payload.size()) + " entries");
+    }
 
     virtual Tag *clone() const { return new TagArray<T, tag_type>(*this); }
 
