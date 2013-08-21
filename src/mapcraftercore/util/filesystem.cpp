@@ -192,10 +192,10 @@ PathList findLoggingConfigFiles(const fs::path &executable) {
 }
 
 fs::path findTemplateDir() {
-	PathList templates = findTemplateDirs(findExecutablePath());
-	if (templates.size())
-		return *templates.begin();
-	return fs::path();
+    PathList templates = findTemplateDirs(findExecutablePath());
+    if (templates.size())
+        return *templates.begin();
+    return fs::path();
 }
 
 fs::path findBlockDir() {
