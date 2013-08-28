@@ -124,7 +124,7 @@ template <typename Key, typename Value> struct CacheEntry {
 class WorldCache {
   private:
     mc::BlockStateRegistry &block_registry;
-	World world;
+    World world;
 
     CacheEntry<RegionPos, RegionFile> regioncache[RSIZE];
     CacheEntry<ChunkPos, Chunk> chunkcache[CSIZE];
