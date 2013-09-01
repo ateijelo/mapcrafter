@@ -29,7 +29,7 @@
 #elif defined(__FreeBSD__)
 #include <sys/sysctl.h>
 #elif defined(OS_WINDOWS)
-  #include <windows.h>
+#include <windows.h>
 #endif
 
 namespace mapcrafter {
@@ -77,11 +77,11 @@ bool moveFile(const fs::path &from, const fs::path &to) {
 }
 
 fs::path findHomeDir() {
-	char* path;
+    char *path;
 #if defined(OS_WINDOWS)
-	path = getenv("APPDATA");
+    path = getenv("APPDATA");
 #else
-	path = getenv("HOME");
+    path = getenv("HOME");
 #endif
     if (path != nullptr)
         return fs::path(path);
@@ -114,8 +114,8 @@ fs::path findExecutablePath() {
     if ((len = readlink("/proc/self/exe", buf, sizeof(buf))) != -1)
         return fs::path(std::string(buf, len));
 #elif defined(OS_WINDOWS)
-	GetModuleFileName(NULL, buf, 1024);
-	return fs::path(std::string(buf));
+    GetModuleFileName(NULL, buf, 1024);
+    return fs::path(std::string(buf));
 #else
     static_assert(0, "Unable to find the executable's path!");
 #endif
