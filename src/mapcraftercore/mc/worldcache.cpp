@@ -72,14 +72,14 @@ RegionFile *WorldCache::getRegion(const RegionPos &pos) {
 
     // region does not exist, region in cache was not modified
     if (!world.getRegion(pos, entry.value))
-		return nullptr;
+        return nullptr;
 
     if (!entry.value.read()) {
         // the region is not valid, region in cache was probably modified
         entry.used = false;
         // remember this region as broken and do not try to load it again
         regions_broken.insert(pos);
-		return nullptr;
+        return nullptr;
     }
 
     entry.used = true;
@@ -98,9 +98,9 @@ Chunk *WorldCache::getChunk(const ChunkPos &pos) {
 
     // if not try to get the region of the chunk from the cache
     RegionFile *region = getRegion(pos.getRegion());
-	if (region == nullptr) {
+    if (region == nullptr) {
         // chunkstats.unavailable++;
-		return nullptr;
+        return nullptr;
     }
 
     // then try to load the chunk
@@ -111,7 +111,7 @@ Chunk *WorldCache::getChunk(const ChunkPos &pos) {
     int status = region->loadChunk(pos, block_registry, entry.value);
     // the chunk does not exist, chunk in cache was not modified
 	if (status == RegionFile::CHUNK_DOES_NOT_EXIST)
-		return nullptr;
+        return nullptr;
 
     if (status != RegionFile::CHUNK_OK) {
         // chunkstats.unavailable++;
@@ -119,7 +119,7 @@ Chunk *WorldCache::getChunk(const ChunkPos &pos) {
         entry.used = false;
 		// remember this chunk as broken and do not try to load it again
 		chunks_broken.insert(pos);
-		return nullptr;
+        return nullptr;
     }
 
     entry.used = true;
@@ -135,10 +135,10 @@ Block WorldCache::getBlock(const mc::BlockPos &pos, const mc::Chunk *chunk, int 
 
     mc::ChunkPos chunk_pos(pos);
     const mc::Chunk *mychunk = chunk;
-	if (chunk == nullptr || chunk_pos != chunk->getPos())
+    if (chunk == nullptr || chunk_pos != chunk->getPos())
         mychunk = getChunk(chunk_pos);
-	// chunk may be nullptr
-	if (mychunk == nullptr) {
+    // chunk may be nullptr
+    if (mychunk == nullptr) {
         return Block();
         // otherwise get all required block data
     } else {
