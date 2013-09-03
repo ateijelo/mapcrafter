@@ -23,7 +23,6 @@
 #include "../util.h"
 
 #include <iostream>
-#include <string>
 #include <map>
 #include <string>
 #include <vector>
@@ -39,10 +38,10 @@ class INIConfigError : public std::runtime_error {
 typedef std::pair<std::string, std::string> INIConfigEntry;
 
 class INIConfigSection {
-public:
+  public:
     INIConfigSection(const std::string &type = "", const std::string &name = "");
     ~INIConfigSection();
-	
+
 	const std::string& getType() const;
 	const std::string& getName() const;
 	std::string getNameType() const;
@@ -60,8 +59,8 @@ public:
 	
 	const std::vector<INIConfigEntry>& getEntries() const;
 
-	void set(const std::string& key, const std::string& value);
-	void remove(const std::string& key);
+    void set(const std::string &key, const std::string &value);
+    void remove(const std::string &key);
 
   private:
     std::string type, name;
@@ -74,7 +73,7 @@ public:
 std::ostream &operator<<(std::ostream &out, const INIConfigSection &section);
 
 class INIConfig {
-public:
+  public:
     INIConfig();
     ~INIConfig();
 
