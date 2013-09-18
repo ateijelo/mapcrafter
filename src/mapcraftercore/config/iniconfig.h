@@ -92,7 +92,7 @@ class INIConfig {
 
     const std::vector<INIConfigSection> &getSections() const;
 
-	void removeSection(const std::string& type, const std::string& name);
+    void removeSection(const std::string &type, const std::string &name);
 
   private:
     INIConfigSection root;
