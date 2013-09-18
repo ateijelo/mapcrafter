@@ -47,26 +47,32 @@ bool INIConfigSection::has(const std::string &key) const { return getEntryIndex(
 
 std::string INIConfigSection::get(const std::string &key, const std::string &default_value) const {
     int index = getEntryIndex(key);
-	int index = getEntryIndex(key);
-	if (index == -1)
-		return default_value;
-	return entries[index].second;
+    if (index == -1)
+        return default_value;
+    return entries[index].second;
 }
 
 const std::vector<INIConfigEntry> &INIConfigSection::getEntries() const { return entries; }
 
 void INIConfigSection::set(const std::string &key, const std::string &value) {
-	int index = getEntryIndex(key);
-	if (index != -1)
-		entries[index].second = value;
-	else
-		entries.push_back(std::make_pair(key, value));
+    int index = getEntryIndex(key);
+    if (index != -1)
+        entries[index].second = value;
+    else
+        entries.push_back(std::make_pair(key, value));
 }
 
 void INIConfigSection::remove(const std::string &key) {
-	int index = getEntryIndex(key);
-	if (index != -1)
-		entries.erase(entries.begin() + index);
+    int index = getEntryIndex(key);
+    if (index != -1)
+        entries.erase(entries.begin() + index);
+}
+
+int INIConfigSection::getEntryIndex(const std::string &key) const {
+    for (size_t i = 0; i < entries.size(); i++)
+        if (entries[i].first == key)
+            return i;
+    return -1;
 }
 
 std::ostream &operator<<(std::ostream &out, const INIConfigSection &section) {
@@ -217,26 +223,26 @@ const std::vector<INIConfigSection>& INIConfig::getSections() const {
 
         // a line with a new section
         else if (line[0] == '[') {
-	int index = getSectionIndex(type, name);
-	if (index == -1)
-		return empty_section;
-	return sections.at(index);
+            if (line[line.size() - 1] != ']') {
+                throw INIConfigError("Expecting ']' at end of line " + util::str(line_number) +
+                                     ".");
+                return;
             }
 
             std::string type, name;
             std::string section_name = line.substr(1, line.size() - 2);
-	int index = getSectionIndex(type, name);
-	if (index != -1)
-		return sections[index];
+            std::string::size_type colon = section_name.find(':');
+            if (colon == std::string::npos)
+                name = section_name;
             else {
-	sections.push_back(section);
-	return sections.back();
+                type = section_name.substr(0, colon);
+                name = section_name.substr(colon + 1, std::string::npos);
             }
 
             if (name.empty()) {
-	int index = getSectionIndex(type, name);
-	if (index == -1)
-		sections.erase(sections.begin() + index);
+                throw INIConfigError("Invalid section name on line " + util::str(line_number) +
+                                     ".");
+                return;
             }
 
             section++;
