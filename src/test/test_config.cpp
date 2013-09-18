@@ -20,21 +20,20 @@
 #include "../mapcraftercore/config/iniconfig.h"
 #include "../mapcraftercore/config/mapcrafterconfig.h"
 
-#include <iostream>
+#include <boost/test/unit_test.hpp>
 #include <fstream>
 #include <sstream>
-#include <boost/test/unit_test.hpp>
 
 namespace config = mapcrafter::config;
 
 BOOST_AUTO_TEST_CASE(config_test) {
 	/*
-	config::ConfigSection section("world", "myworld");
-	section.set("foo", "bar");
-	section.set("foo2", "test");
-	section.remove("foo2");
-	section.set("test", "73");
-	section.set("test", "42");
+    config::ConfigSection section("world", "myworld");
+    section.set("foo", "bar");
+    section.set("foo2", "test");
+    section.remove("foo2");
+    section.set("test", "73");
+    section.set("test", "42");
 	*/
 
 	/*
