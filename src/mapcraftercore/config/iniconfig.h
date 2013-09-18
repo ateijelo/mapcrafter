@@ -82,7 +82,7 @@ class INIConfig {
     void write(std::ostream &out) const;
     void writeFile(const std::string &filename) const;
 
-	bool hasSection(const std::string& type, const std::string& name) const;
+    bool hasSection(const std::string &type, const std::string &name) const;
 
     const INIConfigSection &getRootSection() const;
     INIConfigSection &getRootSection();
