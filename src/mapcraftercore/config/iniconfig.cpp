@@ -19,6 +19,7 @@
 
 #include "iniconfig.h"
 
+#include <boost/filesystem.hpp>
 #include <fstream>
 #include <sstream>
 #include <boost/filesystem.hpp>
@@ -235,7 +236,7 @@ const INIConfigSection& INIConfig::getSection(const std::string& type,
 	if (index == -1)
 		return empty_section;
 	return sections.at(index);
-}
+            }
 
 INIConfigSection& INIConfig::getSection(const std::string& type,
 		const std::string& name) {
@@ -245,13 +246,13 @@ INIConfigSection& INIConfig::getSection(const std::string& type,
 	INIConfigSection section(type, name);
 	sections.push_back(section);
 	return sections.back();
-}
+            }
 
 void INIConfig::removeSection(const std::string& type, const std::string& name) {
 	int index = getSectionIndex(type, name);
 	if (index == -1)
 		sections.erase(sections.begin() + index);
-}
+            }
 
 int INIConfig::getSectionIndex(const std::string& type,
 		const std::string& name) const {
