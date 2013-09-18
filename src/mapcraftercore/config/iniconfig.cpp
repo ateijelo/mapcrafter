@@ -98,9 +98,9 @@ INIConfig::~INIConfig() {}
 
 void INIConfig::load(std::istream &in) {
     int section = -1;
-	std::string line;
+    std::string line;
     size_t line_number = 0;
-	while (std::getline(in, line)) {
+    while (std::getline(in, line)) {
 		line_number++;
 
 		// trim the line
