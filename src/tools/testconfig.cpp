@@ -25,10 +25,10 @@
 namespace config = mapcrafter::config;
 
 int main(int argc, char **argv) {
-	if (argc < 2) {
-		std::cerr << "Usage: ./testconfig [configfile]" << std::endl;
-		return 1;
-	}
+    if (argc < 2) {
+        std::cerr << "Usage: ./testconfig [configfile]" << std::endl;
+        return 1;
+    }
 
     config::MapcrafterConfig parser;
     config::ValidationMap validation = parser.parseFile(argv[1]);
@@ -40,12 +40,12 @@ int main(int argc, char **argv) {
             LOG(WARNING) << "Some notes on your configuration file:";
         validation.log();
         LOG(WARNING) << "Please read the documentation about the new configuration file format.";
-	}
+    }
 
     if (validation.isCritical())
         return 1;
 
 	parser.dump(std::cout);
 
-	return 0;
+    return 0;
 }
