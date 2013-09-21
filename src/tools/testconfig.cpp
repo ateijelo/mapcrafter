@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
     if (validation.isCritical())
         return 1;
 
-	parser.dump(std::cout);
+    parser.dump(std::cout);
 
     return 0;
 }
