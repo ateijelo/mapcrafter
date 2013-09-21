@@ -120,37 +120,45 @@ void ValidationMap::log(std::string logger) const {
     }
 }
 
-std::ostream& operator<<(std::ostream& out, const ValidationMessage& msg) {
-	switch (msg.getType()) {
-		case (ValidationMessage::INFO): out << "Info: "; break;
-		case (ValidationMessage::WARNING): out << "Warning: "; break;
-		case (ValidationMessage::ERROR): out << "Error: "; break;
-		default: out << msg.getType(); break;
-	}
-	out << msg.getMessage();
-	return out;
-}
-
-ValidationList makeValidationList(const ValidationMessage& msg) {
-	ValidationList validation;
+std::ostream &operator<<(std::ostream &out, const ValidationMessage &msg) {
+    switch (msg.getType()) {
+    case (ValidationMessage::INFO):
+        out << "Info: ";
         break;
-	return validation;
-}
-
+    case (ValidationMessage::WARNING):
+        out << "Warning: ";
+        break;
+    case (ValidationMessage::ERROR):
+        out << "Error: ";
+        break;
+ValidationList makeValidationList(const ValidationMessage& msg) {
+        out << msg.getType();
+        break;
+    }
+    out << msg.getMessage();
+    return out;
 bool isValidationValid(const ValidationList& validation) {
 
 ValidationList makeValidationList(const ValidationMessage &msg) {
     ValidationList validation;
-			return false;
-	return true;
+    validation.message(msg);
+    return validation;
 }
 
-int stringToRotation(const std::string& rotation, std::string names[4]) {
-	for (int i = 0; i < 4; i++)
-		if (rotation == names[i])
-			return i;
-	return -1;
+bool isValidationValid(const ValidationList &validation) {
+    auto messages = validation.getMessages();
+    for (auto message_it = messages.begin(); message_it != messages.end(); ++message_it)
+        if (message_it->getType() == ValidationMessage::ERROR)
+            return false;
+    return true;
 }
 
-} /* namespace config2 */
+int stringToRotation(const std::string &rotation, std::string names[4]) {
+    for (int i = 0; i < 4; i++)
+        if (rotation == names[i])
+            return i;
+    return -1;
+}
+
+} // namespace config
 } /* namespace mapcrafter */

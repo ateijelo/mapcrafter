@@ -37,7 +37,7 @@ namespace config {
  * (information, warning, error).
  */
 class ValidationMessage {
-public:
+  public:
     ValidationMessage(int type = -1, const std::string &message = "");
     ~ValidationMessage();
 
@@ -67,16 +67,16 @@ public:
     static ValidationMessage error(const std::string &message);
 
 	// different possible types
-	static const int INFO = 0;
-	static const int WARNING = 1;
-	static const int ERROR = 2;
+    static const int INFO = 0;
+    static const int WARNING = 1;
+    static const int ERROR = 2;
 
 private:
 	int type;
 	std::string message;
 };
 
-std::ostream& operator<<(std::ostream& out, const ValidationMessage& msg);
+std::ostream &operator<<(std::ostream &out, const ValidationMessage &msg);
 
 /**
  * This class represents a so called 'validation list'.
@@ -175,14 +175,14 @@ class ValidationMap {
     std::vector<std::pair<std::string, ValidationList>> sections;
 };
 
-template <typename T>
-class Field {
-private:
-	T value;
-	bool loaded;
-public:
+template <typename T> class Field {
+  private:
+    T value;
+    bool loaded;
+
+  public:
 	Field(T value = T()) : value(value), loaded(false) {}
-	~Field() {}
+    ~Field() {}
 
 	/**
 	 * Sets the default value of a configuration option.
@@ -197,13 +197,13 @@ public:
 	 */
     bool load(const std::string &key, const std::string &value, ValidationList &validation);
 
-
+    /**
 	/**
 	 * Checks if the configuration option was specified and adds an error to the
 	 * validation list if not.
 	 */
 
-
+    /**
      * Gets/sets the value of the field.
      */
     T getValue() const;
@@ -218,7 +218,7 @@ public:
 static std::string ROTATION_NAMES[4] = {"top-left", "top-right", "bottom-right", "bottom-left"};
 static std::string ROTATION_NAMES_SHORT[4] = {"tl", "tr", "br", "bl"};
 
-int stringToRotation(const std::string& rotation, std::string names[4] = ROTATION_NAMES);
+int stringToRotation(const std::string &rotation, std::string names[4] = ROTATION_NAMES);
 
 template <typename T> void Field<T>::setDefault(T value) {
     // do not overwrite an already loaded value with a default value
