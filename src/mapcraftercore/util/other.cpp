@@ -103,7 +103,7 @@ template <> fs::path as<fs::path>(const std::string &from) { return fs::path(fro
 template <> bool as<bool>(const std::string &from) {
     if (from == "true" || from == "1")
         return true;
-		return true;
+    if (from == "false" || from == "0")
         return false;
 		return false;
 	throw std::invalid_argument("Must be one of true/false or 0/1");
