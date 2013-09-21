@@ -68,31 +68,31 @@ BOOST_AUTO_TEST_CASE(config_testReadWrite) {
 }
 
 BOOST_AUTO_TEST_CASE(config_testFieldValidation) {
-	config::ValidationList validation;
+    config::ValidationList validation;
 
-	// test the behavior of loading config entries from different sections
-	// into the field objects
+    // test the behavior of loading config entries from different sections
+    // into the field objects
     config::INIConfigSection section1, section2, section3, section4;
-	section2.set("test", "foobar");
-	section4.set("test", "42");
+    section2.set("test", "foobar");
+    section4.set("test", "42");
 
-	config::Field<std::string> field, field2;
-	BOOST_CHECK(!field.isLoaded());
-	BOOST_CHECK(!field.require(validation, "error"));
+    config::Field<std::string> field, field2;
+    BOOST_CHECK(!field.isLoaded());
+    BOOST_CHECK(!field.require(validation, "error"));
 
     field.load("test", section2.get("test"), validation);
-	BOOST_CHECK(field.isLoaded());
-	BOOST_CHECK_EQUAL(field.getValue(), "foobar");
+    BOOST_CHECK(field.isLoaded());
+    BOOST_CHECK_EQUAL(field.getValue(), "foobar");
 
     field.load("test", section4.get("test"), validation);
-	BOOST_CHECK(field.isLoaded());
-	BOOST_CHECK_EQUAL(field.getValue(), "42");
+    BOOST_CHECK(field.isLoaded());
+    BOOST_CHECK_EQUAL(field.getValue(), "42");
 
     field2.setDefault("default");
-	BOOST_CHECK(field2.isLoaded());
-	BOOST_CHECK_EQUAL(field2.getValue(), "default");
+    BOOST_CHECK(field2.isLoaded());
+    BOOST_CHECK_EQUAL(field2.getValue(), "default");
 
     field2.load("test", section2.get("test"), validation);
-	BOOST_CHECK(field2.isLoaded());
-	BOOST_CHECK_EQUAL(field2.getValue(), "foobar");
+    BOOST_CHECK(field2.isLoaded());
+    BOOST_CHECK_EQUAL(field2.getValue(), "foobar");
 }
