@@ -131,13 +131,13 @@ std::ostream &operator<<(std::ostream &out, const ValidationMessage &msg) {
     case (ValidationMessage::ERROR):
         out << "Error: ";
         break;
-ValidationList makeValidationList(const ValidationMessage& msg) {
+    default:
         out << msg.getType();
         break;
     }
     out << msg.getMessage();
     return out;
-bool isValidationValid(const ValidationList& validation) {
+}
 
 ValidationList makeValidationList(const ValidationMessage &msg) {
     ValidationList validation;
