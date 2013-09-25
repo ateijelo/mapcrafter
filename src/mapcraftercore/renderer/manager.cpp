@@ -160,8 +160,8 @@ bool RenderManager::initialize() {
 }
 
 bool RenderManager::scanWorlds() {
-	auto config_worlds = config.getWorlds();
-	auto config_maps = config.getMaps();
+    auto config_worlds = config.getWorlds();
+    auto config_maps = config.getMaps();
 
     time_started_scanning = std::time(nullptr);
 
@@ -210,7 +210,7 @@ bool RenderManager::scanWorlds() {
             LOG(FATAL) << "Unable to load world " << tile_set_it->world_name << "!";
             return false;
         }
-		}
+        int world_version = world.getMinecraftVersion();
         if (world_version == -1) {
             LOG(WARNING) << "Unable to determine Minecraft version of world '"
                          << tile_set_it->world_name
