@@ -59,12 +59,12 @@ typedef std::vector<fs::path> PathList;
 /**
  * Returns all possible Mapcrafter resource directories.
  */
-PathList findResourceDirs(const fs::path& executable);
+PathList findResourceDirs(const fs::path &executable);
 
 /**
  * Returns all possible Mapcrafter template directories.
  */
-PathList findTemplateDirs(const fs::path& executable);
+PathList findTemplateDirs(const fs::path &executable);
 
 /**
  * Returns all possible Mapcrafter block directories.

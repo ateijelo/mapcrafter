@@ -131,8 +131,8 @@ fs::path findExecutableMapcrafterDir(fs::path executable) {
     return executable.parent_path();
 }
 
-PathList findTemplateDirs(const fs::path& executable) {
-	PathList templates, resources = findResourceDirs(executable);
+PathList findResourceDirs(const fs::path &executable) {
+    fs::path mapcrafter_dir = findExecutableMapcrafterDir(executable);
     PathList resources = {
         mapcrafter_dir.parent_path() / "share" / "mapcrafter",
         mapcrafter_dir / "data",
