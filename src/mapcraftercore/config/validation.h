@@ -209,7 +209,7 @@ template <typename T> class Field {
     T getValue() const;
     void setValue(T value);
 
-
+    /**
      * Returns whether a value is set.
      */
     bool isLoaded() const;
