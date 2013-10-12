@@ -13,9 +13,9 @@ namespace renderer {
  * Collection of Minecraft block textures.
  */
 class BlockTextures {
-public:
-	BlockTextures();
-	~BlockTextures();
+  public:
+    BlockTextures();
+    ~BlockTextures();
 
     bool load(const std::string &block_dir, int size, int blur, double water_opacity);
 
@@ -883,7 +883,7 @@ public:
 	std::vector<TextureImage*> textures;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* BLOCKTEXTURES_H_ */

@@ -2,8 +2,8 @@
 
 #include "../util.h"
 
-#include <iostream>
 #include <boost/filesystem.hpp>
+#include <iostream>
 
 namespace fs = boost::filesystem;
 
@@ -1733,30 +1733,29 @@ BlockTextures::BlockTextures()
 	             &YELLOW_WOOL, }) {
 }
 
-BlockTextures::~BlockTextures() {
-}
+BlockTextures::~BlockTextures() {}
 
 /**
  * Loads all block textures from the 'blocks' directory.
  */
 bool BlockTextures::load(const std::string &block_dir, int size, int blur, double water_opacity) {
-	if (!fs::exists(block_dir) || !fs::is_directory(block_dir)) {
+    if (!fs::exists(block_dir) || !fs::is_directory(block_dir)) {
 		LOG(ERROR) << "Directory '" << block_dir << "' with block textures does not exist.";
-		return false;
-	}
+        return false;
+    }
 
-	// go through all textures and load them
+    // go through all textures and load them
 	bool loaded_all = true;
-	for (size_t i = 0; i < textures.size(); i++) {
+    for (size_t i = 0; i < textures.size(); i++) {
         if (!textures[i]->load(block_dir, size, blur, water_opacity)) {
 			LOG(WARNING) << "Unable to load block texture '" << textures[i]->getName() << ".png'.";
 			loaded_all = false;
 		}
-	}
+    }
 	if (!loaded_all)
 		LOG(WARNING) << "Unable to load some block textures.";
-	return true;
+    return true;
 }
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
