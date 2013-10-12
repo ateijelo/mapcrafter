@@ -95,9 +95,7 @@ bool TextureImage::load(const std::string &path, int size, int blur, double wate
 
 const std::string &TextureImage::getName() const { return name; }
 
-const std::string& TextureImage::getName() const {
-	return name;
-}
+const RGBAImage &TextureImage::getOriginal() const { return original; }
 
 const RGBAImage& TextureImage::getOriginal() const {
 	return original;
@@ -121,5 +119,5 @@ RGBAImage TextureImage::getFrame(int frame) const {
 	return original_resized.clip(0, width * frame, width, width);
 }
 
-} /* namespace render */
+} // namespace renderer
 } /* namespace mapcrafter */

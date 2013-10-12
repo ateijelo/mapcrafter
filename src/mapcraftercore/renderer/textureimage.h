@@ -29,10 +29,10 @@ namespace renderer {
  * A single Minecraft block texture image.
  */
 class TextureImage : public RGBAImage {
-public:
-	TextureImage();
-	TextureImage(const std::string& name);
-	~TextureImage();
+  public:
+    TextureImage();
+    TextureImage(const std::string &name);
+    ~TextureImage();
 
 	/**
 	 * Tries to load the texture from the given path.
@@ -42,7 +42,7 @@ public:
 	/**
 	 * Returns the name of the texture.
 	 */
-	const std::string& getName() const;
+    const std::string &getName() const;
 
 	/**
 	 * Returns the original texture image.
@@ -75,7 +75,7 @@ private:
     int frame_count;
 };
 
-} /* namespace render */
+} // namespace renderer
 } /* namespace mapcrafter */
 
 #endif /* TEXTUREIMAGE_H_ */
