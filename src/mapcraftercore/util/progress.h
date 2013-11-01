@@ -32,14 +32,14 @@ std::string format_eta(int eta);
  * A basic interface for a progress handler.
  */
 class IProgressHandler {
-public:
-	virtual ~IProgressHandler() {};
+  public:
+    virtual ~IProgressHandler(){};
 
-	virtual int getMax() const = 0;
-	virtual void setMax(int max) = 0;
+    virtual int getMax() const = 0;
+    virtual void setMax(int max) = 0;
 
-	virtual int getValue() const = 0;
-	virtual void setValue(int value) = 0;
+    virtual int getValue() const = 0;
+    virtual void setValue(int value) = 0;
 };
 
 class MultiplexingProgressHandler : public IProgressHandler {

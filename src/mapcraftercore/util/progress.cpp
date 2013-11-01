@@ -201,7 +201,7 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
     std::cout << progressbar << " " << stats << "\r";
     std::cout.flush();
 
-	// set this as last shown
+    // set this as last shown
     last_output_len = progressbar.size() + 1 + stats.size();
 }
 
