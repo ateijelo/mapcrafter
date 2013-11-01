@@ -80,14 +80,11 @@ std::ostream &operator<<(std::ostream &stream, const TilePos &tile) {
 
 TilePath::TilePath() {}
 
-TilePath::~TilePath() {
-}
+TilePath::~TilePath() {}
 
 int TilePath::getDepth() const { return path.size(); }
 
-const std::vector<int>& TilePath::getPath() const {
-	return path;
-}
+const std::vector<int> &TilePath::getPath() const { return path; }
 
 TilePath TilePath::parent() const {
     TilePath copy(*this);
