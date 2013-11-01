@@ -152,8 +152,8 @@ std::string TilePath::toString() const {
 	return ss.str();
 }
 
-TilePath TilePath::byTilePos(const TilePos& tile, int depth) {
-	TilePath path;
+TilePath TilePath::byTilePos(const TilePos &tile, int depth) {
+    TilePath path;
 
 	// at first calculate the radius in tiles of this zoom level
     int radius = pow(2, depth) / 2;

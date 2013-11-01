@@ -108,8 +108,8 @@ std::ostream &operator<<(std::ostream &stream, const TilePos &tile);
  */
 class TilePath {
   public:
-	TilePath();
-	~TilePath();
+    TilePath();
+    ~TilePath();
 
     /**
      * Returns the zoom level of the path.
@@ -135,12 +135,12 @@ class TilePath {
     /**
      * Adds a node to the path.
      */
-	TilePath& operator+=(int node);
-	TilePath operator+(int node) const;
+    TilePath &operator+=(int node);
+    TilePath operator+(int node) const;
 
     // some more comparison operations
-	bool operator==(const TilePath& other) const;
-	bool operator<(const TilePath& other) const;
+    bool operator==(const TilePath &other) const;
+    bool operator<(const TilePath &other) const;
 
     /**
      * Returns the string representation of the path, for example "1/2/3/4".
@@ -157,7 +157,7 @@ class TilePath {
     std::vector<int> path;
 };
 
-std::ostream& operator<<(std::ostream& stream, const TilePath& path);
+std::ostream &operator<<(std::ostream &stream, const TilePath &path);
 
 /**
  * This class manages all tiles required to render a world.
