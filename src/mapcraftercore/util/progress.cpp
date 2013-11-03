@@ -98,9 +98,7 @@ DummyProgressHandler::DummyProgressHandler() : max(0), value(0) {}
 
 DummyProgressHandler::~DummyProgressHandler() {}
 
-int DummyProgressHandler::getMax() const {
-	return max;
-}
+int DummyProgressHandler::getMax() const { return max; }
 
 void DummyProgressHandler::setMax(int max) { this->max = max; }
 
