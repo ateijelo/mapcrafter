@@ -96,8 +96,7 @@ void MultiplexingProgressHandler::setValue(int value) {
 
 DummyProgressHandler::DummyProgressHandler() : max(0), value(0) {}
 
-DummyProgressHandler::~DummyProgressHandler() {
-}
+DummyProgressHandler::~DummyProgressHandler() {}
 
 int DummyProgressHandler::getMax() const {
 	return max;
@@ -105,9 +104,7 @@ int DummyProgressHandler::getMax() const {
 
 void DummyProgressHandler::setMax(int max) { this->max = max; }
 
-int DummyProgressHandler::getValue() const {
-	return value;
-}
+int DummyProgressHandler::getValue() const { return value; }
 
 void DummyProgressHandler::setValue(int value) {
 	this->value = value;
