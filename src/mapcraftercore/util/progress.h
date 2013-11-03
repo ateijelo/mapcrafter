@@ -66,15 +66,15 @@ class MultiplexingProgressHandler : public IProgressHandler {
  * and getting the progress values.
  */
 class DummyProgressHandler : public IProgressHandler {
-public:
-	DummyProgressHandler();
-	virtual ~DummyProgressHandler();
+  public:
+    DummyProgressHandler();
+    virtual ~DummyProgressHandler();
 
-	virtual int getMax() const;
-	virtual void setMax(int max);
+    virtual int getMax() const;
+    virtual void setMax(int max);
 
-	virtual int getValue() const;
-	virtual void setValue(int value);
+    virtual int getValue() const;
+    virtual void setValue(int value);
 
 protected:
 	// the maximum and current value of the progress
