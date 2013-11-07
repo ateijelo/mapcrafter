@@ -19,9 +19,9 @@
 
 #include "pos.h"
 
-#include "chunk.h"
 #include "../util.h"
 
+#include <boost/filesystem.hpp>
 #include <cmath>
 #include <cstdio>
 #include <boost/filesystem.hpp>
