@@ -174,7 +174,7 @@ bool RenderManager::scanWorlds() {
     for (auto map_it = config_maps.begin(); map_it != config_maps.end(); ++map_it) {
         std::string map = map_it->getShortName();
         if (render_behaviors.isCompleteRenderSkip(map))
-			continue;
+            continue;
 
         // just the rotations that are not to be skipped are required
         std::set<int> required_rotations;
