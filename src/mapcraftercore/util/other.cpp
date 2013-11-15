@@ -179,18 +179,18 @@ std::string escapeJSON(const std::string &str) {
     return ss.str();
 }
 
-bool startswith(const std::string& str, const std::string& start) {
+std::string capitalize(const std::string &str) {
 	if (start.size() > str.size())
 		return false;
-	return str.substr(0, start.size()) == start;
+    std::string capitalized = str.substr(1);
+    capitalized.insert(capitalized.begin(), toupper(str[0]));
+    return capitalized;
 }
-
-bool endswith(const std::string& str, const std::string& end) {
 	if (end.size() > str.size())
 		return false;
-	return str.substr(str.size() - end.size(), end.size()) == end;
-}
-
+    std::string replaced = str;
+    size_t start = 0;
+    while ((start = replaced.find(from, start)) != std::string::npos) {
         replaced.replace(start, from.length(), to);
         start += to.length();
     }
