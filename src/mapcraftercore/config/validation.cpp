@@ -22,31 +22,25 @@
 namespace mapcrafter {
 namespace config {
 
-ValidationMessage::ValidationMessage(int type, const std::string& message)
-		: type(type), message(message) {
+ValidationMessage::ValidationMessage(int type, const std::string &message)
+    : type(type), message(message) {}
+
+ValidationMessage::~ValidationMessage() {}
+
+int ValidationMessage::getType() const { return type; }
+
+const std::string &ValidationMessage::getMessage() const { return message; }
+
+ValidationMessage ValidationMessage::info(const std::string &message) {
+    return ValidationMessage(INFO, message);
 }
 
-ValidationMessage::~ValidationMessage() {
+ValidationMessage ValidationMessage::warning(const std::string &message) {
+    return ValidationMessage(WARNING, message);
 }
 
-int ValidationMessage::getType() const {
-	return type;
-}
-
-const std::string& ValidationMessage::getMessage() const {
-	return message;
-}
-
-ValidationMessage ValidationMessage::info(const std::string& message) {
-	return ValidationMessage(INFO, message);
-}
-
-ValidationMessage ValidationMessage::warning(const std::string& message) {
-	return ValidationMessage(WARNING, message);
-}
-
-ValidationMessage ValidationMessage::error(const std::string& message) {
-	return ValidationMessage(ERROR, message);
+ValidationMessage ValidationMessage::error(const std::string &message) {
+    return ValidationMessage(ERROR, message);
 }
 
 ValidationList::ValidationList() {}

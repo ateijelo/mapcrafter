@@ -38,33 +38,33 @@ namespace config {
  */
 class ValidationMessage {
 public:
-	ValidationMessage(int type = -1, const std::string& message = "");
-	~ValidationMessage();
+    ValidationMessage(int type = -1, const std::string &message = "");
+    ~ValidationMessage();
 
 	/**
 	 * Returns the type of the message. One of ValidationMessage::INFO/WARNING/ERROR.
 	 */
-	int getType() const;
+    int getType() const;
 
 	/**
 	 * Returns the actual message.
 	 */
-	const std::string& getMessage() const;
+    const std::string &getMessage() const;
 
 	/**
 	 * Creates an information validation message object from a string message.
 	 */
-	static ValidationMessage info(const std::string& message);
+    static ValidationMessage info(const std::string &message);
 
 	/**
 	 * Creates a warning validation message object from a string message.
 	 */
-	static ValidationMessage warning(const std::string& message);
+    static ValidationMessage warning(const std::string &message);
 
 	/**
 	 * Creates an error validation message object from a string message.
 	 */
-	static ValidationMessage error(const std::string& message);
+    static ValidationMessage error(const std::string &message);
 
 	// different possible types
 	static const int INFO = 0;

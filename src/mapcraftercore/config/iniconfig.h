@@ -42,12 +42,16 @@ class INIConfigSection {
     INIConfigSection(const std::string &type = "", const std::string &name = "");
     ~INIConfigSection();
 
-	const std::string& getType() const;
-	const std::string& getName() const;
-	std::string getNameType() const;
+    const std::string &getType() const;
+    const std::string &getName() const;
+    std::string getNameType() const;
 
-	bool isNamed() const;
-	bool isEmpty() const;
+    bool isNamed() const;
+    bool isEmpty() const;
+
+    bool has(const std::string &key) const;
+
+    std::string get(const std::string &key, const std::string &default_value = "") const;
 
 	bool has(const std::string& key) const;
 	
