@@ -267,12 +267,12 @@ RGBAImage RGBAImage::colorize(double r, double g, double b, double a) const {
 
 RGBAImage RGBAImage::colorize(uint8_t r, uint8_t g, uint8_t b, uint8_t a) const {
     RGBAImage img(width, height);
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
-			img.setPixel(x, y, rgba_multiply(getPixel(x, y), r, g, b, a));
-		}
-	}
-	return img;
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            img.setPixel(x, y, rgba_multiply(getPixel(x, y), r, g, b, a));
+        }
+    }
+    return img;
 }
 
 RGBAImage RGBAImage::rotate(int rotation) const {
