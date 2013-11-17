@@ -389,13 +389,13 @@ bool RenderManager::run(int threads, bool batch) {
                   << map_config.getLongName() << "\"):";
 
         auto required_rotations = map_it->second;
-		int progress_rotations = 0;
+        int progress_rotations = 0;
         int progress_rotations_all = required_rotations.size();
 
         // now go through the all required rotations of this map and render them
         for (auto rotation_it = required_rotations.begin(); rotation_it != required_rotations.end();
              ++rotation_it) {
-			progress_rotations++;
+            progress_rotations++;
 
             LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/" << progress_maps
                       << "." << progress_rotations_all << "] "
