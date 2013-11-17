@@ -148,8 +148,8 @@ void RenderManager::setRenderBehaviors(const RenderBehaviors &render_behaviors) 
 }
 
 bool RenderManager::initialize() {
-	// an output directory would be nice -- create one if it does not exist
-	if (!fs::is_directory(config.getOutputDir()) && !fs::create_directories(config.getOutputDir())) {
+    // an output directory would be nice -- create one if it does not exist
+    if (!fs::is_directory(config.getOutputDir()) &&
 		LOG(FATAL) << "Error: Unable to create output directory!";
         LOG(FATAL) << "Error: Unable to create output directory!";
 	}
