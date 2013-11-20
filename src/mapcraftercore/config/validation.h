@@ -181,27 +181,27 @@ template <typename T> class Field {
     bool loaded;
 
   public:
-	Field(T value = T()) : value(value), loaded(false) {}
+    Field(T value = T()) : value(value), loaded(false) {}
     ~Field() {}
 
-	/**
-	 * Sets the default value of a configuration option.
-	 */
+    /**
+     * Sets the default value of a configuration option.
+     */
     void setDefault(T value);
 
-	/**
-	 * Tries to load/parse the value of a configuration option.
-	 * Uses the util::as function to convert the string value to the type of this field.
-	 * Returns false if this function threw an std::invalid_argument exception
-	 * and adds an error message to the validation list.
-	 */
+    /**
+     * Tries to load/parse the value of a configuration option.
+     * Uses the util::as function to convert the string value to the type of this field.
+     * Returns false if this function threw an std::invalid_argument exception
+     * and adds an error message to the validation list.
+     */
     bool load(const std::string &key, const std::string &value, ValidationList &validation);
 
     /**
-	/**
-	 * Checks if the configuration option was specified and adds an error to the
-	 * validation list if not.
-	 */
+     * Checks if the configuration option was specified and adds an error to the
+     * validation list if not.
+     */
+    bool require(ValidationList &validation, std::string message) const;
 
     /**
      * Gets/sets the value of the field.

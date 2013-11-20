@@ -80,19 +80,19 @@ BOOST_AUTO_TEST_CASE(config_testFieldValidation) {
 	BOOST_CHECK(!field.isLoaded());
 	BOOST_CHECK(!field.require(validation, "error"));
 
-	field.load("test", section2.get("test"), validation);
+    field.load("test", section2.get("test"), validation);
 	BOOST_CHECK(field.isLoaded());
 	BOOST_CHECK_EQUAL(field.getValue(), "foobar");
 
-	field.load("test", section4.get("test"), validation);
+    field.load("test", section4.get("test"), validation);
 	BOOST_CHECK(field.isLoaded());
 	BOOST_CHECK_EQUAL(field.getValue(), "42");
 
-	field2.setDefault("default");
+    field2.setDefault("default");
 	BOOST_CHECK(field2.isLoaded());
 	BOOST_CHECK_EQUAL(field2.getValue(), "default");
 
-	field2.load("test", section2.get("test"), validation);
+    field2.load("test", section2.get("test"), validation);
 	BOOST_CHECK(field2.isLoaded());
 	BOOST_CHECK_EQUAL(field2.getValue(), "foobar");
 }
