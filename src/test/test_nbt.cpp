@@ -49,20 +49,50 @@ BOOST_AUTO_TEST_CASE(nbt_testIO) {
                                                                          : " Zlib compression.")));
 
         std::stringstream stream;
-		out.addTag("byte", nbt::TagByte(42));
-		out.addTag("short", nbt::TagShort(1337));
-		out.addTag("int", nbt::TagInt(-23));
-		out.addTag("long", nbt::TagLong(123456));
-		out.addTag("float", nbt::TagFloat(3.1415926));
-		out.addTag("double", nbt::TagDouble(2.7182818));
-		out.addTag("string", nbt::TagString("foobar"));
+
+        nbt::NBTFile out("TestNBTFile");
+        out.addTag("byte", nbt::TagByte(42));
+        out.addTag("short", nbt::TagShort(1337));
+        out.addTag("int", nbt::TagInt(-23));
+        out.addTag("long", nbt::TagLong(123456));
+        out.addTag("float", nbt::TagFloat(3.1415926));
+        out.addTag("double", nbt::TagDouble(2.7182818));
+        out.addTag("string", nbt::TagString("foobar"));
+
+        nbt::TagList list(nbt::TagString::TAG_TYPE);
+        for (size_t i = 0; i < list_data.size(); i++)
+            list.payload.push_back(nbt::TagPtr(new nbt::TagString(list_data[i])));
+        out.addTag("list", list);
+        out.addTag("bytearray", nbt::TagByteArray(bytearray_data));
+        out.addTag("intarray", nbt::TagIntArray(intarray_data));
+        out.addTag("compound", out);
+
+        // out.dump(std::cout);
+        out.writeNBT(stream, compression);
+
+        stream.seekg(0, std::ios_base::beg);
+        nbt::NBTFile in;
+        in.readNBT(stream, compression);
+        // in.dump(std::cout);
+
+        REQUIRE_TAG(in.hasTag<nbt::TagByte>("byte"), "byte");
+        REQUIRE_TAG(in.hasTag<nbt::TagShort>("short"), "short");
+        REQUIRE_TAG(in.hasTag<nbt::TagInt>("int"), "int");
+        REQUIRE_TAG(in.hasTag<nbt::TagLong>("long"), "long");
+        REQUIRE_TAG(in.hasTag<nbt::TagFloat>("float"), "float");
+        REQUIRE_TAG(in.hasTag<nbt::TagDouble>("double"), "double");
+        REQUIRE_TAG(in.hasTag<nbt::TagString>("string"), "string");
+        REQUIRE_TAG(in.hasList<nbt::TagString>("list", list_data.size()), "list");
+        REQUIRE_TAG(in.hasArray<nbt::TagByteArray>("bytearray", bytearray_data.size()),
+                    "bytearray");
+        REQUIRE_TAG(in.hasArray<nbt::TagIntArray>("intarray", intarray_data.size()), "intarray");
 
 		nbt::TagList list(nbt::TagString::TAG_TYPE);
         BOOST_CHECK_EQUAL(in.findTag<nbt::TagShort>("short").payload, 1337);
 			list.payload.push_back(nbt::TagPtr(new nbt::TagString(list_data[i])));
-		out.addTag("list", list);
-		out.addTag("bytearray", nbt::TagByteArray(bytearray_data));
-		out.addTag("intarray", nbt::TagIntArray(intarray_data));
+        BOOST_CHECK_EQUAL(in.findTag<nbt::TagLong>("long").payload, 123456);
+        BOOST_CHECK_CLOSE(in.findTag<nbt::TagFloat>("float").payload, 3.1415926, 0.0001);
+        BOOST_CHECK_CLOSE(in.findTag<nbt::TagDouble>("double").payload, 2.7182818, 0.0001);
 		out.addTag("compound", out);
 		
 		//out.dump(std::cout);
