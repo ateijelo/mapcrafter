@@ -243,9 +243,9 @@ class TagString : public Tag {
 // use shared_ptr in gcc <= 4.5.* instead of unique_ptr,
 // because there are problems with smart pointers in containers
 #if __GNUC__ == 4 && __GNUC_MINOR__ <= 5
-# define TagPtrType std::shared_ptr
+#define TagPtrType std::shared_ptr
 #else
-# define TagPtrType std::unique_ptr
+#define TagPtrType std::unique_ptr
 #endif
 
 typedef TagPtrType<Tag> TagPtr;
