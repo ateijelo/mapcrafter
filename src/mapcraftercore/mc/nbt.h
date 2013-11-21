@@ -321,14 +321,7 @@ class TagCompound : public Tag {
 
     std::map<std::string, TagPtr> payload;
 
-		return findTag(name).cast<T>();
-	}
-
-	void addTag(const std::string& name, const Tag& tag);
-
-	std::map<std::string, TagPtr> payload;
-	
-	static const int8_t TAG_TYPE = (int8_t) TagType::TAG_COMPOUND;
+    static const int8_t TAG_TYPE = (int8_t)TagType::TAG_COMPOUND;
 };
 
 class NBTFile : public TagCompound {
