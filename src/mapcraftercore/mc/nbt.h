@@ -137,8 +137,7 @@ class Tag {
     virtual Tag &read(std::istream &stream);
     virtual void write(std::ostream &stream) const;
     virtual void dump(std::ostream &stream, const std::string &indendation = "") const;
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const;
-	virtual Tag* clone() const;
+    virtual Tag *clone() const;
 };
 
 class TagEnd : public Tag {
