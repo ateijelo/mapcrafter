@@ -87,9 +87,9 @@ BOOST_AUTO_TEST_CASE(nbt_testIO) {
                     "bytearray");
         REQUIRE_TAG(in.hasArray<nbt::TagIntArray>("intarray", intarray_data.size()), "intarray");
 
-		nbt::TagList list(nbt::TagString::TAG_TYPE);
+        BOOST_CHECK_EQUAL(in.findTag<nbt::TagByte>("byte").payload, 42);
         BOOST_CHECK_EQUAL(in.findTag<nbt::TagShort>("short").payload, 1337);
-			list.payload.push_back(nbt::TagPtr(new nbt::TagString(list_data[i])));
+        BOOST_CHECK_EQUAL(in.findTag<nbt::TagInt>("int").payload, -23);
         BOOST_CHECK_EQUAL(in.findTag<nbt::TagLong>("long").payload, 123456);
         BOOST_CHECK_CLOSE(in.findTag<nbt::TagFloat>("float").payload, 3.1415926, 0.0001);
         BOOST_CHECK_CLOSE(in.findTag<nbt::TagDouble>("double").payload, 2.7182818, 0.0001);
