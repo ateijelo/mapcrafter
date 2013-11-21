@@ -172,10 +172,7 @@ template <typename T, TagType tag_type> class ScalarTag : public Tag {
 
     T payload;
 
-
-	T payload;
-	
-	static const int8_t TAG_TYPE = (int8_t) tag_type;
+    static const int8_t TAG_TYPE = (int8_t)tag_type;
 };
 
 typedef ScalarTag<int8_t, TagType::TAG_BYTE> TagByte;
@@ -221,10 +218,7 @@ template <typename T, TagType tag_type> class TagArray : public Tag {
 
     std::vector<T> payload;
 
-
-	std::vector<T> payload;
-	
-	static const int8_t TAG_TYPE = (int8_t) tag_type;
+    static const int8_t TAG_TYPE = (int8_t)tag_type;
 };
 
 typedef TagArray<int8_t, TagType::TAG_BYTE_ARRAY> TagByteArray;
