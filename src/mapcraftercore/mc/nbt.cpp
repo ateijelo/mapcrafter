@@ -382,8 +382,8 @@ Tag* TagCompound::clone() const {
         tag->read(stream);
         tag->setName(name);
         tag->setWriteType(true);
-Tag& TagCompound::findTag(const std::string& name) {
-	if (!hasTag(name))
+        payload[name] = TagPtr(tag);
+    }
 		throw TagNotFound(std::string("Unable to find tag '") + name + "'");
 	return *payload[name];
 }

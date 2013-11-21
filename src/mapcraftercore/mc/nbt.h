@@ -120,12 +120,12 @@ class Tag {
     }
 
     template <typename T> const T &cast() const {
-	const T& cast() const {
-		if (type == T::TAG_TYPE)
-			return dynamic_cast<const T&>(*this);
+        if (type == T::TAG_TYPE)
+            return dynamic_cast<const T &>(*this);
+        throw InvalidTagCast("Invalid tag cast");
     }
-	}
 
+    bool isWriteType() const;
     void setWriteType(bool write_type);
 
     bool isNamed() const;
@@ -323,16 +323,16 @@ class TagCompound : public Tag {
     Tag &findTag(const std::string &name);
     const Tag &findTag(const std::string &name) const;
 
-	Tag& findTag(const std::string& name);
-	const Tag& findTag(const std::string& name) const;
+    template <typename T> T &findTag(const std::string &name) { return findTag(name).cast<T>(); }
+
     template <typename T> const T &findTag(const std::string &name) const {
         return findTag(name).cast<T>();
-	T& findTag(const std::string& name) {
-		return findTag(name).cast<T>();
-	}
+    }
+
+    void addTag(const std::string &name, const Tag &tag);
 
     std::map<std::string, TagPtr> payload;
-	const T& findTag(const std::string& name) const {
+
 		return findTag(name).cast<T>();
 	}
 
