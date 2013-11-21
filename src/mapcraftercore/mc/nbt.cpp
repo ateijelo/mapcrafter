@@ -225,9 +225,7 @@ void Tag::setName(const std::string &name, bool set_named) {
     this->name = name;
 }
 
-Tag* Tag::clone() const {
-	return new Tag(*this);
-}
+Tag &Tag::read(std::istream &stream) { return *this; }
 
 void Tag::write(std::ostream &stream) const {
     if (write_type)
@@ -245,8 +243,9 @@ void TagString::dump(std::ostream& stream, const std::string& indendation) const
 	dumpTag(stream, indendation, *this);
 }
 
-Tag* TagString::clone() const {
-	return new TagString(*this);
+Tag &TagString::read(std::istream &stream) {
+    payload = nbtstream::read<std::string>(stream);
+    return *this;
 }
 
 TagList::TagList(int8_t tag_type)
@@ -310,7 +309,7 @@ void TagList::write(std::ostream& stream) const {
 	stream << indendation << "}" << std::endl;
 }
 
-Tag* TagList::clone() const {
+Tag &TagList::read(std::istream &stream) {
 	return new TagList(*this);
 }
 
@@ -374,9 +373,9 @@ Tag &TagCompound::read(std::istream &stream) {
         if (tag_type == TagEnd::TAG_TYPE)
             break;
         std::string name = nbtstream::read<std::string>(stream);
-Tag* TagCompound::clone() const {
+        Tag *tag = createTag(tag_type);
 	return new TagCompound(*this);
-}
+            throw NBTError(std::string("Unknown tag type with id ") +
                            util::str(static_cast<int>(tag_type)) +
                            ". NBT data stream may be corrupted.");
         tag->read(stream);

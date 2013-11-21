@@ -170,8 +170,8 @@ template <typename T, TagType tag_type> class ScalarTag : public Tag {
 
     virtual Tag *clone() const { return new ScalarTag<T, tag_type>(*this); }
 
-		return new ScalarTag<T, tag_type>(*this);
-	}
+    T payload;
+
 
 	T payload;
 	
@@ -219,8 +219,8 @@ template <typename T, TagType tag_type> class TagArray : public Tag {
 
     virtual Tag *clone() const { return new TagArray<T, tag_type>(*this); }
 
-		return new TagArray<T, tag_type>(*this);
-	}
+    std::vector<T> payload;
+
 
 	std::vector<T> payload;
 	
