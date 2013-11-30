@@ -51,7 +51,7 @@ struct RenderOpts {
     bool batch;
 
     fs::path config;
-	std::vector<std::string> render_skip, render_auto, render_force;
+    std::vector<std::string> render_skip, render_auto, render_force;
     bool skip_all, force_all;
     int jobs;
 };
