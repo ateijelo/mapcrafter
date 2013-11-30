@@ -40,8 +40,8 @@ namespace mapcrafter {
 namespace util {
 
 std::string format_eta(int eta) {
-	int MINUTES = 60;
-	int HOURS = 60*MINUTES;
+    int MINUTES = 60;
+    int HOURS = 60 * MINUTES;
 	int DAYS = 24*HOURS;
 
 	int days = eta / DAYS;
@@ -241,7 +241,7 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
 	int progressbar_width = terminal_width - stats.size() - 1;
 	std::string progressbar = createProgressBar(progressbar_width, percentage);
 
-	// go to the begin of the line and clear it
+    // go to the begin of the line and clear it
     std::cout << "\r" << std::string(last_output_len, ' ') << "\r";
 
 	// now show everything
