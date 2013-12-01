@@ -102,7 +102,7 @@ WorldCrop World::getWorldCrop() const { return world_crop; }
 void World::setWorldCrop(const WorldCrop &world_crop) { this->world_crop = world_crop; }
 
 bool World::load() {
-	this->rotation = rotation;
+    if (!fs::exists(world_dir)) {
         std::cerr << "Error: World directory " << world_dir;
         std::cerr << " does not exist!" << std::endl;
         return false;
@@ -139,8 +139,10 @@ const World::RegionSet& World::getAvailableRegions() const {
 	return available_regions;
 }
 
-bool World::hasRegion(const RegionPos& pos) const {
-	return available_regions.count(pos) != 0;
+fs::path World::getRegionPath(const RegionPos &pos) const {
+    if (!hasRegion(pos))
+        return fs::path();
+    return fs::path(region_files.at(pos));
 }
 
 fs::path World::getRegionPath(const RegionPos& pos) const {

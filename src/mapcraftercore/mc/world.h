@@ -68,8 +68,8 @@ struct hash_function {
  */
 class World {
   public:
-	typedef std::unordered_set<RegionPos, hash_function> RegionSet;
-	typedef std::unordered_map<RegionPos, std::string, hash_function> RegionMap;
+    typedef std::unordered_set<RegionPos, hash_function> RegionSet;
+    typedef std::unordered_map<RegionPos, std::string, hash_function> RegionMap;
 
     /**
      * Constructor. You should specify a world directory and you can specify a dimension
@@ -107,25 +107,25 @@ class World {
     WorldCrop getWorldCrop() const;
     void setWorldCrop(const WorldCrop &world_crop);
 
-	/**
+    /**
      * Loads a world from the specified directory. Returns false if the world- or region
      * directory does not exist.
-	 */
+     */
     bool load();
 
-	/**
-	 * Returns the count of available region files.
-	 */
-	int getAvailableRegionCount() const;
+    /**
+     * Returns the count of available region files.
+     */
+    int getAvailableRegionCount() const;
 
-	/**
-	 * Returns the positions of all available regions.
-	 */
-	const World::RegionSet& getAvailableRegions() const;
+    /**
+     * Returns the positions of all available regions.
+     */
+    const World::RegionSet &getAvailableRegions() const;
 
-	/**
-	 * Returns whether a specific region exists.
-	 */
+    /**
+     * Returns whether a specific region exists.
+     */
     bool hasRegion(const RegionPos &pos) const;
 
 	/**
@@ -134,10 +134,10 @@ class World {
 	 */
 	fs::path getRegionPath(const RegionPos& pos) const;
 
-	/**
-	 * Creates the Region-object for a specific region and assigns the supplied reference
-	 * 'region' to it. Returns false if the region does not exist.
-	 */
+    /**
+     * Creates the Region-object for a specific region and assigns the supplied reference
+     * 'region' to it. Returns false if the region does not exist.
+     */
     bool getRegion(const RegionPos &pos, RegionFile &region) const;
 
 	/**
@@ -156,25 +156,25 @@ class World {
 	 */
 	int getMinecraftVersion() const;
 
-private:
+  private:
     // world directory, region directory
     fs::path world_dir, region_dir;
     // used dimension of the world
     Dimension dimension;
 
     // rotation and possible boundaries of the world
-	int rotation;
+    int rotation;
     WorldCrop world_crop;
 
-	// (hash-) set containing positions of available region files
-	RegionSet available_regions;
-	// (hash-) map containing positions of available region files and their file paths
-	RegionMap region_files;
+    // (hash-) set containing positions of available region files
+    RegionSet available_regions;
+    // (hash-) map containing positions of available region files and their file paths
+    RegionMap region_files;
 
-	/**
-	 * Scans a directory for Anvil *.mca region files and adds them to the available
-	 * region files. Returns false if the directory does not exist.
-	 */
+    /**
+     * Scans a directory for Anvil *.mca region files and adds them to the available
+     * region files. Returns false if the directory does not exist.
+     */
     bool readRegions(const fs::path &region_dir);
 };
 
