@@ -118,13 +118,9 @@ bool World::load() {
 
 int World::getAvailableRegionCount() const { return available_regions.size(); }
 
-int World::getAvailableRegionCount() const {
-	return available_regions.size();
-}
+const World::RegionSet &World::getAvailableRegions() const { return available_regions; }
 
-const World::RegionSet& World::getAvailableRegions() const {
-	return available_regions;
-}
+bool World::hasRegion(const RegionPos &pos) const { return available_regions.count(pos) != 0; }
 
 fs::path World::getRegionPath(const RegionPos &pos) const {
     if (!hasRegion(pos))
