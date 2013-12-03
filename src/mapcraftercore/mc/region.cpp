@@ -236,9 +236,7 @@ const RegionPos &RegionFile::getPos() const { return regionpos; }
 
 int RegionFile::getContainingChunksCount() const { return containing_chunks.size(); }
 
-const RegionFile::ChunkMap& RegionFile::getContainingChunks() const {
-	return containing_chunks;
-}
+const RegionFile::ChunkMap &RegionFile::getContainingChunks() const { return containing_chunks; }
 
 bool RegionFile::hasChunk(const ChunkPos &chunk) const {
     return chunk_exists[getChunkIndex(chunk)];
