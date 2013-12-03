@@ -127,7 +127,7 @@ bool RegionFile::read() {
     size_t filesize = file.tellg();
     file.seekg(0, std::ios::beg);
 
-	std::vector<uint8_t> regiondata(filesize);
+    std::vector<uint8_t> regiondata(filesize);
     file.read(reinterpret_cast<char *>(&regiondata[0]), filesize);
 
 	for (int i = 0; i < 1024; i++) {
@@ -234,9 +234,7 @@ const std::string &RegionFile::getFilename() const { return filename; }
 
 const RegionPos &RegionFile::getPos() const { return regionpos; }
 
-int RegionFile::getContainingChunksCount() const {
-	return containing_chunks.size();
-}
+int RegionFile::getContainingChunksCount() const { return containing_chunks.size(); }
 
 const RegionFile::ChunkMap& RegionFile::getContainingChunks() const {
 	return containing_chunks;
@@ -283,11 +281,11 @@ void RegionFile::setChunkData(const ChunkPos &chunk, const std::vector<uint8_t> 
 int RegionFile::loadChunk(const ChunkPos &pos, BlockStateRegistry &block_registry, Chunk &chunk) {
     int index = getChunkIndex(pos);
 
-	// check if the chunk exists
+    // check if the chunk exists
     if (chunk_data[index].size() == 0)
-		return CHUNK_DOES_NOT_EXIST;
+        return CHUNK_DOES_NOT_EXIST;
 
-	// get compression type and size of the data
+    // get compression type and size of the data
     uint8_t compression = chunk_data_compression[index];
     nbt::Compression comp = nbt::Compression::NO_COMPRESSION;
     if (compression == 1)

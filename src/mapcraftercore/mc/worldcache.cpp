@@ -80,7 +80,7 @@ RegionFile *WorldCache::getRegion(const RegionPos &pos) {
 	if (!world.getRegion(pos, entry.value))
 		return nullptr;
 
-	if (!entry.value.read()) {
+    if (!entry.value.read()) {
 		// the region is not valid, region in cache was probably modified
         entry.used = false;
         // remember this region as broken and do not try to load it again
