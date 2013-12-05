@@ -116,7 +116,7 @@ class LightingRenderMode : public BaseRenderMode {
     /**
      * Returns the light of a block (sky/block light). This also means that the light is
      * estimated if the block is a special transparent block.
-	LightingData getBlockLight(const mc::BlockPos& pos);
+     */
 
 
     /**
