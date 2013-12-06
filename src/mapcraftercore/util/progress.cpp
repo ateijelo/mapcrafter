@@ -165,14 +165,14 @@ ProgressBar::ProgressBar() : last_output_len(0) {}
 ProgressBar::~ProgressBar() {}
 
 void ProgressBar::update(double percentage, double average_speed, int eta) {
-	// try to determine the width of the terminal
-	// use 80 columns as default if we can't determine a terminal size
-	int terminal_width = 80;
+    // try to determine the width of the terminal
+    // use 80 columns as default if we can't determine a terminal size
+    int terminal_width = 80;
 #ifdef TIOCGWINSZ
-	struct winsize ws = {0, 0, 0, 0};
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
-	if (ws.ws_col != 0)
-		terminal_width = ws.ws_col;
+    struct winsize ws = {0, 0, 0, 0};
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
+    if (ws.ws_col != 0)
+        terminal_width = ws.ws_col;
 #elif defined(OS_WINDOWS)
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
@@ -187,7 +187,7 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
     std::string stats;
     stats = createProgressStats(percentage, value, max, average_speed, eta);
 
-	// now create the progress bar
+    // now create the progress bar
     // with the remaining size minus one as size
     // (because the space between progress and stats)
     int progressbar_width = terminal_width - stats.size() - 1;
@@ -196,7 +196,7 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
     // go to the begin of the line and clear it
     std::cout << "\r" << std::string(last_output_len, ' ') << "\r";
 
-	// now show everything
+    // now show everything
     // also go back to beginning of line after it, in case there is other output
     std::cout << progressbar << " " << stats << "\r";
     std::cout.flush();
