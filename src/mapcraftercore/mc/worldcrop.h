@@ -34,9 +34,9 @@ namespace mc {
  * A 1-dimensional boundary.
  * Has either two limits, one limit (minimum or maximum) or no limit.
  */
-template <typename T>
-class Bounds {
-public:
+template <typename T> class Bounds {
+  public:
+    Bounds();
 	Bounds();
 	~Bounds();
 
@@ -56,10 +56,10 @@ public:
 	 * Returns whether a specific value is within in the bounds.
 	 */
 	bool contains(T value) const;
-
-private:
+  private:
+    // minimum, maximum
 	// minimum, maximum
-	T min, max;
+    // whether minimum, maximum is set to infinity (or -infinity for minimum)
 	// whether minimum, maximum is set to infinity (or -infinity for minimum)
 	bool min_set, max_set;
 };
@@ -171,13 +171,13 @@ private:
  * Boundaries to crop a Minecraft World.
  */
 class WorldCrop {
-public:
+  public:
 	// different types of boundaries -- either rectangular or circular
 	const static int RECTANGULAR = 1;
 	const static int CIRCULAR = 2;
 
-	WorldCrop();
-	~WorldCrop();
+    WorldCrop();
+    ~WorldCrop();
 
 	/**
 	 * Returns the type of the boundaries.
@@ -193,10 +193,10 @@ public:
 	/**
 	 * Sets the limits (in block coordinates) of the rectangular boundaries.
 	 */
-	void setMinX(int value);
-	void setMaxX(int value);
-	void setMinZ(int value);
-	void setMaxZ(int value);
+    void setMinX(int value);
+    void setMaxX(int value);
+    void setMinZ(int value);
+    void setMaxZ(int value);
 
 	/**
 	 * Sets the limits (in block coordinates) of the circular boundaries.
@@ -207,12 +207,12 @@ public:
 	/**
 	 * Returns whether a specific region is contained.
 	 */
-	bool isRegionContained(const mc::RegionPos& region) const;
+    bool isRegionContained(const mc::RegionPos &region) const;
 
 	/**
 	 * Returns whether a specific chunk is contained.
 	 */
-	bool isChunkContained(const mc::ChunkPos& chunk) const;
+    bool isChunkContained(const mc::ChunkPos &chunk) const;
 
 	/**
 	 * Returns whether a specific chunk is completely contained. With completely is
@@ -253,7 +253,7 @@ public:
      */
 	void loadBlockMask(const std::string& definition);
 
-private:
+  private:
 	// type of world boundaries -- either RECTANGULAR or CIRCULAR
 	int type;
 
@@ -333,6 +333,8 @@ bool Bounds<T>::contains(T value) const {
 }
 
 }
-}
+
+} // namespace mc
+} // namespace mapcrafter
 
 #endif /* WORLDCROP_H_ */

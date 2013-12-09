@@ -22,35 +22,36 @@
 
 #include <set>
 #include <boost/test/unit_test.hpp>
+#include <set>
 
 namespace mc = mapcrafter::mc;
 namespace util = mapcrafter::util;
 
 BOOST_AUTO_TEST_CASE(world_crop_bounds) {
-	mc::Bounds<int> bounds;
+    mc::Bounds<int> bounds;
 
-	// case 1: no borders
-	BOOST_CHECK(bounds.contains(42));
-	BOOST_CHECK(bounds.contains(-73));
+    // case 1: no borders
+    BOOST_CHECK(bounds.contains(42));
+    BOOST_CHECK(bounds.contains(-73));
 
 	// case 2: only a minimum border
-	bounds.resetMax();
-	bounds.setMin(42);
-	BOOST_CHECK(bounds.contains(42));
-	BOOST_CHECK(!bounds.contains(21));
+    bounds.resetMax();
+    bounds.setMin(42);
+    BOOST_CHECK(bounds.contains(42));
+    BOOST_CHECK(!bounds.contains(21));
 
 	// case 3: only a maximum border
 	bounds.setMax(42);
 	BOOST_CHECK(bounds.contains(42));
 	BOOST_CHECK(!bounds.contains(43));
 
-	// case 3: two borders
-	bounds.setMax(73);
-	BOOST_CHECK(bounds.contains(42));
-	BOOST_CHECK(bounds.contains(73));
-	BOOST_CHECK(bounds.contains(54));
-	BOOST_CHECK(!bounds.contains(21));
-	BOOST_CHECK(!bounds.contains(89));
+    // case 3: two borders
+    bounds.setMax(73);
+    BOOST_CHECK(bounds.contains(42));
+    BOOST_CHECK(bounds.contains(73));
+    BOOST_CHECK(bounds.contains(54));
+    BOOST_CHECK(!bounds.contains(21));
+    BOOST_CHECK(!bounds.contains(89));
 }
 
 BOOST_AUTO_TEST_CASE(world_crop_crop_rectangular) {
