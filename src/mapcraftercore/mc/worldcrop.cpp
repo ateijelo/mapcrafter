@@ -159,56 +159,56 @@ WorldCrop::~WorldCrop() {}
 int WorldCrop::getType() const { return type; }
 
 void WorldCrop::setMinY(int value) { bounds_y.setMin(value); }
-	bounds_y.setMax(value);
+
 void WorldCrop::setMaxY(int value) { bounds_y.setMax(value); }
 
 void WorldCrop::setMinX(int value) {
-	bounds_x.setMin(value);
+    bounds_x.setMin(value);
 	bounds_chunk_x.setMin(util::floordiv(value, 16));
 	bounds_region_x.setMin(util::floordiv(value, 512));
 
-	type = RECTANGULAR;
+    type = RECTANGULAR;
 }
 
 void WorldCrop::setMaxX(int value) {
-	bounds_x.setMax(value);
+    bounds_x.setMax(value);
 	bounds_chunk_x.setMax(util::floordiv(value, 16));
 	bounds_region_x.setMax(util::floordiv(value, 512));
 
-	type = RECTANGULAR;
+    type = RECTANGULAR;
 }
 
 void WorldCrop::setMinZ(int value) {
-	bounds_z.setMin(value);
+    bounds_z.setMin(value);
 	bounds_chunk_z.setMin(util::floordiv(value, 16));
 	bounds_region_z.setMin(util::floordiv(value, 512));
 
-	type = RECTANGULAR;
+    type = RECTANGULAR;
 }
 
 void WorldCrop::setMaxZ(int value) {
-	bounds_z.setMax(value);
+    bounds_z.setMax(value);
 	bounds_chunk_z.setMax(util::floordiv(value, 16));
 	bounds_region_z.setMax(util::floordiv(value, 512));
 
-	type = RECTANGULAR;
+    type = RECTANGULAR;
 }
 
 void WorldCrop::setCenter(const BlockPos &pos) {
-	center = pos;
-	type = CIRCULAR;
+    center = pos;
+    type = CIRCULAR;
 }
 
 void WorldCrop::setRadius(long radius) {
-	this->radius = radius;
-	type = CIRCULAR;
+    this->radius = radius;
+    type = CIRCULAR;
 }
 
 bool WorldCrop::isRegionContained(const mc::RegionPos &region) const {
 	if (type == RECTANGULAR) {
 		// rectangular crop:
 		// just check if the region is contained in the calculated bounds
-		return bounds_region_x.contains(region.x) && bounds_region_z.contains(region.z);
+        return bounds_region_x.contains(region.x) && bounds_region_z.contains(region.z);
 	} else if (type == CIRCULAR) {
 		// circular crop:
 		// check roughly whether at least one block of the region is included
@@ -218,7 +218,7 @@ bool WorldCrop::isRegionContained(const mc::RegionPos &region) const {
         long dz = region_center.z - center.z;
 		// and check whether it is at most radius + size of a region blocks away
 		return (radius+512)*(radius+512) >= dx*dx + dz*dz;
-	}
+    }
 
     return true;
 }
@@ -227,7 +227,7 @@ bool WorldCrop::isChunkContained(const mc::ChunkPos &chunk) const {
 	if (type == RECTANGULAR) {
 		// rectangular crop:
 		// just check if the chunk is contained in the calculated chunk bounds
-		return bounds_chunk_x.contains(chunk.x) && bounds_chunk_z.contains(chunk.z);
+        return bounds_chunk_x.contains(chunk.x) && bounds_chunk_z.contains(chunk.z);
 	} else if (type == CIRCULAR) {
 		// circular crop:
 		// do the same thing doing with regions
@@ -235,7 +235,7 @@ bool WorldCrop::isChunkContained(const mc::ChunkPos &chunk) const {
         long dx = chunk_center.x - center.x;
         long dz = chunk_center.z - center.z;
 		return (radius+16)*(radius+16) >= dx*dx + dz*dz;
-	}
+    }
 
     return true;
 }
