@@ -60,8 +60,7 @@ template <typename T> class Bounds {
     // minimum, maximum
     T min, max;
     // whether minimum, maximum is set to infinity (or -infinity for minimum)
-	// whether minimum, maximum is set to infinity (or -infinity for minimum)
-	bool min_set, max_set;
+    bool min_set, max_set;
 };
 
 /**
