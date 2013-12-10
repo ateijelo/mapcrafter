@@ -258,23 +258,23 @@ bool WorldCrop::isChunkCompletelyContained(const mc::ChunkPos& chunk) const {
 			&& isBlockContainedXZ(corner + mc::BlockPos(0, 15, 0))
 			&& isBlockContainedXZ(corner + mc::BlockPos(15, 15, 0));
 }
-
+bool WorldCrop::isBlockContainedXZ(const mc::BlockPos &block) const {
 bool WorldCrop::isBlockContainedXZ(const mc::BlockPos& block) const {
 	if (type == RECTANGULAR) {
 		// rectangular crop:
 		// just check if the chunk is contained in the bounds
-		return bounds_x.contains(block.x) && bounds_z.contains(block.z);
+    } else if (type == CIRCULAR) {
 	} else if (type == CIRCULAR) {
 		// circular crop:
 		// also check distance to the center (like with regions and chunks)
 		long dx = block.x - center.x;
 		long dz = block.z - center.z;
 		return radius*radius >= dx*dx + dz*dz;
-	}
 
-	return true;
+    return true;
 }
 
+bool WorldCrop::isBlockContainedY(const mc::BlockPos &block) const {
 bool WorldCrop::isBlockContainedY(const mc::BlockPos& block) const {
 	return bounds_y.contains(block.y);
 }

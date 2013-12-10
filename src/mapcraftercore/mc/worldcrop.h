@@ -178,10 +178,10 @@ class WorldCrop {
     WorldCrop();
     ~WorldCrop();
 
-	/**
-	 * Returns the type of the boundaries.
-	 */
-	int getType() const;
+    /**
+     * Returns the type of the boundaries.
+     */
+    int getType() const;
 
     /**
      * Sets the minimum/maximum values for y-coordinates.
