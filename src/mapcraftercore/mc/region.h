@@ -47,17 +47,17 @@ public:
 	static const int CHUNK_NBT_ERROR = 4;
 
 	RegionFile();
-	RegionFile(const std::string& filename);
+    RegionFile(const std::string &filename);
 	~RegionFile();
 
-	/**
-	 * Sets the rotation of the world. You have to call this before loading a world.
-	 */
-	void setRotation(int rotation);
+    /**
+     * Sets the rotation of the world. You have to call this before loading a world.
+     */
+    void setRotation(int rotation);
 
-	/**
-	 * Sets the boundaries of the world.
-	 */
+    /**
+     * Sets the boundaries of the world.
+     */
     void setWorldCrop(const WorldCrop &world_crop);
 
 	/**
@@ -137,11 +137,11 @@ public:
 
     std::string filename;
     RegionPos regionpos, regionpos_original;
-	RegionPos regionpos, regionpos_original;
+
     // rotation of the region file
 	// rotation of the region file
     // and possible boundaries of the world
-	// and possible boundaries of the world
+    WorldCrop world_crop;
 
     // a set with all available chunks
 	// a set with all available chunks

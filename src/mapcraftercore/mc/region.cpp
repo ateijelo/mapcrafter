@@ -77,9 +77,9 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
             file.read(reinterpret_cast<char *>(&timestamp), 4);
             timestamp = util::bigEndian32(timestamp);
 
-			// check if this chunk is not cropped
+            // get the original (not rotated) position of the chunk
             ChunkPos chunkpos(x + regionpos_original.x * 32, z + regionpos_original.z * 32);
-				continue;
+            // check if this chunk is not cropped
             if (!world_crop.isChunkContained(chunkpos))
                 continue;
 

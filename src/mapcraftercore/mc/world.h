@@ -163,7 +163,7 @@ private:
 	// used dimension of the world
 	Dimension dimension;
 
-	// rotation and possible boundaries of the world
+    // rotation and possible boundaries of the world
 	int rotation;
     WorldCrop world_crop;
 
