@@ -79,9 +79,9 @@ class World {
     World(std::string world_dir = "", Dimension dimension = Dimension::OVERWORLD);
     ~World();
 
-	/**
+    /**
      * Returns the directory of the world.
-	 */
+     */
     fs::path getWorldDir() const;
 
     /**
@@ -98,12 +98,12 @@ class World {
      * Returns/Sets the rotation of the world. You set this before loading the world.
      */
     int getRotation() const;
-	void setRotation(int rotation);
+    void setRotation(int rotation);
 
-	/**
+    /**
      * Returns/Sets the boundaries of the world. You also have to set this before
      * loading the world.
-	 */
+     */
     WorldCrop getWorldCrop() const;
     void setWorldCrop(const WorldCrop &world_crop);
 
