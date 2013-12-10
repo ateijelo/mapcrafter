@@ -37,28 +37,28 @@ namespace mc {
 template <typename T> class Bounds {
   public:
     Bounds();
-	Bounds();
-	~Bounds();
+    ~Bounds();
 
-	/**
-	 * Sets the minimum/maximum limit.
-	 */
-	void setMin(T min);
-	void setMax(T max);
+    /**
+     * Sets the minimum/maximum limit.
+     */
+    void setMin(T min);
+    void setMax(T max);
 
-	/**
-	 * Resets the minimum/maximum, i.e. sets it to infinity (or -infinity for minimum).
-	 */
-	void resetMin();
-	void resetMax();
+    /**
+     * Resets the minimum/maximum, i.e. sets it to infinity (or -infinity for minimum).
+     */
+    void resetMin();
+    void resetMax();
 
-	/**
-	 * Returns whether a specific value is within in the bounds.
-	 */
-	bool contains(T value) const;
+    /**
+     * Returns whether a specific value is within in the bounds.
+     */
+    bool contains(T value) const;
+
   private:
     // minimum, maximum
-	// minimum, maximum
+    T min, max;
     // whether minimum, maximum is set to infinity (or -infinity for minimum)
 	// whether minimum, maximum is set to infinity (or -infinity for minimum)
 	bool min_set, max_set;
@@ -279,59 +279,43 @@ class WorldCrop {
 	std::shared_ptr<BlockMask> block_mask;
 };
 
-template <typename T>
-Bounds<T>::Bounds()
-	: min_set(false), max_set(false) {
+template <typename T> Bounds<T>::Bounds() : min_set(false), max_set(false) {}
+
+template <typename T> Bounds<T>::~Bounds() {}
+
+template <typename T> void Bounds<T>::setMin(T min) {
+    this->min = min;
+    min_set = true;
 }
 
-template <typename T>
-Bounds<T>::~Bounds() {
+template <typename T> void Bounds<T>::setMax(T max) {
+    this->max = max;
+    max_set = true;
 }
 
-template <typename T>
-void Bounds<T>::setMin(T min) {
-	this->min = min;
-	min_set = true;
-}
+template <typename T> void Bounds<T>::resetMin() { min_set = false; }
 
-template <typename T>
-void Bounds<T>::setMax(T max) {
-	this->max = max;
-	max_set = true;
-}
+template <typename T> void Bounds<T>::resetMax() { max_set = false; }
 
-template <typename T>
-void Bounds<T>::resetMin() {
-	min_set = false;
-}
+template <typename T> bool Bounds<T>::contains(T value) const {
+    // case 1: no limits
+    // value is definitely included
+    if (!min_set && !max_set)
+        return true;
 
-template <typename T>
-void Bounds<T>::resetMax() {
-	max_set = false;
-}
+    // case 2: only a minimum limit
+    // value is included if value >= minimum
+    if (min_set && !max_set)
+        return value >= min;
 
-template <typename T>
-bool Bounds<T>::contains(T value) const {
-	// case 1: no limits
-	// value is definitely included
-	if (!min_set && !max_set)
-		return true;
+    // case 3: only a maximum limits
+    // value is included if value <= maximum
+    if (max_set && !min_set)
+        return value <= max;
 
-	// case 2: only a minimum limit
-	// value is included if value >= minimum
-	if (min_set && !max_set)
-		return value >= min;
-
-	// case 3: only a maximum limits
-	// value is included if value <= maximum
-	if (max_set && !min_set)
-		return value <= max;
-
-	// case 3: two limits
-	// value is included if value >= minimum and value <= maximum
-	return min <= value && value <= max;
-}
-
+    // case 3: two limits
+    // value is included if value >= minimum and value <= maximum
+    return min <= value && value <= max;
 }
 
 } // namespace mc
