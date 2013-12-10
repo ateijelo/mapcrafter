@@ -156,9 +156,7 @@ WorldCrop::WorldCrop() : type(RECTANGULAR), radius(0), crop_unpopulated_chunks(t
 
 WorldCrop::~WorldCrop() {}
 
-void WorldCrop::setMinY(int value) {
-	bounds_y.setMin(value);
-}
+int WorldCrop::getType() const { return type; }
 
 void WorldCrop::setMinY(int value) { bounds_y.setMin(value); }
 	bounds_y.setMax(value);
