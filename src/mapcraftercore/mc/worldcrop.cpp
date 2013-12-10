@@ -144,7 +144,7 @@ void BlockMask::updateBlockState(uint16_t id) {
     for (size_t i = 0; i < 16; i++)
         block[i] = block_mask[16 * id + i];
 
-WorldCrop::WorldCrop()
+    if (block.all())
         block_states[id] = BlockState::COMPLETELY_SHOWN;
     else if (block.none())
         block_states[id] = BlockState::COMPLETELY_HIDDEN;
@@ -152,8 +152,7 @@ WorldCrop::WorldCrop()
         block_states[id] = BlockState::PARTIALLY_HIDDEN_SHOWN;
 }
 
-WorldCrop::~WorldCrop() {
-}
+WorldCrop::WorldCrop() : type(RECTANGULAR), radius(0), crop_unpopulated_chunks(true) {}
 
 WorldCrop::~WorldCrop() {}
 
@@ -161,9 +160,9 @@ void WorldCrop::setMinY(int value) {
 	bounds_y.setMin(value);
 }
 
-void WorldCrop::setMaxY(int value) {
+void WorldCrop::setMinY(int value) { bounds_y.setMin(value); }
 	bounds_y.setMax(value);
-}
+void WorldCrop::setMaxY(int value) { bounds_y.setMax(value); }
 
 void WorldCrop::setMinX(int value) {
 	bounds_x.setMin(value);
@@ -197,7 +196,7 @@ void WorldCrop::setMaxZ(int value) {
 	type = RECTANGULAR;
 }
 
-void WorldCrop::setCenter(const BlockPos& pos) {
+void WorldCrop::setCenter(const BlockPos &pos) {
 	center = pos;
 	type = CIRCULAR;
 }
@@ -207,7 +206,7 @@ void WorldCrop::setRadius(long radius) {
 	type = CIRCULAR;
 }
 
-bool WorldCrop::isRegionContained(const mc::RegionPos& region) const {
+bool WorldCrop::isRegionContained(const mc::RegionPos &region) const {
 	if (type == RECTANGULAR) {
 		// rectangular crop:
 		// just check if the region is contained in the calculated bounds
@@ -223,10 +222,10 @@ bool WorldCrop::isRegionContained(const mc::RegionPos& region) const {
 		return (radius+512)*(radius+512) >= dx*dx + dz*dz;
 	}
 
-	return true;
+    return true;
 }
 
-bool WorldCrop::isChunkContained(const mc::ChunkPos& chunk) const {
+bool WorldCrop::isChunkContained(const mc::ChunkPos &chunk) const {
 	if (type == RECTANGULAR) {
 		// rectangular crop:
 		// just check if the chunk is contained in the calculated chunk bounds
@@ -240,7 +239,7 @@ bool WorldCrop::isChunkContained(const mc::ChunkPos& chunk) const {
 		return (radius+16)*(radius+16) >= dx*dx + dz*dz;
 	}
 
-	return true;
+    return true;
 }
 
 bool WorldCrop::isChunkCompletelyContained(const mc::ChunkPos &chunk) const {
@@ -299,5 +298,5 @@ void WorldCrop::loadBlockMask(const std::string &definition) {
     }
 }
 
-}
-}
+} // namespace mc
+} // namespace mapcrafter
