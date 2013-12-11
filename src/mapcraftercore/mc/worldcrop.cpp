@@ -205,36 +205,36 @@ void WorldCrop::setRadius(long radius) {
 }
 
 bool WorldCrop::isRegionContained(const mc::RegionPos &region) const {
-	if (type == RECTANGULAR) {
-		// rectangular crop:
-		// just check if the region is contained in the calculated bounds
+    if (type == RECTANGULAR) {
+        // rectangular crop:
+        // just check if the region is contained in the calculated bounds
         return bounds_region_x.contains(region.x) && bounds_region_z.contains(region.z);
-	} else if (type == CIRCULAR) {
-		// circular crop:
-		// check roughly whether at least one block of the region is included
-		// use the midpoint of the region and determine the distance to the center
-		BlockPos region_center(region.x * 512 + 256, region.z * 512 + 256, 0);
+    } else if (type == CIRCULAR) {
+        // circular crop:
+        // check roughly whether at least one block of the region is included
+        // use the midpoint of the region and determine the distance to the center
+        BlockPos region_center(region.x * 512 + 256, region.z * 512 + 256, 0);
         long dx = region_center.x - center.x;
         long dz = region_center.z - center.z;
-		// and check whether it is at most radius + size of a region blocks away
-		return (radius+512)*(radius+512) >= dx*dx + dz*dz;
+        // and check whether it is at most radius + size of a region blocks away
+        return (radius + 512) * (radius + 512) >= dx * dx + dz * dz;
     }
 
     return true;
 }
 
 bool WorldCrop::isChunkContained(const mc::ChunkPos &chunk) const {
-	if (type == RECTANGULAR) {
-		// rectangular crop:
-		// just check if the chunk is contained in the calculated chunk bounds
+    if (type == RECTANGULAR) {
+        // rectangular crop:
+        // just check if the chunk is contained in the calculated chunk bounds
         return bounds_chunk_x.contains(chunk.x) && bounds_chunk_z.contains(chunk.z);
-	} else if (type == CIRCULAR) {
-		// circular crop:
-		// do the same thing doing with regions
-		BlockPos chunk_center(chunk.x * 16 + 8, chunk.z * 16 + 8, 0);
+    } else if (type == CIRCULAR) {
+        // circular crop:
+        // do the same thing doing with regions
+        BlockPos chunk_center(chunk.x * 16 + 8, chunk.z * 16 + 8, 0);
         long dx = chunk_center.x - center.x;
         long dz = chunk_center.z - center.z;
-		return (radius+16)*(radius+16) >= dx*dx + dz*dz;
+        return (radius + 16) * (radius + 16) >= dx * dx + dz * dz;
     }
 
     return true;
@@ -249,16 +249,16 @@ bool WorldCrop::isChunkCompletelyContained(const mc::ChunkPos &chunk) const {
 
 bool WorldCrop::isBlockContainedXZ(const mc::BlockPos &block) const {
     if (type == RECTANGULAR) {
-	if (type == RECTANGULAR) {
-		// rectangular crop:
-		// just check if the chunk is contained in the bounds
+        // rectangular crop:
+        // just check if the chunk is contained in the bounds
+        return bounds_x.contains(block.x) && bounds_z.contains(block.z);
     } else if (type == CIRCULAR) {
-	} else if (type == CIRCULAR) {
-		// circular crop:
-		// also check distance to the center (like with regions and chunks)
+        // circular crop:
+        // also check distance to the center (like with regions and chunks)
+        long dx = block.x - center.x;
         long dz = block.z - center.z;
         return radius * radius >= dx * dx + dz * dz;
-		return radius*radius >= dx*dx + dz*dz;
+    }
 
     return true;
 }
