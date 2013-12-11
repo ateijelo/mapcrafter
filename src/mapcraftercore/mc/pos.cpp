@@ -96,9 +96,9 @@ ChunkPos ChunkPos::byRowCol(int row, int col) { return ChunkPos((col - row) / 2,
 
 void ChunkPos::rotate(int count) {
     for (int i = 0; i < count; i++) {
-		int nx = 31 - z;
-		z = x;
-		x = nx;
+        int nx = 31 - z;
+        z = x;
+        x = nx;
     }
 }
 
