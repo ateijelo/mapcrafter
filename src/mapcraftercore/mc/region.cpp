@@ -130,35 +130,35 @@ bool RegionFile::read() {
     std::vector<uint8_t> regiondata(filesize);
     file.read(reinterpret_cast<char *>(&regiondata[0]), filesize);
 
-	for (int i = 0; i < 1024; i++) {
-		// get the offsets, where the chunk data starts
-		int offset = chunk_offsets[i];
-		if (offset == 0)
-			continue;
+    for (int i = 0; i < 1024; i++) {
+        // get the offsets, where the chunk data starts
+        int offset = chunk_offsets[i];
+        if (offset == 0)
+            continue;
 
 		// i = x + z * 32
 		int x = i % 32;
 		int z = (i - x) / 32;
 
-		// get data size and compression type
+        // get data size and compression type
         uint32_t size = *(reinterpret_cast<uint32_t *>(&regiondata[offset]));
 		if (size == 0) {
 			LOG(ERROR)  << "Corrupt region '" << filename << "': Size of chunk "
 				<< x << ":" << z << " is zero.";
 			return false;
 		}
-		size = util::bigEndian32(size) - 1;
-		uint8_t compression = regiondata[offset + 4];
+        size = util::bigEndian32(size) - 1;
+        uint8_t compression = regiondata[offset + 4];
         if (filesize < offset + 5 + size) {
             LOG(ERROR) << "Corrupt region '" << filename << "': Invalid size of chunk " << x << ":"
 				<< x << ":" << z << ".";
             return false;
         }
 
-		chunk_data_compression[i] = compression;
-		chunk_data[i].resize(size);
-		std::copy(&regiondata[offset+5], &regiondata[offset+5+size], chunk_data[i].begin());
-	}
+        chunk_data_compression[i] = compression;
+        chunk_data[i].resize(size);
+        std::copy(&regiondata[offset + 5], &regiondata[offset + 5 + size], chunk_data[i].begin());
+    }
 
     return true;
 }
@@ -170,64 +170,64 @@ bool RegionFile::readOnlyHeaders() {
 }
 
 bool RegionFile::write(std::string filename) const {
-	if (filename.empty())
-		filename = this->filename;
-	if (filename.empty())
-		throw std::invalid_argument("You have to specify a filename!");
+    if (filename.empty())
+        filename = this->filename;
+    if (filename.empty())
+        throw std::invalid_argument("You have to specify a filename!");
 
-	uint32_t offsets[1024];
-	for (int i = 0; i < 1024; i++)
-		offsets[i] = 0;
+    uint32_t offsets[1024];
+    for (int i = 0; i < 1024; i++)
+        offsets[i] = 0;
 
-	std::stringstream out_data, out_header;
+    std::stringstream out_data, out_header;
 
-	// write chunk data to a temporary string stream
-	int position = 8192;
-	for (int i = 0; i < 1024; i++) {
-		if (chunk_data[i].size() == 0)
-			continue;
-		// pad every chunk data with zeros to the next n*4096 bytes
-		if (position % 4096 != 0) {
-			int append = 4096 - position % 4096;
-			position += append;
-			for (int j = 0; j < append; j++)
-				out_data.put(0);
-		}
+    // write chunk data to a temporary string stream
+    int position = 8192;
+    for (int i = 0; i < 1024; i++) {
+        if (chunk_data[i].size() == 0)
+            continue;
+        // pad every chunk data with zeros to the next n*4096 bytes
+        if (position % 4096 != 0) {
+            int append = 4096 - position % 4096;
+            position += append;
+            for (int j = 0; j < append; j++)
+                out_data.put(0);
+        }
 
-		// calculate the offset, the chunk starts at 4096*offset bytes
-		offsets[i] = position / 4096;
+        // calculate the offset, the chunk starts at 4096*offset bytes
+        offsets[i] = position / 4096;
 
-		// get chunk data, size and compression type
-		const std::vector<uint8_t>& data = chunk_data[i];
-		uint32_t size = data.size();
-		size = util::bigEndian32(size + 1);
-		uint8_t compression = chunk_data_compression[i];
+        // get chunk data, size and compression type
+        const std::vector<uint8_t> &data = chunk_data[i];
+        uint32_t size = data.size();
+        size = util::bigEndian32(size + 1);
+        uint8_t compression = chunk_data_compression[i];
 
-		// append everything to the data
-		out_data.write(reinterpret_cast<char*>(&size), 4);
-		out_data.write(reinterpret_cast<char*>(&compression), 1);
-		out_data.write(reinterpret_cast<const char*>(&data[0]), data.size());
-		position += data.size() + 5;
-	}
+        // append everything to the data
+        out_data.write(reinterpret_cast<char *>(&size), 4);
+        out_data.write(reinterpret_cast<char *>(&compression), 1);
+        out_data.write(reinterpret_cast<const char *>(&data[0]), data.size());
+        position += data.size() + 5;
+    }
 
-	// create the header with offsets and timestamps
-	for (int i = 0; i < 1024; i++) {
+    // create the header with offsets and timestamps
+    for (int i = 0; i < 1024; i++) {
         uint32_t offset_big_endian = util::bigEndian32(offsets[i]) >> 8;
-		out_header.write(reinterpret_cast<char*>(&offset_big_endian), 4);
-	}
+        out_header.write(reinterpret_cast<char *>(&offset_big_endian), 4);
+    }
 
-	for (int i = 0; i < 1024; i++) {
+    for (int i = 0; i < 1024; i++) {
         uint32_t timestamp_big_endian = util::bigEndian32(chunk_timestamps[i]);
-		out_header.write(reinterpret_cast<char*>(&timestamp_big_endian), 4);
-	}
+        out_header.write(reinterpret_cast<char *>(&timestamp_big_endian), 4);
+    }
 
-	// write complete region file
-	std::ofstream out(filename, std::ios::binary);
-	if (!out)
-		return false;
-	out << out_header.rdbuf() << out_data.rdbuf();
-	out.close();
-	return !out.fail();
+    // write complete region file
+    std::ofstream out(filename, std::ios::binary);
+    if (!out)
+        return false;
+    out << out_header.rdbuf() << out_data.rdbuf();
+    out.close();
+    return !out.fail();
 }
 
 const std::string &RegionFile::getFilename() const { return filename; }
@@ -248,7 +248,7 @@ uint32_t RegionFile::getChunkTimestamp(const ChunkPos &chunk) const {
     return chunk_timestamps[getChunkIndex(chunk)];
 }
 
-void RegionFile::setChunkTimestamp(const ChunkPos& chunk, uint32_t timestamp) {
+void RegionFile::setChunkTimestamp(const ChunkPos &chunk, uint32_t timestamp) {
     chunk_timestamps[getChunkIndex(chunk)] = timestamp;
 }
 

@@ -72,11 +72,11 @@ class RegionFile {
      */
     bool readOnlyHeaders();
 
-	/**
-	 * Writes the region to a file. You can also specify a different filename to write
-	 * the region file to.
-	 */
-	bool write(std::string filename = "") const;
+    /**
+     * Writes the region to a file. You can also specify a different filename to write
+     * the region file to.
+     */
+    bool write(std::string filename = "") const;
 
     /**
      * Returns the filename of the region file.
@@ -107,7 +107,7 @@ class RegionFile {
      * Returns/Sets the timestamp of a specific chunk.
      */
     uint32_t getChunkTimestamp(const ChunkPos &chunk) const;
-	void setChunkTimestamp(const ChunkPos& chunk, uint32_t timestamp);
+    void setChunkTimestamp(const ChunkPos &chunk, uint32_t timestamp);
 
     /**
      * Returns the raw (compressed) data of a specific chunk. Returns an empty array if
@@ -154,7 +154,7 @@ class RegionFile {
 
     // timestamps of the chunks
 	// timestamps of the chunks
-	uint32_t chunk_timestamps[1024];
+
     // actual chunk data with compression type
     uint8_t chunk_data_compression[1024];
     std::vector<uint8_t> chunk_data[1024];
