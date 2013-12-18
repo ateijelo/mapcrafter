@@ -43,7 +43,7 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
     containing_chunks.clear();
     for (int i = 0; i < 1024; i++) {
         chunk_offsets[i] = 0;
-		chunk_data_compression[i] = 0;
+        chunk_exists[i] = false;
         chunk_timestamps[i] = 0;
         chunk_data_compression[i] = 0;
 	file.seekg(0, std::ios::end);
@@ -256,16 +256,16 @@ void RegionFile::setChunkTimestamp(const ChunkPos& chunk, uint32_t timestamp) {
 	chunk_timestamps[getChunkIndex(chunk)] = timestamp;
 }
 
-const std::vector<uint8_t>& RegionFile::getChunkData(const ChunkPos& chunk) const {
+const std::vector<uint8_t> &RegionFile::getChunkData(const ChunkPos &chunk) const {
 	return chunk_data[getChunkIndex(chunk)];
 }
 
-uint8_t RegionFile::getChunkDataCompression(const ChunkPos& chunk) const {
+uint8_t RegionFile::getChunkDataCompression(const ChunkPos &chunk) const {
 	return chunk_data_compression[getChunkIndex(chunk)];
 }
 
-void RegionFile::setChunkData(const ChunkPos& chunk, const std::vector<uint8_t>& data,
-		uint8_t compression) {
+void RegionFile::setChunkData(const ChunkPos &chunk, const std::vector<uint8_t> &data,
+                              uint8_t compression) {
     size_t index = getChunkIndex(chunk);
 	chunk_data[index] = data;
 	chunk_data_compression[index] = compression;

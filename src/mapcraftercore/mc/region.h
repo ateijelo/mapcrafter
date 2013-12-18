@@ -109,26 +109,26 @@ public:
     uint32_t getChunkTimestamp(const ChunkPos &chunk) const;
 	void setChunkTimestamp(const ChunkPos& chunk, uint32_t timestamp);
 
-	/**
-	 * Returns the raw (compressed) data of a specific chunk. Returns an empty array if
-	 * the chunk does not exist.
-	 */
-	const std::vector<uint8_t>& getChunkData(const ChunkPos& chunk) const;
+    /**
+     * Returns the raw (compressed) data of a specific chunk. Returns an empty array if
+     * the chunk does not exist.
+     */
+    const std::vector<uint8_t> &getChunkData(const ChunkPos &chunk) const;
 
-	/**
-	 * Returns the type of the compressed chunk data (one byte, see specification of
-	 * region format).
-	 */
-	uint8_t getChunkDataCompression(const ChunkPos& chunk) const;
+    /**
+     * Returns the type of the compressed chunk data (one byte, see specification of
+     * region format).
+     */
+    uint8_t getChunkDataCompression(const ChunkPos &chunk) const;
 
-	/**
-	 * Sets the raw (compressed) data of a specific chunk. You also need to specify
-	 * a compression type (one byte, see specification of region format).
-	 * You can remove a chunk by setting its chunk data to an empty array.
-	 */
-	void setChunkData(const ChunkPos& chunk, const std::vector<uint8_t>& data,
-			uint8_t compression);
+    /**
+     * Sets the raw (compressed) data of a specific chunk. You also need to specify
+     * a compression type (one byte, see specification of region format).
+     * You can remove a chunk by setting its chunk data to an empty array.
+     */
+    void setChunkData(const ChunkPos &chunk, const std::vector<uint8_t> &data, uint8_t compression);
 
+    /**
 	/**
 	 * Loads a specific chunk into the supplied Chunk-object.
 	 * Returns as integer one of the RegionFile::CHUNK_* status codes.
