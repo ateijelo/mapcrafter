@@ -223,7 +223,7 @@ void TagString::write(std::ostream &stream) const {
     nbtstream::write<std::string>(stream, payload);
 }
 
-TagList::TagList(const TagList& other)
+void TagString::dump(std::ostream &stream, const std::string &indendation) const {
 	: Tag(TAG_TYPE) {
 	*this = other;
 }
@@ -234,12 +234,9 @@ void TagList::operator=(const TagList& other) {
 	name = other.name;
 	named = other.named;
 
-	tag_type = other.tag_type;
+TagList::TagList(const TagList &other) : Tag(TAG_TYPE) { *this = other; }
 
-	payload.clear();
-	for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
-		payload.push_back(TagPtr((*it)->clone()));
-}
+TagList::~TagList() {}
 
 void TagList::operator=(const TagList &other) {
     name = other.name;
@@ -280,7 +277,20 @@ void TagList::write(std::ostream& stream) const {
 }
 
 Tag &TagList::read(std::istream &stream) {
-	return new TagList(*this);
+    tag_type = nbtstream::read<int8_t>(stream);
+    int32_t length = nbtstream::read<int32_t>(stream);
+    for (int32_t i = 0; i < length; i++) {
+        Tag *tag = createTag(tag_type);
+        if (tag == nullptr)
+            throw NBTError(std::string("Unknown tag type with id ") +
+                           util::str(static_cast<int>(tag_type)) +
+                           ". NBT data stream may be corrupted.");
+        tag->read(stream);
+        tag->setWriteType(false);
+        tag->setNamed(false);
+        payload.push_back(TagPtrType<Tag>(tag));
+    }
+    return *this;
 }
 
 void TagList::write(std::ostream &stream) const {
@@ -294,9 +304,16 @@ void TagList::write(std::ostream &stream) const {
     }
 }
 
-TagCompound::TagCompound(const TagCompound& other)
+void TagList::dump(std::ostream &stream, const std::string &indendation) const {
     stream << indendation << "TAG_List";
-	*this = other;
+    if (named)
+        stream << "(\"" << name << "\")";
+    stream << ": " << payload.size() << " entries of type " << static_cast<int>(tag_type)
+           << std::endl;
+    stream << indendation << "{" << std::endl;
+    for (auto it = payload.begin(); it != payload.end(); ++it)
+        (*it)->dump(stream, indendation + "   ");
+    stream << indendation << "}" << std::endl;
 }
 
 Tag *TagList::clone() const { return new TagList(*this); }
@@ -305,10 +322,7 @@ void TagCompound::operator=(const TagCompound& other) {
 	name = other.name;
 	named = other.named;
 
-	payload.clear();
-	for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
-		payload[it->first] = TagPtr(it->second->clone());
-}
+TagCompound::TagCompound(const TagCompound &other) : Tag(TAG_TYPE) { *this = other; }
 
 Tag& TagCompound::read(std::istream& stream) {
 	while (1) {
