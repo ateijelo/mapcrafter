@@ -151,8 +151,8 @@ public:
 
     // available chunks also as array
     bool chunk_exists[1024];
-	bool chunk_exists[1024];
-	
+
+    // timestamps of the chunks
 	// timestamps of the chunks
 	uint32_t chunk_timestamps[1024];
 

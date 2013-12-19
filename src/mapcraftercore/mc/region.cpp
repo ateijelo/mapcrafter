@@ -38,10 +38,10 @@ RegionFile::~RegionFile() {}
 
 bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) {
     if (!file)
-	containing_chunks.clear();
+        return false;
 
     containing_chunks.clear();
-		chunk_exists[i] = false;
+    for (int i = 0; i < 1024; i++) {
         chunk_offsets[i] = 0;
 		chunk_data_compression[i] = 0;
         chunk_timestamps[i] = 0;
@@ -85,7 +85,7 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
 
             // now rotate this chunk position for the public set with available chunks
 			
-			chunk_exists[z * 32 + x] = true;
+                chunkpos.rotate(rotation);
 
             chunk_exists[z * 32 + x] = true;
             containing_chunks.insert(chunkpos);
@@ -123,7 +123,7 @@ void RegionFile::setWorldCrop(const WorldCrop& world_crop) {
 bool RegionFile::read() {
     std::ifstream file(filename.c_str(), std::ios_base::binary);
     uint32_t chunk_offsets[1024];
-	if (!readHeaders(file, chunk_offsets))
+    if (!readHeaders(file, chunk_offsets))
         return false;
     file.seekg(0, std::ios::end);
     size_t filesize = file.tellg();
@@ -168,7 +168,7 @@ bool RegionFile::read() {
 bool RegionFile::readOnlyHeaders() {
     std::ifstream file(filename.c_str(), std::ios_base::binary);
     uint32_t chunk_offsets[1024];
-	return readHeaders(file, chunk_offsets);
+    return readHeaders(file, chunk_offsets);
 }
 
 bool RegionFile::write(std::string filename) const {
@@ -270,13 +270,13 @@ void RegionFile::setChunkData(const ChunkPos& chunk, const std::vector<uint8_t>&
 	chunk_data[index] = data;
 	chunk_data_compression[index] = compression;
 
-	if (data.size() == 0) {
+    if (data.size() == 0) {
 		chunk_exists[index] = false;
-		containing_chunks.erase(chunk);
-	} else {
+        containing_chunks.erase(chunk);
+    } else {
 		chunk_exists[index] = true;
-		containing_chunks.insert(chunk);
-	}
+        containing_chunks.insert(chunk);
+    }
 }
 
 /**
