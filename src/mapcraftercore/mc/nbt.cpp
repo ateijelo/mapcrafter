@@ -196,13 +196,7 @@ void TagList::operator=(const TagList &other) {
 
     payload.clear();
     for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
-	if (named)
-		stream << "(\"" << name << "\")";
-	stream << ": " << payload.size() << " entries of type " << static_cast<int>(tag_type) << std::endl;
-	stream << indendation << "{" << std::endl;
-	for (auto it = payload.begin(); it != payload.end(); ++it)
-		(*it)->dump(stream, indendation + "   ");
-	stream << indendation << "}" << std::endl;
+        payload.push_back(TagPtr((*it)->clone()));
 }
 
 Tag &TagList::read(std::istream &stream) {
