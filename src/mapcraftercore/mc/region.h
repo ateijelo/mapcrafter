@@ -164,12 +164,11 @@ public:
 	 * Reads the headers of a region file.
 	 */
 
-
-	/**
-	 * Calculates the index (chunk_* arrays) for a specific chunks.
-	 * The chunk position is rotated to the original rotation if the region is rotated.
-	 */
-	size_t getChunkIndex(const mc::ChunkPos& chunkpos) const;
+    /**
+     * Calculates the index (chunk_* arrays) for a specific chunks.
+     * The chunk position is rotated to the original rotation if the region is rotated.
+     */
+    size_t getChunkIndex(const mc::ChunkPos &chunkpos) const;
 };
 
 } // namespace mc
