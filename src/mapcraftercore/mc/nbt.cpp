@@ -192,16 +192,7 @@ void TagList::operator=(const TagList &other) {
     name = other.name;
     named = other.named;
 
-void TagList::write(std::ostream& stream) const {
-	Tag::write(stream);
-	nbtstream::write<int8_t>(stream, tag_type);
-	nbtstream::write<int32_t>(stream, payload.size());
-	for (auto it = payload.begin(); it != payload.end(); ++it) {
-		(*it)->setWriteType(false);
-		(*it)->setNamed(false);
-		(*it)->write(stream);
-	}
-}
+    tag_type = other.tag_type;
 
     payload.clear();
     for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
@@ -280,13 +271,7 @@ Tag& TagCompound::read(std::istream& stream) {
 
 void TagCompound::operator=(const TagCompound &other) {
     name = other.name;
-	for (auto it = payload.begin(); it != payload.end(); ++it) {
-		it->second->setWriteType(true);
-		it->second->setNamed(true);
-		it->second->write(stream);
-	}
-	nbtstream::write<int8_t>(stream, TagEnd::TAG_TYPE);
-}
+    named = other.named;
 
     payload.clear();
     for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
