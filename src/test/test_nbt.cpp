@@ -93,10 +93,7 @@ BOOST_AUTO_TEST_CASE(nbt_testIO) {
         BOOST_CHECK_EQUAL(in.findTag<nbt::TagLong>("long").payload, 123456);
         BOOST_CHECK_CLOSE(in.findTag<nbt::TagFloat>("float").payload, 3.1415926, 0.0001);
         BOOST_CHECK_CLOSE(in.findTag<nbt::TagDouble>("double").payload, 2.7182818, 0.0001);
-		out.addTag("compound", out);
-		
-		//out.dump(std::cout);
-		out.writeNBT(stream, compression);
+        BOOST_CHECK_EQUAL(in.findTag<nbt::TagString>("string").payload, "foobar");
 
         nbt::TagList &tag_list = in.findTag<nbt::TagList>("list");
         for (size_t i = 0; i < list_data.size(); i++) {
