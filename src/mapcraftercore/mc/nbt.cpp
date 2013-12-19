@@ -218,8 +218,9 @@ Tag &TagString::read(std::istream &stream) {
     return *this;
 }
 
-TagList::TagList(int8_t tag_type)
-	: Tag(TAG_TYPE), tag_type(tag_type) {
+void TagString::write(std::ostream &stream) const {
+    Tag::write(stream);
+    nbtstream::write<std::string>(stream, payload);
 }
 
 TagList::TagList(const TagList& other)
@@ -282,13 +283,19 @@ Tag &TagList::read(std::istream &stream) {
 	return new TagList(*this);
 }
 
-TagCompound::TagCompound(const std::string& name)
-	: Tag(TAG_TYPE) {
-	setName(name);
+void TagList::write(std::ostream &stream) const {
+    Tag::write(stream);
+    nbtstream::write<int8_t>(stream, tag_type);
+    nbtstream::write<int32_t>(stream, payload.size());
+    for (auto it = payload.begin(); it != payload.end(); ++it) {
+        (*it)->setWriteType(false);
+        (*it)->setNamed(false);
+        (*it)->write(stream);
+    }
 }
 
 TagCompound::TagCompound(const TagCompound& other)
-	: Tag(TAG_TYPE) {
+    stream << indendation << "TAG_List";
 	*this = other;
 }
 

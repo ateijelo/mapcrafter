@@ -252,7 +252,7 @@ typedef TagPtrType<Tag> TagPtr;
 
 class TagList : public Tag {
   public:
-	TagList(int8_t tag_type = -1);
+    TagList(int8_t tag_type = -1);
 	TagList(const TagList& other);
     ~TagList();
 
@@ -271,7 +271,7 @@ class TagList : public Tag {
 
 class TagCompound : public Tag {
   public:
-	TagCompound(const std::string& name = "");
+    TagCompound(const std::string &name = "");
 	TagCompound(const TagCompound& other);
     ~TagCompound();
 
