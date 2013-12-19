@@ -177,8 +177,7 @@ void TagString::write(std::ostream &stream) const {
 }
 
 void TagString::dump(std::ostream &stream, const std::string &indendation) const {
-	: Tag(TAG_TYPE) {
-	*this = other;
+    dumpTag(stream, indendation, *this);
 }
 
 Tag *TagString::clone() const { return new TagString(*this); }
