@@ -190,19 +190,7 @@ TagList::~TagList() {}
 
 void TagList::operator=(const TagList &other) {
     name = other.name;
-	int32_t length = nbtstream::read<int32_t>(stream);
-	for (int32_t i = 0; i < length; i++) {
-		Tag* tag = createTag(tag_type);
-		if (tag == nullptr)
-			throw NBTError(std::string("Unknown tag type with id ") + util::str(static_cast<int>(tag_type))
-						   + ". NBT data stream may be corrupted.");
-		tag->read(stream);
-		tag->setWriteType(false);
-		tag->setNamed(false);
-		payload.push_back(TagPtrType<Tag>(tag));
-	}
-	return *this;
-}
+    named = other.named;
 
 void TagList::write(std::ostream& stream) const {
 	Tag::write(stream);
