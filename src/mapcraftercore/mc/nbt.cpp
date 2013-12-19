@@ -245,23 +245,7 @@ TagCompound::TagCompound(const std::string &name) : Tag(TAG_TYPE) { setName(name
 
 TagCompound::TagCompound(const TagCompound &other) : Tag(TAG_TYPE) { *this = other; }
 
-Tag& TagCompound::read(std::istream& stream) {
-	while (1) {
-		int8_t tag_type = nbtstream::read<int8_t>(stream);
-		if (tag_type == TagEnd::TAG_TYPE)
-			break;
-		std::string name = nbtstream::read<std::string>(stream);
-		Tag* tag = createTag(tag_type);
-		if (tag == nullptr)
-			throw NBTError(std::string("Unknown tag type with id ") + util::str(static_cast<int>(tag_type))
-						   + ". NBT data stream may be corrupted.");
-		tag->read(stream);
-		tag->setName(name);
-		tag->setWriteType(true);
-		payload[name] = TagPtr(tag);
-	}
-	return *this;
-}
+TagCompound::~TagCompound() {}
 
 void TagCompound::operator=(const TagCompound &other) {
     name = other.name;
