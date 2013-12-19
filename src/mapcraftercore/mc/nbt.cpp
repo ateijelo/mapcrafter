@@ -263,7 +263,7 @@ Tag &TagCompound::read(std::istream &stream) {
             break;
         std::string name = nbtstream::read<std::string>(stream);
         Tag *tag = createTag(tag_type);
-	return new TagCompound(*this);
+        if (tag == nullptr)
             throw NBTError(std::string("Unknown tag type with id ") +
                            util::str(static_cast<int>(tag_type)) +
                            ". NBT data stream may be corrupted.");
