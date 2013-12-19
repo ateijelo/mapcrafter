@@ -182,9 +182,7 @@ void TagString::dump(std::ostream &stream, const std::string &indendation) const
 
 Tag *TagString::clone() const { return new TagString(*this); }
 
-void TagList::operator=(const TagList& other) {
-	name = other.name;
-	named = other.named;
+TagList::TagList(int8_t tag_type) : Tag(TAG_TYPE), tag_type(tag_type) {}
 
 TagList::TagList(const TagList &other) : Tag(TAG_TYPE) { *this = other; }
 
@@ -270,9 +268,7 @@ void TagList::dump(std::ostream &stream, const std::string &indendation) const {
 
 Tag *TagList::clone() const { return new TagList(*this); }
 
-void TagCompound::operator=(const TagCompound& other) {
-	name = other.name;
-	named = other.named;
+TagCompound::TagCompound(const std::string &name) : Tag(TAG_TYPE) { setName(name); }
 
 TagCompound::TagCompound(const TagCompound &other) : Tag(TAG_TYPE) { *this = other; }
 
