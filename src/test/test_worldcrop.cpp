@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE(world_crop_crop_circular) {
     for (int x = center.x - radius; x <= center.x + radius; x++)
         for (int z = center.z - radius; z <= center.z + radius; z++) {
             mc::BlockPos pos(x, z, 0);
-			if (crop.isBlockContainedXZ(pos)) {
+            if (crop.isBlockContainedXZ(pos)) {
                 mc::ChunkPos chunk(pos);
                 chunks.insert(chunk);
                 regions.insert(chunk.getRegion());
