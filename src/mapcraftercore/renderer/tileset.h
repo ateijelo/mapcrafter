@@ -72,11 +72,11 @@ namespace renderer {
  */
 class TilePos {
   public:
-	TilePos(int x = 0, int y = 0);
+    TilePos(int x = 0, int y = 0);
 
-	/**
+    /**
      * Returns x tile coordinate.
-	 */
+     */
     int getX() const;
 
     /**
@@ -84,7 +84,7 @@ class TilePos {
      */
     int getY() const;
 
-	// some operations with tile positions
+    // some operations with tile positions
     TilePos &operator+=(const TilePos &p);
     TilePos &operator-=(const TilePos &p);
     TilePos operator+(const TilePos &p2) const;
@@ -94,9 +94,9 @@ class TilePos {
 	bool operator!=(const TilePos& other) const;
     bool operator<(const TilePos &other) const;
 
-private:
-	// actual coordinates
-	int x, y;
+  private:
+    // actual coordinates
+    int x, y;
 };
 
 std::ostream &operator<<(std::ostream &stream, const TilePos &tile);
@@ -111,40 +111,40 @@ class TilePath {
 	TilePath();
 	~TilePath();
 
-	/**
-	 * Returns the zoom level of the path.
-	 */
+    /**
+     * Returns the zoom level of the path.
+     */
     int getDepth() const;
 
-	/**
-	 * Returns the path.
-	 */
-	const std::vector<int>& getPath() const;
+    /**
+     * Returns the path.
+     */
+    const std::vector<int> &getPath() const;
 
-	/**
-	 * Returns the path of the parent tile.
-	 * For example: The parent path of 1/2/3/4 is 1/2/3.
-	 */
-	TilePath parent() const;
+    /**
+     * Returns the path of the parent tile.
+     * For example: The parent path of 1/2/3/4 is 1/2/3.
+     */
+    TilePath parent() const;
 
-	/**
-	 * Calculates the tile position of the path.
-	 */
+    /**
+     * Calculates the tile position of the path.
+     */
     TilePos getTilePos() const;
 
-	/**
-	 * Adds a node to the path.
-	 */
+    /**
+     * Adds a node to the path.
+     */
 	TilePath& operator+=(int node);
 	TilePath operator+(int node) const;
 
-	// some more comparison operations
+    // some more comparison operations
 	bool operator==(const TilePath& other) const;
 	bool operator<(const TilePath& other) const;
 
-	/**
-	 * Returns the string representation of the path, for example "1/2/3/4".
-	 */
+    /**
+     * Returns the string representation of the path, for example "1/2/3/4".
+     */
     std::string toString() const;
 
     /**
@@ -153,8 +153,8 @@ class TilePath {
      */
     static TilePath byTilePos(const TilePos &tile, int depth);
 
-private:
-	std::vector<int> path;
+  private:
+    std::vector<int> path;
 };
 
 std::ostream& operator<<(std::ostream& stream, const TilePath& path);

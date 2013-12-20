@@ -88,9 +88,7 @@ TilePath::TilePath() {
 TilePath::~TilePath() {
 }
 
-int TilePath::getDepth() const {
-	return path.size();
-}
+int TilePath::getDepth() const { return path.size(); }
 
 const std::vector<int>& TilePath::getPath() const {
 	return path;
@@ -98,8 +96,8 @@ const std::vector<int>& TilePath::getPath() const {
 
 TilePath TilePath::parent() const {
 	TilePath copy(*this);
-	copy.path.pop_back();
-	return copy;
+    copy.path.pop_back();
+    return copy;
 }
 
 TilePos TilePath::getTilePos() const {
@@ -115,7 +113,7 @@ TilePos TilePath::getTilePos() const {
 		// increase x by the radius if this tile is on the right side (2 or 4)
         if (tile == 2 || tile == 4)
 			x += radius;
-		// increase y by the radius if this tile is on the bottom side (3 or 4)
+        // increase y by the radius if this tile is on the bottom side (3 or 4)
         if (tile == 3 || tile == 4)
 			y += radius;
 		// divide size by two, because the next zoom level has only the half radius
@@ -162,10 +160,10 @@ TilePath TilePath::byTilePos(const TilePos& tile, int depth) {
 	// at first calculate the radius in tiles of this zoom level
     int radius = pow(2, depth) / 2;
 	// check if the tile is in this bounds
-	if (tile.getX() > radius  || tile.getY() > radius
-			|| tile.getX() < -radius || tile.getY() < -radius)
-		throw std::runtime_error("Invalid tile position " + util::str(tile.getX())
-			+ ":" + util::str(tile.getY()) + " on depth " + util::str(depth));
+    if (tile.getX() > radius || tile.getY() > radius || tile.getX() < -radius ||
+        tile.getY() < -radius)
+        throw std::runtime_error("Invalid tile position " + util::str(tile.getX()) + ":" +
+                                 util::str(tile.getY()) + " on depth " + util::str(depth));
 	// the tactic is here to calculate the bounds where the tile is inside
     int bounds_left = -radius;
     int bounds_right = radius;
