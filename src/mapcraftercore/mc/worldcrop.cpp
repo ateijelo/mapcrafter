@@ -251,15 +251,15 @@ bool WorldCrop::isChunkContained(const mc::ChunkPos& chunk) const {
 	return true;
 }
 
-bool WorldCrop::isChunkCompletelyContained(const mc::ChunkPos& chunk) const {
-	mc::BlockPos corner(chunk.x * 16, chunk.z * 16, 0);
-	return isBlockContainedXZ(corner)
+bool WorldCrop::isChunkCompletelyContained(const mc::ChunkPos &chunk) const {
+    mc::BlockPos corner(chunk.x * 16, chunk.z * 16, 0);
+    return isBlockContainedXZ(corner) && isBlockContainedXZ(corner + mc::BlockPos(15, 0, 0)) &&
 			&& isBlockContainedXZ(corner + mc::BlockPos(15, 0, 0))
 			&& isBlockContainedXZ(corner + mc::BlockPos(0, 15, 0))
 			&& isBlockContainedXZ(corner + mc::BlockPos(15, 15, 0));
-}
+
 bool WorldCrop::isBlockContainedXZ(const mc::BlockPos &block) const {
-bool WorldCrop::isBlockContainedXZ(const mc::BlockPos& block) const {
+    if (type == RECTANGULAR) {
 	if (type == RECTANGULAR) {
 		// rectangular crop:
 		// just check if the chunk is contained in the bounds
@@ -275,9 +275,9 @@ bool WorldCrop::isBlockContainedXZ(const mc::BlockPos& block) const {
 }
 
 bool WorldCrop::isBlockContainedY(const mc::BlockPos &block) const {
-bool WorldCrop::isBlockContainedY(const mc::BlockPos& block) const {
-	return bounds_y.contains(block.y);
+    return bounds_y.contains(block.y);
 }
+
 
 bool WorldCrop::hasCropUnpopulatedChunks() const {
 	return crop_unpopulated_chunks;

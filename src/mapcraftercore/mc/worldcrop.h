@@ -204,32 +204,32 @@ class WorldCrop {
     void setRadius(long radius);
 
     /**
-	 * Returns whether a specific region is contained.
+     * Returns whether a specific region is contained.
      */
     bool isRegionContained(const mc::RegionPos &region) const;
 
-	/**
-	 * Returns whether a specific chunk is contained.
-	 */
+    /**
+     * Returns whether a specific chunk is contained.
+     */
     bool isChunkContained(const mc::ChunkPos &chunk) const;
 
-	/**
-	 * Returns whether a specific chunk is completely contained. With completely is
-	 * meant that all x- and z-coordinates are included, only some y-coordinates may not
-	 * be included.
-	 */
-	bool isChunkCompletelyContained(const mc::ChunkPos& chunk) const;
+    /**
+     * Returns whether a specific chunk is completely contained. With completely is
+     * meant that all x- and z-coordinates are included, only some y-coordinates may not
+     * be included.
+     */
+    bool isChunkCompletelyContained(const mc::ChunkPos &chunk) const;
 
-	/**
-	 * Returns whether a block is contained regarding x- and z-coordinates.
-	 * Used if a chunk is only partly contained.
-	 */
-	bool isBlockContainedXZ(const mc::BlockPos& block) const;
+    /**
+     * Returns whether a block is contained regarding x- and z-coordinates.
+     * Used if a chunk is only partly contained.
+     */
+    bool isBlockContainedXZ(const mc::BlockPos &block) const;
 
-	/**
-	 * Returns whether a block is contained regarding its y-coordinate.
-	 */
-	bool isBlockContainedY(const mc::BlockPos& block) const;
+    /**
+     * Returns whether a block is contained regarding its y-coordinate.
+     */
+    bool isBlockContainedY(const mc::BlockPos &block) const;
 
     /**
      * Returns/sets whether unpopulated chunks should be cropped.
