@@ -35,9 +35,7 @@
 namespace mapcrafter {
 namespace renderer {
 
-TilePos::TilePos(int x, int y)
-	: x(x), y(y) {
-}
+TilePos::TilePos(int x, int y) : x(x), y(y) {}
 
 int TilePos::getX() const { return x; }
 
