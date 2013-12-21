@@ -27,15 +27,7 @@
 namespace mapcrafter {
 namespace mc {
 
-RegionFile::RegionFile()
-	: rotation(0) {
-}
-
-RegionFile::RegionFile(const std::string& filename)
-	: filename(filename), rotation(0) {
-	regionpos_original = RegionPos::byFilename(filename);
-	regionpos = regionpos_original;
-}
+RegionFile::RegionFile() : rotation(0) {}
 
 RegionFile::RegionFile(const std::string &filename) : filename(filename), rotation(0) {
     regionpos_original = RegionPos::byFilename(filename);
