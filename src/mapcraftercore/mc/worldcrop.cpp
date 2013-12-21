@@ -164,32 +164,32 @@ void WorldCrop::setMaxY(int value) { bounds_y.setMax(value); }
 
 void WorldCrop::setMinX(int value) {
     bounds_x.setMin(value);
-	bounds_chunk_x.setMin(util::floordiv(value, 16));
-	bounds_region_x.setMin(util::floordiv(value, 512));
+    bounds_chunk_x.setMin(util::floordiv(value, 16));
+    bounds_region_x.setMin(util::floordiv(value, 512));
 
     type = RECTANGULAR;
 }
 
 void WorldCrop::setMaxX(int value) {
     bounds_x.setMax(value);
-	bounds_chunk_x.setMax(util::floordiv(value, 16));
-	bounds_region_x.setMax(util::floordiv(value, 512));
+    bounds_chunk_x.setMax(util::floordiv(value, 16));
+    bounds_region_x.setMax(util::floordiv(value, 512));
 
     type = RECTANGULAR;
 }
 
 void WorldCrop::setMinZ(int value) {
     bounds_z.setMin(value);
-	bounds_chunk_z.setMin(util::floordiv(value, 16));
-	bounds_region_z.setMin(util::floordiv(value, 512));
+    bounds_chunk_z.setMin(util::floordiv(value, 16));
+    bounds_region_z.setMin(util::floordiv(value, 512));
 
     type = RECTANGULAR;
 }
 
 void WorldCrop::setMaxZ(int value) {
     bounds_z.setMax(value);
-	bounds_chunk_z.setMax(util::floordiv(value, 16));
-	bounds_region_z.setMax(util::floordiv(value, 512));
+    bounds_chunk_z.setMax(util::floordiv(value, 16));
+    bounds_region_z.setMax(util::floordiv(value, 512));
 
     type = RECTANGULAR;
 }

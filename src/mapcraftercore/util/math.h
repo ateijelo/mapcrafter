@@ -48,10 +48,9 @@ T rotateShiftLeft(T x, int m, int n) {
  * Does a floor division a/b towards -infinity.
  */
 template <typename T> T floordiv(T a, T b) {
-T floordiv(T a, T b) {
-	if (a >= 0)
-		return a / b;
-	return (a - b + 1) / b;
+    if (a >= 0)
+        return a / b;
+    return (a - b + 1) / b;
 }
 
 /**
