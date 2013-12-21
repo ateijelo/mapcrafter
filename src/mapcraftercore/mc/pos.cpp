@@ -67,15 +67,15 @@ ChunkPos::ChunkPos() : x(0), z(0) {}
 ChunkPos::ChunkPos(int x, int z) : x(x), z(z) {}
 
 ChunkPos::ChunkPos(const BlockPos &block) {
-	x = util::floordiv(block.x, 16);
-	z = util::floordiv(block.z, 16);
+    x = util::floordiv(block.x, 16);
+    z = util::floordiv(block.z, 16);
 }
 
 int ChunkPos::getLocalX() const { return x % 32 < 0 ? x % 32 + 32 : x % 32; }
 int ChunkPos::getLocalZ() const { return z % 32 < 0 ? z % 32 + 32 : z % 32; }
 
 RegionPos ChunkPos::getRegion() const {
-	return RegionPos(util::floordiv(x, 32), util::floordiv(z, 32));
+    return RegionPos(util::floordiv(x, 32), util::floordiv(z, 32));
 }
 
 bool ChunkPos::operator==(const ChunkPos &other) const { return x == other.x && z == other.z; }
