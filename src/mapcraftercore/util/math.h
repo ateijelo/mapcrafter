@@ -17,7 +17,6 @@
  * along with Mapcrafter.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef MATH_H_
 #define MATH_H_
 
