@@ -91,7 +91,7 @@ class TilePos {
     TilePos operator-(const TilePos &p2) const;
 
     bool operator==(const TilePos &other) const;
-	bool operator!=(const TilePos& other) const;
+    bool operator!=(const TilePos &other) const;
     bool operator<(const TilePos &other) const;
 
   private:

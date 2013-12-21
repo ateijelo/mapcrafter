@@ -67,9 +67,7 @@ TilePos TilePos::operator-(const TilePos &p2) const {
 
 bool TilePos::operator==(const TilePos &other) const { return x == other.x && y == other.y; }
 
-bool TilePos::operator!=(const TilePos& other) const {
-	return !(*this == other);
-}
+bool TilePos::operator!=(const TilePos &other) const { return !(*this == other); }
 
 bool TilePos::operator<(const TilePos &other) const {
     if (x == other.x)
