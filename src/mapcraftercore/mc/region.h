@@ -155,7 +155,7 @@ public:
     // timestamps of the chunks
 	// timestamps of the chunks
 	uint32_t chunk_timestamps[1024];
-
+    // actual chunk data with compression type
     uint8_t chunk_data_compression[1024];
 	uint8_t chunk_data_compression[1024];
 	std::vector<uint8_t> chunk_data[1024];

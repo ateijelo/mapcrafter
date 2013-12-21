@@ -84,7 +84,7 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
                 continue;
 
             // now rotate this chunk position for the public set with available chunks
-			
+            if (rotation)
                 chunkpos.rotate(rotation);
 
             chunk_exists[z * 32 + x] = true;
@@ -107,13 +107,13 @@ size_t RegionFile::getChunkIndex(const mc::ChunkPos& chunkpos) const {
 }
 
 void RegionFile::setRotation(int rotation) {
-	this->rotation = rotation;
+    this->rotation = rotation;
 
-	// TODO properly handle this
-	if (rotation) {
-		regionpos = regionpos_original;
-		regionpos.rotate(rotation);
-	}
+    // TODO properly handle this
+    if (rotation) {
+        regionpos = regionpos_original;
+        regionpos.rotate(rotation);
+    }
 }
 
 void RegionFile::setWorldCrop(const WorldCrop& world_crop) {
