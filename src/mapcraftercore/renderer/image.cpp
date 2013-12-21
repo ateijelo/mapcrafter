@@ -188,10 +188,10 @@ void RGBAImage::simpleAlphaBlit(const RGBAImage &image, int x, int y) {
     int sx = std::max(0, -x);
     int sy;
     for (; sx < image.width && sx + x < width; sx++) {
-	int sx = std::max(0, -x);
+        sy = std::max(0, -y);
         for (; sy < image.height && sy + y < height; sy++) {
             if (rgba_alpha(image.data[sy * image.width + sx]) != 0) {
-		sy = std::max(0, -y);
+                data[(sy + y) * width + (sx + x)] = image.data[sy * image.width + sx];
             }
         }
     }
@@ -216,10 +216,10 @@ void RGBAImage::alphaBlit(const RGBAImage &image, int x, int y) {
     int sx = std::max(0, -x);
     int sy;
     for (; sx < image.width && sx + x < width; sx++) {
-	int sx = std::max(0, -x);
+        sy = std::max(0, -y);
         for (; sy < image.height && sy + y < height; sy++) {
             blend(data[(sy + y) * width + (sx + x)], image.data[sy * image.width + sx]);
-		sy = std::max(0, -y);
+        }
     }
 }
 
@@ -232,11 +232,11 @@ void RGBAImage::fill(RGBAPixel color, int x, int y, int w, int h) {
     if (x >= width || y >= height)
         return;
 
-	int dx = std::max(x, 0);
-	int sx = std::max(0, -x);
+    int dx = std::max(x, 0);
+    int sx = std::max(0, -x);
     for (; sx < w && dx < width; sx++, dx++) {
-		int dy = std::max(y, 0);
-		int sy = std::max(0, -y);
+        int dy = std::max(y, 0);
+        int sy = std::max(0, -y);
         for (; sy < h && dy < height; sy++, dy++) {
             data[dy * width + dx] = color;
         }
