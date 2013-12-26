@@ -42,33 +42,7 @@ namespace util {
 std::string format_eta(int eta) {
     int MINUTES = 60;
     int HOURS = 60 * MINUTES;
-	int DAYS = 24*HOURS;
-
-	int days = eta / DAYS;
-	eta -= days * DAYS;
-	int hours = eta / HOURS;
-	eta -= hours * HOURS;
-	int minutes = eta / MINUTES;
-	eta -= minutes * MINUTES;
-	int seconds = eta;
-
-	std::string str_days = util::str(days) + "d";
-	std::string str_hours = util::str(hours) + "h";
-	std::string str_minutes = util::str(minutes) + "m";
-	if (minutes < 10)
-		str_minutes = "0" + str_minutes;
-	std::string str_seconds = util::str(seconds) + "s";
-	if (seconds < 10)
-		str_seconds = "0" + str_seconds;
-
-	if (days > 0)
-		return str_days + " " + str_hours;
-	if (hours > 0)
-		return str_hours + " " + str_minutes;
-	if (minutes > 0)
-		return str_minutes + " " + str_seconds;
-	return str_seconds;
-}
+    int DAYS = 24 * HOURS;
 
     int days = eta / DAYS;
     eta -= days * DAYS;
