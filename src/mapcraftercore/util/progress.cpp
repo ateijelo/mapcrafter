@@ -115,7 +115,7 @@ void AbstractOutputProgressHandler::setValue(int value) {
     int now = std::time(nullptr);
     // check whether the time since the last shown update
     // and the change was big enough to show a new update
-	double percentage = value / (double) max * 100.;
+    double percentage = value / (double)max * 100.;
     if (last_update + 1 > now && !(last_percentage != max && value == max)) {
         this->value = value;
         return;
@@ -215,15 +215,15 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
     }
 #endif
 
-	// create the progress stats: percentage, current/maximum value, speed, eta
-	std::string stats;
+    // create the progress stats: percentage, current/maximum value, speed, eta
+    std::string stats;
     stats = createProgressStats(percentage, value, max, average_speed, eta);
 
 	// now create the progress bar
-	// with the remaining size minus one as size
-	// (because the space between progress and stats)
-	int progressbar_width = terminal_width - stats.size() - 1;
-	std::string progressbar = createProgressBar(progressbar_width, percentage);
+    // with the remaining size minus one as size
+    // (because the space between progress and stats)
+    int progressbar_width = terminal_width - stats.size() - 1;
+    std::string progressbar = createProgressBar(progressbar_width, percentage);
 
     // go to the begin of the line and clear it
     std::cout << "\r" << std::string(last_output_len, ' ') << "\r";
@@ -234,48 +234,48 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
     std::cout.flush();
 
 	// set this as last shown
-	last_output_len = progressbar.size() + 1 + stats.size();
+    last_output_len = progressbar.size() + 1 + stats.size();
 }
 
 std::string ProgressBar::createProgressBar(int width, double percentage) const {
-	// width - 2 because we need two characters for [ and ]
-	width -= 2;
+    // width - 2 because we need two characters for [ and ]
+    width -= 2;
 
-	std::string progressbar = "[";
-	double progress_step = (double) 100 / width;
-	for (int i = 0; i < width; i++) {
-		double current = progress_step * i;
-		if (current > percentage)
-			progressbar += " ";
-		else if (percentage - progress_step < current)
-			progressbar += ">";
-		else
-			progressbar += "=";
-	}
-	return progressbar + "]";
+    std::string progressbar = "[";
+    double progress_step = (double)100 / width;
+    for (int i = 0; i < width; i++) {
+        double current = progress_step * i;
+        if (current > percentage)
+            progressbar += " ";
+        else if (percentage - progress_step < current)
+            progressbar += ">";
+        else
+            progressbar += "=";
+    }
+    return progressbar + "]";
 }
 
 std::string ProgressBar::createProgressStats(double percentage, int value, int max,
 		double speed_average, int eta) const {
-	std::string stats;
+    std::string stats;
 	char formatted_percent[20], formatted_speed_average[20];
 	sprintf(&formatted_percent[0], "%.2f%%", percentage);
 	sprintf(&formatted_speed_average[0], "%.2f", speed_average);
 	stats += std::string(formatted_percent) + " ";
-	stats += util::str(value) + "/" + util::str(max) + " ";
+    stats += util::str(value) + "/" + util::str(max) + " ";
 	stats += std::string(formatted_speed_average) + "/s ";
 
-	if (eta != -1)
-		stats += "ETA " + format_eta(eta);
+    if (eta != -1)
+        stats += "ETA " + format_eta(eta);
 
-	// add some padding to these stats
-	// to prevent the progress bar changing the size all the time
-	int padding = 20 - (stats.size() % 20);
-	return stats + std::string(padding, ' ');
+    // add some padding to these stats
+    // to prevent the progress bar changing the size all the time
+    int padding = 20 - (stats.size() % 20);
+    return stats + std::string(padding, ' ');
 }
 
 void ProgressBar::finish() {
-	setValue(max);
+    setValue(max);
     std::cout << std::endl;
 }
 

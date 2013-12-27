@@ -76,9 +76,9 @@ class DummyProgressHandler : public IProgressHandler {
     virtual int getValue() const;
     virtual void setValue(int value);
 
-protected:
-	// the maximum and current value of the progress
-	int max, value;
+  protected:
+    // the maximum and current value of the progress
+    int max, value;
 };
 
 class AbstractOutputProgressHandler : public DummyProgressHandler {
@@ -116,9 +116,9 @@ class LogOutputProgressHandler : public AbstractOutputProgressHandler {
  * Shows a nice command line progress bar.
  */
 class ProgressBar : public AbstractOutputProgressHandler {
-public:
+  public:
     ProgressBar();
-	virtual ~ProgressBar();
+    virtual ~ProgressBar();
 
     virtual void update(double percentage, double average_speed, int eta);
 
@@ -127,8 +127,8 @@ private:
 	// length of last output needed to clear the line
 	int last_output_len;
 
-	std::string createProgressBar(int width, double percentage) const;
-	std::string createProgressStats(double percentage, int value, int max,
+  private:
+    // length of last output needed to clear the line
 			double speed_average, int eta = -1) const;
 };
 
