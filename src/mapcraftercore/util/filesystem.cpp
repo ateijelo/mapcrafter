@@ -25,7 +25,7 @@
 #include <iostream>
 
 #if defined(__APPLE__)
-  #include <mach-o/dyld.h>
+#include <mach-o/dyld.h>
 #elif defined(__FreeBSD__)
   #include <sys/sysctl.h>
 #elif defined(OS_WINDOWS)
@@ -92,14 +92,14 @@ fs::path findHomeDir() {
 fs::path findExecutablePath() {
     char buf[1024];
 #if defined(__APPLE__)
-	uint32_t size = sizeof(buf);
-	if (_NSGetExecutablePath(buf, &size) == 0) {
-		char real_path[1024];
-		if (realpath(buf, real_path)) {
-			size_t len = strlen(real_path);
-			return fs::path(std::string(real_path, len));
-		}
-	}
+    uint32_t size = sizeof(buf);
+    if (_NSGetExecutablePath(buf, &size) == 0) {
+        char real_path[1024];
+        if (realpath(buf, real_path)) {
+            size_t len = strlen(real_path);
+            return fs::path(std::string(real_path, len));
+        }
+    }
 #elif defined(__FreeBSD__)
 	int mib[4];
     mib[0] = CTL_KERN;
