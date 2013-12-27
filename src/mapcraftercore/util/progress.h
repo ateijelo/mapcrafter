@@ -122,10 +122,7 @@ class ProgressBar : public AbstractOutputProgressHandler {
 
     virtual void update(double percentage, double average_speed, int eta);
 
-	void finish();
-private:
-	// length of last output needed to clear the line
-	int last_output_len;
+    void finish();
 
   private:
     // length of last output needed to clear the line
