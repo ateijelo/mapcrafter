@@ -35,8 +35,8 @@ namespace thread {
  * work.
  */
 class Dispatcher {
-public:
-	virtual ~Dispatcher() {};
+  public:
+    virtual ~Dispatcher(){};
 
 	virtual void dispatch(const renderer::RenderContext& context,
                           util::IProgressHandler *progress) = 0;

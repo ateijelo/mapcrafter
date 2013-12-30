@@ -27,9 +27,8 @@ namespace thread {
  * This is an interface for a class managing the work of render workers.
  */
 template <typename Work, typename WorkResult> class WorkerManager {
-class WorkerManager {
-public:
-	virtual ~WorkerManager() {};
+  public:
+    virtual ~WorkerManager(){};
 
 	virtual bool getWork(Work& work) = 0;
 	virtual void workFinished(const Work& work, const WorkResult& result) = 0;
