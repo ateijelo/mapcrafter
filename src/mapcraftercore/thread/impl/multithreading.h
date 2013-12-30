@@ -34,7 +34,7 @@ namespace mapcrafter {
 namespace thread {
 
 class ThreadManager : public WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> {
-public:
+  public:
 	ThreadManager();
 	virtual ~ThreadManager();
 

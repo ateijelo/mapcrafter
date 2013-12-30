@@ -29,11 +29,9 @@
 namespace mapcrafter {
 namespace thread {
 
-SingleThreadDispatcher::SingleThreadDispatcher() {
-}
+SingleThreadDispatcher::SingleThreadDispatcher() {}
 
-SingleThreadDispatcher::~SingleThreadDispatcher() {
-}
+SingleThreadDispatcher::~SingleThreadDispatcher() {}
 
 void SingleThreadDispatcher::dispatch(const renderer::RenderContext &context,
                                       util::IProgressHandler *progress) {
