@@ -28,17 +28,16 @@ namespace mapcrafter {
 namespace thread {
 
 template <typename T> class ConcurrentQueue {
-class ConcurrentQueue {
-public:
-	ConcurrentQueue();
-	~ConcurrentQueue();
+  public:
+    ConcurrentQueue();
+    ~ConcurrentQueue();
 
 	bool empty();
-	void push(T item);
-	T pop();
+    void push(T item);
+    T pop();
 
-private:
-	std::queue<T> queue;
+  private:
+    std::queue<T> queue;
 	thread_ns::mutex mutex;
 	thread_ns::condition_variable condition_variable;
 };
@@ -58,24 +57,22 @@ bool ConcurrentQueue<T>::empty() {
 }
 
 template <typename T> void ConcurrentQueue<T>::push(T item) {
-void ConcurrentQueue<T>::push(T item) {
+    thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
 	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
-	if (queue.empty()) {
-		queue.push(item);
-		condition_variable.notify_one();
-	} else {
-		queue.push(item);
-	}
+        queue.push(item);
+        condition_variable.notify_one();
+    } else {
+        queue.push(item);
+    }
 }
 
 template <typename T> T ConcurrentQueue<T>::pop() {
-T ConcurrentQueue<T>::pop() {
+    thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
 	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
-	while (queue.empty())
-		condition_variable.wait(lock);
-	T item = queue.front();
-	queue.pop();
-	return item;
+        condition_variable.wait(lock);
+    T item = queue.front();
+    queue.pop();
+    return item;
 }
 
 } /* namespace thread */
