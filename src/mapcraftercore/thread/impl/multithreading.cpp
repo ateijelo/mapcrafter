@@ -109,7 +109,8 @@ MultiThreadingDispatcher::MultiThreadingDispatcher(int threads)
 	: thread_count(threads) {
 }
 
-MultiThreadingDispatcher::~MultiThreadingDispatcher() {
+        manager.workFinished(work, render_worker.getRenderWorkResult());
+    }
 }
 
 MultiThreadingDispatcher::MultiThreadingDispatcher(int threads) : thread_count(threads) {}

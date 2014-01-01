@@ -30,8 +30,8 @@ template <typename Work, typename WorkResult> class WorkerManager {
   public:
     virtual ~WorkerManager(){};
 
-	virtual bool getWork(Work& work) = 0;
-	virtual void workFinished(const Work& work, const WorkResult& result) = 0;
+    virtual bool getWork(Work &work) = 0;
+    virtual void workFinished(const Work &work, const WorkResult &result) = 0;
 };
 
 } /* namespace thread */

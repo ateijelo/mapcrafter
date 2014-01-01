@@ -35,8 +35,12 @@ namespace thread {
 
 class ThreadManager : public WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> {
   public:
-	ThreadManager();
-	virtual ~ThreadManager();
+    ThreadManager();
+    virtual ~ThreadManager();
+
+    void addWork(const renderer::RenderWork &work);
+    void addExtraWork(const renderer::RenderWork &work);
+    void setFinished();
 
     virtual bool getWork(renderer::RenderWork &work);
     virtual void workFinished(const renderer::RenderWork &work,
@@ -68,9 +72,11 @@ private:
 };
 
 class MultiThreadingDispatcher : public Dispatcher {
-public:
+  public:
     MultiThreadingDispatcher(int threads);
-	virtual ~MultiThreadingDispatcher();
+    virtual ~MultiThreadingDispatcher();
+
+    virtual void dispatch(const renderer::RenderContext &context, util::IProgressHandler *progress);
 
   private:
 			util::IProgressHandler* progress);
