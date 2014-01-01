@@ -47,8 +47,8 @@ void SingleThreadDispatcher::dispatch(const renderer::RenderContext &context,
     renderer::TileRenderWorker worker;
     worker.setRenderContext(context);
     worker.setRenderWork(work);
-	worker.setProgressHandler(progress);
-	worker();
+    worker.setProgressHandler(progress);
+    worker();
 }
 
 } /* namespace thread */
