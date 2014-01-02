@@ -32,8 +32,7 @@ ThreadManager::ThreadManager()
 	: finished(false) {
 }
 
-ThreadManager::~ThreadManager() {
-}
+ThreadManager::~ThreadManager() {}
 
 void ThreadManager::addWork(const renderer::RenderWork &work) {
 	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
@@ -58,23 +57,23 @@ bool ThreadManager::getWork(renderer::RenderWork &work) {
 	while (!finished && (work_queue.empty() && work_extra_queue.empty()))
 		condition_wait_jobs.wait(lock);
 	if (finished)
-		return false;
+        return false;
 	if (!work_extra_queue.empty())
 		work = work_extra_queue.pop();
 	else if (!work_queue.empty())
 		work = work_queue.pop();
-	return true;
+    return true;
 }
 
 void ThreadManager::workFinished(const renderer::RenderWork &work,
                                  const renderer::RenderWorkResult &result) {
 	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
-	if (!result_queue.empty())
-		result_queue.push(result);
-	else {
-		result_queue.push(result);
+    if (!result_queue.empty())
+        result_queue.push(result);
+    else {
+        result_queue.push(result);
 		condition_wait_results.notify_one();
-	}
+    }
 }
 
 bool ThreadManager::getResult(renderer::RenderWorkResult &result) {
@@ -82,9 +81,9 @@ bool ThreadManager::getResult(renderer::RenderWorkResult &result) {
 	while (!finished && result_queue.empty())
 		condition_wait_results.wait(lock);
 	if (finished)
-		return false;
-	result = result_queue.pop();
-	return true;
+        return false;
+    result = result_queue.pop();
+    return true;
 }
 
 ThreadWorker::ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
@@ -93,8 +92,7 @@ ThreadWorker::ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderW
     render_worker.setRenderContext(context);
 }
 
-ThreadWorker::~ThreadWorker() {
-}
+ThreadWorker::~ThreadWorker() {}
 
 void ThreadWorker::operator()() {
 	renderer::RenderWork work;
@@ -104,7 +102,7 @@ void ThreadWorker::operator()() {
 		render_worker();
 
     while (manager.getWork(work)) {
-	}
+        render_worker.setRenderWork(work);
 }
 
 MultiThreadingDispatcher::MultiThreadingDispatcher(int threads)
@@ -137,10 +135,10 @@ MultiThreadingDispatcher::~MultiThreadingDispatcher() {}
     // LOG(INFO) << thread_count << " threads will render " << render_tiles << " render tiles.";
 
     for (int i = 0; i < thread_count; i++) {
-
+        renderer::RenderContext thread_context = context;
         thread_context.initializeTileRenderer();
         threads.push_back(thread_ns::thread(ThreadWorker(manager, thread_context)));
-	while (manager.getResult(result)) {
+    }
 		progress->setValue(progress->getValue() + result.tiles_rendered);
     progress->setMax(context.tile_set->getRequiredRenderTilesCount());
     renderer::RenderWorkResult result;
@@ -167,10 +165,14 @@ MultiThreadingDispatcher::~MultiThreadingDispatcher() {}
                 work.tiles.insert(parent);
                 for (int i = 1; i <= 4; i++)
 		}
-	}
+                        work.tiles_skip.insert(parent + i);
+                manager.addExtraWork(work);
+            }
+        }
+    }
 
-	for (int i = 0; i < thread_count; i++)
-		threads[i].join();
+    for (int i = 0; i < thread_count; i++)
+        threads[i].join();
 }
 
 } /* namespace thread */

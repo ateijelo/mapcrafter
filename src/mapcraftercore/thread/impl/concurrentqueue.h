@@ -32,7 +32,7 @@ template <typename T> class ConcurrentQueue {
     ConcurrentQueue();
     ~ConcurrentQueue();
 
-	bool empty();
+    bool empty();
     void push(T item);
     T pop();
 
@@ -51,7 +51,7 @@ ConcurrentQueue<T>::~ConcurrentQueue() {
 }
 
 template <typename T> bool ConcurrentQueue<T>::empty() {
-bool ConcurrentQueue<T>::empty() {
+    thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
 	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
 	return queue.empty();
 }

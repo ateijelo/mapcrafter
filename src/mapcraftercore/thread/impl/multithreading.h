@@ -48,7 +48,7 @@ public:
     bool getResult(renderer::RenderWorkResult &result);
 
   private:
-private:
+    ConcurrentQueue<renderer::RenderWork> work_queue, work_extra_queue;
     ConcurrentQueue<renderer::RenderWorkResult> result_queue;
 
 	bool finished;
@@ -57,10 +57,10 @@ private:
 };
 
 class ThreadWorker {
-public:
+  public:
     ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
                  const renderer::RenderContext &context);
-	~ThreadWorker();
+    ~ThreadWorker();
 
 	void operator()();
 private:
@@ -72,7 +72,7 @@ private:
 
 class MultiThreadingDispatcher : public Dispatcher {
 public:
-	MultiThreadingDispatcher(int threads);
+    MultiThreadingDispatcher(int threads);
 	virtual ~MultiThreadingDispatcher();
 
   private:
@@ -80,7 +80,7 @@ public:
 private:
 	int thread_count;
 
-	ThreadManager manager;
+    ThreadManager manager;
 	std::vector<thread_ns::thread> threads;
 
 	std::set<renderer::TilePath> rendered_tiles;
