@@ -44,7 +44,7 @@ class ThreadManager : public WorkerManager<renderer::RenderWork, renderer::Rende
 
     virtual bool getWork(renderer::RenderWork &work);
     virtual void workFinished(const renderer::RenderWork &work,
-	void setFinished();
+                              const renderer::RenderWorkResult &result);
 
     bool getResult(renderer::RenderWorkResult &result);
 
@@ -52,7 +52,7 @@ class ThreadManager : public WorkerManager<renderer::RenderWork, renderer::Rende
     ConcurrentQueue<renderer::RenderWork> work_queue, work_extra_queue;
     ConcurrentQueue<renderer::RenderWorkResult> result_queue;
 
-	bool finished;
+    bool finished;
     thread_ns::mutex mutex;
     thread_ns::condition_variable condition_wait_jobs, condition_wait_results;
 };
