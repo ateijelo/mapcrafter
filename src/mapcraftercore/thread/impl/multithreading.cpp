@@ -97,11 +97,7 @@ void ThreadWorker::operator()() {
 
     while (manager.getWork(work)) {
         render_worker.setRenderWork(work);
-}
-
-MultiThreadingDispatcher::MultiThreadingDispatcher(int threads)
-	: thread_count(threads) {
-}
+        render_worker();
 
         manager.workFinished(work, render_worker.getRenderWorkResult());
     }
