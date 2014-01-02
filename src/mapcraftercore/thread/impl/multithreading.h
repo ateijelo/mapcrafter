@@ -20,9 +20,6 @@
 #ifndef MULTITHREADING_H_
 #define MULTITHREADING_H_
 
-#include "concurrentqueue.h"
-#include "../dispatcher.h"
-#include "../workermanager.h"
 #include "../../compat/thread.h"
 #include "../../renderer/tilerenderworker.h"
 #include "../dispatcher.h"
