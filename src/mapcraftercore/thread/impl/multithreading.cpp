@@ -56,10 +56,10 @@ bool ThreadManager::getWork(renderer::RenderWork &work) {
         condition_wait_jobs.wait(lock);
     if (finished)
         return false;
-	if (!work_extra_queue.empty())
+    if (!work_extra_queue.empty())
         work = work_extra_queue.pop();
-	else if (!work_queue.empty())
-		work = work_queue.pop();
+    else if (!work_queue.empty())
+        work = work_queue.pop();
     return true;
 }
 
