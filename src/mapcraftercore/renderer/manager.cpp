@@ -21,8 +21,6 @@
 
 #include "../config/loggingconfig.h"
 #include "../mc/blockstate.h"
-#include "../thread/impl/singlethread.h"
-#include "../thread/impl/multithreading.h"
 #include "../thread/dispatcher.h"
 #include "../thread/impl/multithreading.h"
 #include "../thread/impl/singlethread.h"
@@ -439,7 +437,7 @@ bool RenderManager::run(int threads, bool batch) {
                 progress_bar->finish();
                 delete progress_bar;
             }
-
+            delete log_output;
 			LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/"
             LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/" << progress_maps
                       << "." << progress_rotations_all << "] "
