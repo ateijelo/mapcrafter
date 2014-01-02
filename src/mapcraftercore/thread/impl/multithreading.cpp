@@ -39,7 +39,7 @@ void ThreadManager::addWork(const renderer::RenderWork &work) {
 
 void ThreadManager::addExtraWork(const renderer::RenderWork &work) {
     thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
-	work_extra_queue.push(work);
+    work_extra_queue.push(work);
     condition_wait_jobs.notify_one();
 }
 
@@ -118,14 +118,14 @@ MultiThreadingDispatcher::~MultiThreadingDispatcher() {}
 void MultiThreadingDispatcher::dispatch(const renderer::RenderContext &context,
                                         util::IProgressHandler *progress) {
     auto tiles = context.tile_set->getRequiredCompositeTiles();
-	for (auto tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
+    if (tiles.size() == 0)
         return;
 
     int jobs = 0;
     for (auto tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
         if (tile_it->getDepth() == context.tile_set->getDepth() - 2) {
-		}
-
+            renderer::RenderWork work;
+            work.tiles.insert(*tile_it);
             manager.addWork(work);
             jobs++;
 
@@ -138,15 +138,15 @@ void MultiThreadingDispatcher::dispatch(const renderer::RenderContext &context,
         thread_context.initializeTileRenderer();
         threads.push_back(thread_ns::thread(ThreadWorker(manager, thread_context)));
     }
-		progress->setValue(progress->getValue() + result.tiles_rendered);
+
     progress->setMax(context.tile_set->getRequiredRenderTilesCount());
     renderer::RenderWorkResult result;
     while (manager.getResult(result)) {
         progress->setValue(progress->getValue() + result.tiles_rendered);
         for (auto tile_it = result.render_work.tiles.begin();
              tile_it != result.render_work.tiles.end(); ++tile_it) {
-			}
-
+            rendered_tiles.insert(*tile_it);
+            if (*tile_it == renderer::TilePath()) {
                 manager.setFinished();
                 continue;
             }
@@ -163,7 +163,7 @@ void MultiThreadingDispatcher::dispatch(const renderer::RenderContext &context,
                 renderer::RenderWork work;
                 work.tiles.insert(parent);
                 for (int i = 1; i <= 4; i++)
-		}
+                    if (context.tile_set->hasTile(parent + i))
                         work.tiles_skip.insert(parent + i);
                 manager.addExtraWork(work);
             }
