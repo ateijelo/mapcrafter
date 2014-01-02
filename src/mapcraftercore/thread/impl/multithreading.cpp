@@ -28,9 +28,7 @@
 namespace mapcrafter {
 namespace thread {
 
-ThreadManager::ThreadManager()
-	: finished(false) {
-}
+ThreadManager::ThreadManager() : finished(false) {}
 
 ThreadManager::~ThreadManager() {}
 
