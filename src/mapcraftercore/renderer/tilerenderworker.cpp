@@ -19,6 +19,9 @@
 
 #include "tilerenderworker.h"
 
+#include "../mc/blockstate.h"
+#include "../mc/worldcache.h"
+#include "../util.h"
 #include "blockimages.h"
 #include "image.h"
 #include "rendermode.h"
@@ -45,8 +48,7 @@ TileRenderWorker::TileRenderWorker()
 	: progress(nullptr) {
 }
 
-TileRenderWorker::~TileRenderWorker() {
-}
+TileRenderWorker::~TileRenderWorker() {}
 
 void TileRenderWorker::setRenderContext(const RenderContext& context) {
 	render_context = context;
@@ -63,7 +65,7 @@ const RenderWorkResult& TileRenderWorker::getRenderWorkResult() const {
 }
 
 void TileRenderWorker::setProgressHandler(util::IProgressHandler *progress) {
-	this->progress = progress;
+    this->progress = progress;
 }
 
 void TileRenderWorker::saveTile(const TilePath &tile, const RGBAImage &image) {
@@ -71,11 +73,11 @@ void TileRenderWorker::saveTile(const TilePath &tile, const RGBAImage &image) {
     bool png_indexed = render_context.map_config.isPNGIndexed();
 	std::string suffix = std::string(".") + render_context.map_config.getImageFormatSuffix();
 	std::string filename = tile.toString() + suffix;
-	if (tile.getDepth() == 0)
+    if (tile.getDepth() == 0)
 		filename = std::string("base") + suffix;
 	fs::path file = render_context.output_dir / filename;
-	if (!fs::exists(file.branch_path()))
-		fs::create_directories(file.branch_path());
+    if (!fs::exists(file.branch_path()))
+        fs::create_directories(file.branch_path());
 
     if ((png && !png_indexed) && !image.writePNG(file.string()))
         LOG(WARNING) << "Unable to write '" << file.string() << "'.";
@@ -90,7 +92,7 @@ void TileRenderWorker::saveTile(const TilePath &tile, const RGBAImage &image) {
 }
 
 void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
-	// if this is tile is not required or we should skip it, try to load it from file
+    // if this is tile is not required or we should skip it, try to load it from file
 	if (!render_context.tile_set->isTileRequired(tile)
 			|| render_work.tiles_skip.count(tile)) {
 		bool png = render_context.map_config.getImageFormat() == config::ImageFormat::PNG;
@@ -101,19 +103,19 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
                                    render_context.tile_set->getContainingRenderTiles(tile));
 				progress->setValue(progress->getValue()
 						+ render_context.tile_set->getContainingRenderTiles(tile));
-			return;
-		}
 
+        LOG(WARNING) << "Unable to read tile '" << tile.toString()
+                     << "', I will just render it again.";
     }
 
-	}
-
+    if (tile.getDepth() == render_context.tile_set->getDepth()) {
+        // this tile is a render tile, render it
 	if (tile.getDepth() == render_context.tile_set->getDepth()) {
-		// this tile is a render tile, render it
+            tile.getTilePos() + render_context.tile_set->getTileOffset(), image);
 		render_context.tile_renderer->renderTile(tile.getTilePos()
 				+ render_context.tile_set->getTileOffset(), image);
 		render_work_result.tiles_rendered++;
-
+        // draws a border on the tile
         uint32_t color = rgba(0, 0, 255, 255);
         if (tile.getTilePos() == TilePos(0, 0)) {
                 color = rgba(255, 0, 0, 255);
@@ -129,87 +131,85 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
                         }
                 }
         }
-			}
+        */
 
-		*/
+        // save it
+        saveTile(tile, image);
 
-		// save it
-		saveTile(tile, image);
-
-		// update progress
+        // update progress
+        if (progress != nullptr)
+            progress->setValue(progress->getValue() + 1);
     } else {
         // this tile is a composite tile, we need to compose it from its children
-	} else {
-		// this tile is a composite tile, we need to compose it from its children
-		// just check, if children 1, 2, 3, 4 exists, render it, resize it to the half size
-		// and blit it to the properly position
+        // just check, if children 1, 2, 3, 4 exists, render it, resize it to the half size
+        // and blit it to the properly position
+        // int size = render_context.map_config.getTextureSize() * 32 * TILE_WIDTH;
+        // TODO
 		//int size = render_context.map_config.getTextureSize() * 32 * TILE_WIDTH;
 		// TODO
         image.setSize(w, h);
 
         RGBAImage other;
-
+        RGBAImage resized;
         if (render_context.tile_set->hasTile(tile + 1)) {
             renderRecursive(tile + 1, other);
 		if (render_context.tile_set->hasTile(tile + 1)) {
-			renderRecursive(tile + 1, other);
+            image.simpleAlphaBlit(resized, 0, 0);
             other.clear();
         }
-			other.clear();
-		}
+        if (render_context.tile_set->hasTile(tile + 2)) {
+            renderRecursive(tile + 2, other);
 		if (render_context.tile_set->hasTile(tile + 2)) {
-			renderRecursive(tile + 2, other);
+            image.simpleAlphaBlit(resized, w / 2, 0);
             other.clear();
         }
-			other.clear();
-		}
+        if (render_context.tile_set->hasTile(tile + 3)) {
+            renderRecursive(tile + 3, other);
 		if (render_context.tile_set->hasTile(tile + 3)) {
-			renderRecursive(tile + 3, other);
+            image.simpleAlphaBlit(resized, 0, h / 2);
             other.clear();
         }
-			other.clear();
-		}
+        if (render_context.tile_set->hasTile(tile + 4)) {
+            renderRecursive(tile + 4, other);
 		if (render_context.tile_set->hasTile(tile + 4)) {
-			renderRecursive(tile + 4, other);
+            image.simpleAlphaBlit(resized, w / 2, h / 2);
         }
 
-		}
+        /*
+        // draws a border on the tile
+        for (int x = 0; x < size; x++)
+                for (int y = 0; y < size; y++) {
+                        if (x < 5 || x > size-5)
+                                tile.setPixel(x, y, rgba(255, 0, 0, 255));
+                        if (y < 5 || y > size-5)
+                                tile.setPixel(x, y, rgba(255, 0, 0, 255));
+                }
+        */
 
-		/*
-		// draws a border on the tile
-		for (int x = 0; x < size; x++)
-			for (int y = 0; y < size; y++) {
-				if (x < 5 || x > size-5)
-					tile.setPixel(x, y, rgba(255, 0, 0, 255));
-				if (y < 5 || y > size-5)
-					tile.setPixel(x, y, rgba(255, 0, 0, 255));
-			}
-		*/
-
-		// then save the tile
-		saveTile(tile, image);
-	}
+        // then save the tile
+        saveTile(tile, image);
+    }
 }
 
 void TileRenderWorker::operator()() {
-	int work = 0;
+    int work = 0;
 	for (auto it = render_work.tiles.begin(); it != render_work.tiles.end(); ++it)
 		work += render_context.tile_set->getContainingRenderTiles(*it);
     if (progress != nullptr) {
         progress->setMax(work);
         progress->setValue(0);
     }
-	
-    RGBAImage image;
-	// iterate through the start composite tiles
-	for (auto it = render_work.tiles.begin(); it != render_work.tiles.end(); ++it) {
-		// render this composite tile
-		renderRecursive(*it, image);
 
-		// clear image
-		image.clear();
-	}
+    RGBAImage image;
+    // iterate through the start composite tiles
+	for (auto it = render_work.tiles.begin(); it != render_work.tiles.end(); ++it) {
+        // render this composite tile
+        renderRecursive(*it, image);
+
+        // clear image
+        image.clear();
+    }
 }
 
-} /* namespace render */
+} // namespace renderer
 } /* namespace mapcrafter */

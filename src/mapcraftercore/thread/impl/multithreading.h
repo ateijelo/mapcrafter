@@ -25,6 +25,9 @@
 #include "../workermanager.h"
 #include "../../compat/thread.h"
 #include "../../renderer/tilerenderworker.h"
+#include "../dispatcher.h"
+#include "../workermanager.h"
+#include "concurrentqueue.h"
 
 #include <set>
 #include <thread>

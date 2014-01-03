@@ -25,6 +25,7 @@
 #include "../config/mapcrafterconfig.h"
 #include "../mc/world.h"
 
+#include <boost/filesystem.hpp>
 #include <memory>
 #include <set>
 #include <boost/filesystem.hpp>
@@ -88,9 +89,9 @@ struct RenderWorkResult {
 };
 
 class TileRenderWorker {
-public:
-	TileRenderWorker();
-	~TileRenderWorker();
+  public:
+    TileRenderWorker();
+    ~TileRenderWorker();
 
 	void setRenderContext(const RenderContext& context);
 	void setRenderWork(const RenderWork& work);
@@ -101,7 +102,7 @@ public:
     void saveTile(const TilePath &tile, const RGBAImage &image);
     void renderRecursive(const TilePath &path, RGBAImage &image);
 
-	void operator()();
+    void operator()();
 
 private:
 	RenderContext render_context;
@@ -112,6 +113,6 @@ private:
     util::IProgressHandler *progress;
 };
 
-} /* namespace render */
+} // namespace renderer
 } /* namespace mapcrafter */
 #endif /* TILERENDERWORKER_H_ */
