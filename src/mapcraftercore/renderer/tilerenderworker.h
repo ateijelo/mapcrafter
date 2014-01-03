@@ -28,7 +28,6 @@
 #include <boost/filesystem.hpp>
 #include <memory>
 #include <set>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -50,10 +49,10 @@ class TileRenderer;
 class TileSet;
 
 struct RenderContext {
-	fs::path output_dir;
+    fs::path output_dir;
     config::Color background_color;
 	config::WorldSection world_config;
-	config::MapSection map_config;
+    config::MapSection map_config;
 
 	RenderView* render_view;
 	BlockImages* block_images;
@@ -77,7 +76,7 @@ struct RenderContext {
 };
 
 struct RenderWork {
-	std::set<renderer::TilePath> tiles, tiles_skip;
+    std::set<renderer::TilePath> tiles, tiles_skip;
 };
 
 struct RenderWorkResult {
@@ -85,7 +84,7 @@ struct RenderWorkResult {
 
 	RenderWork render_work;
 
-	int tiles_rendered;
+    int tiles_rendered;
 };
 
 class TileRenderWorker {

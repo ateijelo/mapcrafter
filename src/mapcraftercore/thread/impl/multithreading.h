@@ -41,17 +41,15 @@ public:
 	ThreadManager();
 	virtual ~ThreadManager();
 
-	void addWork(const renderer::RenderWork& work);
-	void addExtraWork(const renderer::RenderWork& work);
+    virtual bool getWork(renderer::RenderWork &work);
+    virtual void workFinished(const renderer::RenderWork &work,
 	void setFinished();
 
-	virtual bool getWork(renderer::RenderWork& work);
-	virtual void workFinished(const renderer::RenderWork& work, const renderer::RenderWorkResult& result);
+    bool getResult(renderer::RenderWorkResult &result);
 
-	bool getResult(renderer::RenderWorkResult& result);
+  private:
 private:
-	ConcurrentQueue<renderer::RenderWork> work_queue, work_extra_queue;
-	ConcurrentQueue<renderer::RenderWorkResult> result_queue;
+    ConcurrentQueue<renderer::RenderWorkResult> result_queue;
 
 	bool finished;
 	thread_ns::mutex mutex;
@@ -60,7 +58,7 @@ private:
 
 class ThreadWorker {
 public:
-	ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult>& manager,
+    ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
 			const renderer::RenderContext& context);
 	~ThreadWorker();
 
