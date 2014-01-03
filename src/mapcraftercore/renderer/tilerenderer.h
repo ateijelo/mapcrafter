@@ -20,12 +20,14 @@
 #ifndef TILERENDERER_H_
 #define TILERENDERER_H_
 
+#include "../mc/worldcache.h" // mc::DIR_*
 #include "biomes.h"
 #include "image.h"
 
 #include <array>
 #include <vector>
 #include <boost/filesystem.hpp>
+#include <vector>
 
 namespace fs = boost::filesystem;
 
@@ -111,7 +113,7 @@ protected:
     const BlockImage *waterlog_block_image;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* TILERENDERER_H_ */
