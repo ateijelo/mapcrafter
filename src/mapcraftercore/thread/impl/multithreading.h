@@ -63,9 +63,7 @@ class ThreadWorker {
                  const renderer::RenderContext &context);
     ~ThreadWorker();
 
-	void operator()();
-private:
-	WorkerManager<renderer::RenderWork, renderer::RenderWorkResult>& manager;
+    void operator()();
 
   private:
 	renderer::TileRenderWorker render_worker;
