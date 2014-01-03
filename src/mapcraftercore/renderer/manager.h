@@ -24,6 +24,8 @@
 #include "../config/webconfig.h"
 #include "../mc/world.h"
 #include "../mc/worldcache.h"
+#include "tilerenderer.h"
+#include "tileset.h"
 
 #include <boost/filesystem.hpp>
 #include <ctime>
