@@ -34,7 +34,7 @@ ThreadManager::~ThreadManager() {}
 
 void ThreadManager::addWork(const renderer::RenderWork &work) {
     thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
-	work_queue.push(work);
+    work_queue.push(work);
 }
 
 void ThreadManager::addExtraWork(const renderer::RenderWork &work) {
@@ -117,13 +117,13 @@ MultiThreadingDispatcher::~MultiThreadingDispatcher() {}
 
 void MultiThreadingDispatcher::dispatch(const renderer::RenderContext &context,
                                         util::IProgressHandler *progress) {
-	int jobs = 0;
+    auto tiles = context.tile_set->getRequiredCompositeTiles();
 	for (auto tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
         return;
 
     int jobs = 0;
-			manager.addWork(work);
-			jobs++;
+    for (auto tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
+        if (tile_it->getDepth() == context.tile_set->getDepth() - 2) {
 		}
 
             manager.addWork(work);
