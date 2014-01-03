@@ -66,7 +66,10 @@ class ThreadWorker {
     void operator()();
 
   private:
-	renderer::TileRenderWorker render_worker;
+    WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager;
+
+    renderer::RenderContext render_context;
+    renderer::TileRenderWorker render_worker;
 };
 
 class MultiThreadingDispatcher : public Dispatcher {
@@ -84,7 +87,7 @@ private:
     ThreadManager manager;
     std::vector<thread_ns::thread> threads;
 
-	std::set<renderer::TilePath> rendered_tiles;
+    std::set<renderer::TilePath> rendered_tiles;
 };
 
 } /* namespace thread */
