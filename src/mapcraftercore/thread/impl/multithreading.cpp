@@ -86,7 +86,7 @@ bool ThreadManager::getResult(renderer::RenderWorkResult &result) {
 
 ThreadWorker::ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
                            const renderer::RenderContext &context)
-	: manager(manager), render_context(context) {
+    : manager(manager), render_context(context) {
     render_worker.setRenderContext(context);
 }
 
@@ -128,7 +128,7 @@ void MultiThreadingDispatcher::dispatch(const renderer::RenderContext &context,
             work.tiles.insert(*tile_it);
             manager.addWork(work);
             jobs++;
-
+        }
 
     // int render_tiles = context.tile_set->getRequiredRenderTilesCount();
     // LOG(INFO) << thread_count << " threads will render " << render_tiles << " render tiles.";
