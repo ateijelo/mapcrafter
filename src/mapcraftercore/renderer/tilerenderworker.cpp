@@ -45,9 +45,7 @@ TileRenderWorker::TileRenderWorker() : progress(nullptr) {}
 
 TileRenderWorker::~TileRenderWorker() {}
 
-void TileRenderWorker::setRenderContext(const RenderContext& context) {
-	render_context = context;
-}
+void TileRenderWorker::setRenderContext(const RenderContext &context) { render_context = context; }
 
 void TileRenderWorker::setRenderWork(const RenderWork &work) {
     render_work = work;
