@@ -59,14 +59,14 @@ private:
 class ThreadWorker {
 public:
     ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
-			const renderer::RenderContext& context);
+                 const renderer::RenderContext &context);
 	~ThreadWorker();
 
 	void operator()();
 private:
 	WorkerManager<renderer::RenderWork, renderer::RenderWorkResult>& manager;
 
-	renderer::RenderContext render_context;
+  private:
 	renderer::TileRenderWorker render_worker;
 };
 
@@ -75,7 +75,7 @@ public:
 	MultiThreadingDispatcher(int threads);
 	virtual ~MultiThreadingDispatcher();
 
-	virtual void dispatch(const renderer::RenderContext& context,
+  private:
 			util::IProgressHandler* progress);
 private:
 	int thread_count;

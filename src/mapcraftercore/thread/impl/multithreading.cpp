@@ -88,9 +88,9 @@ bool ThreadManager::getResult(renderer::RenderWorkResult &result) {
 }
 
 ThreadWorker::ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
-		const renderer::RenderContext& context)
+                           const renderer::RenderContext &context)
 	: manager(manager), render_context(context) {
-	render_worker.setRenderContext(context);
+    render_worker.setRenderContext(context);
 }
 
 ThreadWorker::~ThreadWorker() {
@@ -114,7 +114,7 @@ MultiThreadingDispatcher::MultiThreadingDispatcher(int threads)
 MultiThreadingDispatcher::~MultiThreadingDispatcher() {
 }
 
-void MultiThreadingDispatcher::dispatch(const renderer::RenderContext& context,
+MultiThreadingDispatcher::MultiThreadingDispatcher(int threads) : thread_count(threads) {}
 
 	auto tiles = context.tile_set->getRequiredCompositeTiles();
 	if (tiles.size() == 0)

@@ -35,7 +35,7 @@ SingleThreadDispatcher::SingleThreadDispatcher() {
 SingleThreadDispatcher::~SingleThreadDispatcher() {
 }
 
-void SingleThreadDispatcher::dispatch(const renderer::RenderContext& context,
+void SingleThreadDispatcher::dispatch(const renderer::RenderContext &context,
                                       util::IProgressHandler *progress) {
 	int render_tiles = context.tile_set->getRequiredRenderTilesCount();
 	if (render_tiles == 0)
@@ -43,12 +43,12 @@ void SingleThreadDispatcher::dispatch(const renderer::RenderContext& context,
 
     LOG(INFO) << "Single thread will render " << render_tiles << " render tiles.";
 
-	renderer::RenderWork work;
-	work.tiles.insert(renderer::TilePath());
+    renderer::RenderWork work;
+    work.tiles.insert(renderer::TilePath());
 
-	renderer::TileRenderWorker worker;
-	worker.setRenderContext(context);
-	worker.setRenderWork(work);
+    renderer::TileRenderWorker worker;
+    worker.setRenderContext(context);
+    worker.setRenderWork(work);
 	worker.setProgressHandler(progress);
 	worker();
 }

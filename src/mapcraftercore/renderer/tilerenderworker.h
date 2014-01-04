@@ -92,8 +92,8 @@ class TileRenderWorker {
     TileRenderWorker();
     ~TileRenderWorker();
 
-	void setRenderContext(const RenderContext& context);
-	void setRenderWork(const RenderWork& work);
+    void setRenderContext(const RenderContext &context);
+    void setRenderWork(const RenderWork &work);
     const RenderWorkResult &getRenderWorkResult() const;
 
     void setProgressHandler(util::IProgressHandler *progress);
@@ -103,12 +103,12 @@ class TileRenderWorker {
 
     void operator()();
 
-private:
-	RenderContext render_context;
-	RenderWork render_work;
+  private:
+    RenderContext render_context;
+    RenderWork render_work;
     RenderWorkResult render_work_result;
 
-	// progress handler
+    // progress handler
     util::IProgressHandler *progress;
 };
 
