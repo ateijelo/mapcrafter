@@ -93,11 +93,7 @@ ThreadWorker::ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderW
 ThreadWorker::~ThreadWorker() {}
 
 void ThreadWorker::operator()() {
-	renderer::RenderWork work;
-
-	while (manager.getWork(work)) {
-		render_worker.setRenderWork(work);
-		render_worker();
+    renderer::RenderWork work;
 
     while (manager.getWork(work)) {
         render_worker.setRenderWork(work);
