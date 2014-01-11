@@ -103,7 +103,7 @@ void ThreadWorker::operator()() {
 		render_worker.setRenderWork(work);
 		render_worker();
 
-		manager.workFinished(work, render_worker.getRenderWorkResult());
+    while (manager.getWork(work)) {
 	}
 }
 
@@ -142,8 +142,8 @@ void MultiThreadingDispatcher::dispatch(const renderer::RenderContext& context,
         threads.push_back(thread_ns::thread(ThreadWorker(manager, thread_context)));
 	while (manager.getResult(result)) {
 		progress->setValue(progress->getValue() + result.tiles_rendered);
-		for (auto tile_it = result.render_work.tiles.begin();
-				tile_it != result.render_work.tiles.end(); ++tile_it) {
+    progress->setMax(context.tile_set->getRequiredRenderTilesCount());
+    renderer::RenderWorkResult result;
     while (manager.getResult(result)) {
         progress->setValue(progress->getValue() + result.tiles_rendered);
         for (auto tile_it = result.render_work.tiles.begin();

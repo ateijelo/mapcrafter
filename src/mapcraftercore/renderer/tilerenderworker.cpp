@@ -56,8 +56,8 @@ void TileRenderWorker::setRenderContext(const RenderContext& context) {
 
 void TileRenderWorker::setRenderWork(const RenderWork& work) {
 	render_work = work;
-	render_work_result = RenderWorkResult();
-	render_work_result.render_work = work;
+    render_work_result = RenderWorkResult();
+    render_work_result.render_work = work;
 }
 
 const RenderWorkResult& TileRenderWorker::getRenderWorkResult() const {
@@ -114,7 +114,7 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
             tile.getTilePos() + render_context.tile_set->getTileOffset(), image);
 		render_context.tile_renderer->renderTile(tile.getTilePos()
 				+ render_context.tile_set->getTileOffset(), image);
-		render_work_result.tiles_rendered++;
+        /*
         // draws a border on the tile
         uint32_t color = rgba(0, 0, 255, 255);
         if (tile.getTilePos() == TilePos(0, 0)) {

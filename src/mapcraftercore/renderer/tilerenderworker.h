@@ -80,9 +80,9 @@ struct RenderWork {
 };
 
 struct RenderWorkResult {
-	RenderWorkResult() : tiles_rendered(0) {}
+    RenderWorkResult() : tiles_rendered(0) {}
 
-	RenderWork render_work;
+    RenderWork render_work;
 
     int tiles_rendered;
 };
@@ -94,7 +94,7 @@ class TileRenderWorker {
 
 	void setRenderContext(const RenderContext& context);
 	void setRenderWork(const RenderWork& work);
-	const RenderWorkResult& getRenderWorkResult() const;
+    const RenderWorkResult &getRenderWorkResult() const;
 
     void setProgressHandler(util::IProgressHandler *progress);
 
@@ -106,7 +106,7 @@ class TileRenderWorker {
 private:
 	RenderContext render_context;
 	RenderWork render_work;
-	RenderWorkResult render_work_result;
+    RenderWorkResult render_work_result;
 
 	// progress handler
     util::IProgressHandler *progress;
