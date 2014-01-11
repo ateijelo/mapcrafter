@@ -53,9 +53,7 @@ void TileRenderWorker::setRenderWork(const RenderWork &work) {
     render_work_result.render_work = work;
 }
 
-const RenderWorkResult& TileRenderWorker::getRenderWorkResult() const {
-	return render_work_result;
-}
+const RenderWorkResult &TileRenderWorker::getRenderWorkResult() const { return render_work_result; }
 
 void TileRenderWorker::setProgressHandler(util::IProgressHandler *progress) {
     this->progress = progress;
