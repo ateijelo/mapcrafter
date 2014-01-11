@@ -129,7 +129,11 @@ private:
 
   private:
     // length of last output needed to clear the line
-			double speed_average, int eta = -1) const;
+    int last_output_len;
+
+    std::string createProgressBar(int width, double percentage) const;
+    std::string createProgressStats(double percentage, int value, int max, double speed_average,
+                                    int eta = -1) const;
 };
 
 } /* namespace util */

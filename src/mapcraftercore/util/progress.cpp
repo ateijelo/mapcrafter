@@ -224,14 +224,14 @@ std::string ProgressBar::createProgressBar(int width, double percentage) const {
 }
 
 std::string ProgressBar::createProgressStats(double percentage, int value, int max,
-		double speed_average, int eta) const {
+                                             double speed_average, int eta) const {
     std::string stats;
-	char formatted_percent[20], formatted_speed_average[20];
-	sprintf(&formatted_percent[0], "%.2f%%", percentage);
-	sprintf(&formatted_speed_average[0], "%.2f", speed_average);
-	stats += std::string(formatted_percent) + " ";
+    char formatted_percent[20], formatted_speed_average[20];
+    sprintf(&formatted_percent[0], "%.2f%%", percentage);
+    sprintf(&formatted_speed_average[0], "%.2f", speed_average);
+    stats += std::string(formatted_percent) + " ";
     stats += util::str(value) + "/" + util::str(max) + " ";
-	stats += std::string(formatted_speed_average) + "/s ";
+    stats += std::string(formatted_speed_average) + "/s ";
 
     if (eta != -1)
         stats += "ETA " + format_eta(eta);
