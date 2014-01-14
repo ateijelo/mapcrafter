@@ -124,19 +124,19 @@ unsigned int parseHexNumber(const std::string &str) {
     return x;
 }
 
-std::string trim(const std::string& str) {
+std::string trim(const std::string &str) {
     // removes trailing and leading whitespaces
-	std::string trimmed = str;
+    std::string trimmed = str;
 	size_t end = trimmed.find_last_not_of(" \t\r\n");
     if (end != std::string::npos)
-		trimmed = trimmed.substr(0, end+1);
+        trimmed = trimmed.substr(0, end + 1);
 	size_t start = trimmed.find_first_not_of(" \t\r\n");
     if (start != std::string::npos)
-		trimmed = trimmed.substr(start);
+        trimmed = trimmed.substr(start);
 	else if (trimmed.find_first_of(" \t\r\n") != std::string::npos)
         // special case if all characters are whitespaces
-		trimmed = "";
-	return trimmed;
+        trimmed = "";
+    return trimmed;
 }
 
 // http://stackoverflow.com/questions/7724448/simple-json-string-escape-for-c
@@ -169,14 +169,14 @@ std::string capitalize(const std::string& str) {
 	return capitalized;
 }
 
-std::string replaceAll(const std::string& str, const std::string& from, const std::string& to) {
-	std::string replaced = str;
+            ss << "\\t";
+            break;
         default:
-	while ((start = replaced.find(from, start)) != std::string::npos) {
-		replaced.replace(start, from.length(), to);
+            ss << *it;
+            break;
         }
     }
-	return replaced;
+    return ss.str();
 }
 
 bool startswith(const std::string& str, const std::string& start) {
