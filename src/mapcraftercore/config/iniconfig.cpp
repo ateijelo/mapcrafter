@@ -43,9 +43,7 @@ bool INIConfigSection::isNamed() const { return !name.empty(); }
 
 bool INIConfigSection::isEmpty() const { return entries.size() == 0; }
 
-bool INIConfigSection::has(const std::string& key) const {
-	return getEntryIndex(key) != -1;
-}
+bool INIConfigSection::has(const std::string &key) const { return getEntryIndex(key) != -1; }
 
 std::string INIConfigSection::get(const std::string& key,
 		const std::string& default_value) const {
