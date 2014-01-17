@@ -31,28 +31,17 @@ namespace config {
 INIConfigSection::INIConfigSection(const std::string &type, const std::string &name)
     : type(type), name(name) {}
 
-INIConfigSection::~INIConfigSection() {
-}
+INIConfigSection::~INIConfigSection() {}
 
-const std::string& INIConfigSection::getType() const {
-	return type;
-}
+const std::string &INIConfigSection::getType() const { return type; }
 
-const std::string& INIConfigSection::getName() const {
-	return name;
-}
+const std::string &INIConfigSection::getName() const { return name; }
 
-std::string INIConfigSection::getNameType() const {
-	return type + ":" + name;
-}
+std::string INIConfigSection::getNameType() const { return type + ":" + name; }
 
-bool INIConfigSection::isNamed() const {
-	return !name.empty();
-}
+bool INIConfigSection::isNamed() const { return !name.empty(); }
 
-bool INIConfigSection::isEmpty() const {
-	return entries.size() == 0;
-}
+bool INIConfigSection::isEmpty() const { return entries.size() == 0; }
 
 bool INIConfigSection::has(const std::string& key) const {
 	return getEntryIndex(key) != -1;
@@ -106,11 +95,9 @@ int INIConfigSection::getEntryIndex(const std::string& key) const {
 	return out;
 }
 
-INIConfig::INIConfig() {
-}
+INIConfig::INIConfig() {}
 
-INIConfig::~INIConfig() {
-}
+INIConfig::~INIConfig() {}
 
 void INIConfig::load(std::istream& in) {
 	int section = -1;
