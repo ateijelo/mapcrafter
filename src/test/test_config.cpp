@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(config_test) {
 }
 
 BOOST_AUTO_TEST_CASE(config_testReadWrite) {
-	config::INIConfig c;
+    config::INIConfig c;
 	c.loadFile("data/config/test.conf");
 	std::ifstream in("data/config/test.conf");
 	std::string in_data((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(config_testFieldValidation) {
 
 	// test the behavior of loading config entries from different sections
 	// into the field objects
-	config::INIConfigSection section1, section2, section3, section4;
+    config::INIConfigSection section1, section2, section3, section4;
 	section2.set("test", "foobar");
 	section4.set("test", "42");
 

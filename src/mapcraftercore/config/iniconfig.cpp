@@ -28,7 +28,7 @@ namespace fs = boost::filesystem;
 namespace mapcrafter {
 namespace config {
 
-INIConfigSection::INIConfigSection(const std::string& type, const std::string& name)
+INIConfigSection::INIConfigSection(const std::string &type, const std::string &name)
 	: type(type), name(name) {
 }
 
@@ -71,7 +71,7 @@ const std::vector<INIConfigEntry>& INIConfigSection::getEntries() const {
 	return entries;
 }
 
-void INIConfigSection::set(const std::string& key, const std::string& value) {
+void INIConfigSection::set(const std::string &key, const std::string &value) {
 	int index = getEntryIndex(key);
 	if (index != -1)
 		entries[index].second = value;
@@ -79,7 +79,7 @@ void INIConfigSection::set(const std::string& key, const std::string& value) {
 		entries.push_back(std::make_pair(key, value));
 }
 
-void INIConfigSection::remove(const std::string& key) {
+void INIConfigSection::remove(const std::string &key) {
 	int index = getEntryIndex(key);
 	if (index != -1)
 		entries.erase(entries.begin() + index);
@@ -92,7 +92,7 @@ int INIConfigSection::getEntryIndex(const std::string& key) const {
 	return -1;
 }
 
-std::ostream& operator<<(std::ostream& out, const INIConfigSection& section) {
+    auto entries = section.getEntries();
 	std::string name = section.getName();
 	std::string type = section.getType();
 
@@ -242,12 +242,12 @@ INIConfigSection& INIConfig::getSection(const std::string& type,
 	int index = getSectionIndex(type, name);
 	if (index != -1)
 		return sections[index];
-	INIConfigSection section(type, name);
+            else {
 	sections.push_back(section);
 	return sections.back();
             }
 
-void INIConfig::removeSection(const std::string& type, const std::string& name) {
+            if (name.empty()) {
 	int index = getSectionIndex(type, name);
 	if (index == -1)
 		sections.erase(sections.begin() + index);

@@ -40,8 +40,8 @@ typedef std::pair<std::string, std::string> INIConfigEntry;
 
 class INIConfigSection {
 public:
-	INIConfigSection(const std::string& type = "", const std::string& name = "");
-	~INIConfigSection();
+    INIConfigSection(const std::string &type = "", const std::string &name = "");
+    ~INIConfigSection();
 	
 	const std::string& getType() const;
 	const std::string& getName() const;
@@ -71,12 +71,12 @@ private:
 	int getEntryIndex(const std::string& key) const;
 };
 
-std::ostream& operator<<(std::ostream& out, const INIConfigSection& section);
+std::ostream &operator<<(std::ostream &out, const INIConfigSection &section);
 
 class INIConfig {
 public:
-	INIConfig();
-	~INIConfig();
+    INIConfig();
+    ~INIConfig();
 
 	void load(std::istream& in);
 	void loadFile(const std::string& filename);
@@ -87,8 +87,8 @@ public:
 
 	bool hasSection(const std::string& type, const std::string& name) const;
 
-	const INIConfigSection& getRootSection() const;
-	INIConfigSection& getRootSection();
+    const INIConfigSection &getRootSection() const;
+    INIConfigSection &getRootSection();
 
 	const INIConfigSection& getSection(const std::string& type,
 			const std::string& name) const;
