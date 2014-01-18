@@ -86,9 +86,7 @@ void WorldSection::dump(std::ostream &out) const {
     out << "  block_mask = " << block_mask << std::endl;
 }
 
-void WorldSection::setConfigDir(const fs::path& config_dir) {
-	this->config_dir = config_dir;
-}
+void WorldSection::setConfigDir(const fs::path &config_dir) { this->config_dir = config_dir; }
 
 std::string WorldSection::getShortName() { return getSectionName(); }
 
