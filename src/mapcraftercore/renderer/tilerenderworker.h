@@ -20,7 +20,6 @@
 #ifndef TILERENDERWORKER_H_
 #define TILERENDERWORKER_H_
 
-#include "../config/mapcrafterconfig.h"
 #include "../config/configsections/map.h"
 #include "../config/configsections/world.h"
 #include "../config/mapcrafterconfig.h"

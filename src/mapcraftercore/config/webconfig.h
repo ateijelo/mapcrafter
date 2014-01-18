@@ -20,11 +20,11 @@
 #ifndef MAPCRAFTERCONFIGHELPER_H_
 #define MAPCRAFTERCONFIGHELPER_H_
 
-#include "mapcrafterconfig.h"
 #include "../renderer/tileset.h"
 #include "../util/picojson.h"
 
 #include <array>
+#include <boost/filesystem.hpp>
 #include <map>
 #include <set>
 #include <tuple>
@@ -39,7 +39,7 @@ namespace config {
 class MapcrafterConfig;
 
 class WebConfig {
-public:
+  public:
 	WebConfig(const MapcrafterConfig& config);
 	~WebConfig();
 

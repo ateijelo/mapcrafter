@@ -128,19 +128,18 @@ MapcrafterConfig::MapcrafterConfig() {
     marker_global.setGlobal(true);
 }
 
-MapcrafterConfig::~MapcrafterConfig() {
-}
+MapcrafterConfig::~MapcrafterConfig() {}
 
 ValidationMap MapcrafterConfig::parseFile(const std::string &filename) {
     ValidationMap validation;
 
-	INIConfig config;
+    INIConfig config;
 	try {
 		config.loadFile(filename);
 	} catch (INIConfigError& exception) {
 		validation.section("Configuration file").error(exception.what());
         return validation;
-	}
+    }
 
     return parse(config, BOOST_FS_ABSOLUTE1(fs::path(filename)).parent_path());
 }
@@ -159,7 +158,7 @@ ValidationMap MapcrafterConfig::parseString(const std::string &string, fs::path 
     return parse(config, config_dir);
 }
 
-void MapcrafterConfig::dump(std::ostream& out) const {
+void MapcrafterConfig::dump(std::ostream &out) const {
     out << root_section << std::endl;
     out << world_global << std::endl;
     out << map_global << std::endl;
@@ -200,35 +199,28 @@ Color MapcrafterConfig::getBackgroundColor() const {
 	return root_section.getBackgroundColor();
 }
 
-bool MapcrafterConfig::hasWorld(const std::string& world) const {
-	return worlds.count(world);
+bool MapcrafterConfig::hasWorld(const std::string &world) const { return worlds.count(world); }
+
+const std::map<std::string, WorldSection> &MapcrafterConfig::getWorlds() const { return worlds; }
+
+const WorldSection &MapcrafterConfig::getWorld(const std::string &world) const {
+    return worlds.at(world);
 }
 
-const std::map<std::string, WorldSection>& MapcrafterConfig::getWorlds() const {
-	return worlds;
+bool MapcrafterConfig::hasMap(const std::string &map) const {
+    for (auto it = maps.begin(); it != maps.end(); ++it)
+        if (it->getShortName() == map)
+            return true;
+    return false;
 }
 
-const WorldSection& MapcrafterConfig::getWorld(
-		const std::string& world) const {
-	return worlds.at(world);
-}
+const std::vector<MapSection> &MapcrafterConfig::getMaps() const { return maps; }
 
-bool MapcrafterConfig::hasMap(const std::string& map) const {
-	for (auto it = maps.begin(); it != maps.end(); ++it)
-		if (it->getShortName() == map)
-			return true;
-	return false;
-}
-
-const std::vector<MapSection>& MapcrafterConfig::getMaps() const {
-	return maps;
-}
-
-const MapSection& MapcrafterConfig::getMap(const std::string& map) const {
-	for (auto it = maps.begin(); it != maps.end(); ++it)
-		if (it->getShortName() == map)
-			return *it;
-	throw std::out_of_range("Map not found!");
+const MapSection &MapcrafterConfig::getMap(const std::string &map) const {
+    for (auto it = maps.begin(); it != maps.end(); ++it)
+        if (it->getShortName() == map)
+            return *it;
+    throw std::out_of_range("Map not found!");
 }
 
 bool MapcrafterConfig::hasMarker(const std::string marker) const {

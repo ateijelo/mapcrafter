@@ -18,7 +18,6 @@
  */
 
 #include "../configsections/map.h"
-#include "../iniconfig.h"
 #include "../../util.h"
 
 namespace mapcrafter {
@@ -136,8 +135,7 @@ MapSection::MapSection()
 	: texture_size(12), render_biomes(false) {
 }
 
-MapSection::~MapSection() {
-}
+MapSection::~MapSection() {}
 
 std::string MapSection::getPrettyName() const {
     if (isGlobal())
@@ -324,28 +322,88 @@ void MapSection::preParse(const INIConfigSection &section, ValidationList &valid
 
 bool MapSection::parseField(const std::string key, const std::string value,
                             ValidationList &validation) {
-	// parse rotations
-	rotations_set.clear();
+    if (key == "name") {
+        name_long = value;
 	tile_sets.clear();
-	std::string str = rotations.getValue();
-	std::stringstream ss;
-	ss << str;
-	std::string elem;
-	while (ss >> elem) {
-		int r = stringToRotation(elem);
+        world.load(key, value, validation);
+    } else if (key == "render_view") {
+        if (render_view.load(key, value, validation)) {
+            if (render_view.getValue() == renderer::RenderViewType::ISOMETRICNEW) {
+                validation.error("Using 'isometricnew' for 'render_view' is not necessary anymore! "
+                                 "Just use 'isometric' or 'topdown'.");
 		if (r != -1) {
-			rotations_set.insert(r);
+        }
 			tile_sets.insert(getTileSet(r));
 		} else {
         if (key == "rendermode")
 		}
-	}
-
-	// check if required options were specified
+                               "It's called 'render_mode' now.");
+    } else if (key == "overlay") {
+        overlay.load(key, value, validation);
     } else if (key == "rotations") {
-		world.require(validation, "You have to specify a world ('world')!");
+        rotations.load(key, value, validation);
 		block_dir.require(validation, "You have to specify a block directory ('block_dir')!");
-	}
+        if (block_dir.load(key, value, validation)) {
+            block_dir.setValue(BOOST_FS_ABSOLUTE(block_dir.getValue(), config_dir));
+            if (!fs::is_directory(block_dir.getValue())) {
+                validation.error("'block_dir' must be an existing directory! '" +
+                                 block_dir.getValue().string() + "' does not exist!");
+            }
+        }
+    } else if (key == "texture_blur") {
+        texture_blur.load(key, value, validation);
+    } else if (key == "texture_size") {
+        if (texture_size.load(key, value, validation) &&
+            (texture_size.getValue() <= 0 || texture_size.getValue() > 128))
+            validation.error("'texture_size' must be a number between 1 and 32!");
+    } else if (key == "tile_width") {
+        tile_width.load(key, value, validation);
+        if (tile_width.getValue() < 1)
+            validation.error("'tile_width' must be a positive number!");
+    } else if (key == "image_format") {
+        image_format.load(key, value, validation);
+    } else if (key == "png_indexed") {
+        png_indexed.load(key, value, validation);
+    } else if (key == "jpeg_quality") {
+        if (jpeg_quality.load(key, value, validation) &&
+            (jpeg_quality.getValue() < 0 || jpeg_quality.getValue() > 100))
+            validation.error("'jpeg_quality' must be a number between 0 and 100!");
+    } else if (key == "lighting_intensity") {
+        lighting_intensity.load(key, value, validation);
+    } else if (key == "lighting_water_intensity") {
+        lighting_water_intensity.load(key, value, validation);
+    } else if (key == "render_biomes") {
+        render_biomes.load(key, value, validation);
+    } else if (key == "use_image_mtimes") {
+        use_image_mtimes.load(key, value, validation);
+    } else
+        return false;
+    return true;
+}
+
+void MapSection::postParse(const INIConfigSection &section, ValidationList &validation) {
+    // parse rotations
+    rotations_set.clear();
+    tile_sets.clear();
+    std::string str = rotations.getValue();
+    std::stringstream ss;
+    ss << str;
+    std::string elem;
+    while (ss >> elem) {
+        int r = stringToRotation(elem);
+        if (r != -1) {
+            rotations_set.insert(r);
+            tile_sets.insert(getTileSet(r));
+        } else {
+            validation.error("Invalid rotation '" + elem + "'!");
+        }
+    }
+
+    // check if required options were specified
+    if (!isGlobal()) {
+        world.require(validation, "You have to specify a world ('world')!");
+        block_dir.require(validation, "You have to specify a block directory ('block_dir')!");
+    }
 }
 
 } /* namespace config */

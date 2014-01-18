@@ -18,7 +18,6 @@
  */
 
 #include "../configsections/world.h"
-#include "../iniconfig.h"
 #include "../../util.h"
 
 #include <sstream>
@@ -58,8 +57,7 @@ namespace config {
 WorldSection::WorldSection() {
 }
 
-WorldSection::~WorldSection() {
-}
+WorldSection::~WorldSection() {}
 
 std::string WorldSection::getPrettyName() const {
     if (isGlobal())
@@ -130,7 +128,7 @@ bool WorldSection::needsWorldCentering() const {
 }
 
 void WorldSection::preParse(const INIConfigSection &section, ValidationList &validation) {
-		ValidationList& validation) {
+    dimension.setDefault(mc::Dimension::OVERWORLD);
 	dimension.setDefault(mc::Dimension::OVERWORLD);
 	world_name.setDefault(section.getName());
 
@@ -150,7 +148,7 @@ bool WorldSection::parseField(const std::string key, const std::string value,
             if (!fs::is_directory(input_dir.getValue()))
                 validation.error("'input_dir' must be an existing directory! '" +
                                  input_dir.getValue().string() + "' does not exist!");
-		}
+        }
 	} else if (key == "dimension")
 		dimension.load(key, value, validation);
 	else if (key == "world_name")
@@ -210,31 +208,31 @@ void WorldSection::postParse(const INIConfigSection &section, ValidationList &va
 	if (default_zoom.isLoaded() && default_zoom.getValue() < 0)
 
 
-	// validate the world croppping
-	bool crop_rectangular = min_x.isLoaded() || max_x.isLoaded() || min_z.isLoaded() || max_z.isLoaded();
-	bool crop_circular = center_x.isLoaded() || center_z.isLoaded() || radius.isLoaded();
+    bool crop_rectangular =
+        min_x.isLoaded() || max_x.isLoaded() || min_z.isLoaded() || max_z.isLoaded();
+    bool crop_circular = center_x.isLoaded() || center_z.isLoaded() || radius.isLoaded();
 
-	if (crop_rectangular && crop_circular) {
+    if (crop_rectangular && crop_circular) {
         validation.error("You can not use both world cropping types at the same time!");
-	} else if (crop_rectangular) {
-		if (min_x.isLoaded() && max_x.isLoaded() && min_x.getValue() > max_x.getValue())
+    } else if (crop_rectangular) {
+        if (min_x.isLoaded() && max_x.isLoaded() && min_x.getValue() > max_x.getValue())
             validation.error("min_x must be smaller than or equal to max_x!");
-		if (min_z.isLoaded() && max_z.isLoaded() && min_z.getValue() > max_z.getValue())
+        if (min_z.isLoaded() && max_z.isLoaded() && min_z.getValue() > max_z.getValue())
             validation.error("min_z must be smaller than or equal to max_z!");
-	} else if (crop_circular) {
-		std::string message = "You have to specify crop_center_x, crop_center_z "
-				"and crop_radius for circular world cropping!";
-		center_x.require(validation, message)
-			&& center_z.require(validation, message)
-			&& radius.require(validation, message);
+    } else if (crop_circular) {
+        std::string message = "You have to specify crop_center_x, crop_center_z "
+                              "and crop_radius for circular world cropping!";
+        center_x.require(validation, message) && center_z.require(validation, message) &&
+            radius.require(validation, message);
 
+        world_crop.setCenter(mc::BlockPos(center_x.getValue(), center_z.getValue(), 0));
         world_crop.setRadius(radius.getValue());
     }
-	}
 
-	if (min_y.isLoaded() && max_y.isLoaded() && min_y.getValue() > max_y.getValue())
+    if (min_y.isLoaded() && max_y.isLoaded() && min_y.getValue() > max_y.getValue())
+        validation.error("min_y must be smaller than or equal to max_y!");
 
-
+    world_crop.setCropUnpopulatedChunks(crop_unpopulated_chunks.getValue());
     if (block_mask.isLoaded()) {
 	if (block_mask.isLoaded()) {
 		try {
@@ -245,10 +243,9 @@ void WorldSection::postParse(const INIConfigSection &section, ValidationList &va
 		}
 	}
 
-	// check if required options were specified
+    if (!isGlobal()) {
         input_dir.require(validation, "You have to specify an input directory ('input_dir')!");
-		input_dir.require(validation, "You have to specify an input directory ('input_dir')!");
-	}
+    }
 }
 
 } /* namespace config */

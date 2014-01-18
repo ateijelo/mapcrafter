@@ -22,13 +22,13 @@
 
 #include "../configsection.h"
 
-#include "../validation.h"
 #include "../../mc/pos.h"
 #include "../../mc/world.h"
 #include "../../mc/worldcrop.h"
+#include "../validation.h"
 
-#include <string>
 #include <boost/filesystem.hpp>
+#include <string>
 
 namespace fs = boost::filesystem;
 
@@ -38,9 +38,9 @@ namespace config {
 class INIConfigSection;
 
 class WorldSection : public ConfigSection {
-public:
+  public:
     WorldSection();
-	~WorldSection();
+    ~WorldSection();
 
     virtual std::string getPrettyName() const;
     virtual void dump(std::ostream &out) const;
@@ -49,9 +49,9 @@ public:
 
     std::string getShortName();
 
-	fs::path getInputDir() const;
+    fs::path getInputDir() const;
 	mc::Dimension getDimension() const;
-	std::string getWorldName() const;
+    std::string getWorldName() const;
 
 	mc::BlockPos getDefaultView() const;
 	int getDefaultZoom() const;
@@ -61,8 +61,8 @@ public:
 	bool hasCropUnpopulatedChunks() const;
 	std::string getBlockMask() const;
 
-	const mc::WorldCrop getWorldCrop() const;
-	bool needsWorldCentering() const;
+    const mc::WorldCrop getWorldCrop() const;
+    bool needsWorldCentering() const;
 
   protected:
     virtual void preParse(const INIConfigSection &section, ValidationList &validation);

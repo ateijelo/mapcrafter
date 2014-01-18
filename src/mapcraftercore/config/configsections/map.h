@@ -25,10 +25,10 @@
 #include "../../renderer/rendermode.h"
 #include "../../renderer/renderview.h"
 
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <set>
 #include <string>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -84,25 +84,25 @@ std::ostream &operator<<(std::ostream &out, ImageFormat image_format);
 class INIConfigSection;
 
 class MapSection : public ConfigSection {
-public:
+  public:
     MapSection();
-	~MapSection();
+    ~MapSection();
 
     virtual std::string getPrettyName() const;
     virtual void dump(std::ostream &out) const;
 
     void setConfigDir(const fs::path &config_dir);
 
-	std::string getShortName() const;
-	std::string getLongName() const;
-	std::string getWorld() const;
+    std::string getShortName() const;
+    std::string getLongName() const;
+    std::string getWorld() const;
 
 	renderer::RenderViewType getRenderView() const;
 	renderer::RenderModeType getRenderMode() const;
 	renderer::OverlayType getOverlay() const;
 	std::set<int> getRotations() const;
 	fs::path getBlockDir() const;
-	int getTextureSize() const;
+    int getTextureSize() const;
 	int getTextureBlur() const;
 	double getWaterOpacity() const;
 	int getTileWidth() const;
@@ -114,8 +114,8 @@ public:
 
 	double getLightingIntensity() const;
 	double getLightingWaterIntensity() const;
-	bool renderBiomes() const;
-	bool useImageModificationTimes() const;
+    bool renderBiomes() const;
+    bool useImageModificationTimes() const;
 
 	TileSetGroupID getTileSetGroup() const;
 	TileSetID getTileSet(int rotation) const;

@@ -26,11 +26,11 @@
 #include "configsections/world.h"
 #include "validation.h"
 
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -77,30 +77,30 @@ private:
 };
 
 class MapcrafterConfig {
-public:
-	MapcrafterConfig();
-	~MapcrafterConfig();
+  public:
+    MapcrafterConfig();
+    ~MapcrafterConfig();
 
     ValidationMap parseFile(const std::string &filename);
     ValidationMap parseString(const std::string &string, fs::path config_dir = "");
-	void dump(std::ostream& out) const;
+    void dump(std::ostream &out) const;
 
 	void configureLogging() const;
 
-	fs::path getOutputDir() const;
-	fs::path getTemplateDir() const;
+    fs::path getOutputDir() const;
+    fs::path getTemplateDir() const;
     fs::path getOutputPath(const std::string &path) const;
     fs::path getTemplatePath(const std::string &path) const;
 
     Color getBackgroundColor() const;
 
-	bool hasWorld(const std::string& world) const;
-	const std::map<std::string, WorldSection>& getWorlds() const;
-	const WorldSection& getWorld(const std::string& world) const;
+    bool hasWorld(const std::string &world) const;
+    const std::map<std::string, WorldSection> &getWorlds() const;
+    const WorldSection &getWorld(const std::string &world) const;
 
-	bool hasMap(const std::string& map) const;
-	const std::vector<MapSection>& getMaps() const;
-	const MapSection& getMap(const std::string& map) const;
+    bool hasMap(const std::string &map) const;
+    const std::vector<MapSection> &getMaps() const;
+    const MapSection &getMap(const std::string &map) const;
 
     bool hasMarker(const std::string marker) const;
 	const std::vector<MarkerSection>& getMarkers() const;

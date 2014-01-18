@@ -26,9 +26,9 @@ namespace mapcrafter {
 namespace config {
 
 WebConfig::WebConfig(const MapcrafterConfig& config)
-	: config(config) {
-	auto maps = config.getMaps();
-	for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
+    auto maps = config.getMaps();
+    for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
+        std::string map_name = map_it->getShortName();
 		std::string map_name = map_it->getShortName();
 
 		// set tile size to something != 0 for now,
@@ -40,7 +40,7 @@ WebConfig::WebConfig(const MapcrafterConfig& config)
 		map_max_zoom[map_name] = 0;
 		for (int i = 0; i < 4; i++)
 			map_last_rendered[map_name][i] = 0;
-
+        auto tile_sets = map_it->getTileSets();
 		auto tile_sets = map_it->getTileSets();
 		for (auto tile_set_it = tile_sets.begin(); tile_set_it != tile_sets.end(); ++tile_set_it)
 			tile_sets_max_zoom[*tile_set_it] = 0;
@@ -159,7 +159,7 @@ void WebConfig::writeConfigJS() const {
 	if (!out) {
 		LOG(ERROR) << "Unable to write config.js file!";
 		return;
-	}
+    }
 	// TODO write world/map config to check if it was changed next time we read config.js?
 	out << "var CONFIG = " << util::trim(getConfigJSON().serialize(true)) << ";" << std::endl;
 	out.close();
@@ -196,7 +196,7 @@ void WebConfig::setMapTileSize(const std::string& map, std::tuple<int, int> tile
 
 int WebConfig::getMapMaxZoom(const std::string& map) const {
 	if (!map_max_zoom.count(map))
-		return 0;
+        return 0;
 	return map_max_zoom.at(map);
 }
 
@@ -401,39 +401,40 @@ void WebConfig::parseConfigJSON(const picojson::object& object) {
 
 /*
 void MapcrafterConfigHelper::setRenderBehaviors(std::vector<std::string> maps, int behavior) {
-	for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
-		std::string map = *map_it;
-		std::string rotation;
+        for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
+                std::string map = *map_it;
+                std::string rotation;
 
-		size_t pos = map_it->find(":");
-		if (pos != std::string::npos) {
-			rotation = map.substr(pos+1);
-			map = map.substr(0, pos);
-		} else
-			rotation = "";
+                size_t pos = map_it->find(":");
+                if (pos != std::string::npos) {
+                        rotation = map.substr(pos+1);
+                        map = map.substr(0, pos);
+                } else
+                        rotation = "";
 
-		int r = stringToRotation(rotation, ROTATION_NAMES_SHORT);
-		if (!config.hasMap(map)) {
+                int r = stringToRotation(rotation, ROTATION_NAMES_SHORT);
+                if (!config.hasMap(map)) {
 			LOG(WARNING) << "Unknown map '" << map << "'.";
-			continue;
-		}
+                        continue;
+                }
 
-		if (!rotation.empty()) {
-			if (r == -1) {
+                if (!rotation.empty()) {
+                        if (r == -1) {
 				LOG(WARNING) << "Unknown rotation '" << rotation << "'.";
-				continue;
-			}
-			if (!config.getMap(map).getRotations().count(r)) {
+                                continue;
+                        }
+                        if (!config.getMap(map).getRotations().count(r)) {
 				LOG(WARNING) << "Map '" << map << "' does not have rotation '" << rotation << "'.";
-				continue;
-			}
-		}
+rotation << "'."; continue;
+                        }
+                }
 
-		if (r != -1)
+                if (r != -1)
 			map_render_behavior[map][r] = behavior;
-		else
+                else
 			std::fill(&map_render_behavior[map][0], &map_render_behavior[map][4], behavior);
-	}
+behavior);
+        }
 }
 */
 

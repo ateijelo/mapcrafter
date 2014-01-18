@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	config::MapcrafterConfig parser;
+    config::MapcrafterConfig parser;
     config::ValidationMap validation = parser.parseFile(argv[1]);
 
     if (!validation.isEmpty()) {
