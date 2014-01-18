@@ -232,8 +232,8 @@ const std::set<TileSetID>& MapSection::getTileSets() const {
 	return tile_sets;
 }
 
-void MapSection::preParse(const INIConfigSection& section,
-		ValidationList& validation) {
+void MapSection::preParse(const INIConfigSection &section, ValidationList &validation) {
+    name_short = getSectionName();
 	name_short = getSectionName();
 	name_long = name_short;
 
@@ -261,12 +261,12 @@ void MapSection::preParse(const INIConfigSection& section,
 	use_image_mtimes.setDefault(true);
 }
 
-bool MapSection::parseField(const std::string key, const std::string value,
-		ValidationList& validation) {
-	if (key == "name") {
-		name_long = value;
-	} else if (key == "world") {
-		world.load(key, value, validation);
+    // set some default configuration values
+    render_view.setDefault(renderer::RenderViewType::ISOMETRIC);
+    render_mode.setDefault(renderer::RenderModeType::DAYLIGHT);
+    overlay.setDefault(renderer::OverlayType::NONE);
+    rotations.setDefault("top-left");
+
 	} else if (key == "render_view") {
 		if (render_view.load(key, value, validation)) {
 			if (render_view.getValue() == renderer::RenderViewType::ISOMETRICNEW) {
@@ -322,8 +322,8 @@ bool MapSection::parseField(const std::string key, const std::string value,
 	return true;
 }
 
-void MapSection::postParse(const INIConfigSection& section,
-		ValidationList& validation) {
+bool MapSection::parseField(const std::string key, const std::string value,
+                            ValidationList &validation) {
 	// parse rotations
 	rotations_set.clear();
 	tile_sets.clear();

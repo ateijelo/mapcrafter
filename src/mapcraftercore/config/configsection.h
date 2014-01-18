@@ -44,25 +44,25 @@ template <typename T> class ConfigDirSectionFactory {
 class INIConfigSection;
 
 class ConfigSection {
-public:
+  public:
     ConfigSection();
     virtual ~ConfigSection();
 
-	/**
+    /**
      * Gets/sets whether this is a global section.
-	 */
+     */
     bool isGlobal() const;
-	void setGlobal(bool global);
+    void setGlobal(bool global);
 
 	/**
 	 * Returns the name of the section.
 	 */
 	std::string getSectionName() const;
 
-	/**
+    /**
      * Parses the given configurations section and returns false if there was a critical
      * parsing/validation error.
-	 */
+     */
     ValidationList parse(const INIConfigSection &section);
 
     /**
@@ -77,38 +77,38 @@ public:
 	virtual void dump(std::ostream& out) const;
 
   protected:
-	/**
-	 * This method is called before parsing the section entries. The method can output
-	 * infos/warnings/errors via the validation list object.
-	 *
-	 * Used to set default configuration options for example.
-	 */
-	virtual void preParse(const INIConfigSection& section,
-			ValidationList& validation);
+    /**
+     * This method is called before parsing the section entries. The method can output
+     * infos/warnings/errors via the validation list object.
+     *
+     * Used to set default configuration options for example.
+     */
+    virtual void preParse(const INIConfigSection &section, ValidationList &validation);
 
-	/**
-	 * This method is called to parse one configuration entry.
-	 *
-	 * Should return false if the configuration key is unknown.
-	 */
-	virtual bool parseField(const std::string key, const std::string value,
-			ValidationList& validation);
+    /**
+     * This method is called to parse one configuration entry.
+     *
+     * Should return false if the configuration key is unknown.
+     */
+    virtual bool parseField(const std::string key, const std::string value,
+                            ValidationList &validation);
 
-	/**
-	 * This method is called after parsing the section entries. The method can output
-	 * infos/warnings/errors via the validation list object.
-	 *
-	 * Used for further validation things for example.
-	 */
-	virtual void postParse(const INIConfigSection& section,
-			ValidationList& validation);
+    /**
+     * This method is called after parsing the section entries. The method can output
+     * infos/warnings/errors via the validation list object.
+     *
+     * Used for further validation things for example.
+     */
+    virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
+  private:
+    // whether this is a global section ([global:sections])
     // might change with future versions, [section:my_glob_*] seems to be a good idea, too
-	// whether this is a global section ([global:sections])
-	// might change with future versions, [section:my_glob_*] seems to be a good idea, too
-	bool global;
+    bool global;
 
-	// name of this section
+    // name of this section
+    std::string section_name;
+
 	std::string section_name;
 
 	ValidationList validation;
@@ -127,7 +127,7 @@ template <typename T> T ConfigDirSectionFactory<T>::operator()() const {
     return section;
 }
 
-}
-}
+} // namespace config
+} // namespace mapcrafter
 
 #endif /* CONFIGSECTION_H_ */

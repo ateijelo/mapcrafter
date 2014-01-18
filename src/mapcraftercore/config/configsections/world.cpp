@@ -133,7 +133,7 @@ bool WorldSection::needsWorldCentering() const {
            center_x.isLoaded() || center_z.isLoaded() || radius.isLoaded();
 }
 
-void WorldSection::preParse(const INIConfigSection& section,
+void WorldSection::preParse(const INIConfigSection &section, ValidationList &validation) {
 		ValidationList& validation) {
 	dimension.setDefault(mc::Dimension::OVERWORLD);
 	world_name.setDefault(section.getName());
@@ -147,18 +147,18 @@ void WorldSection::preParse(const INIConfigSection& section,
 }
 
 bool WorldSection::parseField(const std::string key, const std::string value,
-		ValidationList& validation) {
-	if (key == "input_dir") {
-		if (input_dir.load(key, value, validation)) {
-			input_dir.setValue(BOOST_FS_ABSOLUTE(input_dir.getValue(), config_dir));
-			if (!fs::is_directory(input_dir.getValue()))
+                              ValidationList &validation) {
+    if (key == "input_dir") {
+        if (input_dir.load(key, value, validation)) {
+            input_dir.setValue(BOOST_FS_ABSOLUTE(input_dir.getValue(), config_dir));
+            if (!fs::is_directory(input_dir.getValue()))
 				validation.error("'input_dir' must be an existing directory! '"
 						+ input_dir.getValue().string() + "' does not exist!");
 		}
 	} else if (key == "dimension")
 		dimension.load(key, value, validation);
 	else if (key == "world_name")
-		world_name.load(key, value, validation);
+        world_name.load(key, value, validation);
 
 	else if (key == "default_view")
 		default_view.load(key, value, validation);
@@ -173,44 +173,44 @@ bool WorldSection::parseField(const std::string key, const std::string value,
 		sea_level.load(key,value, validation);
 	}
 
-	else if (key == "crop_min_y") {
-		if (min_y.load(key, value, validation))
+    else if (key == "crop_min_y") {
+        if (min_y.load(key, value, validation))
             world_crop.setMinY(min_y.getValue());
-	} else if (key == "crop_max_y") {
-		if (max_y.load(key, value, validation))
+    } else if (key == "crop_max_y") {
+        if (max_y.load(key, value, validation))
             world_crop.setMaxY(max_y.getValue());
-	} else if (key == "crop_min_x") {
-		if (min_x.load(key, value, validation))
+    } else if (key == "crop_min_x") {
+        if (min_x.load(key, value, validation))
             world_crop.setMinX(min_x.getValue());
-	} else if (key == "crop_max_x") {
-		if (max_x.load(key, value, validation))
+    } else if (key == "crop_max_x") {
+        if (max_x.load(key, value, validation))
             world_crop.setMaxX(max_x.getValue());
-	} else if (key == "crop_min_z") {
-		if (min_z.load(key, value, validation))
+    } else if (key == "crop_min_z") {
+        if (min_z.load(key, value, validation))
             world_crop.setMinZ(min_z.getValue());
-	} else if (key == "crop_max_z") {
-		if (max_z.load(key, value, validation))
+    } else if (key == "crop_max_z") {
+        if (max_z.load(key, value, validation))
             world_crop.setMaxZ(max_z.getValue());
 	}
 
 	else if (key == "crop_center_x")
-		center_x.load(key, value, validation);
-	else if (key == "crop_center_z")
-		center_z.load(key, value, validation);
-	else if (key == "crop_radius")
-		radius.load(key, value, validation);
+        center_x.load(key, value, validation);
+    else if (key == "crop_center_z")
+        center_z.load(key, value, validation);
+    else if (key == "crop_radius")
+        radius.load(key, value, validation);
 
 	else if (key == "crop_unpopulated_chunks")
 		crop_unpopulated_chunks.load(key, value, validation);
 	else if (key == "block_mask")
 		block_mask.load(key, value, validation);
-	else
-		return false;
-	return true;
+    else
+        return false;
+    return true;
 }
 
-void WorldSection::postParse(const INIConfigSection& section,
-		ValidationList& validation) {
+void WorldSection::postParse(const INIConfigSection &section, ValidationList &validation) {
+    if (default_zoom.isLoaded() && default_zoom.getValue() < 0)
 	if (default_zoom.isLoaded() && default_zoom.getValue() < 0)
 		validation.error("The default zoom level must be bigger or equal to 0 ('default_zoom').");
 

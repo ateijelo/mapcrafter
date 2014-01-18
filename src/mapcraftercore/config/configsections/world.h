@@ -45,7 +45,7 @@ public:
     virtual std::string getPrettyName() const;
 	virtual void dump(std::ostream& out) const;
 
-	void setConfigDir(const fs::path& config_dir);
+    void setConfigDir(const fs::path &config_dir);
 
     std::string getShortName();
 
@@ -70,10 +70,10 @@ public:
                             ValidationList &validation);
     virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
-private:
-	fs::path config_dir;
+  private:
+    fs::path config_dir;
 
-	Field<fs::path> input_dir;
+    Field<fs::path> input_dir;
 	Field<mc::Dimension> dimension;
 	Field<std::string> world_name;
 
@@ -81,9 +81,9 @@ private:
 	Field<int> default_zoom, default_rotation;
 	Field<int> sea_level;
 
-	Field<int> min_y, max_y;
-	Field<int> min_x, max_x, min_z, max_z;
-	Field<int> center_x, center_z, radius;
+    Field<int> min_y, max_y;
+    Field<int> min_x, max_x, min_z, max_z;
+    Field<int> center_x, center_z, radius;
 
 	Field<bool> crop_unpopulated_chunks;
 	Field<std::string> block_mask;

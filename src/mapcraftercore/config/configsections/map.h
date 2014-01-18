@@ -91,7 +91,7 @@ public:
     virtual std::string getPrettyName() const;
 	virtual void dump(std::ostream& out) const;
 
-	void setConfigDir(const fs::path& config_dir);
+    void setConfigDir(const fs::path &config_dir);
 
 	std::string getShortName() const;
 	std::string getLongName() const;
@@ -129,17 +129,17 @@ public:
 
   private:
     fs::path config_dir;
-private:
-	fs::path config_dir;
 
-	std::string name_short, name_long;
-	Field<std::string> world;
+    std::string name_short, name_long;
+    Field<std::string> world;
 
+    Field<renderer::RenderViewType> render_view;
+    Field<renderer::RenderModeType> render_mode;
 	Field<renderer::RenderViewType> render_view;
 	Field<renderer::RenderModeType> render_mode;
 	Field<renderer::OverlayType> overlay;
-	Field<std::string> rotations;
-	std::set<int> rotations_set;
+
+    Field<fs::path> block_dir;
 
 	Field<fs::path> block_dir;
 	Field<int> texture_size, texture_blur, tile_width;
