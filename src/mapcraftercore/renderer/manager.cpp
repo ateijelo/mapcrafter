@@ -27,6 +27,8 @@
 #include "../thread/impl/singlethread.h"
 #include "../thread/impl/multithreading.h"
 #include "../thread/dispatcher.h"
+#include "../thread/impl/multithreading.h"
+#include "../thread/impl/singlethread.h"
 #include "../util.h"
 #include "../version.h"
 

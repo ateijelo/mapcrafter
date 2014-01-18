@@ -20,8 +20,6 @@
 #ifndef MANAGER_H_
 #define MANAGER_H_
 
-#include "tilerenderer.h"
-#include "tileset.h"
 #include "../config/mapcrafterconfig.h"
 #include "../config/webconfig.h"
 #include "../mc/world.h"
