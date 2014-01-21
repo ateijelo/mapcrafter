@@ -117,8 +117,8 @@ MultiThreadingDispatcher::MultiThreadingDispatcher(int threads) : thread_count(t
 
 MultiThreadingDispatcher::~MultiThreadingDispatcher() {}
 
-		return;
-
+void MultiThreadingDispatcher::dispatch(const renderer::RenderContext &context,
+                                        util::IProgressHandler *progress) {
 	int jobs = 0;
 	for (auto tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
         return;

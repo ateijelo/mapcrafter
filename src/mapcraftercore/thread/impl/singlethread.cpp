@@ -37,7 +37,7 @@ void SingleThreadDispatcher::dispatch(const renderer::RenderContext &context,
                                       util::IProgressHandler *progress) {
     int render_tiles = context.tile_set->getRequiredRenderTilesCount();
     if (render_tiles == 0)
-		return;
+        return;
 
     LOG(INFO) << "Single thread will render " << render_tiles << " render tiles.";
 
