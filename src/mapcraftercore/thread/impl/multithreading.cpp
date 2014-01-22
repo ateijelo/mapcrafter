@@ -116,7 +116,7 @@ MultiThreadingDispatcher::MultiThreadingDispatcher(int threads)
 MultiThreadingDispatcher::MultiThreadingDispatcher(int threads) : thread_count(threads) {}
 
 MultiThreadingDispatcher::~MultiThreadingDispatcher() {}
-	if (tiles.size() == 0)
+
 		return;
 
 	int jobs = 0;
