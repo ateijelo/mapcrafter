@@ -23,6 +23,8 @@
 #include "mapcraftercore/mc/worldentities.h"
 #include "mapcraftercore/util.h"
 
+#include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -39,16 +41,17 @@ namespace config = mapcrafter::config;
 namespace mc = mapcrafter::mc;
 
 struct Marker {
-	mc::BlockPos pos;
-	std::string title, text;
+    mc::BlockPos pos;
+    std::string title, text;
 
 	std::string toJSON() const {
-		std::string json = "{";
-		json += "\"pos\": [" + util::str(pos.x) + "," + util::str(pos.z) + "," + util::str(pos.y) + "], ";
+        std::string json = "{";
+        json += "\"pos\": [" + util::str(pos.x) + "," + util::str(pos.z) + "," + util::str(pos.y) +
 		json += "\"title\": \"" + util::escapeJSON(title) + "\", ";
 		json += "\"text\": \"" + util::escapeJSON(text) + "\", ";
-		return json + "}";
-	}
+        json += "\"text\": \"" + util::escapeJSON(text) + "\", ";
+        return json + "}";
+    }
 };
 
 typedef std::map<std::string, std::vector<Marker>> MarkerGroup;
@@ -153,7 +156,7 @@ std::string createMarkersJSON(const config::MapcrafterConfig& config,
 	return ss.str();
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
 	std::string config_file;
 	std::string output_file;
     int verbosity = 0;
@@ -184,14 +187,14 @@ int main(int argc, char** argv) {
 
 	if (vm.count("help")) {
 		std::cout << all << std::endl;
-		return 1;
-	}
+    }
 
+    if (!vm.count("config")) {
 	if (!vm.count("config")) {
 		std::cerr << "You have to specify a configuration file!" << std::endl;
 		return 1;
 	}
-
+    // TODO add this to an automatic logging configuration?
     util::LogLevel log_level = util::LogLevel::WARNING;
     if (verbosity == 1)
         log_level = util::LogLevel::INFO;
@@ -201,9 +204,9 @@ int main(int argc, char** argv) {
     util::Logging::getInstance().setSinkLogProgress("__output__", true);
 
     config::MapcrafterConfig config;
-	config::MapcrafterConfig config;
+    config::ValidationMap validation = config.parseFile(config_file);
 	config::ValidationMap validation = config.parseFile(config_file);
-
+    if (!validation.isEmpty()) {
 	if (!validation.isEmpty()) {
             LOG(FATAL) << "Your configuration file is invalid!";
 			LOG(FATAL) << "Your configuration file is invalid!";
@@ -211,8 +214,8 @@ int main(int argc, char** argv) {
         validation.log();
 		validation.log();
 		LOG(WARNING) << "Please read the documentation about the new configuration file format.";
-	}
 
+    Markers markers = findMarkers(config);
 
     // count how many markers / markers of which group were found
     int markers_count = 0;

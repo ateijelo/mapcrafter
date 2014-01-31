@@ -28,8 +28,7 @@ namespace config {
 MarkerSection::MarkerSection() {
 }
 
-MarkerSection::~MarkerSection() {
-}
+MarkerSection::~MarkerSection() {}
 
 std::string MarkerSection::getPrettyName() const {
 	if (isGlobal())
@@ -107,8 +106,8 @@ std::string MarkerSection::formatText(const mc::SignEntity& sign) const {
 	return formatSign(text_format.getValue(), sign);
 }
 
-void MarkerSection::preParse(const INIConfigSection& section,
-		ValidationList& validation) {
+void MarkerSection::preParse(const INIConfigSection &section, ValidationList &validation) {
+    name_long.setDefault(getSectionName());
 	name_long.setDefault(getSectionName());
 	title_format.setDefault("%(text)");
 	match_empty.setDefault(false);
@@ -116,33 +115,33 @@ void MarkerSection::preParse(const INIConfigSection& section,
 }
 
 bool MarkerSection::parseField(const std::string key, const std::string value,
-		ValidationList& validation) {
+                               ValidationList &validation) {
 	if (key == "name")
 		name_long.load(key, value, validation);
 	else if (key == "prefix")
-		prefix.load(key, value, validation);
+        prefix.load(key, value, validation);
 	else if (key == "postfix")
 		postfix.load(key, value, validation);
-	else if (key == "title_format")
-		title_format.load(key, value, validation);
-	else if (key == "text_format")
-		text_format.load(key, value, validation);
-	else if (key == "icon")
-		icon.load(key, value, validation);
-	else if (key == "icon_size")
-		icon_size.load(key, value, validation);
+    else if (key == "title_format")
+        title_format.load(key, value, validation);
+    else if (key == "text_format")
+        text_format.load(key, value, validation);
+    else if (key == "icon")
+        icon.load(key, value, validation);
+    else if (key == "icon_size")
+        icon_size.load(key, value, validation);
 	else if (key == "match_empty")
 		match_empty.load(key, value, validation);
 	else if (key == "show_default")
 		show_default.load(key, value, validation);
-	else
-		return false;
-	return true;
+    else
+        return false;
+    return true;
 }
 
-void MarkerSection::postParse(const INIConfigSection& section,
-		ValidationList& validation) {
-	text_format.setDefault(title_format.getValue());
+void MarkerSection::postParse(const INIConfigSection &section, ValidationList &validation) {
+    text_format.setDefault(title_format.getValue());
+
 
 	// check if the old placeholders are used, just search for %placeholder
 	// they are still supported, but show a warning
@@ -169,8 +168,8 @@ template <typename T>
 void replacePlaceholder(std::string& str, const std::string& key, T value) {
 	str = util::replaceAll(str, "%" + key, util::str(value));
 	str = util::replaceAll(str, "%(" + key + ")", util::str(value));
-}
 
+std::string MarkerSection::formatSign(std::string format, const mc::SignEntity &sign) const {
 std::string MarkerSection::formatSign(std::string format, const mc::SignEntity& sign) const {
 	std::string pp = prefix.getValue() + postfix.getValue();
 	std::string textpp = sign.getText(); // with prefix/postfix

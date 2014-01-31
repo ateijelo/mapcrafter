@@ -22,28 +22,27 @@
 
 #include "../configsection.h"
 
-#include "../validation.h"
 #include "../../mc/worldentities.h"
 
 namespace mapcrafter {
 namespace config {
 
 class MarkerSection : public ConfigSection {
-public:
+  public:
 	MarkerSection();
-	~MarkerSection();
+    ~MarkerSection();
 
 	virtual std::string getPrettyName() const;
 	virtual void dump(std::ostream& out) const;
 
 	std::string getShortName() const;
 	std::string getLongName() const;
-	std::string getPrefix() const;
+    std::string getPrefix() const;
 	std::string getPostfix() const;
-	std::string getTitleFormat() const;
-	std::string getTextFormat() const;
-	std::string getIcon() const;
-	std::string getIconSize() const;
+    std::string getTitleFormat() const;
+    std::string getTextFormat() const;
+    std::string getIcon() const;
+    std::string getIconSize() const;
 	bool isMatchedEmpty() const;
 	bool isShownByDefault() const;
 
@@ -59,11 +58,11 @@ protected:
 	virtual void postParse(const INIConfigSection& section,
 			ValidationList& validation);
 
-private:
+  private:
 	Field<std::string> name_long;
 	Field<std::string> prefix, postfix;
-	Field<std::string> title_format, text_format;
-	Field<std::string> icon, icon_size;
+    Field<std::string> title_format, text_format;
+    Field<std::string> icon, icon_size;
 	Field<bool> match_empty, show_default;
 
 	std::string formatSign(std::string format, const mc::SignEntity& sign) const;
