@@ -109,7 +109,7 @@ class MapSection : public ConfigSection {
     bool isPNGIndexed() const;
     int getJPEGQuality() const;
 
-	double getLightingIntensity() const;
+    double getLightingIntensity() const;
     double getLightingWaterIntensity() const;
     bool renderBiomes() const;
     bool useImageModificationTimes() const;

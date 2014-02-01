@@ -58,8 +58,7 @@ T floordiv(T a, T b) {
  * Checks whether two floating point numbers are equal with a small deviation.
  */
 template <typename T> bool floatingPointEquals(T a, T b, T epsilon = 0.0001) {
-bool floatingPointEquals(T a, T b, T epsilon = 0.0001) {
-	return std::abs(a - b) < epsilon;
+    return std::abs(a - b) < epsilon;
 }
 
 /**
