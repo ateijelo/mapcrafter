@@ -121,8 +121,8 @@ void WorldSection::preParse(const INIConfigSection &section, ValidationList &val
     world_name.setDefault(section.getName());
 
     default_view.setDefault(mc::BlockPos(0, 0, 0));
-	default_zoom.setDefault(0);
-	default_rotation.setDefault(-1);
+    default_zoom.setDefault(0);
+    default_rotation.setDefault(-1);
     sea_level.setDefault(64);
 
 	crop_unpopulated_chunks.setDefault(false);
@@ -142,18 +142,18 @@ bool WorldSection::parseField(const std::string key, const std::string value,
 	else if (key == "world_name")
         world_name.load(key, value, validation);
 
-	else if (key == "default_view")
-		default_view.load(key, value, validation);
-	else if (key == "default_zoom")
-		default_zoom.load(key, value, validation);
-	else if (key == "default_rotation") {
-		int rotation = stringToRotation(value, ROTATION_NAMES);
+    else if (key == "default_view")
+        default_view.load(key, value, validation);
+    else if (key == "default_zoom")
+        default_zoom.load(key, value, validation);
+    else if (key == "default_rotation") {
+        int rotation = stringToRotation(value, ROTATION_NAMES);
 		if (rotation == -1)
             validation.error("Invalid rotation '" + value + "'!");
-		default_rotation.setValue(rotation);
+        default_rotation.setValue(rotation);
     } else if (key == "sea_level") {
         sea_level.load(key, value, validation);
-	}
+    }
 
     else if (key == "crop_min_y") {
         if (min_y.load(key, value, validation))
