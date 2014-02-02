@@ -148,7 +148,7 @@ bool WorldSection::parseField(const std::string key, const std::string value,
         default_zoom.load(key, value, validation);
     else if (key == "default_rotation") {
         int rotation = stringToRotation(value, ROTATION_NAMES);
-		if (rotation == -1)
+        if (rotation == -1)
             validation.error("Invalid rotation '" + value + "'!");
         default_rotation.setValue(rotation);
     } else if (key == "sea_level") {
@@ -173,9 +173,9 @@ bool WorldSection::parseField(const std::string key, const std::string value,
     } else if (key == "crop_max_z") {
         if (max_z.load(key, value, validation))
             world_crop.setMaxZ(max_z.getValue());
-	}
+    }
 
-	else if (key == "crop_center_x")
+    else if (key == "crop_center_x")
         center_x.load(key, value, validation);
     else if (key == "crop_center_z")
         center_z.load(key, value, validation);
@@ -193,9 +193,9 @@ bool WorldSection::parseField(const std::string key, const std::string value,
 
 void WorldSection::postParse(const INIConfigSection &section, ValidationList &validation) {
     if (default_zoom.isLoaded() && default_zoom.getValue() < 0)
-	if (default_zoom.isLoaded() && default_zoom.getValue() < 0)
+        validation.error("The default zoom level must be bigger or equal to 0 ('default_zoom').");
 
-
+    // validate the world croppping
     bool crop_rectangular =
         min_x.isLoaded() || max_x.isLoaded() || min_z.isLoaded() || max_z.isLoaded();
     bool crop_circular = center_x.isLoaded() || center_z.isLoaded() || radius.isLoaded();
