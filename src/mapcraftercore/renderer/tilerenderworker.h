@@ -51,7 +51,7 @@ class TileSet;
 struct RenderContext {
     fs::path output_dir;
     config::Color background_color;
-	config::WorldSection world_config;
+    config::WorldSection world_config;
     config::MapSection map_config;
 
     RenderView *render_view;
