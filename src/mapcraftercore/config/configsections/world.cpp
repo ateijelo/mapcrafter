@@ -137,9 +137,9 @@ bool WorldSection::parseField(const std::string key, const std::string value,
                 validation.error("'input_dir' must be an existing directory! '" +
                                  input_dir.getValue().string() + "' does not exist!");
         }
-	} else if (key == "dimension")
+    } else if (key == "dimension")
         dimension.load(key, value, validation);
-	else if (key == "world_name")
+    else if (key == "world_name")
         world_name.load(key, value, validation);
 
     else if (key == "default_view")

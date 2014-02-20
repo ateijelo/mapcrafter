@@ -50,7 +50,7 @@ class WorldSection : public ConfigSection {
     std::string getShortName();
 
     fs::path getInputDir() const;
-	mc::Dimension getDimension() const;
+    mc::Dimension getDimension() const;
     std::string getWorldName() const;
 
     mc::BlockPos getDefaultView() const;
