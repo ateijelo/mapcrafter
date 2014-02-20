@@ -41,9 +41,9 @@ namespace mc {
  * The Nether, normal Overworld or The End.
  */
 enum class Dimension {
-	NETHER,
-	OVERWORLD,
-	END,
+    NETHER,
+    OVERWORLD,
+    END,
 };
 
 std::ostream &operator<<(std::ostream &out, Dimension dimension);
