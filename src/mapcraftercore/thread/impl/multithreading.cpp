@@ -116,13 +116,13 @@ MultiThreadingDispatcher::~MultiThreadingDispatcher() {
 
 MultiThreadingDispatcher::MultiThreadingDispatcher(int threads) : thread_count(threads) {}
 
-	auto tiles = context.tile_set->getRequiredCompositeTiles();
+MultiThreadingDispatcher::~MultiThreadingDispatcher() {}
 	if (tiles.size() == 0)
 		return;
 
 	int jobs = 0;
 	for (auto tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
-		if (tile_it->getDepth() == context.tile_set->getDepth() - 2) {
+        return;
 
     int jobs = 0;
 			manager.addWork(work);
@@ -138,7 +138,7 @@ MultiThreadingDispatcher::MultiThreadingDispatcher(int threads) : thread_count(t
 
     for (int i = 0; i < thread_count; i++) {
 
-	progress->setMax(context.tile_set->getRequiredRenderTilesCount());
+        thread_context.initializeTileRenderer();
         threads.push_back(thread_ns::thread(ThreadWorker(manager, thread_context)));
 	while (manager.getResult(result)) {
 		progress->setValue(progress->getValue() + result.tiles_rendered);
@@ -153,7 +153,7 @@ MultiThreadingDispatcher::MultiThreadingDispatcher(int threads) : thread_count(t
                 manager.setFinished();
                 continue;
             }
-				if (context.tile_set->isTileRequired(parent + i)
+
             renderer::TilePath parent = tile_it->parent();
             bool childs_rendered = true;
             for (int i = 1; i <= 4; i++)
@@ -162,7 +162,7 @@ MultiThreadingDispatcher::MultiThreadingDispatcher(int threads) : thread_count(t
                     childs_rendered = false;
                 }
 
-					if (context.tile_set->hasTile(parent + i))
+            if (childs_rendered) {
                 renderer::RenderWork work;
                 work.tiles.insert(parent);
                 for (int i = 1; i <= 4; i++)

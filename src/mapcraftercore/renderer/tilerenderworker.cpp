@@ -84,7 +84,7 @@ void TileRenderWorker::saveTile(const TilePath &tile, const RGBAImage &image) {
 
 void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
     // if this is tile is not required or we should skip it, try to load it from file
-	if (!render_context.tile_set->isTileRequired(tile)
+    if (!render_context.tile_set->isTileRequired(tile) || render_work.tiles_skip.count(tile)) {
         bool png = render_context.map_config.getImageFormat() == config::ImageFormat::PNG;
         fs::path file = render_context.output_dir /
                         (tile.toString() + "." + render_context.map_config.getImageFormatSuffix());
@@ -93,7 +93,7 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
                 progress->setValue(progress->getValue() +
                                    render_context.tile_set->getContainingRenderTiles(tile));
             return;
-						+ render_context.tile_set->getContainingRenderTiles(tile));
+        }
 
         LOG(WARNING) << "Unable to read tile '" << tile.toString()
                      << "', I will just render it again.";
@@ -101,7 +101,7 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
 
     if (tile.getDepth() == render_context.tile_set->getDepth()) {
         // this tile is a render tile, render it
-	if (tile.getDepth() == render_context.tile_set->getDepth()) {
+        render_context.tile_renderer->renderTile(
             tile.getTilePos() + render_context.tile_set->getTileOffset(), image);
 		render_context.tile_renderer->renderTile(tile.getTilePos()
 				+ render_context.tile_set->getTileOffset(), image);
@@ -144,25 +144,25 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
         RGBAImage resized;
         if (render_context.tile_set->hasTile(tile + 1)) {
             renderRecursive(tile + 1, other);
-		if (render_context.tile_set->hasTile(tile + 1)) {
+            other.resize(resized, 0, 0, InterpolationType::HALF);
             image.simpleAlphaBlit(resized, 0, 0);
             other.clear();
         }
         if (render_context.tile_set->hasTile(tile + 2)) {
             renderRecursive(tile + 2, other);
-		if (render_context.tile_set->hasTile(tile + 2)) {
+            other.resize(resized, 0, 0, InterpolationType::HALF);
             image.simpleAlphaBlit(resized, w / 2, 0);
             other.clear();
         }
         if (render_context.tile_set->hasTile(tile + 3)) {
             renderRecursive(tile + 3, other);
-		if (render_context.tile_set->hasTile(tile + 3)) {
+            other.resize(resized, 0, 0, InterpolationType::HALF);
             image.simpleAlphaBlit(resized, 0, h / 2);
             other.clear();
         }
         if (render_context.tile_set->hasTile(tile + 4)) {
             renderRecursive(tile + 4, other);
-		if (render_context.tile_set->hasTile(tile + 4)) {
+            other.resize(resized, 0, 0, InterpolationType::HALF);
             image.simpleAlphaBlit(resized, w / 2, h / 2);
         }
 
@@ -185,7 +185,7 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
 void TileRenderWorker::operator()() {
     int work = 0;
     for (auto it = render_work.tiles.begin(); it != render_work.tiles.end(); ++it)
-		work += render_context.tile_set->getContainingRenderTiles(*it);
+        work += render_context.tile_set->getContainingRenderTiles(*it);
     if (progress != nullptr) {
         progress->setMax(work);
         progress->setValue(0);
