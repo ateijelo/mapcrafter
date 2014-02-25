@@ -38,7 +38,7 @@ std::ostream &operator<<(std::ostream &out, Dimension dimension) {
 }
 
 World::World(std::string world_dir, Dimension dimension)
-	: world_dir(world_dir), dimension(dimension), rotation(0) {
+    : world_dir(world_dir), dimension(dimension), rotation(0) {
 	std::string world_name = BOOST_FS_FILENAME(this->world_dir);
 
 	// try to find the region directory
@@ -62,7 +62,7 @@ World::World(std::string world_dir, Dimension dimension)
 World::~World() {}
 
 bool World::readRegions(const fs::path &region_dir) {
-bool World::readRegions(const fs::path& region_dir) {
+    if (!fs::exists(region_dir))
         return false;
     std::string ending = ".mca";
     for (fs::directory_iterator it(region_dir); it != fs::directory_iterator(); ++it) {

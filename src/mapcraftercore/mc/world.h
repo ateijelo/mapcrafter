@@ -30,7 +30,6 @@
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -72,12 +71,12 @@ class World {
 	typedef std::unordered_set<RegionPos, hash_function> RegionSet;
 	typedef std::unordered_map<RegionPos, std::string, hash_function> RegionMap;
 
-	/**
-	 * Constructor. You should specify a world directory and you can specify a dimension
-	 * of the world (Nether, Overworld per default, End). Mapcrafter will automagically
-	 * try to find the right region directory.
-	 */
-	World(std::string world_dir = "", Dimension dimension = Dimension::OVERWORLD);
+    /**
+     * Constructor. You should specify a world directory and you can specify a dimension
+     * of the world (Nether, Overworld per default, End). Mapcrafter will automagically
+     * try to find the right region directory.
+     */
+    World(std::string world_dir = "", Dimension dimension = Dimension::OVERWORLD);
     ~World();
 
 	/**
@@ -109,10 +108,10 @@ class World {
     void setWorldCrop(const WorldCrop &world_crop);
 
 	/**
-	 * Loads a world from the specified directory. Returns false if the world- or region
-	 * directory does not exist.
+     * Loads a world from the specified directory. Returns false if the world- or region
+     * directory does not exist.
 	 */
-	bool load();
+    bool load();
 
 	/**
 	 * Returns the count of available region files.
@@ -159,9 +158,9 @@ class World {
 
 private:
 	// world directory, region directory
-	fs::path world_dir, region_dir;
+    fs::path world_dir, region_dir;
 	// used dimension of the world
-	Dimension dimension;
+    Dimension dimension;
 
     // rotation and possible boundaries of the world
 	int rotation;
@@ -176,7 +175,7 @@ private:
 	 * Scans a directory for Anvil *.mca region files and adds them to the available
 	 * region files. Returns false if the directory does not exist.
 	 */
-	bool readRegions(const fs::path& region_dir);
+    bool readRegions(const fs::path &region_dir);
 };
 
 } // namespace mc
