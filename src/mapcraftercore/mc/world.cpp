@@ -116,20 +116,7 @@ bool World::load() {
     return readRegions(region_dir.string());
 }
 
-bool World::load() {
-	if(!fs::exists(world_dir)) {
-		std::cerr << "Error: World directory " << world_dir;
-		std::cerr << " does not exist!" << std::endl;
-		return false;
-	}
-
-	if(!fs::exists(region_dir)) {
-		std::cerr << "Error: Region directory " << region_dir << " does not exist!" << std::endl;
-		return false;
-	}
-
-	return readRegions(region_dir.string());
-}
+int World::getAvailableRegionCount() const { return available_regions.size(); }
 
 int World::getAvailableRegionCount() const {
 	return available_regions.size();
