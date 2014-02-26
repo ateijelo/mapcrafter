@@ -88,30 +88,27 @@ bool World::readRegions(const fs::path &region_dir) {
 }
 
 fs::path World::getWorldDir() const { return world_dir; }
-fs::path World::getWorldDir() const {
-	return world_dir;
-}
 
-fs::path World::getRegionDir() const {
-	return region_dir;
-}
+fs::path World::getRegionDir() const { return region_dir; }
 
-Dimension World::getDimension() const {
-	return dimension;
-}
+Dimension World::getDimension() const { return dimension; }
 
-int World::getRotation() const {
-	return rotation;
-}
+int World::getRotation() const { return rotation; }
 
+void World::setRotation(int rotation) { this->rotation = rotation; }
+
+WorldCrop World::getWorldCrop() const { return world_crop; }
+
+void World::setWorldCrop(const WorldCrop &world_crop) { this->world_crop = world_crop; }
 
 void World::setRotation(int rotation) {
 	this->rotation = rotation;
 }
 
-WorldCrop World::getWorldCrop() const {
+    if (!fs::exists(region_dir)) {
         std::cerr << "Error: Region directory " << region_dir << " does not exist!" << std::endl;
-}
+        return false;
+    }
 
     return readRegions(region_dir.string());
 }
