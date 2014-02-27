@@ -28,7 +28,6 @@
 #include <array>
 #include <map>
 #include <vector>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -66,32 +65,33 @@ class SignEntity {
 };
 
 class WorldEntitiesCache {
-public:
-	WorldEntitiesCache(const World& world);
-	~WorldEntitiesCache();
+  public:
+    WorldEntitiesCache(const World &world);
+    ~WorldEntitiesCache();
 
-	/**
-	 * Updates the entity cache.
-	 */
+    /**
+     * Updates the entity cache.
+     */
     void update(util::IProgressHandler *progress = nullptr);
 
 	std::vector<SignEntity> getSigns(WorldCrop crop = WorldCrop()) const;
-private:
-	World world;
-	fs::path cache_file;
 
-	std::map<RegionPos, std::map<ChunkPos, std::vector<nbt::TagCompound> > > entities;
+  private:
+    World world;
+    fs::path cache_file;
 
-	/**
-	 * Reads the file with the cached entities and returns a timestamp when this cache
-	 * was updated the last time.
-	 */
+    std::map<RegionPos, std::map<ChunkPos, std::vector<nbt::TagCompound>>> entities;
+
+    /**
+     * Reads the file with the cached entities and returns a timestamp when this cache
+     * was updated the last time.
 	unsigned int readCacheFile();
+    unsigned int readCacheFile();
 
-	/**
-	 * Writes the file with the cached entities.
-	 */
-	void writeCacheFile() const;
+    /**
+     * Writes the file with the cached entities.
+     */
+    void writeCacheFile() const;
 };
 
 } /* namespace mc */

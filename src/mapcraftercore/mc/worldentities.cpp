@@ -114,89 +114,87 @@ const SignEntity::Lines &SignEntity::getLines() const { return lines; }
 
 const std::string &SignEntity::getText() const { return text; }
 
-WorldEntitiesCache::WorldEntitiesCache(const World& world)
-	: world(world), cache_file(world.getRegionDir() / "entities.nbt.gz") {
-}
+WorldEntitiesCache::WorldEntitiesCache(const World &world)
+    : world(world), cache_file(world.getRegionDir() / "entities.nbt.gz") {}
 
-WorldEntitiesCache::~WorldEntitiesCache() {
-}
+WorldEntitiesCache::~WorldEntitiesCache() {}
 
 unsigned int WorldEntitiesCache::readCacheFile() {
     if (!fs::exists(cache_file)) {
         LOG(DEBUG) << "Cache file " << cache_file << " does not exist.";
-		return 0;
+        return 0;
     }
 
-	nbt::NBTFile nbt_file;
-	nbt_file.readNBT(cache_file.string().c_str(), nbt::Compression::GZIP);
+    nbt::NBTFile nbt_file;
+    nbt_file.readNBT(cache_file.string().c_str(), nbt::Compression::GZIP);
 
-	nbt::TagList nbt_regions = nbt_file.findTag<nbt::TagList>("regions");
-	for (auto region_it = nbt_regions.payload.begin();
-			region_it != nbt_regions.payload.end(); ++region_it) {
-		nbt::TagCompound region = (*region_it)->cast<nbt::TagCompound>();
-		nbt::TagList chunks = region.findTag<nbt::TagList>("chunks");
-		mc::RegionPos region_pos;
-		region_pos.x = region.findTag<nbt::TagInt>("x").payload;
-		region_pos.z = region.findTag<nbt::TagInt>("z").payload;
+    nbt::TagList nbt_regions = nbt_file.findTag<nbt::TagList>("regions");
+    for (auto region_it = nbt_regions.payload.begin(); region_it != nbt_regions.payload.end();
+         ++region_it) {
+        nbt::TagCompound region = (*region_it)->cast<nbt::TagCompound>();
+        nbt::TagList chunks = region.findTag<nbt::TagList>("chunks");
+        mc::RegionPos region_pos;
+        region_pos.x = region.findTag<nbt::TagInt>("x").payload;
+        region_pos.z = region.findTag<nbt::TagInt>("z").payload;
 
-		for (auto chunk_it = chunks.payload.begin(); chunk_it != chunks.payload.end();
-				++chunk_it) {
-			nbt::TagCompound chunk = (*chunk_it)->cast<nbt::TagCompound>();
-			nbt::TagList entities = chunk.findTag<nbt::TagList>("entities");
-			mc::ChunkPos chunk_pos;
-			chunk_pos.x = chunk.findTag<nbt::TagInt>("x").payload;
-			chunk_pos.z = chunk.findTag<nbt::TagInt>("z").payload;
+        for (auto chunk_it = chunks.payload.begin(); chunk_it != chunks.payload.end(); ++chunk_it) {
+            nbt::TagCompound chunk = (*chunk_it)->cast<nbt::TagCompound>();
+            nbt::TagList entities = chunk.findTag<nbt::TagList>("entities");
+            mc::ChunkPos chunk_pos;
+            chunk_pos.x = chunk.findTag<nbt::TagInt>("x").payload;
+            chunk_pos.z = chunk.findTag<nbt::TagInt>("z").payload;
 
-			for (auto entity_it = entities.payload.begin();
-					entity_it != entities.payload.end(); ++entity_it) {
-				nbt::TagCompound entity = (*entity_it)->cast<nbt::TagCompound>();
-				this->entities[region_pos][chunk_pos].push_back(entity);
-			}
-		}
-	}
+            for (auto entity_it = entities.payload.begin(); entity_it != entities.payload.end();
+                 ++entity_it) {
+                nbt::TagCompound entity = (*entity_it)->cast<nbt::TagCompound>();
+                this->entities[region_pos][chunk_pos].push_back(entity);
+            }
+        }
+    }
 
+    LOG(DEBUG) << "Read cache file " << cache_file << ". Last modification time was "
                << fs::last_write_time(cache_file) << ".";
 			<< fs::last_write_time(cache_file) << ".";
 	return fs::last_write_time(cache_file);
 }
 
 void WorldEntitiesCache::writeCacheFile() const {
-	nbt::NBTFile nbt_file;
-	nbt::TagList nbt_regions(nbt::TagCompound::TAG_TYPE);
+    nbt::NBTFile nbt_file;
+    nbt::TagList nbt_regions(nbt::TagCompound::TAG_TYPE);
 
-	for (auto region_it = entities.begin(); region_it != entities.end(); ++region_it) {
-		nbt::TagCompound nbt_region;
-		nbt_region.addTag("x", nbt::TagInt(region_it->first.x));
-		nbt_region.addTag("z", nbt::TagInt(region_it->first.z));
-		nbt::TagList nbt_chunks(nbt::TagCompound::TAG_TYPE);
-		for (auto chunk_it = region_it->second.begin();
-				chunk_it != region_it->second.end(); ++chunk_it) {
-			nbt::TagCompound nbt_chunk;
-			nbt_chunk.addTag("x", nbt::TagInt(chunk_it->first.x));
-			nbt_chunk.addTag("z", nbt::TagInt(chunk_it->first.z));
-			nbt::TagList nbt_entities(nbt::TagCompound::TAG_TYPE);
-			for (auto entity_it = chunk_it->second.begin();
-					entity_it != chunk_it->second.end(); ++entity_it) {
-				nbt_entities.payload.push_back(nbt::TagPtr(entity_it->clone()));
-			}
-			nbt_chunk.addTag("entities", nbt_entities);
-			nbt_chunks.payload.push_back(nbt::TagPtr(nbt_chunk.clone()));
-		}
-		nbt_region.addTag("chunks", nbt_chunks);
-		nbt_regions.payload.push_back(nbt::TagPtr(nbt_region.clone()));
-	}
+    for (auto region_it = entities.begin(); region_it != entities.end(); ++region_it) {
+        nbt::TagCompound nbt_region;
+        nbt_region.addTag("x", nbt::TagInt(region_it->first.x));
+        nbt_region.addTag("z", nbt::TagInt(region_it->first.z));
+        nbt::TagList nbt_chunks(nbt::TagCompound::TAG_TYPE);
+        for (auto chunk_it = region_it->second.begin(); chunk_it != region_it->second.end();
+             ++chunk_it) {
+            nbt::TagCompound nbt_chunk;
+            nbt_chunk.addTag("x", nbt::TagInt(chunk_it->first.x));
+            nbt_chunk.addTag("z", nbt::TagInt(chunk_it->first.z));
+            nbt::TagList nbt_entities(nbt::TagCompound::TAG_TYPE);
+            for (auto entity_it = chunk_it->second.begin(); entity_it != chunk_it->second.end();
+                 ++entity_it) {
+                nbt_entities.payload.push_back(nbt::TagPtr(entity_it->clone()));
+            }
+            nbt_chunk.addTag("entities", nbt_entities);
+            nbt_chunks.payload.push_back(nbt::TagPtr(nbt_chunk.clone()));
+        }
+        nbt_region.addTag("chunks", nbt_chunks);
+        nbt_regions.payload.push_back(nbt::TagPtr(nbt_region.clone()));
+    }
 
-	nbt_file.addTag("regions", nbt_regions);
-	nbt_file.writeNBT(cache_file.string().c_str(), nbt::Compression::GZIP);
+    nbt_file.addTag("regions", nbt_regions);
+    nbt_file.writeNBT(cache_file.string().c_str(), nbt::Compression::GZIP);
 }
 
 void WorldEntitiesCache::update(util::IProgressHandler *progress) {
 	unsigned int timestamp = readCacheFile();
 
-	auto regions = world.getAvailableRegions();
+    auto regions = world.getAvailableRegions();
     if (progress != nullptr)
         progress->setMax(regions.size());
-	for (auto region_it = regions.begin(); region_it != regions.end(); ++region_it) {
+    for (auto region_it = regions.begin(); region_it != regions.end(); ++region_it) {
 
         fs::path region_path = world.getRegionPath(*region_it);
         if (fs::last_write_time(region_path) < timestamp) {
@@ -212,39 +210,39 @@ void WorldEntitiesCache::update(util::IProgressHandler *progress) {
                        << " >= mtime cache " << timestamp << "). Updating.";
         }
 
-		RegionFile region;
-		world.getRegion(*region_it, region);
-		region.read();
+        RegionFile region;
+        world.getRegion(*region_it, region);
+        region.read();
 
-		auto chunks = region.getContainingChunks();
-		for (auto chunk_it = chunks.begin(); chunk_it != chunks.end(); ++chunk_it) {
-			if (region.getChunkTimestamp(*chunk_it) < timestamp)
-				continue;
+        auto chunks = region.getContainingChunks();
+        for (auto chunk_it = chunks.begin(); chunk_it != chunks.end(); ++chunk_it) {
+            if (region.getChunkTimestamp(*chunk_it) < timestamp)
+                continue;
 
 			this->entities[*region_it][*chunk_it].clear();
 
-			mc::nbt::NBTFile nbt;
-			const std::vector<uint8_t>& data = region.getChunkData(*chunk_it);
-			nbt.readNBT(reinterpret_cast<const char*>(&data[0]), data.size(),
-					mc::nbt::Compression::ZLIB);
+            mc::nbt::NBTFile nbt;
+            const std::vector<uint8_t> &data = region.getChunkData(*chunk_it);
+            nbt.readNBT(reinterpret_cast<const char *>(&data[0]), data.size(),
+                        mc::nbt::Compression::ZLIB);
 
 			//nbt::TagCompound& level = nbt.findTag<nbt::TagCompound>("Level");
 			if (!nbt.hasTag<nbt::TagList>("block_entities")) {
 				continue;
 			}
 			nbt::TagList& entities = nbt.findTag<nbt::TagList>("block_entities");
-			for (auto entity_it = entities.payload.begin();
-					entity_it != entities.payload.end(); ++entity_it) {
-				nbt::TagCompound entity = (*entity_it)->cast<nbt::TagCompound>();
-				this->entities[*region_it][*chunk_it].push_back(entity);
-			}
-		}
+            for (auto entity_it = entities.payload.begin(); entity_it != entities.payload.end();
+                 ++entity_it) {
+                nbt::TagCompound entity = (*entity_it)->cast<nbt::TagCompound>();
+                this->entities[*region_it][*chunk_it].push_back(entity);
+            }
+        }
         if (progress != nullptr)
             progress->setValue(progress->getValue() + 1);
-	}
+    }
 
     LOG(DEBUG) << "Writing cache file " << cache_file << " at " << std::time(nullptr) << ".";
-	writeCacheFile();
+    writeCacheFile();
 }
 
 std::vector<SignEntity> WorldEntitiesCache::getSigns(WorldCrop world_crop) const {
