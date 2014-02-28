@@ -234,7 +234,7 @@ void WorldEntitiesCache::update(util::IProgressHandler *progress) {
                        << " < mtime cache " << timestamp << ").";
             if (progress != nullptr)
                 progress->setValue(progress->getValue() + 1);
-			continue;
+            continue;
         } else {
             LOG(DEBUG) << "Entities of region " << region_path.filename()
                        << " are outdated. (mtime region file " << fs::last_write_time(region_path)
