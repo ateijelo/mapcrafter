@@ -44,7 +44,7 @@ bool copyFile(const fs::path &from, const fs::path &to) {
         return false;
 
     out << in.rdbuf();
-	if (out.bad())
+    if (out.bad())
         return false;
     in.close();
     out.close();
