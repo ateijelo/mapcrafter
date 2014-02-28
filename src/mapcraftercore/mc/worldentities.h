@@ -26,6 +26,7 @@
 #include "worldcrop.h"
 
 #include <array>
+#include <boost/filesystem.hpp>
 #include <map>
 #include <vector>
 
