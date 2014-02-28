@@ -74,7 +74,7 @@ class WorldEntitiesCache {
      */
     void update(util::IProgressHandler *progress = nullptr);
 
-	std::vector<SignEntity> getSigns(WorldCrop crop = WorldCrop()) const;
+    std::vector<SignEntity> getSigns(WorldCrop crop = WorldCrop()) const;
 
   private:
     World world;

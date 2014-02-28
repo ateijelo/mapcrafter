@@ -245,46 +245,41 @@ void WorldEntitiesCache::update(util::IProgressHandler *progress) {
 }
 
 std::vector<SignEntity> WorldEntitiesCache::getSigns(WorldCrop world_crop) const {
-	std::vector<SignEntity> signs;
+    std::vector<SignEntity> signs;
 
-	for (auto region_it = entities.begin(); region_it != entities.end(); ++region_it) {
+    for (auto region_it = entities.begin(); region_it != entities.end(); ++region_it) {
         if (!world_crop.isRegionContained(region_it->first))
-			continue;
-		for (auto chunk_it = region_it->second.begin();
-				chunk_it != region_it->second.end(); ++chunk_it) {
+            continue;
+        for (auto chunk_it = region_it->second.begin(); chunk_it != region_it->second.end();
+             ++chunk_it) {
             if (!world_crop.isChunkContained(chunk_it->first))
-				continue;
-			for (auto entity_it = chunk_it->second.begin();
-					entity_it != chunk_it->second.end(); ++entity_it) {
-				const nbt::TagCompound& entity = *entity_it;
+                continue;
+            for (auto entity_it = chunk_it->second.begin(); entity_it != chunk_it->second.end();
+                 ++entity_it) {
+                const nbt::TagCompound &entity = *entity_it;
 
 				if (entity.findTag<nbt::TagString>("id").payload != "Sign"
 						&& entity.findTag<nbt::TagString>("id").payload != "minecraft:sign")
-					continue;
+                    continue;
 
-				mc::BlockPos pos(
-					entity.findTag<nbt::TagInt>("x").payload,
-					entity.findTag<nbt::TagInt>("z").payload,
-					entity.findTag<nbt::TagInt>("y").payload
-				);
+                mc::BlockPos pos(entity.findTag<nbt::TagInt>("x").payload,
+                                 entity.findTag<nbt::TagInt>("z").payload,
+                                 entity.findTag<nbt::TagInt>("y").payload);
 
+                if (!world_crop.isBlockContainedXZ(pos) || !world_crop.isBlockContainedY(pos))
+                    continue;
 
                 mc::SignEntity::Lines lines = {{entity.findTag<nbt::TagString>("Text1").payload,
-					continue;
+                                                entity.findTag<nbt::TagString>("Text2").payload,
+                                                entity.findTag<nbt::TagString>("Text3").payload,
+                                                entity.findTag<nbt::TagString>("Text4").payload}};
 
-				mc::SignEntity::Lines lines = {{
-					entity.findTag<nbt::TagString>("Text1").payload,
-					entity.findTag<nbt::TagString>("Text2").payload,
-					entity.findTag<nbt::TagString>("Text3").payload,
-					entity.findTag<nbt::TagString>("Text4").payload
-				}};
+                signs.push_back(mc::SignEntity(pos, lines));
+            }
+        }
+    }
 
-				signs.push_back(mc::SignEntity(pos, lines));
-			}
-		}
-	}
-
-	return signs;
+    return signs;
 }
 
 } /* namespace mc */
