@@ -108,17 +108,11 @@ SignEntity::SignEntity(const mc::BlockPos &pos, const Lines &lines)
 
 SignEntity::~SignEntity() {}
 
-const mc::BlockPos& SignEntity::getPos() const {
-	return pos;
-}
+const mc::BlockPos &SignEntity::getPos() const { return pos; }
 
-const SignEntity::Lines& SignEntity::getLines() const {
-	return lines;
-}
+const SignEntity::Lines &SignEntity::getLines() const { return lines; }
 
-const std::string& SignEntity::getText() const {
-	return text;
-}
+const std::string &SignEntity::getText() const { return text; }
 
 WorldEntitiesCache::WorldEntitiesCache(const World& world)
 	: world(world), cache_file(world.getRegionDir() / "entities.nbt.gz") {
