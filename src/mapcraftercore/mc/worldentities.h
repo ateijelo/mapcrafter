@@ -36,33 +36,33 @@ namespace mapcrafter {
 namespace mc {
 
 class SignEntity {
-public:
-	typedef std::array<std::string, 4> Lines;
+  public:
+    typedef std::array<std::string, 4> Lines;
 
 	SignEntity();
 	SignEntity(const mc::BlockPos& pos, const Lines& lines);
 	~SignEntity();
 
-	/**
-	 * Returns the position of the sign.
-	 */
-	const mc::BlockPos& getPos() const;
+    /**
+     * Returns the position of the sign.
+     */
+    const mc::BlockPos &getPos() const;
 
-	/**
-	 * Returns the four lines of the sign.
-	 */
+    /**
+     * Returns the four lines of the sign.
+     */
 	const SignEntity::Lines& getLines() const;
 
-	/**
-	 * Returns the text of the sign -- the not-empty lines joined with a separative space.
-	 */
-	const std::string& getText() const;
+    /**
+     * Returns the text of the sign -- the not-empty lines joined with a separative space.
+     */
+    const std::string &getText() const;
 
-private:
-	mc::BlockPos pos;
+  private:
+    mc::BlockPos pos;
 
-	Lines lines;
-	std::string text;
+    Lines lines;
+    std::string text;
 };
 
 class WorldEntitiesCache {

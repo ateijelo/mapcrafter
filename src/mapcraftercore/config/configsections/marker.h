@@ -23,6 +23,7 @@
 #include "../configsection.h"
 
 #include "../../mc/worldentities.h"
+#include "../validation.h"
 
 namespace mapcrafter {
 namespace config {
