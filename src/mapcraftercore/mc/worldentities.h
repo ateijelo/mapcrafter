@@ -39,9 +39,9 @@ class SignEntity {
   public:
     typedef std::array<std::string, 4> Lines;
 
-	SignEntity();
-	SignEntity(const mc::BlockPos& pos, const Lines& lines);
-	~SignEntity();
+    SignEntity();
+    SignEntity(const mc::BlockPos &pos, const Lines &lines);
+    ~SignEntity();
 
     /**
      * Returns the position of the sign.
@@ -51,7 +51,7 @@ class SignEntity {
     /**
      * Returns the four lines of the sign.
      */
-	const SignEntity::Lines& getLines() const;
+    const SignEntity::Lines &getLines() const;
 
     /**
      * Returns the text of the sign -- the not-empty lines joined with a separative space.

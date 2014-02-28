@@ -47,9 +47,9 @@ class MarkerSection : public ConfigSection {
     bool isMatchedEmpty() const;
     bool isShownByDefault() const;
 
-	bool matchesSign(const mc::SignEntity& sign) const;
-	std::string formatTitle(const mc::SignEntity& sign) const;
-	std::string formatText(const mc::SignEntity& sign) const;
+    bool matchesSign(const mc::SignEntity &sign) const;
+    std::string formatTitle(const mc::SignEntity &sign) const;
+    std::string formatText(const mc::SignEntity &sign) const;
 
   protected:
     virtual void preParse(const INIConfigSection &section, ValidationList &validation);
@@ -64,7 +64,7 @@ class MarkerSection : public ConfigSection {
     Field<std::string> icon, icon_size;
     Field<bool> match_empty, show_default;
 
-	std::string formatSign(std::string format, const mc::SignEntity& sign) const;
+    std::string formatSign(std::string format, const mc::SignEntity &sign) const;
 };
 
 } /* namespace config */
