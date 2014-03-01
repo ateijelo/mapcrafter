@@ -249,6 +249,5 @@ int main(int argc, char **argv) {
             LOG(ERROR) << "Unable to write to file '" << output_file << "'!";
             return 1;
         }
-		}
-	}
+    }
 }
