@@ -95,7 +95,7 @@ void MarkerSection::preParse(const INIConfigSection &section, ValidationList &va
 bool MarkerSection::parseField(const std::string key, const std::string value,
                                ValidationList &validation) {
     if (key == "name")
-		name_long.load(key, value, validation);
+        name_long.load(key, value, validation);
     else if (key == "prefix")
         prefix.load(key, value, validation);
     else if (key == "postfix")

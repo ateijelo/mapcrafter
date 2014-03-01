@@ -35,8 +35,8 @@ class MarkerSection : public ConfigSection {
     virtual std::string getPrettyName() const;
     virtual void dump(std::ostream &out) const;
 
-	std::string getShortName() const;
-	std::string getLongName() const;
+    std::string getShortName() const;
+    std::string getLongName() const;
     std::string getPrefix() const;
     std::string getPostfix() const;
     std::string getTitleFormat() const;
@@ -57,7 +57,7 @@ class MarkerSection : public ConfigSection {
     virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
   private:
-	Field<std::string> name_long;
+    Field<std::string> name_long;
     Field<std::string> prefix, postfix;
     Field<std::string> title_format, text_format;
     Field<std::string> icon, icon_size;

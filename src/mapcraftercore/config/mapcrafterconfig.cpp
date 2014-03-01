@@ -224,10 +224,10 @@ const MapSection &MapcrafterConfig::getMap(const std::string &map) const {
 }
 
 bool MapcrafterConfig::hasMarker(const std::string marker) const {
-	for (auto it = markers.begin(); it != markers.end(); ++it)
-		if (it->getShortName() == marker)
-			return true;
-	return false;
+    for (auto it = markers.begin(); it != markers.end(); ++it)
+        if (it->getShortName() == marker)
+            return true;
+    return false;
 }
 
 const std::vector<MarkerSection>& MapcrafterConfig::getMarkers() const {
@@ -235,10 +235,10 @@ const std::vector<MarkerSection>& MapcrafterConfig::getMarkers() const {
 }
 
 const MarkerSection& MapcrafterConfig::getMarker(const std::string& marker) const {
-	for (auto it = markers.begin(); it != markers.end(); ++it)
-		if (it->getShortName() == marker)
-			return *it;
-	throw std::out_of_range("Marker not found!");
+    for (auto it = markers.begin(); it != markers.end(); ++it)
+        if (it->getShortName() == marker)
+            return *it;
+    throw std::out_of_range("Marker not found!");
 }
 
 const std::vector<LogSection> &MapcrafterConfig::getLogSections() const { return log_sections; }

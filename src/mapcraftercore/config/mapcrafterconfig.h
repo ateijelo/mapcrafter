@@ -103,7 +103,7 @@ class MapcrafterConfig {
     const MapSection &getMap(const std::string &map) const;
 
     bool hasMarker(const std::string marker) const;
-	const std::vector<MarkerSection>& getMarkers() const;
+    const std::vector<MarkerSection> &getMarkers() const;
 	const MarkerSection& getMarker(const std::string& marker) const;
 
     const std::vector<LogSection> &getLogSections() const;
