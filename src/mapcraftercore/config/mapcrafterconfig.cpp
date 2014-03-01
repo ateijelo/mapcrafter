@@ -217,9 +217,7 @@ bool MapcrafterConfig::hasMarker(const std::string marker) const {
     return false;
 }
 
-const std::vector<MarkerSection>& MapcrafterConfig::getMarkers() const {
-	return markers;
-}
+const std::vector<MarkerSection> &MapcrafterConfig::getMarkers() const { return markers; }
 
 const MarkerSection& MapcrafterConfig::getMarker(const std::string& marker) const {
     for (auto it = markers.begin(); it != markers.end(); ++it)
