@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 
     po::options_description general("General options");
     general.add_options()("help,h", "shows this help message")(
-		("help,h", "shows this help message")
+        "version,v", "shows the version of Mapcrafter")("mc-version",
 		("version,v", "shows the version of Mapcrafter")
 		("mc-version", "shows the required Minecraft version");
     po::options_description logging("Logging/output options");
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
                            "shows available resource paths, for example template/texture directory "
                            "and global logging configuration file")(
         "config,c", po::value<std::string>(&arg_config),
-			"the path to the configuration file to use (required)")
+        "the path to the configuration file to use (required)")(
 		("render-skip,s", po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
 			"skips rendering the specified map(s)")
 		("render-reset,r", "skips rendering all maps")
