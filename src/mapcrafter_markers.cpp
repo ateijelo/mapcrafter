@@ -152,43 +152,43 @@ std::string createMarkersJSON(const config::MapcrafterConfig &config,
 }
 
 int main(int argc, char **argv) {
-	std::string config_file;
-	std::string output_file;
+    std::string config_file;
+    std::string output_file;
     int verbosity = 0;
 
-	po::options_description all("Allowed options");
-	all.add_options()
-		("help,h", "shows this help message")
+    po::options_description all("Allowed options");
+    all.add_options()("help,h", "shows this help message")(
+        "verbose,v", accumulator<int>(&verbosity), "verbose blah blah")
 
         ("config,c", po::value<std::string>(&config_file),
+         "the path to the configuration file (required)")(
+            "output-file,o", po::value<std::string>(&output_file),
+            "file to write the generated markers to, "
+            "defaults to markers-generated.js in the output directory.");
 
-		("config,c", po::value<std::string>(&config_file),
-			"the path to the configuration file (required)")
-		("output-file,o", po::value<std::string>(&output_file),
-			"file to write the generated markers to, "
-			"defaults to markers-generated.js in the output directory.");
+    po::variables_map vm;
+    try {
+        po::store(po::parse_command_line(argc, argv, all), vm);
+    } catch (po::error &ex) {
+        std::cout << "There is a problem parsing the command line arguments: " << ex.what()
+                  << std::endl
+                  << std::endl;
+        std::cout << all << std::endl;
+        return 1;
+    }
 
-	po::variables_map vm;
-	try {
-		po::store(po::parse_command_line(argc, argv, all), vm);
-	} catch (po::error& ex) {
-		std::cout << "There is a problem parsing the command line arguments: "
-				<< ex.what() << std::endl << std::endl;
-		std::cout << all << std::endl;
-		return 1;
-	}
+    po::notify(vm);
 
-	po::notify(vm);
-
-	if (vm.count("help")) {
-		std::cout << all << std::endl;
+    if (vm.count("help")) {
+        std::cout << all << std::endl;
+        return 1;
     }
 
     if (!vm.count("config")) {
-	if (!vm.count("config")) {
-		std::cerr << "You have to specify a configuration file!" << std::endl;
-		return 1;
-	}
+        std::cerr << "You have to specify a configuration file!" << std::endl;
+        return 1;
+    }
+
     // TODO add this to an automatic logging configuration?
     util::LogLevel log_level = util::LogLevel::WARNING;
     if (verbosity == 1)
