@@ -161,26 +161,26 @@ std::string trim(const std::string& str) {
 
 // http://stackoverflow.com/questions/7724448/simple-json-string-escape-for-c
 
-std::string escapeJSON(const std::string& str) {
-	std::ostringstream ss;
+std::string escapeJSON(const std::string &str) {
+    std::ostringstream ss;
 	for (auto it = str.begin(); it != str.end(); ++it) {
-	//C++98/03:
-	//for (std::string::const_iterator it = str.begin(); it != str.end(); ++it) {
-		switch (*it) {
-			case '\\': ss << "\\\\"; break;
-			case '"': ss << "\\\""; break;
-			case '/': ss << "\\/"; break;
-			case '\b': ss << "\\b"; break;
-			case '\f': ss << "\\f"; break;
-			case '\n': ss << "\\n"; break;
-			case '\r': ss << "\\r"; break;
-			case '\t': ss << "\\t"; break;
-			default: ss << *it; break;
-		}
-	}
-	return ss.str();
-}
-
+        // C++98/03:
+        // for (std::string::const_iterator it = str.begin(); it != str.end(); ++it) {
+        switch (*it) {
+        case '\\':
+            ss << "\\\\";
+            break;
+        case '"':
+            ss << "\\\"";
+            break;
+        case '/':
+            ss << "\\/";
+            break;
+        case '\b':
+            ss << "\\b";
+            break;
+        case '\f':
+            ss << "\\f";
 std::string capitalize(const std::string& str) {
 	if (str.empty())
 		return "";
