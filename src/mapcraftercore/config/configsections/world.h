@@ -47,7 +47,7 @@ public:
 
 	void setConfigDir(const fs::path& config_dir);
 
-	std::string getShortName();
+    std::string getShortName();
 
 	fs::path getInputDir() const;
 	mc::Dimension getDimension() const;

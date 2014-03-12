@@ -80,8 +80,8 @@ Markers findMarkers(const config::MapcrafterConfig &config) {
 
         // use name of the world section as world name, not the world_name
         std::string world_name = world_it->second.getShortName();
-		// use name of the world section as world name, not the world_name
-		std::string world_name = world_it->second.getShortName();
+        std::vector<mc::SignEntity> signs = entities.getSigns(world.getWorldCrop());
+        for (auto sign_it = signs.begin(); sign_it != signs.end(); ++sign_it) {
             // don't use signs not contained in the world boundaries
             if (!world_crop.isBlockContainedXZ(sign_it->getPos()) &&
                 !world_crop.isBlockContainedY(sign_it->getPos()))
