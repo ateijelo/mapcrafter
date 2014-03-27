@@ -968,7 +968,4 @@ bool RGBAImage::writeJPEG(const std::string &filename, int quality, RGBAPixel ba
 }
 
 } // namespace renderer
-}
-
-}
-}
+} // namespace mapcrafter
