@@ -65,7 +65,7 @@ void TileRenderWorker::setProgressHandler(util::IProgressHandler* progress) {
 	this->progress = progress;
 }
 
-void TileRenderWorker::saveTile(const TilePath& tile, const RGBAImage& image) {
+void TileRenderWorker::saveTile(const TilePath &tile, const RGBAImage &image) {
 	bool png = render_context.map_config.getImageFormat() == config::ImageFormat::PNG;
     bool png_indexed = render_context.map_config.isPNGIndexed();
 	std::string suffix = std::string(".") + render_context.map_config.getImageFormatSuffix();
@@ -88,7 +88,7 @@ void TileRenderWorker::saveTile(const TilePath& tile, const RGBAImage& image) {
         LOG(WARNING) << "Unable to write '" << file.string() << "'.";
 }
 
-void TileRenderWorker::renderRecursive(const TilePath& tile, RGBAImage& image) {
+void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
 	// if this is tile is not required or we should skip it, try to load it from file
 	if (!render_context.tile_set->isTileRequired(tile)
 			|| render_work.tiles_skip.count(tile)) {
@@ -148,8 +148,8 @@ void TileRenderWorker::renderRecursive(const TilePath& tile, RGBAImage& image) {
 
         RGBAImage other;
 
-		RGBAImage other;
-		RGBAImage resized;
+        if (render_context.tile_set->hasTile(tile + 1)) {
+            renderRecursive(tile + 1, other);
 		if (render_context.tile_set->hasTile(tile + 1)) {
 			renderRecursive(tile + 1, other);
             other.clear();
@@ -199,7 +199,7 @@ void TileRenderWorker::operator()() {
 		progress->setValue(0);
 	}
 	
-	RGBAImage image;
+    RGBAImage image;
 	// iterate through the start composite tiles
 	for (auto it = render_work.tiles.begin(); it != render_work.tiles.end(); ++it) {
 		// render this composite tile

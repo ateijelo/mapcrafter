@@ -111,7 +111,7 @@ public:
 	/**
 	 * Dummy implementation of interface method.
 	 */
-	virtual void draw(RGBAImage& image, const mc::BlockPos& pos, uint16_t id, uint16_t data);
+    virtual void draw(RGBAImage &image, const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
 protected:
     mc::Block getBlock(const mc::BlockPos &pos, int get = mc::GET_ID);

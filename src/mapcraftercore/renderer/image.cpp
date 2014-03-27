@@ -153,11 +153,11 @@ void pngWriteData(png_structp pngPtr, png_bytep data, png_size_t length) {
     ((std::ostream *)a)->write((char *)data, length);
 }
 
-RGBAImage::RGBAImage(int width, int height)
+RGBAImage::RGBAImage(int width, int height) : Image<RGBAPixel>(width, height) {}
 
 RGBAImage::~RGBAImage() {}
 
-RGBAImage::~RGBAImage() {
+void RGBAImage::simpleBlit(const RGBAImage &image, int x, int y) {
     if (x >= width || y >= height)
         return;
 
@@ -254,7 +254,7 @@ void RGBAImage::clear() {
 }
 
 RGBAImage RGBAImage::clip(int x, int y, int width, int height) const {
-	RGBAImage image(width, height);
+    RGBAImage image(width, height);
 	for (int xx = 0; xx < width && xx + x < this->width; xx++) {
 		for (int yy = 0; yy < height && yy + y < this->height; yy++) {
             image.setPixel(xx, yy, getPixel(x + xx, y + yy));
@@ -264,7 +264,7 @@ RGBAImage RGBAImage::clip(int x, int y, int width, int height) const {
 }
 
 RGBAImage RGBAImage::colorize(double r, double g, double b, double a) const {
-	RGBAImage img(width, height);
+    RGBAImage img(width, height);
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             img.setPixel(x, y, rgba_multiply(getPixel(x, y), r, g, b, a));
@@ -274,7 +274,7 @@ RGBAImage RGBAImage::colorize(double r, double g, double b, double a) const {
 }
 
 RGBAImage RGBAImage::colorize(uint8_t r, uint8_t g, uint8_t b, uint8_t a) const {
-	RGBAImage img(width, height);
+    RGBAImage img(width, height);
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
 			img.setPixel(x, y, rgba_multiply(getPixel(x, y), r, g, b, a));
@@ -289,7 +289,7 @@ RGBAImage RGBAImage::rotate(int rotation) const {
 		return *this;
     int newWidth = rotation == ROTATE_90 || rotation == ROTATE_270 ? height : width;
     int newHeight = rotation == ROTATE_90 || rotation == ROTATE_270 ? width : height;
-	RGBAImage copy(newWidth, newHeight);
+    RGBAImage copy(newWidth, newHeight);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             RGBAPixel pixel = 0;
@@ -306,7 +306,7 @@ RGBAImage RGBAImage::rotate(int rotation) const {
 }
 
 RGBAImage RGBAImage::flip(bool flipX, bool flipY) const {
-	RGBAImage copy(width, height);
+    RGBAImage copy(width, height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             int xx = flipX ? width - x - 1 : x;
@@ -318,7 +318,7 @@ RGBAImage RGBAImage::flip(bool flipX, bool flipY) const {
 }
 
 RGBAImage RGBAImage::move(int xOffset, int yOffset) const {
-	RGBAImage img(width, height);
+    RGBAImage img(width, height);
     for (int y = 0; y < height && y + yOffset < height; y++) {
         for (int x = 0; x < width && x + xOffset < width; x++) {
             img.setPixel(x + xOffset, y + yOffset, getPixel(x, y));
@@ -431,7 +431,7 @@ void RGBAImage::blur(RGBAImage &dest, int radius) const {
 }
 
 bool RGBAImage::readPNG(const std::string &filename) {
-bool RGBAImage::readPNG(const std::string& filename) {
+    std::ifstream file(filename.c_str(), std::ios::binary);
     if (!file) {
         return false;
     }
@@ -507,7 +507,7 @@ bool RGBAImage::readPNG(const std::string& filename) {
 }
 
 bool RGBAImage::writePNG(const std::string &filename) const {
-bool RGBAImage::writePNG(const std::string& filename) const {
+    std::ofstream file(filename.c_str(), std::ios::binary);
     if (!file) {
         return false;
     }

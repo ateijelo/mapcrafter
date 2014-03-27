@@ -140,12 +140,12 @@ class RGBAImage : public Image<RGBAPixel> {
     void fill(RGBAPixel color, int x1, int y1, int w, int h);
     void clear();
 
-	RGBAImage clip(int x, int y, int width, int height) const;
-	RGBAImage colorize(double r, double g, double b, double a = 1) const;
-	RGBAImage colorize(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) const;
-	RGBAImage rotate(int rotation) const;
-	RGBAImage flip(bool flip_x, bool flip_y) const;
-	RGBAImage move(int x_off, int y_off) const;
+    RGBAImage clip(int x, int y, int width, int height) const;
+    RGBAImage colorize(double r, double g, double b, double a = 1) const;
+    RGBAImage colorize(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) const;
+    RGBAImage rotate(int rotation) const;
+    RGBAImage flip(bool flip_x, bool flip_y) const;
+    RGBAImage move(int x_off, int y_off) const;
 
     void resize(RGBAImage &dest, int width, int height,
                 InterpolationType interpolation = InterpolationType::AUTO) const;
