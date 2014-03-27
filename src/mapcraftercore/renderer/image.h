@@ -180,8 +180,9 @@ class RGBAImage : public Image<RGBAPixel> {
     bool writeIndexedPNG(const std::string &filename, int palette_bits = 8,
                          bool dithered = true) const;
 
-	bool writeJPEG(const std::string& filename, int quality,
-			RGBAPixel background = rgba(255, 255, 255, 255)) const;
+    bool readJPEG(const std::string &filename);
+    bool writeJPEG(const std::string &filename, int quality,
+                   RGBAPixel background = rgba(255, 255, 255, 255)) const;
 };
 
 template <typename Pixel>

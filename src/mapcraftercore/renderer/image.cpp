@@ -721,7 +721,7 @@ my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-bool RGBAImage::readJPEG(const std::string& filename) {
+    /* This struct contains the JPEG decompression parameters and pointers to
 	/* This struct contains the JPEG decompression parameters and pointers to
 	 * working space (which is allocated as needed by the JPEG library).
 	 */
@@ -853,11 +853,11 @@ bool RGBAImage::readJPEG(const std::string& filename) {
 
 	/* And we're done! */
 
-	return true;
+
 bool RGBAImage::writeJPEG(const std::string &filename, int quality, RGBAPixel background) const {
 
-bool RGBAImage::writeJPEG(const std::string& filename, int quality,
-		RGBAPixel background) const {
+    /* This struct contains the JPEG compression parameters and pointers to
+     * working space (which is allocated as needed by the JPEG library).
 
 	/* This struct contains the JPEG compression parameters and pointers to
 	 * working space (which is allocated as needed by the JPEG library).
@@ -975,7 +975,7 @@ bool RGBAImage::writeJPEG(const std::string& filename, int quality,
 	jpeg_destroy_compress(&cinfo);
 
 	/* And we're done! */
-	return true;
+} // namespace renderer
 }
 
 }
