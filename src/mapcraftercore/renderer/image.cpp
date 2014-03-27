@@ -54,10 +54,10 @@ RGBAPixel rgba_add_clamp(RGBAPixel value, const std::tuple<int, int, int> &value
 }
 
 RGBAPixel rgba_multiply(RGBAPixel value, double r, double g, double b, double a) {
-	uint8_t red = rgba_red(value);
-	uint8_t green = rgba_green(value);
-	uint8_t blue = rgba_blue(value);
-	uint8_t alpha = rgba_alpha(value);
+    uint8_t red = rgba_red(value);
+    uint8_t green = rgba_green(value);
+    uint8_t blue = rgba_blue(value);
+    uint8_t alpha = rgba_alpha(value);
     return rgba(red * r, green * g, blue * b, alpha * a);
 }
 
@@ -94,7 +94,7 @@ void blend(RGBAPixel &dest, const RGBAPixel &source) {
     else if (dest >= 0xff000000) {
         // get sa and sainv in the range 1-256; this way, the possible results of blending 8-bit
         // color channels sc and dc
-		int64_t sa = rgba_alpha(source) + 1;
+        //  (using sc*sa + dc*sainv) span the range 0x0000-0xffff, so we can just truncate and shift
         int64_t sa = rgba_alpha(source) + 1;
         int64_t sainv = 257 - sa;
         // compute the new RGB channels
@@ -109,7 +109,7 @@ void blend(RGBAPixel &dest, const RGBAPixel &source) {
         // both source and dest are translucent; we need the whole deal
     } else {
         // get sa and sainv in the range 1-256; this way, the possible results of blending 8-bit
-		int64_t sa = rgba_alpha(source) + 1;
+        // color channels sc and dc
         //  (using sc*sa + dc*sainv) span the range 0x0000-0xffff, so we can just truncate and shift
         int64_t sa = rgba_alpha(source) + 1;
         int64_t sainv = 257 - sa;
@@ -117,7 +117,7 @@ void blend(RGBAPixel &dest, const RGBAPixel &source) {
         int64_t d = dest, s = source;
         d = ((d << 16) & UINT64_C(0xff00000000)) | ((d << 8) & 0xff0000) | (d & 0xff);
         s = ((s << 16) & UINT64_C(0xff00000000)) | ((s << 8) & 0xff0000) | (s & 0xff);
-		int64_t dainv = 256 - rgba_alpha(dest);
+        int64_t newrgb = s * sa + d * sainv;
         // compute the new alpha channel
         int64_t dainv = 256 - rgba_alpha(dest);
         int64_t newa = sainv * dainv; // result is from 1-0x10000
@@ -193,7 +193,7 @@ void RGBAImage::simpleAlphaBlit(const RGBAImage &image, int x, int y) {
             if (rgba_alpha(image.data[sy * image.width + sx]) != 0) {
 		sy = std::max(0, -y);
             }
-			if (rgba_alpha(image.data[sy*image.width+sx]) != 0) {
+        }
     }
 }
 
