@@ -68,34 +68,33 @@ RGBAPixel rgba_add_clamp(RGBAPixel value, const std::tuple<int, int, int> &value
 RGBAPixel rgba_multiply(RGBAPixel value, double r, double g, double b, double a = 1);
 int rgba_distance2(RGBAPixel value1, RGBAPixel value2);
 
-void blend(RGBAPixel& dest, const RGBAPixel& source);
+void blend(RGBAPixel &dest, const RGBAPixel &source);
 
 void pngReadData(png_structp pngPtr, png_bytep data, png_size_t length);
 void pngWriteData(png_structp pngPtr, png_bytep data, png_size_t length);
 
 template <typename Pixel> class Image {
-class Image {
-public:
-	Image(int width = 0, int height = 0);
-	~Image();
+  public:
+    Image(int width = 0, int height = 0);
+    ~Image();
 
-	int getWidth() const;
-	int getHeight() const;
+    int getWidth() const;
+    int getHeight() const;
 
-	Pixel getPixel(int x, int y) const;
-	void setPixel(int x, int y, Pixel pixel);
+    Pixel getPixel(int x, int y) const;
+    void setPixel(int x, int y, Pixel pixel);
 
     inline const Pixel &pixel(int x, int y) const;
 
     inline Pixel &pixel(int x, int y);
 
-	void setSize(int width, int height);
+    void setSize(int width, int height);
 
     // protected:
-	int width;
-	int height;
+    int width;
+    int height;
 
-	std::vector<Pixel> data;
+    std::vector<Pixel> data;
 };
 
 const int ROTATE_0 = 0;
@@ -116,9 +115,9 @@ enum class InterpolationType {
 
 // TODO better documentation...
 class RGBAImage : public Image<RGBAPixel> {
-public:
-	RGBAImage(int width = 0, int height = 0);
-	~RGBAImage();
+  public:
+    RGBAImage(int width = 0, int height = 0);
+    ~RGBAImage();
 
     /**
      * Blits one image to another one. Just copies the pixels over without any processing.
@@ -136,9 +135,9 @@ public:
      * image with the pixels of the destination image.
      */
     void alphaBlit(const RGBAImage &image, int x, int y);
-	void blendPixel(RGBAPixel color, int x, int y);
+    void blendPixel(RGBAPixel color, int x, int y);
 
-	void fill(RGBAPixel color, int x1, int y1, int w, int h);
+    void fill(RGBAPixel color, int x1, int y1, int w, int h);
     void clear();
 
 	RGBAImage clip(int x, int y, int width, int height) const;
@@ -179,16 +178,15 @@ public:
     bool readPNG(const std::string &filename);
     bool writePNG(const std::string &filename) const;
 	bool writeIndexedPNG(const std::string& filename, int palette_bits = 8, bool dithered = true) const;
+                         bool dithered = true) const;
 
-	bool readJPEG(const std::string& filename);
 	bool writeJPEG(const std::string& filename, int quality,
 			RGBAPixel background = rgba(255, 255, 255, 255)) const;
 };
 
 template <typename Pixel>
-Image<Pixel>::Image(int width, int height)
-	:width(width), height(height) {
-	data.resize(width * height);
+Image<Pixel>::Image(int width, int height) : width(width), height(height) {
+    data.resize(width * height);
 }
 
 template <typename Pixel>
@@ -206,17 +204,15 @@ int Image<Pixel>::getHeight() const {
 }
 
 template <typename Pixel> Pixel Image<Pixel>::getPixel(int x, int y) const {
-Pixel Image<Pixel>::getPixel(int x, int y) const {
-	if (x >= width || x < 0 || y >= height || y < 0)
-		return 0;
-	return data[y * width + x];
+    if (x >= width || x < 0 || y >= height || y < 0)
+        return 0;
+    return data[y * width + x];
 }
 
 template <typename Pixel> inline void Image<Pixel>::setPixel(int x, int y, Pixel pixel) {
     if (x >= width || x < 0 || y >= height || y < 0)
-	if (x >= width || x < 0 || y >= height || y < 0)
-		return;
-	data[y * width + x] = pixel;
+        return;
+    data[y * width + x] = pixel;
 }
 
 template <typename Pixel> inline const Pixel &Image<Pixel>::pixel(int x, int y) const {
@@ -230,10 +226,9 @@ Pixel& Image<Pixel>::pixel(int x, int y) {
 }
 
 template <typename Pixel> void Image<Pixel>::setSize(int width, int height) {
-void Image<Pixel>::setSize(int width, int height) {
-	this->width = width;
-	this->height = height;
-	data.resize(width * height);
+    this->width = width;
+    this->height = height;
+    data.resize(width * height);
 }
 
 } // namespace renderer

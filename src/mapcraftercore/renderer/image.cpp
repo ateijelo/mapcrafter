@@ -74,13 +74,13 @@ int rgba_distance2(RGBAPixel value1, RGBAPixel value2) {
            std::pow(rgba_alpha(value1) - rgba_alpha(value2), 2);
 }
 
-# ifndef UINT64_C
-#  if __WORDSIZE == 64
-#   define UINT64_C(c)	c ## UL
-#  else
-#   define UINT64_C(c)	c ## ULL
-#  endif
-# endif
+#ifndef UINT64_C
+#if __WORDSIZE == 64
+#define UINT64_C(c) c##UL
+#else
+#define UINT64_C(c) c##ULL
+#endif
+#endif
 
 /**
  * This code is from pigmap.
@@ -88,7 +88,7 @@ int rgba_distance2(RGBAPixel value1, RGBAPixel value2) {
  *
  * https://github.com/equalpants/pigmap (rgba.cpp)
  */
-void blend(RGBAPixel& dest, const RGBAPixel& source) {
+void blend(RGBAPixel &dest, const RGBAPixel &source) {
     // if source is transparent, there's nothing to do
     if (source <= 0xffffff)
         return;
@@ -154,7 +154,7 @@ void pngWriteData(png_structp pngPtr, png_bytep data, png_size_t length) {
 }
 
 RGBAImage::RGBAImage(int width, int height)
-	: Image<RGBAPixel>(width, height) {
+
 RGBAImage::~RGBAImage() {}
 
 RGBAImage::~RGBAImage() {
@@ -292,7 +292,7 @@ RGBAImage RGBAImage::rotate(int rotation) const {
 	RGBAImage copy(newWidth, newHeight);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-			RGBAPixel pixel = 0;
+            RGBAPixel pixel = 0;
             if (rotation == ROTATE_90)
                 pixel = getPixel(y, width - x - 1);
             else if (rotation == ROTATE_180)
@@ -854,7 +854,7 @@ bool RGBAImage::readJPEG(const std::string& filename) {
 	/* And we're done! */
 
 	return true;
-}
+bool RGBAImage::writeJPEG(const std::string &filename, int quality, RGBAPixel background) const {
 
 bool RGBAImage::writeJPEG(const std::string& filename, int quality,
 		RGBAPixel background) const {
