@@ -192,8 +192,8 @@ class RenderManager {
     /**
      * Increases the max zoom level of a map (given as directory, the one with base.png).
      */
-	void increaseMaxZoom(const fs::path& dir, std::string image_format,
-			int jpeg_quality = 85) const;
+    void increaseMaxZoom(const fs::path &dir, std::string image_format,
+                         int jpeg_quality = 85) const;
 
     config::MapcrafterConfig config;
     config::WebConfig web_config;
