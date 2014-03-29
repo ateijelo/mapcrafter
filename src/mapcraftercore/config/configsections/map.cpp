@@ -25,14 +25,14 @@ namespace mapcrafter {
 namespace util {
 
 template <> config::ImageFormat as<config::ImageFormat>(const std::string &from) {
-config::ImageFormat as<config::ImageFormat>(const std::string& from) {
-	if (from == "png")
-		return config::ImageFormat::PNG;
-	else if (from == "jpeg")
-		return config::ImageFormat::JPEG;
-	throw std::invalid_argument("Must be 'png' or 'jpeg'!");
+    if (from == "png")
+        return config::ImageFormat::PNG;
+    else if (from == "jpeg")
+        return config::ImageFormat::JPEG;
+    throw std::invalid_argument("Must be 'png' or 'jpeg'!");
 }
 
+template <> renderer::RenderModeType as<renderer::RenderModeType>(const std::string &from) {
 template <>
 renderer::RenderModeType as<renderer::RenderModeType>(const std::string& from) {
 	if (from == "plain")

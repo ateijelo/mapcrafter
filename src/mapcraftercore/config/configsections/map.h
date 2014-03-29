@@ -76,10 +76,7 @@ public:
 	int rotation;
 };
 
-enum class ImageFormat {
-	PNG,
-	JPEG
-};
+enum class ImageFormat { PNG, JPEG };
 
 std::ostream &operator<<(std::ostream &out, ImageFormat image_format);
 
@@ -109,10 +106,10 @@ class MapSection : public ConfigSection {
 	double getWaterOpacity() const;
 	int getTileWidth() const;
 
-	ImageFormat getImageFormat() const;
+    ImageFormat getImageFormat() const;
 	std::string getImageFormatSuffix() const;
 	bool isPNGIndexed() const;
-	int getJPEGQuality() const;
+    int getJPEGQuality() const;
 
 	double getLightingIntensity() const;
 	double getLightingWaterIntensity() const;
@@ -149,7 +146,7 @@ class MapSection : public ConfigSection {
 
 	Field<ImageFormat> image_format;
     Field<bool> png_indexed;
-	Field<int> jpeg_quality;
+    Field<int> jpeg_quality;
 
 	Field<double> lighting_intensity, lighting_water_intensity;
 	Field<bool> cave_high_contrast;
