@@ -125,7 +125,7 @@ std::string createMarkersJSON(const config::MapcrafterConfig &config,
                 ss << "    \"iconSize\" : " << marker_config.getIconSize() << "," << std::endl;
         }
         ss << "    \"showDefault\" : ";
-		ss << (marker_config.isShownByDefault() ? "true" : "false") << "," << std::endl;
+        ss << (marker_config.isShownByDefault() ? "true" : "false") << "," << std::endl;
         ss << "    \"markers\" : {" << std::endl;
 
 		if (!markers_found.count(group)) {

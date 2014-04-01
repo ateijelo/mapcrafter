@@ -110,8 +110,7 @@ void MarkerSection::preParse(const INIConfigSection &section, ValidationList &va
     name_long.setDefault(getSectionName());
 	name_long.setDefault(getSectionName());
 	title_format.setDefault("%(text)");
-	match_empty.setDefault(false);
-	show_default.setDefault(true);
+    show_default.setDefault(true);
 }
 
 bool MarkerSection::parseField(const std::string key, const std::string value,
@@ -130,10 +129,10 @@ bool MarkerSection::parseField(const std::string key, const std::string value,
         icon.load(key, value, validation);
     else if (key == "icon_size")
         icon_size.load(key, value, validation);
-	else if (key == "match_empty")
-		match_empty.load(key, value, validation);
-	else if (key == "show_default")
-		show_default.load(key, value, validation);
+    else if (key == "match_empty")
+        match_empty.load(key, value, validation);
+    else if (key == "show_default")
+        show_default.load(key, value, validation);
     else
         return false;
     return true;

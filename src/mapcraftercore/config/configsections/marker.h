@@ -44,7 +44,7 @@ class MarkerSection : public ConfigSection {
     std::string getIcon() const;
     std::string getIconSize() const;
 	bool isMatchedEmpty() const;
-	bool isShownByDefault() const;
+    bool isShownByDefault() const;
 
 	bool matchesSign(const mc::SignEntity& sign) const;
 	std::string formatTitle(const mc::SignEntity& sign) const;
@@ -63,7 +63,7 @@ protected:
 	Field<std::string> prefix, postfix;
     Field<std::string> title_format, text_format;
     Field<std::string> icon, icon_size;
-	Field<bool> match_empty, show_default;
+    Field<bool> match_empty, show_default;
 
 	std::string formatSign(std::string format, const mc::SignEntity& sign) const;
 };
