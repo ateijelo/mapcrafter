@@ -122,9 +122,9 @@ std::string createMarkersJSON(const config::MapcrafterConfig &config,
         if (!marker_config.getIcon().empty()) {
             ss << "    \"icon\" : \"" << marker_config.getIcon() << "\"," << std::endl;
             if (!marker_config.getIconSize().empty())
-				ss << "    \"iconSize\" : " << marker_config.getIconSize() << "," << std::endl;
+                ss << "    \"iconSize\" : " << marker_config.getIconSize() << "," << std::endl;
         }
-		ss << "    \"showDefault\" : ";
+        ss << "    \"showDefault\" : ";
 		ss << (marker_config.isShownByDefault() ? "true" : "false") << "," << std::endl;
         ss << "    \"markers\" : {" << std::endl;
 
