@@ -82,9 +82,9 @@ void TileRenderWorker::saveTile(const TilePath& tile, const RGBAImage& image) {
     if ((png && png_indexed) && !image.writeIndexedPNG(file.string()))
 		LOG(WARNING) << "Unable to write '" << file.string() << "'.";
 
-	config::Color bg = render_context.background_color;
+    config::Color bg = render_context.background_color;
 	if (!png && !image.writeJPEG(file.string(),
-			render_context.map_config.getJPEGQuality(), rgba(bg.red, bg.green, bg.blue, 255)))
+                                 rgba(bg.red, bg.green, bg.blue, 255)))
 		LOG(WARNING) << "Unable to write '" << file.string() << "'.";
 }
 

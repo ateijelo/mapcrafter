@@ -41,8 +41,8 @@ class INIConfig;
 class INIConfigSection;
 
 struct Color {
-	std::string hex;
-	uint8_t red, green, blue;
+    std::string hex;
+    uint8_t red, green, blue;
 };
 
 std::ostream &operator<<(std::ostream &out, const Color &color);

@@ -29,11 +29,11 @@ namespace mapcrafter {
 namespace util {
 
 template <> mapcrafter::config::Color as<mapcrafter::config::Color>(const std::string &from) {
-mapcrafter::config::Color as<mapcrafter::config::Color>(const std::string& from) {
-	std::string error_message = "Hex color must be in the format '#rrggbb'.";
-	if (from.size() != 7)
-		throw std::invalid_argument(error_message);
-	for (size_t i = 1; i < 7; i++)
+    std::string error_message = "Hex color must be in the format '#rrggbb'.";
+    if (from.size() != 7)
+        throw std::invalid_argument(error_message);
+    for (size_t i = 1; i < 7; i++)
+        if (!isxdigit(from[i]))
 		if (!isxdigit(from[i]))
 			throw std::invalid_argument(error_message);
 
@@ -45,8 +45,16 @@ mapcrafter::config::Color as<mapcrafter::config::Color>(const std::string& from)
 	return color;
 }
 
+    mapcrafter::config::Color color;
+    color.hex = from;
+    color.red = util::parseHexNumber(from.substr(1, 2));
+    color.green = util::parseHexNumber(from.substr(3, 2));
+    color.blue = util::parseHexNumber(from.substr(5, 2));
+    return color;
 }
-}
+
+} // namespace util
+} // namespace mapcrafter
 
 namespace mapcrafter {
 namespace config {
