@@ -814,9 +814,9 @@ bool RGBAImage::readJPEG(const std::string &filename) {
             uint8_t blue = buffer[0][3 * x + 2];
             // output_scanline is increased by the jpeg_read_scanlines method
             // before we use it for the image, that's why the -1
-			// output_scanline is increased by the jpeg_read_scanlines method
-			// before we use it for the image, that's why the -1
-			pixel(x, cinfo.output_scanline - 1) = rgba(red, green, blue, 255);
+            pixel(x, cinfo.output_scanline - 1) = rgba(red, green, blue, 255);
+        }
+    }
 
     /* Step 7: Finish decompression */
 
@@ -939,13 +939,13 @@ bool RGBAImage::writeJPEG(const std::string &filename, int quality, RGBAPixel ba
             RGBAPixel color = pixel(x, cinfo.next_scanline);
             // jpeg does not support transparency
             // add background color if this pixel has transparency
-			RGBAPixel color = pixel(x, cinfo.next_scanline);
+            // but ignore a bit transparency
 			// jpeg does not support transparency
 			// add background color if this pixel has transparency
 			// but ignore a bit transparency
 			if (rgba_alpha(color) < 250) {
 				color = background;
-				blend(color, pixel(x, cinfo.next_scanline));
+            line_buffer[3 * x] = rgba_red(color);
 			}
             line_buffer[3 * x + 2] = rgba_blue(color);
         }
