@@ -96,27 +96,26 @@ std::map<std::string, std::string> parseProperties(std::string str);
  * TODO this is unused, maybe use it for the config option values? ... or remove it
  */
 template <typename T> class Nullable {
-class Nullable {
-public:
-	Nullable() : null(true) {}
-	Nullable(const T& value) : null(false), value(value) {}
-	~Nullable() {}
+  public:
+    Nullable() : null(true) {}
+    Nullable(const T &value) : null(false), value(value) {}
+    ~Nullable() {}
 
-	T get() const { return value; }
-	void set(const T& value) { this->value = value; }
+    T get() const { return value; }
+    void set(const T &value) { this->value = value; }
 
-	bool isNull() const { return null; }
-	void setNull() { null = true; }
+    bool isNull() const { return null; }
+    void setNull() { null = true; }
 
-	bool operator==(const T& other) const {
-		if (null)
-			return false;
-		return value == other;
-	}
+    bool operator==(const T &other) const {
+        if (null)
+            return false;
+        return value == other;
+    }
 
-private:
-	bool null;
-	T value;
+  private:
+    bool null;
+    T value;
 };
 
 } /* namespace util */
