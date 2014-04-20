@@ -225,7 +225,7 @@ void MapSection::preParse(const INIConfigSection &section, ValidationList &valid
 
     lighting_intensity.setDefault(1.0);
     lighting_water_intensity.setDefault(0.85);
-	} else if (key == "rotations") {
+    render_biomes.setDefault(true);
 		rotations.load(key, value ,validation);
 	} else if (key == "block_dir") {
 		if (block_dir.load(key, value, validation)) {
