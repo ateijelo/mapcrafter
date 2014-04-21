@@ -26,9 +26,12 @@
 #include "../thread/impl/singlethread.h"
 #include "../util.h"
 #include "../version.h"
+#include "blockimages.h"
+#include "renderview.h"
+#include "tilerenderworker.h"
 
-#include <cstring>
 #include <array>
+#include <cstring>
 #include <fstream>
 #include <memory>
 #include <thread>
