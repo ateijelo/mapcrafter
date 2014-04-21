@@ -27,7 +27,7 @@
 #if defined(__APPLE__)
 #include <mach-o/dyld.h>
 #elif defined(__FreeBSD__)
-  #include <sys/sysctl.h>
+#include <sys/sysctl.h>
 #elif defined(OS_WINDOWS)
   #include <windows.h>
 #endif
@@ -101,18 +101,18 @@ fs::path findExecutablePath() {
         }
     }
 #elif defined(__FreeBSD__)
-	int mib[4];
+    int mib[4];
     mib[0] = CTL_KERN;
     mib[1] = KERN_PROC;
     mib[2] = KERN_PROC_PATHNAME;
     mib[3] = -1;
-	size_t size = sizeof(buf);
-	sysctl(mib, 4, buf, &size, NULL, 0);
+    size_t size = sizeof(buf);
+    sysctl(mib, 4, buf, &size, NULL, 0);
     return fs::path(std::string(buf));
 #elif defined(unix) || defined(__unix) || defined(__unix__) || defined(__linux__)
-	int len;
-	if ((len = readlink("/proc/self/exe", buf, sizeof(buf))) != -1)
-		return fs::path(std::string(buf, len));
+    int len;
+    if ((len = readlink("/proc/self/exe", buf, sizeof(buf))) != -1)
+        return fs::path(std::string(buf, len));
 #elif defined(OS_WINDOWS)
 	GetModuleFileName(NULL, buf, 1024);
 	return fs::path(std::string(buf));
