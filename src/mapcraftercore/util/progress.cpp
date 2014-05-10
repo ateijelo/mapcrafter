@@ -29,8 +29,8 @@
 #include <iomanip>
 #include <iostream>
 #if defined(HAVE_SYS_IOCTL_H) && defined(HAVE_UNISTD_H)
-#  include <sys/ioctl.h> // ioctl, TIOCGWINSZ
-#  include <unistd.h> // STDOUT_FILENO
+#include <sys/ioctl.h> // ioctl, TIOCGWINSZ
+#include <unistd.h>    // STDOUT_FILENO
 #endif
 #if defined(OS_WINDOWS)
 #include <windows.h>
