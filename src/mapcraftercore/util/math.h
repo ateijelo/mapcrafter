@@ -60,7 +60,7 @@ template <typename T> bool floatingPointEquals(T a, T b, T epsilon = 0.0001) {
 /**
  * Binary constants helper.
  */
-template <unsigned long N>
+template <unsigned long N> struct binary {
 struct binary {
 	// prepend higher bits to lowest bit
 	static const unsigned long value = binary<N / 10>::value << 1 | N % 10;
