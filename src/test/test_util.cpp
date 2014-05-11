@@ -24,7 +24,7 @@
 namespace util = mapcrafter::util;
 
 BOOST_AUTO_TEST_CASE(util_testMath) {
-	// some random numbers
+    // some random numbers
 	BOOST_CHECK_EQUAL(util::binary<110110100>::value, 436);
 	BOOST_CHECK_EQUAL(util::binary<100101011>::value, 299);
 	BOOST_CHECK_EQUAL(util::binary<10111111>::value, 191);
