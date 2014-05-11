@@ -25,25 +25,25 @@ namespace util = mapcrafter::util;
 
 BOOST_AUTO_TEST_CASE(util_testMath) {
     // some random numbers
-	BOOST_CHECK_EQUAL(util::binary<110110100>::value, 436);
-	BOOST_CHECK_EQUAL(util::binary<100101011>::value, 299);
-	BOOST_CHECK_EQUAL(util::binary<10111111>::value, 191);
-	BOOST_CHECK_EQUAL(util::binary<1101010101>::value, 853);
-	BOOST_CHECK_EQUAL(util::binary<1001100010>::value, 610);
-	BOOST_CHECK_EQUAL(util::binary<1110111001>::value, 953);
-	BOOST_CHECK_EQUAL(util::binary<111001101>::value, 461);
-	BOOST_CHECK_EQUAL(util::binary<1110101001>::value, 937);
-	BOOST_CHECK_EQUAL(util::binary<11000100>::value, 196);
-	BOOST_CHECK_EQUAL(util::binary<1000001110>::value, 526);
-	BOOST_CHECK_EQUAL(util::binary<1000111101>::value, 573);
-	BOOST_CHECK_EQUAL(util::binary<111111>::value, 63);
-	BOOST_CHECK_EQUAL(util::binary<1100111101>::value, 829);
-	BOOST_CHECK_EQUAL(util::binary<1111001010>::value, 970);
-	BOOST_CHECK_EQUAL(util::binary<101110001>::value, 369);
-	BOOST_CHECK_EQUAL(util::binary<111000110>::value, 454);
-	BOOST_CHECK_EQUAL(util::binary<1100011111>::value, 799);
-	BOOST_CHECK_EQUAL(util::binary<1000001100>::value, 524);
-	BOOST_CHECK_EQUAL(util::binary<101000101>::value, 325);
-	BOOST_CHECK_EQUAL(util::binary<11011101>::value, 221);
+    BOOST_CHECK_EQUAL(util::binary<110110100>::value, 436);
+    BOOST_CHECK_EQUAL(util::binary<100101011>::value, 299);
+    BOOST_CHECK_EQUAL(util::binary<10111111>::value, 191);
+    BOOST_CHECK_EQUAL(util::binary<1101010101>::value, 853);
+    BOOST_CHECK_EQUAL(util::binary<1001100010>::value, 610);
+    BOOST_CHECK_EQUAL(util::binary<1110111001>::value, 953);
+    BOOST_CHECK_EQUAL(util::binary<111001101>::value, 461);
+    BOOST_CHECK_EQUAL(util::binary<1110101001>::value, 937);
+    BOOST_CHECK_EQUAL(util::binary<11000100>::value, 196);
+    BOOST_CHECK_EQUAL(util::binary<1000001110>::value, 526);
+    BOOST_CHECK_EQUAL(util::binary<1000111101>::value, 573);
+    BOOST_CHECK_EQUAL(util::binary<111111>::value, 63);
+    BOOST_CHECK_EQUAL(util::binary<1100111101>::value, 829);
+    BOOST_CHECK_EQUAL(util::binary<1111001010>::value, 970);
+    BOOST_CHECK_EQUAL(util::binary<101110001>::value, 369);
+    BOOST_CHECK_EQUAL(util::binary<111000110>::value, 454);
+    BOOST_CHECK_EQUAL(util::binary<1100011111>::value, 799);
+    BOOST_CHECK_EQUAL(util::binary<1000001100>::value, 524);
+    BOOST_CHECK_EQUAL(util::binary<101000101>::value, 325);
+    BOOST_CHECK_EQUAL(util::binary<11011101>::value, 221);
 }
 
