@@ -70,10 +70,7 @@ template <unsigned long N> const unsigned long binary<N>::value;
 /**
  * Specialization, terminates recursion.
  */
-template <>
-struct binary<0> {
-	static const unsigned long value = 0;
-};
+template <> struct binary<0> { static const unsigned long value = 0; };
 
 } /* namespace util */
 } /* namespace mapcrafter */
