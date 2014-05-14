@@ -41,7 +41,7 @@ void SingleThreadDispatcher::dispatch(const renderer::RenderContext& context,
 	if (render_tiles == 0)
 		return;
 
-	LOG(INFO) << "Single thread will render " << render_tiles << " render tiles.";
+    LOG(INFO) << "Single thread will render " << render_tiles << " render tiles.";
 
 	renderer::RenderWork work;
 	work.tiles.insert(renderer::TilePath());

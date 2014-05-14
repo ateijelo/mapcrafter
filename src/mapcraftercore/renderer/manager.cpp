@@ -150,7 +150,7 @@ void RenderManager::setRenderBehaviors(const RenderBehaviors &render_behaviors) 
 bool RenderManager::initialize() {
     // an output directory would be nice -- create one if it does not exist
     if (!fs::is_directory(config.getOutputDir()) &&
-		LOG(FATAL) << "Error: Unable to create output directory!";
+        !fs::create_directories(config.getOutputDir())) {
         LOG(FATAL) << "Error: Unable to create output directory!";
 	}
 
@@ -384,7 +384,7 @@ bool RenderManager::run(int threads, bool batch) {
         progress_maps++;
         config::MapSection map_config = config.getMap(map_it->first);
 
-		LOG(INFO) << "[" << progress_maps << "/" << progress_maps_all << "] "
+        LOG(INFO) << "[" << progress_maps << "/" << progress_maps_all << "] "
                   << "Rendering map " << map_config.getShortName() << " (\""
                   << map_config.getLongName() << "\"):";
 
@@ -423,7 +423,7 @@ bool RenderManager::run(int threads, bool batch) {
                 delete progress_bar;
             }
             delete log_output;
-			LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/"
+
             LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/" << progress_maps
                       << "." << progress_rotations_all << "] "
                       << "Rendering rotation " << config::ROTATION_NAMES[*rotation_it] << " took "
@@ -431,8 +431,8 @@ bool RenderManager::run(int threads, bool batch) {
         }
     }
 	std::time_t took_all = std::time(nullptr) - time_start_all;
-	LOG(INFO) << "Rendering all worlds took " << took_all << " seconds.";
-	LOG(INFO) << "Finished.....aaand it's gone!";
+    std::time_t took_all = std::time(nullptr) - time_start_all;
+    LOG(INFO) << "Rendering all worlds took " << took_all << " seconds.";
     LOG(INFO) << "Finished.....aaand it's gone!";
     return true;
 }
