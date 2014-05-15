@@ -150,12 +150,12 @@ struct LogMessage {
 class LogStream {
   public:
     LogStream(LogLevel level, const std::string &logger, const std::string &file, int line);
-	~LogStream();
+    ~LogStream();
 
     void setFake(bool fake);
 
     template <typename T> LogStream &operator<<(const T &t) {
-	LogStream& operator<<(const T& t) {
+        (*ss) << t;
         return *this;
     }
 
