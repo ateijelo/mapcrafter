@@ -145,7 +145,7 @@ struct LogMessage {
  */
 class LogStream {
   public:
-	LogStream(LogLevel level, const std::string& logger, const std::string& file, int line);
+    LogStream(LogLevel level, const std::string &logger, const std::string &file, int line);
 	~LogStream();
 
 	void setFake(bool fake);
@@ -180,7 +180,7 @@ class Logger {
 	 *
 	 * You should not call this method directory, use the LOG and LOGN macros instead.
 	 */
-	LogStream log(LogLevel level, const std::string& file, int line);
+    LogStream log(LogLevel level, const std::string &file, int line);
 
 	/**
 	 * Same as log, but returns a fake log stream if there was already something logged

@@ -117,8 +117,8 @@ std::ostream &operator<<(std::ostream &out, LogLevel level) {
     return out;
 }
 
-LogStream::LogStream(LogLevel level, const std::string& logger,
-		const std::string& file, int line)
+LogStream::LogStream(LogLevel level, const std::string &logger, const std::string &file, int line)
+    : fake(false), message({level, logger, file, line, ""}), ss(new std::stringstream) {
 	: fake(false), message({level, logger, file, line, ""}), ss(new std::stringstream) {
 	if (message.file.find('/') != std::string::npos)
 		message.file = message.file.substr(message.file.find_last_of('/') + 1);
@@ -141,8 +141,8 @@ Logger::Logger(const std::string& name)
 
 Logger::~Logger() {}
 
-LogStream Logger::log(LogLevel level, const std::string& file, int line) {
-	return LogStream(level, name, file, line);
+LogStream Logger::log(LogLevel level, const std::string &file, int line) {
+    return LogStream(level, name, file, line);
 }
 
 
