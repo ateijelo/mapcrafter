@@ -236,7 +236,7 @@ class FormattedLogSink : public LogSink {
 	/**
 	 * Sets the date format for the message formatting.
 	 */
-	void setDateFormat(const std::string& date_format);
+    void setDateFormat(const std::string &date_format);
 
 	/**
 	 * This method formats the received log messages and calls the sinkFormatted
@@ -250,7 +250,7 @@ class FormattedLogSink : public LogSink {
     virtual void sinkFormatted(const LogMessage &message, const std::string &formatted);
 
   protected:
-	std::string format, date_format;
+    std::string format, date_format;
 
 	/**
 	 * Formats a log message with the set message/date format.
