@@ -55,24 +55,24 @@ class Logging;
  * Log levels according to syslog.
  */
 enum class LogLevel {
-	// System is unusable
-	EMERGENCY = 0,
-	// Action must be taken immediately
-	ALERT = 1,
-	// Critical conditions
-	FATAL = 2, // or "critical"
-	// Error conditions
-	ERROR = 3,
-	// Warning conditions
-	WARNING = 4,
-	// Normal but significant condition
-	NOTICE = 5,
-	// Informational messages
-	INFO = 6,
-	// Debug-level messages
-	DEBUG = 7,
-	// Unknown level, only used for levelFromString method
-	UNKNOWN = 8,
+    // System is unusable
+    EMERGENCY = 0,
+    // Action must be taken immediately
+    ALERT = 1,
+    // Critical conditions
+    FATAL = 2, // or "critical"
+    // Error conditions
+    ERROR = 3,
+    // Warning conditions
+    WARNING = 4,
+    // Normal but significant condition
+    NOTICE = 5,
+    // Informational messages
+    INFO = 6,
+    // Debug-level messages
+    DEBUG = 7,
+    // Unknown level, only used for levelFromString method
+    UNKNOWN = 8,
 };
 
 #ifndef HAVE_ENUM_CLASS_COMPARISON
@@ -94,16 +94,16 @@ bool operator>=(LogLevel level1, LogLevel level2);
  * Helper to convert the log level enum types from/to string.
  */
 class LogLevelHelper {
-public:
+  public:
 	/**
 	 * std::string to LogLevel.
 	 */
-	static LogLevel levelFromString(const std::string& str);
+    static LogLevel levelFromString(const std::string &str);
 
 	/**
 	 * LogLevel to std::string
 	 */
-	static std::string levelToString(LogLevel level);
+    static std::string levelToString(LogLevel level);
 
 #ifdef HAVE_SYSLOG_H
 

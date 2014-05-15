@@ -48,44 +48,44 @@ bool operator>=(LogLevel level1, LogLevel level2) { return level1 > level2 || le
 
 #endif
 
-LogLevel LogLevelHelper::levelFromString(const std::string& str) {
-	if (str == "EMERGENCY")
-		return LogLevel::EMERGENCY;
-	if (str == "ALERT")
-		return LogLevel::ALERT;
+LogLevel LogLevelHelper::levelFromString(const std::string &str) {
+    if (str == "EMERGENCY")
+        return LogLevel::EMERGENCY;
+    if (str == "ALERT")
+        return LogLevel::ALERT;
 	if (str == "FATAL")
 		return LogLevel::FATAL;
-	if (str == "ERROR")
-		return LogLevel::ERROR;
-	if (str == "WARNING")
-		return LogLevel::WARNING;
-	if (str == "NOTICE")
-		return LogLevel::NOTICE;
-	if (str == "INFO")
-		return LogLevel::INFO;
-	if (str == "DEBUG")
-		return LogLevel::DEBUG;
-	return LogLevel::UNKNOWN;
+    if (str == "ERROR")
+        return LogLevel::ERROR;
+    if (str == "WARNING")
+        return LogLevel::WARNING;
+    if (str == "NOTICE")
+        return LogLevel::NOTICE;
+    if (str == "INFO")
+        return LogLevel::INFO;
+    if (str == "DEBUG")
+        return LogLevel::DEBUG;
+    return LogLevel::UNKNOWN;
 }
 
 std::string LogLevelHelper::levelToString(LogLevel level) {
-	if (level == LogLevel::EMERGENCY)
-		return "EMERGENCY";
-	if (level == LogLevel::ALERT)
-		return "ALERT";
+    if (level == LogLevel::EMERGENCY)
+        return "EMERGENCY";
+    if (level == LogLevel::ALERT)
+        return "ALERT";
 	if (level == LogLevel::FATAL)
 		return "FATAL";
-	if (level == LogLevel::ERROR)
-		return "ERROR";
-	if (level == LogLevel::WARNING)
-		return "WARNING";
-	if (level == LogLevel::NOTICE)
-		return "NOTICE";
-	if (level == LogLevel::INFO)
-		return "INFO";
-	if (level == LogLevel::DEBUG)
-		return "DEBUG";
-	return "UNKNOWN";
+    if (level == LogLevel::ERROR)
+        return "ERROR";
+    if (level == LogLevel::WARNING)
+        return "WARNING";
+    if (level == LogLevel::NOTICE)
+        return "NOTICE";
+    if (level == LogLevel::INFO)
+        return "INFO";
+    if (level == LogLevel::DEBUG)
+        return "DEBUG";
+    return "UNKNOWN";
 }
 
 #ifdef HAVE_SYSLOG_H
