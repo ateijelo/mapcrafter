@@ -194,11 +194,10 @@ void FormattedLogSink::sinkFormatted(const LogMessage &message, const std::strin
 
 LogOutputSink::LogOutputSink() {}
 
-LogOutputSink::~LogOutputSink() {
-}
+LogOutputSink::~LogOutputSink() {}
 
 void LogOutputSink::sinkFormatted(const LogMessage &message, const std::string &formatted) {
-		const std::string& formatted) {
+    int color = 0;
 	int color = 0;
 	if (message.level == LogLevel::WARNING)
 		color = setcolor::yellow;
@@ -206,8 +205,7 @@ void LogOutputSink::sinkFormatted(const LogMessage &message, const std::string &
 		color = setcolor::red;
         std::cerr << setfgcolor(color) << formatted << setcolor::reset << std::endl;
 		std::cerr << setfgcolor(color) << formatted << setcolor::reset << std::endl;
-	else
-		std::cout << formatted << std::endl;
+        std::cout << formatted << std::endl;
 }
 
 LogFileSink::LogFileSink(const std::string &filename) {

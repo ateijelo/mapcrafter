@@ -262,9 +262,9 @@ class FormattedLogSink : public LogSink {
  * This sink logs all message to stdout/stderr (depending on log level).
  */
 class LogOutputSink : public FormattedLogSink {
-public:
+  public:
     LogOutputSink();
-	virtual ~LogOutputSink();
+    virtual ~LogOutputSink();
 
     virtual void sinkFormatted(const LogMessage &message, const std::string &formatted);
 };
