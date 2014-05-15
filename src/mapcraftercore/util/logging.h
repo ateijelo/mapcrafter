@@ -316,7 +316,7 @@ class Logging {
      * Returns/sets the verbosity of a sink, i.e. the minimum log level log messages must
      * have to be handled by this sink. Defaults to the default verbosity.
      */
-	LogLevel getSinkVerbosity(const std::string& sink) const;
+    LogLevel getSinkVerbosity(const std::string &sink) const;
     void setSinkVerbosity(const std::string &sink, LogLevel level);
 
     /**

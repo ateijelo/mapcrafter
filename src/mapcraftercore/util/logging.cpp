@@ -311,14 +311,21 @@ void Logging::updateMaximumVerbosity() {
     for (auto it = sinks.begin(); it != sinks.end(); ++it)
         maximum = std::max(maximum, getSinkVerbosity(it->first));
     maximum_verbosity = maximum;
-	for (auto it = sinks.begin(); it != sinks.end(); ++it) {
+}
 
 void Logging::handleLogMessage(const LogMessage &message) {
     thread_ns::unique_lock<thread_ns::mutex> lock(handle_message_mutex);
     // return already here if there is no log sink with the right verbosity
     if (message.level > maximum_verbosity)
         return;
-	}
+    for (auto it = sinks.begin(); it != sinks.end(); ++it) {
+        // check if this is a progress log message and sink should handle progress messages
+        if (message.logger == "progress" && !getSinkLogProgress(it->first))
+            continue;
+        // if sink has the right verbosity, pass log message to the sink
+        if (message.level <= getSinkVerbosity(it->first))
+            (*it->second).sink(message);
+    }
 }
 
 } /* namespace util */
