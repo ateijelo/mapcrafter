@@ -196,7 +196,7 @@ class Logger {
     Logger(const std::string &name);
 
     // name of this logger
-	std::string name;
+    std::string name;
 
     friend class Logging;
 };
