@@ -19,6 +19,7 @@
 
 #include "logging.h"
 
+#include "../compat/nullptr.h"
 #include "other.h"
 #include "terminal.h"
 
@@ -150,8 +151,7 @@ Logger::Logger(const std::string& name)
 	: name(name) {
 }
 
-Logger::~Logger() {
-}
+Logger::~Logger() {}
 
 LogStream Logger::log(LogLevel level, const std::string& file, int line) {
 	return LogStream(level, name, file, line);

@@ -27,8 +27,8 @@
 #include <map>
 #include <memory>
 #include <set>
-#include <string>
 #include <sstream>
+#include <string>
 #include <vector>
 
 #define STRINGIFY(x) #x
@@ -144,7 +144,7 @@ struct LogMessage {
  * used to log messages only once.
  */
 class LogStream {
-public:
+  public:
 	LogStream(LogLevel level, const std::string& logger, const std::string& file, int line);
 	~LogStream();
 
@@ -152,11 +152,10 @@ public:
 
     template <typename T> LogStream &operator<<(const T &t) {
 	LogStream& operator<<(const T& t) {
-		(*ss) << t;
-		return *this;
-	}
+        return *this;
+    }
 
-private:
+  private:
 	bool fake;
 	LogMessage message;
 
@@ -172,8 +171,8 @@ private:
  * Logging class.
  */
 class Logger {
-public:
-	~Logger();
+  public:
+    ~Logger();
 
 	/**
 	 * Returns a LogStream to log a message, you have to specify a log level for the
@@ -189,8 +188,8 @@ public:
 	 */
 	LogStream logOnce(const std::string& key, LogLevel level, const std::string& file, int line);
 
-protected:
-	Logger(const std::string& name);
+  protected:
+    Logger(const std::string &name);
 
 	// name of this logger
 	std::string name;
