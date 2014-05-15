@@ -132,9 +132,7 @@ LogStream::~LogStream() {
 
 void LogStream::setFake(bool fake) { this->fake = fake; }
 
-Logger::Logger(const std::string& name)
-	: name(name) {
-}
+Logger::Logger(const std::string &name) : name(name) {}
 
 Logger::~Logger() {}
 
