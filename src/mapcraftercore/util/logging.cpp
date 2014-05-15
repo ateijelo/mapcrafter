@@ -152,11 +152,9 @@ LogStream Logger::logOnce(const std::string &key, LogLevel level, const std::str
     return log_stream;
 }
 
-LogSink::LogSink() {
-}
+LogSink::LogSink() {}
 
-LogSink::~LogSink() {
-}
+LogSink::~LogSink() {}
 
 void LogSink::sink(const LogMessage& message) {
 }
@@ -166,11 +164,10 @@ FormattedLogSink::FormattedLogSink()
 	  date_format("%Y-%m-%d %H:%M:%S") {
 }
 
-FormattedLogSink::~FormattedLogSink() {
-}
+FormattedLogSink::~FormattedLogSink() {}
 
 std::string FormattedLogSink::formatLogEntry(const LogMessage &message) {
-	std::string formatted = format;
+    std::string formatted = format;
 
     std::time_t t = std::time(nullptr);
 	char buffer[256];
@@ -185,9 +182,7 @@ std::string FormattedLogSink::formatLogEntry(const LogMessage &message) {
 	return formatted;
 }
 
-void FormattedLogSink::setFormat(const std::string& format) {
-	this->format = format;
-}
+void FormattedLogSink::setFormat(const std::string &format) { this->format = format; }
 
 void FormattedLogSink::setDateFormat(const std::string& date_format) {
 	this->date_format = date_format;

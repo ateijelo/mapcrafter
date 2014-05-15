@@ -126,15 +126,15 @@ std::ostream &operator<<(std::ostream &out, LogLevel level);
  */
 struct LogMessage {
     // log level of this message
-	LogLevel level;
+    LogLevel level;
 	// the logger that emitted the message
-	std::string logger;
+    std::string logger;
 	// source code filename/line where this was logged
-	std::string file;
-	int line;
+    std::string file;
+    int line;
 
 	// actual logged message
-	std::string message;
+    std::string message;
 };
 
 /**
@@ -207,9 +207,9 @@ class Logger {
  * You should implement the sink method to handle log messages.
  */
 class LogSink {
-public:
-	LogSink();
-	virtual ~LogSink();
+  public:
+    LogSink();
+    virtual ~LogSink();
 
 	/**
 	 * This abstract method is called for every message that is logged.
@@ -224,14 +224,14 @@ public:
  * This is a log sink that automatically formats log messages with a specific format.
  */
 class FormattedLogSink : public LogSink {
-public:
+  public:
     FormattedLogSink();
-	virtual ~FormattedLogSink();
+    virtual ~FormattedLogSink();
 
 	/**
 	 * Sets the log message format.
 	 */
-	void setFormat(const std::string& format);
+    void setFormat(const std::string &format);
 
 	/**
 	 * Sets the date format for the message formatting.
@@ -249,7 +249,7 @@ public:
 	 */
     virtual void sinkFormatted(const LogMessage &message, const std::string &formatted);
 
-protected:
+  protected:
 	std::string format, date_format;
 
 	/**
@@ -302,7 +302,7 @@ class LogSyslogSink : public LogSink {
  * Global logging facility. Manages the log sinks and allows the configuration of them.
  */
 class Logging {
-public:
+  public:
 	~Logging();
 
 	/**
@@ -349,7 +349,7 @@ public:
 	 */
 	static Logging& getInstance();
 
-protected:
+  protected:
 	Logging();
 
 	/**
