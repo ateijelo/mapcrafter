@@ -163,7 +163,7 @@ class LogStream {
     bool fake;
     LogMessage message;
 
-	std::shared_ptr<std::stringstream> ss;
+    std::shared_ptr<std::stringstream> ss;
 };
 
 /**
