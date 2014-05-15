@@ -377,7 +377,7 @@ bool RenderManager::run(int threads, bool batch) {
 
     int progress_maps = 0;
     int progress_maps_all = required_maps.size();
-	int time_start_all = std::time(nullptr);
+    int time_start_all = std::time(nullptr);
 
     // go through all required maps
     for (auto map_it = required_maps.begin(); map_it != required_maps.end(); ++map_it) {
@@ -430,7 +430,7 @@ bool RenderManager::run(int threads, bool batch) {
                       << took << " seconds.";
         }
     }
-	std::time_t took_all = std::time(nullptr) - time_start_all;
+
     std::time_t took_all = std::time(nullptr) - time_start_all;
     LOG(INFO) << "Rendering all worlds took " << took_all << " seconds.";
     LOG(INFO) << "Finished.....aaand it's gone!";

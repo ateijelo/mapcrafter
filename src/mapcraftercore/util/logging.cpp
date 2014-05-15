@@ -190,7 +190,7 @@ FormattedLogSink::~FormattedLogSink() {
 std::string FormattedLogSink::formatLogEntry(const LogMessage& message) {
 	std::string formatted = format;
 
-	std::time_t t = std::time(nullptr);
+    std::time_t t = std::time(nullptr);
 	char buffer[256];
 	std::strftime(buffer, sizeof(buffer), date_format.c_str(), std::localtime(&t));
 	formatted = util::replaceAll(formatted, "%(date)", std::string(buffer));
