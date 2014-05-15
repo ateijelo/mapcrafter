@@ -176,7 +176,8 @@ std::string FormattedLogSink::formatLogEntry(const LogMessage &message) {
     formatted = util::replaceAll(formatted, "%(logger)", message.logger);
     formatted = util::replaceAll(formatted, "%(file)", message.file);
     formatted = util::replaceAll(formatted, "%(line)", util::str(message.line));
-	return formatted;
+    formatted = util::replaceAll(formatted, "%(message)", message.message);
+    return formatted;
 }
 
 void FormattedLogSink::setFormat(const std::string &format) { this->format = format; }
