@@ -357,7 +357,7 @@ class Logging {
      * That way we do not even need to consider to handle a message if there is no
      * log sink with such a verbosity.
      */
-	void updateMaximumVerbosity();
+    void updateMaximumVerbosity();
 
     /**
      * Handles a log message and passes it to all log sinks with the required verbosity.

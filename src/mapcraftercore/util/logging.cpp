@@ -247,7 +247,7 @@ LogLevel Logging::getDefaultVerbosity() const { return default_verbosity; }
 
 void Logging::setDefaultVerbosity(LogLevel level) {
     default_verbosity = level;
-	updateMaximumVerbosity();
+    updateMaximumVerbosity();
 }
 
 LogLevel Logging::getSinkVerbosity(const std::string &sink) const {
@@ -307,17 +307,17 @@ Logging& Logging::getInstance() {
 }
 
 Logging &Logging::getInstance() {
-	LogLevel maximum = LogLevel::EMERGENCY;
-	for (auto it = sinks.begin(); it != sinks.end(); ++it)
-		maximum = std::max(maximum, getSinkVerbosity(it->first));
-	maximum_verbosity = maximum;
+    thread_ns::unique_lock<thread_ns::mutex> lock(instance_mutex);
+    if (!instance)
+        instance.reset(new Logging);
+    return *instance;
 }
 
 void Logging::updateMaximumVerbosity() {
 	thread_ns::unique_lock<thread_ns::mutex> lock(handle_message_mutex);
     for (auto it = sinks.begin(); it != sinks.end(); ++it)
         maximum = std::max(maximum, getSinkVerbosity(it->first));
-		return;
+    maximum_verbosity = maximum;
 	for (auto it = sinks.begin(); it != sinks.end(); ++it) {
 
 void Logging::handleLogMessage(const LogMessage &message) {
