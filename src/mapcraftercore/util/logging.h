@@ -198,7 +198,7 @@ class Logger {
     // name of this logger
 	std::string name;
 
-	friend class Logging;
+    friend class Logging;
 };
 
 /**
@@ -303,7 +303,7 @@ class LogSyslogSink : public LogSink {
  */
 class Logging {
   public:
-	~Logging();
+    ~Logging();
 
 	/**
 	 * Returns/sets the default verbosity which is also used as default verbosity for the
@@ -350,7 +350,7 @@ class Logging {
 	static Logging& getInstance();
 
   protected:
-	Logging();
+    Logging();
 
 	/**
 	 * Updates the maximum verbosity that is used as verbosity for a log sink.
