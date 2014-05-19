@@ -99,14 +99,14 @@ bool operator>=(LogLevel level1, LogLevel level2);
  */
 class LogLevelHelper {
   public:
-	/**
-	 * std::string to LogLevel.
-	 */
+    /**
+     * std::string to LogLevel.
+     */
     static LogLevel levelFromString(const std::string &str);
 
-	/**
-	 * LogLevel to std::string
-	 */
+    /**
+     * LogLevel to std::string
+     */
     static std::string levelToString(LogLevel level);
 
 #ifdef HAVE_SYSLOG_H
@@ -127,13 +127,13 @@ std::ostream &operator<<(std::ostream &out, LogLevel level);
 struct LogMessage {
     // log level of this message
     LogLevel level;
-	// the logger that emitted the message
+    // the logger that emitted the message
     std::string logger;
-	// source code filename/line where this was logged
+    // source code filename/line where this was logged
     std::string file;
     int line;
 
-	// actual logged message
+    // actual logged message
     std::string message;
 };
 
@@ -178,12 +178,12 @@ class Logger {
   public:
     ~Logger();
 
-	/**
-	 * Returns a LogStream to log a message, you have to specify a log level for the
-	 * message and a file and line where this was logged.
-	 *
-	 * You should not call this method directory, use the LOG and LOGN macros instead.
-	 */
+    /**
+     * Returns a LogStream to log a message, you have to specify a log level for the
+     * message and a file and line where this was logged.
+     *
+     * You should not call this method directory, use the LOG and LOGN macros instead.
+     */
     LogStream log(LogLevel level, const std::string &file, int line);
 
     /**
@@ -195,7 +195,7 @@ class Logger {
   protected:
     Logger(const std::string &name);
 
-	// name of this logger
+    // name of this logger
 	std::string name;
 
 	friend class Logging;
@@ -211,12 +211,12 @@ class LogSink {
     LogSink();
     virtual ~LogSink();
 
-	/**
-	 * This abstract method is called for every message that is logged.
+    /**
+     * This abstract method is called for every message that is logged.
 	 *
 	 * You MAY NOT use the LOG(level) functionality in here, otherwise the program
 	 * will end up in a deadlock.
-	 */
+     */
     virtual void sink(const LogMessage &message);
 };
 
@@ -228,33 +228,33 @@ class FormattedLogSink : public LogSink {
     FormattedLogSink();
     virtual ~FormattedLogSink();
 
-	/**
-	 * Sets the log message format.
-	 */
+    /**
+     * Sets the log message format.
+     */
     void setFormat(const std::string &format);
 
-	/**
-	 * Sets the date format for the message formatting.
-	 */
+    /**
+     * Sets the date format for the message formatting.
+     */
     void setDateFormat(const std::string &date_format);
 
-	/**
-	 * This method formats the received log messages and calls the sinkFormatted
-	 * method which you should implement.
-	 */
+    /**
+     * This method formats the received log messages and calls the sinkFormatted
+     * method which you should implement.
+     */
     virtual void sink(const LogMessage &message);
 
-	/**
-	 * This abstract method is called for every formatted log message.
-	 */
+    /**
+     * This abstract method is called for every formatted log message.
+     */
     virtual void sinkFormatted(const LogMessage &message, const std::string &formatted);
 
   protected:
     std::string format, date_format;
 
-	/**
-	 * Formats a log message with the set message/date format.
-	 */
+    /**
+     * Formats a log message with the set message/date format.
+     */
     std::string formatLogEntry(const LogMessage &message);
 };
 
