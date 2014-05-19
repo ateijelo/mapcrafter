@@ -23,26 +23,25 @@ namespace mapcrafter {
 namespace util {
 
 template <> config::LogSinkType as<config::LogSinkType>(const std::string &from) {
-config::LogSinkType as<config::LogSinkType>(const std::string& from) {
-	if (from == "output")
-		return config::LogSinkType::OUTPUT;
-	else if (from == "file")
-		return config::LogSinkType::FILE;
-	else if (from == "syslog")
-		return config::LogSinkType::SYSLOG;
-	throw std::invalid_argument("Must be 'output', 'file' or 'syslog'!");
+    if (from == "output")
+        return config::LogSinkType::OUTPUT;
+    else if (from == "file")
+        return config::LogSinkType::FILE;
+    else if (from == "syslog")
+        return config::LogSinkType::SYSLOG;
+    throw std::invalid_argument("Must be 'output', 'file' or 'syslog'!");
 }
 
 template <> util::LogLevel as<util::LogLevel>(const std::string &from) {
-util::LogLevel as<util::LogLevel>(const std::string& from) {
-	util::LogLevel level = util::LogLevelHelper::levelFromString(from);
-	if (level != util::LogLevel::UNKNOWN)
-		return level;
-	throw std::invalid_argument("Must be 'EMERGENCY', 'ALERT', 'FATAL', 'ERROR', 'WARNING', 'NOTICE', 'INFO' or 'DEBUG'!");
+    util::LogLevel level = util::LogLevelHelper::levelFromString(from);
+    if (level != util::LogLevel::UNKNOWN)
+        return level;
+    throw std::invalid_argument(
+        "Must be 'EMERGENCY', 'ALERT', 'FATAL', 'ERROR', 'WARNING', 'NOTICE', 'INFO' or 'DEBUG'!");
 }
 
-}
-}
+} // namespace util
+} // namespace mapcrafter
 
 namespace mapcrafter {
 namespace config {
@@ -60,8 +59,7 @@ std::ostream& operator<<(std::ostream& out, LogSinkType sink_type) {
 LogSection::LogSection() {
 }
 
-LogSection::~LogSection() {
-}
+LogSection::~LogSection() {}
 
 std::string LogSection::getPrettyName() const {
 	if (isGlobal())
@@ -155,36 +153,36 @@ fs::path LogSection::getFile() const {
 	return file.getValue();
 }
 
-void LogSection::preParse(const INIConfigSection& section,
-		ValidationList& validation) {
+void LogSection::preParse(const INIConfigSection &section, ValidationList &validation) {
+    // don't set defaults here, they are set by the logging class
 	// don't set defaults here, they are set by the logging class
 	// if something is set in the logging config file,
 	// it is overwritten in the logging class then
 }
 
 bool LogSection::parseField(const std::string key, const std::string value,
-		ValidationList& validation) {
-	if (key == "type")
-		type.load(key, value, validation);
-	else if (key == "verbosity")
-		verbosity.load(key, value, validation);
-	else if (key == "log_progress")
-		log_progress.load(key, value, validation);
-	else if (key == "format")
-		format.load(key, value, validation);
-	else if (key == "date_format")
-		date_format.load(key, value, validation);
+                            ValidationList &validation) {
+    if (key == "type")
+        type.load(key, value, validation);
+    else if (key == "verbosity")
+        verbosity.load(key, value, validation);
+    else if (key == "log_progress")
+        log_progress.load(key, value, validation);
+    else if (key == "format")
+        format.load(key, value, validation);
+    else if (key == "date_format")
+        date_format.load(key, value, validation);
 	else if (key == "file") {
 		// file is relative to config file
 		if (file.load(key, value, validation))
 			file.setValue(BOOST_FS_ABSOLUTE(file.getValue(), config_dir));
 	} else
-		return false;
-	return true;
+        return false;
+    return true;
 }
 
-void LogSection::postParse(const INIConfigSection& section,
-		ValidationList& validation) {
+void LogSection::postParse(const INIConfigSection &section, ValidationList &validation) {
+    std::string section_name = getSectionName();
 	std::string section_name = getSectionName();
 	// "__<name>__" as name is reserved for special builtin sinks
 	if (!section_name.empty() && section_name[0] == '_')
