@@ -125,7 +125,7 @@ std::ostream &operator<<(std::ostream &out, LogLevel level);
  * Represents a single log message.
  */
 struct LogMessage {
-	// log level of this message
+    // log level of this message
 	LogLevel level;
 	// the logger that emitted the message
 	std::string logger;
@@ -161,7 +161,7 @@ class LogStream {
 
   private:
     bool fake;
-	LogMessage message;
+    LogMessage message;
 
 	std::shared_ptr<std::stringstream> ss;
 };
@@ -217,7 +217,7 @@ public:
 	 * You MAY NOT use the LOG(level) functionality in here, otherwise the program
 	 * will end up in a deadlock.
 	 */
-	virtual void sink(const LogMessage& message);
+    virtual void sink(const LogMessage &message);
 };
 
 /**
@@ -242,12 +242,12 @@ public:
 	 * This method formats the received log messages and calls the sinkFormatted
 	 * method which you should implement.
 	 */
-	virtual void sink(const LogMessage& message);
+    virtual void sink(const LogMessage &message);
 
 	/**
 	 * This abstract method is called for every formatted log message.
 	 */
-	virtual void sinkFormatted(const LogMessage& message, const std::string& formatted);
+    virtual void sinkFormatted(const LogMessage &message, const std::string &formatted);
 
 protected:
 	std::string format, date_format;
@@ -255,7 +255,7 @@ protected:
 	/**
 	 * Formats a log message with the set message/date format.
 	 */
-	std::string formatLogEntry(const LogMessage& message);
+    std::string formatLogEntry(const LogMessage &message);
 };
 
 /**
@@ -266,7 +266,7 @@ public:
     LogOutputSink();
 	virtual ~LogOutputSink();
 
-	virtual void sinkFormatted(const LogMessage& message, const std::string& formatted);
+    virtual void sinkFormatted(const LogMessage &message, const std::string &formatted);
 };
 
 /**
@@ -293,7 +293,7 @@ class LogSyslogSink : public LogSink {
     LogSyslogSink();
     virtual ~LogSyslogSink();
 
-	virtual void sink(const LogMessage& message);
+    virtual void sink(const LogMessage &message);
 };
 
 #endif
@@ -362,7 +362,7 @@ protected:
 	/**
 	 * Handles a log message and passes it to all log sinks with the required verbosity.
 	 */
-	void handleLogMessage(const LogMessage& message);
+    void handleLogMessage(const LogMessage &message);
 
 	LogLevel default_verbosity, maximum_verbosity;
 	std::map<std::string, std::shared_ptr<Logger> > loggers;

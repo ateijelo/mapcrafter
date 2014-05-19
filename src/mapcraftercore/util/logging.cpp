@@ -120,8 +120,7 @@ std::ostream &operator<<(std::ostream &out, LogLevel level) {
 LogStream::LogStream(LogLevel level, const std::string &logger, const std::string &file, int line)
     : fake(false), message({level, logger, file, line, ""}), ss(new std::stringstream) {
     if (message.file.find('/') != std::string::npos)
-	if (message.file.find('/') != std::string::npos)
-		message.file = message.file.substr(message.file.find_last_of('/') + 1);
+        message.file = message.file.substr(message.file.find_last_of('/') + 1);
 }
 
 LogStream::~LogStream() {
@@ -174,7 +173,7 @@ FormattedLogSink::FormattedLogSink()
 FormattedLogSink::~FormattedLogSink() {
 }
 
-std::string FormattedLogSink::formatLogEntry(const LogMessage& message) {
+std::string FormattedLogSink::formatLogEntry(const LogMessage &message) {
 	std::string formatted = format;
 
     std::time_t t = std::time(nullptr);
@@ -182,11 +181,11 @@ std::string FormattedLogSink::formatLogEntry(const LogMessage& message) {
 	std::strftime(buffer, sizeof(buffer), date_format.c_str(), std::localtime(&t));
 	formatted = util::replaceAll(formatted, "%(date)", std::string(buffer));
 
-	formatted = util::replaceAll(formatted, "%(level)", LogLevelHelper::levelToString(message.level));
-	formatted = util::replaceAll(formatted, "%(logger)", message.logger);
-	formatted = util::replaceAll(formatted, "%(file)", message.file);
-	formatted = util::replaceAll(formatted, "%(line)", util::str(message.line));
-	formatted = util::replaceAll(formatted, "%(message)", message.message);
+    formatted =
+        util::replaceAll(formatted, "%(level)", LogLevelHelper::levelToString(message.level));
+    formatted = util::replaceAll(formatted, "%(logger)", message.logger);
+    formatted = util::replaceAll(formatted, "%(file)", message.file);
+    formatted = util::replaceAll(formatted, "%(line)", util::str(message.line));
 	return formatted;
 }
 
@@ -198,8 +197,8 @@ void FormattedLogSink::setDateFormat(const std::string& date_format) {
 	this->date_format = date_format;
 }
 
-void FormattedLogSink::sink(const LogMessage& message) {
-	sinkFormatted(message, formatLogEntry(message));
+void FormattedLogSink::sink(const LogMessage &message) {
+    sinkFormatted(message, formatLogEntry(message));
 }
 
 void FormattedLogSink::sinkFormatted(const LogMessage& message,
@@ -212,14 +211,14 @@ LogOutputSink::LogOutputSink() {
 LogOutputSink::~LogOutputSink() {
 }
 
-void LogOutputSink::sinkFormatted(const LogMessage& message,
+void LogOutputSink::sinkFormatted(const LogMessage &message, const std::string &formatted) {
 		const std::string& formatted) {
 	int color = 0;
 	if (message.level == LogLevel::WARNING)
 		color = setcolor::yellow;
 	if (message.level < LogLevel::WARNING)
 		color = setcolor::red;
-	if (message.level < LogLevel::NOTICE || message.level == LogLevel::UNKNOWN)
+        std::cerr << setfgcolor(color) << formatted << setcolor::reset << std::endl;
 		std::cerr << setfgcolor(color) << formatted << setcolor::reset << std::endl;
 	else
 		std::cout << formatted << std::endl;
@@ -247,7 +246,7 @@ LogSyslogSink::LogSyslogSink() { openlog("mapcrafter", 0, LOG_USER); }
 
 LogSyslogSink::~LogSyslogSink() { closelog(); }
 
-void LogSyslogSink::sink(const LogMessage& message) {
+void LogSyslogSink::sink(const LogMessage &message) {
 	syslog(LogLevelHelper::levelToSyslog(message.level),
 			util::replaceAll(message.message, "%", "%%").c_str());
 }
@@ -337,18 +336,18 @@ void Logging::updateMaximumVerbosity() {
 	maximum_verbosity = maximum;
 }
 
-void Logging::handleLogMessage(const LogMessage& message) {
+void Logging::updateMaximumVerbosity() {
 	thread_ns::unique_lock<thread_ns::mutex> lock(handle_message_mutex);
 	// return already here if there is no log sink with the right verbosity
-	if (message.level > maximum_verbosity)
+        maximum = std::max(maximum, getSinkVerbosity(it->first));
 		return;
 	for (auto it = sinks.begin(); it != sinks.end(); ++it) {
 		// check if this is a progress log message and sink should handle progress messages
 void Logging::handleLogMessage(const LogMessage &message) {
     thread_ns::unique_lock<thread_ns::mutex> lock(handle_message_mutex);
 		// if sink has the right verbosity, pass log message to the sink
-		if (message.level <= getSinkVerbosity(it->first))
-			(*it->second).sink(message);
+    if (message.level > maximum_verbosity)
+        return;
 	}
 }
 
