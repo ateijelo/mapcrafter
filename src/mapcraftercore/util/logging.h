@@ -337,7 +337,7 @@ class Logging {
      * Resets the default verbosity to INFO, deletes the log sinks and creates a new
      * default output log sink.
      */
-	void reset();
+    void reset();
 
     /**
      * Returns the instance of a specific logger (thread-safe).
@@ -367,7 +367,7 @@ class Logging {
     LogLevel default_verbosity, maximum_verbosity;
 	std::map<std::string, std::shared_ptr<Logger> > loggers;
 	std::map<std::string, std::shared_ptr<LogSink> > sinks;
-	std::map<std::string, LogLevel> sinks_verbosity;
+    std::map<std::string, LogLevel> sinks_verbosity;
     std::map<std::string, bool> sinks_log_progress;
 
 	thread_ns::mutex loggers_mutex, handle_message_mutex;
@@ -375,7 +375,7 @@ class Logging {
 	static thread_ns::mutex instance_mutex;
 	static std::shared_ptr<Logging> instance;
 
-	friend class LogStream;
+    friend class LogStream;
 };
 
 

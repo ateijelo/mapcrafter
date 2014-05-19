@@ -251,8 +251,8 @@ void Logging::setDefaultVerbosity(LogLevel level) {
 }
 
 LogLevel Logging::getSinkVerbosity(const std::string &sink) const {
-	if (sinks_verbosity.count(sink))
-		return sinks_verbosity.at(sink);
+    if (sinks_verbosity.count(sink))
+        return sinks_verbosity.at(sink);
     return default_verbosity;
 }
 
@@ -283,9 +283,9 @@ void Logging::setSink(const std::string &name, LogSink *sink) {
 
 void Logging::reset() {
     default_verbosity = maximum_verbosity = LogLevel::INFO;
-	loggers.clear();
-	sinks.clear();
-	sinks_verbosity.clear();
+    loggers.clear();
+    sinks.clear();
+    sinks_verbosity.clear();
 	sinks_log_progress.clear();
 
 	setSink("__output__", new LogOutputSink);
