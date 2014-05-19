@@ -107,10 +107,10 @@ public:
 
 #ifdef HAVE_SYSLOG_H
 
-	/**
-	 * LogLevel to syslog level.
-	 */
-	static int levelToSyslog(LogLevel level);
+    /**
+     * LogLevel to syslog level.
+     */
+    static int levelToSyslog(LogLevel level);
 
 #endif
 };
@@ -285,9 +285,9 @@ private:
  * This sink logs all message to the local syslog daemon.
  */
 class LogSyslogSink : public LogSink {
-public:
-	LogSyslogSink();
-	virtual ~LogSyslogSink();
+  public:
+    LogSyslogSink();
+    virtual ~LogSyslogSink();
 
 	virtual void sink(const LogMessage& message);
 };

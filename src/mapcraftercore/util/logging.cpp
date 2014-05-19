@@ -25,7 +25,7 @@
 
 #include <ctime>
 #ifdef HAVE_SYSLOG_H
-#  include <syslog.h>
+#include <syslog.h>
 #endif
 #include <set>
 
@@ -103,23 +103,23 @@ std::string LogLevelHelper::levelToString(LogLevel level) {
 #ifdef HAVE_SYSLOG_H
 
 int LogLevelHelper::levelToSyslog(LogLevel level) {
-	if (level == LogLevel::EMERGENCY)
-		return LOG_EMERG;
-	if (level == LogLevel::ALERT)
-		return LOG_ALERT;
+    if (level == LogLevel::EMERGENCY)
+        return LOG_EMERG;
+    if (level == LogLevel::ALERT)
+        return LOG_ALERT;
 	if (level == LogLevel::FATAL)
 		return LOG_CRIT;
-	if (level == LogLevel::ERROR)
-		return LOG_ERR;
-	if (level == LogLevel::WARNING)
-		return LOG_WARNING;
-	if (level == LogLevel::NOTICE)
-		return LOG_NOTICE;
-	if (level == LogLevel::INFO)
-		return LOG_INFO;
-	if (level == LogLevel::DEBUG)
-		return LOG_DEBUG;
-	return LOG_INFO;
+    if (level == LogLevel::ERROR)
+        return LOG_ERR;
+    if (level == LogLevel::WARNING)
+        return LOG_WARNING;
+    if (level == LogLevel::NOTICE)
+        return LOG_NOTICE;
+    if (level == LogLevel::INFO)
+        return LOG_INFO;
+    if (level == LogLevel::DEBUG)
+        return LOG_DEBUG;
+    return LOG_INFO;
 }
 
 #endif
@@ -256,13 +256,9 @@ void LogFileSink::sinkFormatted(const LogMessage& message,
 
 #ifdef HAVE_SYSLOG_H
 
-LogSyslogSink::LogSyslogSink() {
-	openlog("mapcrafter", 0, LOG_USER);
-}
+LogSyslogSink::LogSyslogSink() { openlog("mapcrafter", 0, LOG_USER); }
 
-LogSyslogSink::~LogSyslogSink() {
-	closelog();
-}
+LogSyslogSink::~LogSyslogSink() { closelog(); }
 
 void LogSyslogSink::sink(const LogMessage& message) {
 	syslog(LogLevelHelper::levelToSyslog(message.level),
