@@ -278,7 +278,7 @@ LogSink *Logging::getSink(const std::string &name) {
 }
 
 void Logging::setSink(const std::string &name, LogSink *sink) {
-	sinks[name] = std::shared_ptr<LogSink>(sink);
+    sinks[name] = std::shared_ptr<LogSink>(sink);
 }
 
 void Logging::reset() {

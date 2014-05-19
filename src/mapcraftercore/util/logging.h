@@ -365,8 +365,8 @@ class Logging {
     void handleLogMessage(const LogMessage &message);
 
     LogLevel default_verbosity, maximum_verbosity;
-	std::map<std::string, std::shared_ptr<Logger> > loggers;
-	std::map<std::string, std::shared_ptr<LogSink> > sinks;
+    std::map<std::string, std::shared_ptr<Logger>> loggers;
+    std::map<std::string, std::shared_ptr<LogSink>> sinks;
     std::map<std::string, LogLevel> sinks_verbosity;
     std::map<std::string, bool> sinks_log_progress;
 
