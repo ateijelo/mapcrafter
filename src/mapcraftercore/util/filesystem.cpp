@@ -175,24 +175,26 @@ PathList findBlockDirs(const fs::path& executable) {
 	return findDirs(executable, "blocks");
 }
 
-PathList findLoggingConfigFiles(const fs::path& executable) {
-	fs::path mapcrafter_dir = findExecutableMapcrafterDir(findExecutablePath());
-	PathList configs = {
+PathList findBlockDirs(const fs::path &executable) { return findDirs(executable, "blocks"); }
+
+PathList findLoggingConfigFiles(const fs::path &executable) {
 		mapcrafter_dir.parent_path().parent_path() / "etc" / "mapcrafter" / "logging.conf",
-		mapcrafter_dir / "logging.conf",
-	};
+    PathList configs = {
+        mapcrafter_dir.parent_path().parent_path() / "etc" / "mapcrafter" / "logging.conf",
+        mapcrafter_dir / "logging.conf",
+    };
 
-	fs::path home = findHomeDir();
-	if (!home.empty())
-		configs.insert(configs.begin(), home / ".mapcrafter" / "logging.conf");
+    fs::path home = findHomeDir();
+    if (!home.empty())
+        configs.insert(configs.begin(), home / ".mapcrafter" / "logging.conf");
 
-	for (PathList::iterator it = configs.begin(); it != configs.end(); ) {
-		if (!fs::is_regular_file(*it))
-			configs.erase(it);
-		else
-			++it;
-	}
-	return configs;
+    for (PathList::iterator it = configs.begin(); it != configs.end();) {
+        if (!fs::is_regular_file(*it))
+            configs.erase(it);
+        else
+            ++it;
+    }
+    return configs;
 }
 
 fs::path findTemplateDir() {
@@ -211,10 +213,10 @@ fs::path findBlockDir() {
 }
 
 fs::path findLoggingConfigFile() {
-	PathList configs = findLoggingConfigFiles(findExecutablePath());
-	if (configs.size())
-		return *configs.begin();
-	return fs::path();
+    PathList configs = findLoggingConfigFiles(findExecutablePath());
+    if (configs.size())
+        return *configs.begin();
+    return fs::path();
 }
 
 } /* namespace util */

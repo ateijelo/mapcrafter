@@ -74,7 +74,7 @@ PathList findBlockDirs(const fs::path &executable);
 /**
  * Returns all possible logging configuration files.
  */
-PathList findLoggingConfigFiles(const fs::path& executable);
+PathList findLoggingConfigFiles(const fs::path &executable);
 
 /**
  * Returns the first existing template directory.
