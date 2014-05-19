@@ -156,8 +156,7 @@ LogSink::LogSink() {}
 
 LogSink::~LogSink() {}
 
-void LogSink::sink(const LogMessage& message) {
-}
+void LogSink::sink(const LogMessage &message) {}
 
 FormattedLogSink::FormattedLogSink()
 	: format("%(date) [%(level)] [%(logger)] %(message)"),
@@ -192,9 +191,7 @@ void FormattedLogSink::sink(const LogMessage &message) {
     sinkFormatted(message, formatLogEntry(message));
 }
 
-void FormattedLogSink::sinkFormatted(const LogMessage& message,
-		const std::string& formatted) {
-}
+void FormattedLogSink::sinkFormatted(const LogMessage &message, const std::string &formatted) {}
 
 LogOutputSink::LogOutputSink() {
 }
