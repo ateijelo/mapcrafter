@@ -213,9 +213,9 @@ class LogSink {
 
     /**
      * This abstract method is called for every message that is logged.
-	 *
-	 * You MAY NOT use the LOG(level) functionality in here, otherwise the program
-	 * will end up in a deadlock.
+     *
+     * You MAY NOT use the LOG(level) functionality in here, otherwise the program
+     * will end up in a deadlock.
      */
     virtual void sink(const LogMessage &message);
 };
