@@ -172,13 +172,9 @@ void MapcrafterConfig::configureLogging() const {
         sink_it->configureLogging();
 }
 
-fs::path MapcrafterConfig::getOutputDir() const {
-	return root_section.getOutputDir();
-}
+fs::path MapcrafterConfig::getOutputDir() const { return root_section.getOutputDir(); }
 
-fs::path MapcrafterConfig::getTemplateDir() const {
-	return root_section.getTemplateDir();
-}
+fs::path MapcrafterConfig::getTemplateDir() const { return root_section.getTemplateDir(); }
 
 fs::path MapcrafterConfig::getOutputPath(const std::string &path) const {
     return getOutputDir() / path;
