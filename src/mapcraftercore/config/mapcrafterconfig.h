@@ -48,32 +48,30 @@ struct Color {
 std::ostream &operator<<(std::ostream &out, const Color &color);
 
 class MapcrafterConfigRootSection : public ConfigSection {
-public:
-	MapcrafterConfigRootSection();
-	~MapcrafterConfigRootSection();
+  public:
+    MapcrafterConfigRootSection();
+    ~MapcrafterConfigRootSection();
 
     virtual std::string getPrettyName() const;
     virtual void dump(std::ostream &out) const;
 
-	void setConfigDir(const fs::path& config_dir);
+    void setConfigDir(const fs::path &config_dir);
 
 	fs::path getOutputDir() const;
 	fs::path getTemplateDir() const;
 	Color getBackgroundColor() const;
 
 protected:
-	virtual void preParse(const INIConfigSection& section,
+    virtual void preParse(const INIConfigSection &section, ValidationList &validation);
 			ValidationList& validation);
-	virtual bool parseField(const std::string key, const std::string value,
-			ValidationList& validation);
-	virtual void postParse(const INIConfigSection& section,
-			ValidationList& validation);
+                            ValidationList &validation);
+    virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
-private:
-	fs::path config_dir;
+  private:
+    fs::path config_dir;
 
-	Field<fs::path> output_dir, template_dir;
-	Field<Color> background_color;
+    Field<fs::path> output_dir, template_dir;
+    Field<Color> background_color;
 };
 
 class MapcrafterConfig {

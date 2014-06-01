@@ -55,11 +55,9 @@ std::ostream &operator<<(std::ostream &out, const Color &color) {
     return out;
 }
 
-MapcrafterConfigRootSection::MapcrafterConfigRootSection() {
-}
+MapcrafterConfigRootSection::MapcrafterConfigRootSection() {}
 
-MapcrafterConfigRootSection::~MapcrafterConfigRootSection() {
-}
+MapcrafterConfigRootSection::~MapcrafterConfigRootSection() {}
 
 std::string MapcrafterConfigRootSection::getPrettyName() const {
     return "Mapcrafter config root section";
@@ -72,8 +70,8 @@ void MapcrafterConfigRootSection::dump(std::ostream &out) const {
     out << "  color = " << background_color << std::endl;
 }
 
-void MapcrafterConfigRootSection::setConfigDir(const fs::path& config_dir) {
-	this->config_dir = config_dir;
+void MapcrafterConfigRootSection::setConfigDir(const fs::path &config_dir) {
+    this->config_dir = config_dir;
 }
 
 fs::path MapcrafterConfigRootSection::getOutputDir() const {
@@ -88,37 +86,37 @@ Color MapcrafterConfigRootSection::getBackgroundColor() const {
 	return background_color.getValue();
 }
 
-void MapcrafterConfigRootSection::preParse(const INIConfigSection& section,
-		ValidationList& validation) {
-	fs::path default_template_dir = util::findTemplateDir();
-	if (!default_template_dir.empty())
-		template_dir.setDefault(default_template_dir);
-	background_color.setDefault({"#DDDDDD", 0xDD, 0xDD, 0xDD});
+void MapcrafterConfigRootSection::preParse(const INIConfigSection &section,
+                                           ValidationList &validation) {
+    fs::path default_template_dir = util::findTemplateDir();
+    if (!default_template_dir.empty())
+        template_dir.setDefault(default_template_dir);
+    background_color.setDefault({"#DDDDDD", 0xDD, 0xDD, 0xDD});
 }
 
-bool MapcrafterConfigRootSection::parseField(const std::string key,
-		const std::string value, ValidationList& validation) {
-	if (key == "output_dir") {
-		if (output_dir.load(key, value, validation))
-			output_dir.setValue(BOOST_FS_ABSOLUTE(output_dir.getValue(), config_dir));
-	} else if (key == "template_dir") {
-		if (template_dir.load(key, value, validation)) {
-			template_dir.setValue(BOOST_FS_ABSOLUTE(template_dir.getValue(), config_dir));
-			if (!fs::is_directory(template_dir.getValue()))
+bool MapcrafterConfigRootSection::parseField(const std::string key, const std::string value,
+                                             ValidationList &validation) {
+    if (key == "output_dir") {
+        if (output_dir.load(key, value, validation))
+            output_dir.setValue(BOOST_FS_ABSOLUTE(output_dir.getValue(), config_dir));
+    } else if (key == "template_dir") {
+        if (template_dir.load(key, value, validation)) {
+            template_dir.setValue(BOOST_FS_ABSOLUTE(template_dir.getValue(), config_dir));
+            if (!fs::is_directory(template_dir.getValue()))
                 validation.error("'template_dir' must be an existing directory! '" +
                                  template_dir.getValue().string() + "' does not exist!");
-		}
-	} else if (key == "background_color") {
-		background_color.load(key, value, validation);
-	} else
-		return false;
-	return true;
+        }
+    } else if (key == "background_color") {
+        background_color.load(key, value, validation);
+    } else
+        return false;
+    return true;
 }
 
-void MapcrafterConfigRootSection::postParse(const INIConfigSection& section,
-		ValidationList& validation) {
-	output_dir.require(validation, "You have to specify an output directory ('output_dir')!");
-	template_dir.require(validation, "You have to specify a template directory ('template_dir')!");
+void MapcrafterConfigRootSection::postParse(const INIConfigSection &section,
+                                            ValidationList &validation) {
+    output_dir.require(validation, "You have to specify an output directory ('output_dir')!");
+    template_dir.require(validation, "You have to specify a template directory ('template_dir')!");
 }
 
 MapcrafterConfig::MapcrafterConfig() {
