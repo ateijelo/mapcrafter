@@ -53,8 +53,8 @@ LogLevel LogLevelHelper::levelFromString(const std::string &str) {
         return LogLevel::EMERGENCY;
     if (str == "ALERT")
         return LogLevel::ALERT;
-	if (str == "FATAL")
-		return LogLevel::FATAL;
+    if (str == "FATAL")
+        return LogLevel::FATAL;
     if (str == "ERROR")
         return LogLevel::ERROR;
     if (str == "WARNING")
@@ -73,8 +73,8 @@ std::string LogLevelHelper::levelToString(LogLevel level) {
         return "EMERGENCY";
     if (level == LogLevel::ALERT)
         return "ALERT";
-	if (level == LogLevel::FATAL)
-		return "FATAL";
+    if (level == LogLevel::FATAL)
+        return "FATAL";
     if (level == LogLevel::ERROR)
         return "ERROR";
     if (level == LogLevel::WARNING)
@@ -95,8 +95,8 @@ int LogLevelHelper::levelToSyslog(LogLevel level) {
         return LOG_EMERG;
     if (level == LogLevel::ALERT)
         return LOG_ALERT;
-	if (level == LogLevel::FATAL)
-		return LOG_CRIT;
+    if (level == LogLevel::FATAL)
+        return LOG_CRIT;
     if (level == LogLevel::ERROR)
         return LOG_ERR;
     if (level == LogLevel::WARNING)
