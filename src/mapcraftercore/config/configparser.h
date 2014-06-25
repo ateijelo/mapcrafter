@@ -48,18 +48,18 @@ public:
  * A class to parse and validate arbitrary configuration files.
  */
 class ConfigParser {
-public:
+  public:
 	ConfigParser(const INIConfig& config);
-	~ConfigParser();
+    ~ConfigParser();
 
-	/**
-	 * Parses the root section of the configuration with the supplied section type object.
-	 */
+    /**
+     * Parses the root section of the configuration with the supplied section type object.
+     */
 	template <typename T>
 	void parseRootSection(T& section);
-
-	/**
-	 * Parses all sections with a specific type and puts the parsed section type objects
+    /**
+     * Parses all sections with a specific type and puts the parsed section type objects
+     * into the supplied std::vector<Section>.
 	 * into the supplied std::vector<Section>.
 	 *
 	 * It also parses the global section ([global:<type>], if it exists) and uses it as
@@ -69,11 +69,11 @@ public:
 	 * of the section type. The default GenericSectionFactory just creates a new instance,
 	 * but you can overwrite this to pass additional options (for example the config
 	 * directory for relative paths) to the section objects.
-	 */
+    template <typename Section, typename SectionFactory = GenericSectionFactory<Section>>
 	template <typename Section, typename SectionFactory = GenericSectionFactory<Section>>
 	void parseSections(std::vector<Section>& sections, const std::string& type,
 			SectionFactory section_factory = GenericSectionFactory<Section>());
-
+    /**
 	/**
 	 * Same as parseSections(std::vector<Section>& sections... but puts the parsed
 	 * sections into a map with section name -> section object.
@@ -89,17 +89,17 @@ public:
 	 */
 	bool validate();
 
-	/**
+     */
 	 * Returns the validation of the parsed sections.
-	 */
-	const ValidationMap& getValidation() const;
 
-private:
+	const ValidationMap& getValidation() const;
+    // the configuration to be parsed/validated
+    INIConfig config;
 	// the configuration to be parsed/validated
 	INIConfig config;
 
 	// validation messages resulting of validation
-	ValidationMap validation;
+    // set of parsed section types
 
 	// set of parsed section types
 	std::set<std::string> parsed_section_types;

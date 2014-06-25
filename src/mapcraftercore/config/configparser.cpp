@@ -24,8 +24,7 @@ namespace config {
 
 ConfigParser::ConfigParser(const INIConfig &config) : config(config) {}
 
-ConfigParser::~ConfigParser() {
-}
+ConfigParser::~ConfigParser() {}
 
 bool ConfigParser::validate() {
 	auto config_sections = config.getSections();
