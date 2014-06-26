@@ -82,16 +82,16 @@ class ConfigParser {
 
     /**
      * Does the remaining validation work after parsing the sections, for example add
-	/**
-	 * Does the remaining validation work after parsing the sections, for example add
-	 * warnings for unknown section types.
-	 */
-    /**
+     * warnings for unknown section types.
+     */
+    bool validate();
 
+    /**
+     * Returns the validation of the parsed sections.
      */
     const ValidationMap &getValidation() const;
 
-	const ValidationMap& getValidation() const;
+  private:
     // the configuration to be parsed/validated
     INIConfig config;
 	// the configuration to be parsed/validated
