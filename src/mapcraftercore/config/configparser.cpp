@@ -48,9 +48,7 @@ bool ConfigParser::validate() {
     return !validation.isCritical();
 }
 
-const ValidationMap& ConfigParser::getValidation() const {
-	return validation;
-}
+const ValidationMap &ConfigParser::getValidation() const { return validation; }
 
 } /* namespace config */
 } /* namespace mapcrafter */
