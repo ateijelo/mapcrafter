@@ -342,12 +342,12 @@ class Logging {
     /**
      * Returns the instance of a specific logger (thread-safe).
      */
-	Logger& getLogger(const std::string& name);
+    Logger &getLogger(const std::string &name);
 
     /**
      * Returns the singleton instance of the logging facility (thread-safe).
      */
-	static Logging& getInstance();
+    static Logging &getInstance();
 
   protected:
     Logging();
@@ -373,11 +373,10 @@ class Logging {
 	thread_ns::mutex loggers_mutex, handle_message_mutex;
 
 	static thread_ns::mutex instance_mutex;
-	static std::shared_ptr<Logging> instance;
+    static std::shared_ptr<Logging> instance;
 
     friend class LogStream;
 };
-
 
 } /* namespace util */
 } /* namespace mapcrafter */

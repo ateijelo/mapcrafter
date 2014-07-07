@@ -288,18 +288,18 @@ void Logging::reset() {
     sinks_verbosity.clear();
     sinks_log_progress.clear();
 
-Logger& Logging::getLogger(const std::string& name) {
+    setSink("__output__", new LogOutputSink);
 	thread_ns::unique_lock<thread_ns::mutex> lock(loggers_mutex);
 	if (!loggers.count(name))
 		loggers[name].reset(new Logger(name));
 	return *loggers.at(name);
 }
 
-Logging& Logging::getInstance() {
+Logger &Logging::getLogger(const std::string &name) {
 	thread_ns::unique_lock<thread_ns::mutex> lock(instance_mutex);
-	if (!instance)
-		instance.reset(new Logging);
-	return *instance;
+    if (!loggers.count(name))
+        loggers[name].reset(new Logger(name));
+    return *loggers.at(name);
 }
 
 Logging &Logging::getInstance() {
