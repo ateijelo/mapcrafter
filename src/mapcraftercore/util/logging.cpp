@@ -34,29 +34,17 @@ namespace util {
 
 #ifndef HAVE_ENUM_CLASS_COMPARISON
 
-bool operator==(LogLevel level1, LogLevel level2) {
-	return (int) level1 == (int) level2;
-}
+bool operator==(LogLevel level1, LogLevel level2) { return (int)level1 == (int)level2; }
 
-bool operator!=(LogLevel level1, LogLevel level2) {
-	return !(level1 == level2);
-}
+bool operator!=(LogLevel level1, LogLevel level2) { return !(level1 == level2); }
 
-bool operator<(LogLevel level1, LogLevel level2) {
-	return (int) level1 < (int) level2;
-}
+bool operator<(LogLevel level1, LogLevel level2) { return (int)level1 < (int)level2; }
 
-bool operator<=(LogLevel level1, LogLevel level2) {
-	return level1 < level2 || level1 == level2;
-}
+bool operator<=(LogLevel level1, LogLevel level2) { return level1 < level2 || level1 == level2; }
 
-bool operator>(LogLevel level1, LogLevel level2) {
-	return (int) level1 > (int) level2;
-}
+bool operator>(LogLevel level1, LogLevel level2) { return (int)level1 > (int)level2; }
 
-bool operator>=(LogLevel level1, LogLevel level2) {
-	return level1 > level2 || level1 == level2;
-}
+bool operator>=(LogLevel level1, LogLevel level2) { return level1 > level2 || level1 == level2; }
 
 #endif
 
