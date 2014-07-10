@@ -60,8 +60,8 @@ class ConfigParser {
      * Parses all sections with a specific type and puts the parsed section type objects
      * into the supplied std::vector<Section>.
      *
-	 *
-	 * It also parses the global section ([global:<type>], if it exists) and uses it as
+     * It also parses the global section ([global:<type>], if it exists) and uses it as
+     * default for the sections. The global section object is created with the supplied
      * section factory and all sections are copied from this global section object. The
      * section factory is an object that has an operator() which returns a new instance
      * of the section type. The default GenericSectionFactory just creates a new instance,
@@ -73,20 +73,20 @@ class ConfigParser {
                        SectionFactory section_factory = GenericSectionFactory<Section>());
 
     /**
-	/**
+     * Same as parseSections(std::vector<Section>& sections... but puts the parsed
      * sections into a map with section name -> section object.
      */
-	 */
+    template <typename Section, typename SectionFactory = GenericSectionFactory<Section>>
     void parseSections(std::map<std::string, Section> &sections, const std::string &type,
                        SectionFactory section_factory = GenericSectionFactory<Section>());
 
     /**
-
+     * Does the remaining validation work after parsing the sections, for example add
 	/**
 	 * Does the remaining validation work after parsing the sections, for example add
 	 * warnings for unknown section types.
 	 */
-	bool validate();
+    /**
 
      */
     const ValidationMap &getValidation() const;
