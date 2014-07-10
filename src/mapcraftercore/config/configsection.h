@@ -57,7 +57,7 @@ class ConfigSection {
     /**
      * Returns the name of the section.
      */
-	std::string getSectionName() const;
+    std::string getSectionName() const;
 
     /**
      * Parses the given configurations section and returns false if there was a critical
