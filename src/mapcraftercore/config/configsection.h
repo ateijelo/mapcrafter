@@ -54,9 +54,9 @@ class ConfigSection {
     bool isGlobal() const;
     void setGlobal(bool global);
 
-	/**
-	 * Returns the name of the section.
-	 */
+    /**
+     * Returns the name of the section.
+     */
 	std::string getSectionName() const;
 
     /**
