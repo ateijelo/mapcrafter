@@ -49,7 +49,7 @@ public:
  */
 class ConfigParser {
   public:
-	ConfigParser(const INIConfig& config);
+    ConfigParser(const INIConfig &config);
     ~ConfigParser();
 
     /**
@@ -90,14 +90,14 @@ class ConfigParser {
 	bool validate();
 
      */
-	 * Returns the validation of the parsed sections.
+    const ValidationMap &getValidation() const;
 
 	const ValidationMap& getValidation() const;
     // the configuration to be parsed/validated
     INIConfig config;
 	// the configuration to be parsed/validated
-	INIConfig config;
-
+    // validation messages resulting of validation
+    ValidationMap validation;
 	// validation messages resulting of validation
     // set of parsed section types
 

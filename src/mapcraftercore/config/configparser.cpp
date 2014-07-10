@@ -27,11 +27,11 @@ ConfigParser::ConfigParser(const INIConfig &config) : config(config) {}
 ConfigParser::~ConfigParser() {}
 
 bool ConfigParser::validate() {
-	auto config_sections = config.getSections();
-	for (auto config_section_it = config_sections.begin();
-			config_section_it != config_sections.end(); ++config_section_it) {
-		std::string type = config_section_it->getType();
-		std::string name = config_section_it->getName();
+    auto config_sections = config.getSections();
+    for (auto config_section_it = config_sections.begin();
+         config_section_it != config_sections.end(); ++config_section_it) {
+        std::string type = config_section_it->getType();
+        std::string name = config_section_it->getName();
 		if ((type == "global" && parsed_section_types.count(name))
 				|| (type != "global" && parsed_section_types.count(type)))
 			continue;
@@ -41,8 +41,8 @@ bool ConfigParser::validate() {
 		if (type == "global" && *name.rbegin() == 's')
 			validation.section(section_name).info("Global sections do not use the plural "
 					"section name anymore, i.e. it is '[global:section]' instead of '[global:sections]'.");
-	}
-
+                      "section name anymore, i.e. it is '[global:section]' instead of "
+                      "'[global:sections]'.");
 	return !validation.isCritical();
 }
 
