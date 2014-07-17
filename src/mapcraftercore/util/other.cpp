@@ -161,14 +161,14 @@ std::string escapeJSON(const std::string &str) {
             break;
         case '\f':
             ss << "\\f";
-std::string capitalize(const std::string& str) {
-	if (str.empty())
-		return "";
-	std::string capitalized = str.substr(1);
-	capitalized.insert(capitalized.begin(), toupper(str[0]));
-	return capitalized;
-}
-
+            break;
+        case '\n':
+            ss << "\\n";
+            break;
+        case '\r':
+            ss << "\\r";
+            break;
+        case '\t':
             ss << "\\t";
             break;
         default:
