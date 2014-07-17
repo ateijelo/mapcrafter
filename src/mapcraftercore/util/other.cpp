@@ -116,12 +116,12 @@ bool isHexNumber(const std::string &str) {
 }
 
 unsigned int parseHexNumber(const std::string &str) {
-	std::stringstream ss;
+    std::stringstream ss;
     ss << std::hex << str;
 
-	unsigned int x;
-	ss >> x;
-	return x;
+    unsigned int x;
+    ss >> x;
+    return x;
 }
 
 std::string trim(const std::string& str) {
