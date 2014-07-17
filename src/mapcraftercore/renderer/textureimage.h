@@ -34,42 +34,42 @@ class TextureImage : public RGBAImage {
     TextureImage(const std::string &name);
     ~TextureImage();
 
-	/**
-	 * Tries to load the texture from the given path.
-	 */
+    /**
+     * Tries to load the texture from the given path.
+     */
     bool load(const std::string &path, int size, int blur, double water_opacity);
 
-	/**
-	 * Returns the name of the texture.
-	 */
+    /**
+     * Returns the name of the texture.
+     */
     const std::string &getName() const;
 
-	/**
-	 * Returns the original texture image.
-	 */
-	const RGBAImage& getOriginal() const;
+    /**
+     * Returns the original texture image.
+     */
+    const RGBAImage &getOriginal() const;
 
-	/**
-	 * Returns whether the texture is animated.
-	 */
-	bool isAnimated() const;
+    /**
+     * Returns whether the texture is animated.
+     */
+    bool isAnimated() const;
 
     /**
      * Returns the count of frames this texture has.
      */
     int getFrameCount() const;
 
-	/**
-	 * If the texture is animated, returns a (resized to texture size) frame of it.
-	 */
-	RGBAImage getFrame(int frame) const;
+    /**
+     * If the texture is animated, returns a (resized to texture size) frame of it.
+     */
+    RGBAImage getFrame(int frame) const;
 
-private:
-	std::string name;
+  private:
+    std::string name;
 
-	// the original texture image
-	// also original resized texture image (used for animated textures)
-	RGBAImage original, original_resized;
+    // the original texture image
+    // also original resized texture image (used for animated textures)
+    RGBAImage original, original_resized;
 
     // count of frames of animated texture
     int frame_count;

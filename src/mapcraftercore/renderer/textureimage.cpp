@@ -97,9 +97,7 @@ const std::string &TextureImage::getName() const { return name; }
 
 const RGBAImage &TextureImage::getOriginal() const { return original; }
 
-const RGBAImage& TextureImage::getOriginal() const {
-	return original;
-}
+bool TextureImage::isAnimated() const { return original.getWidth() < original.getHeight(); }
 
 bool TextureImage::isAnimated() const {
 	return original.getWidth() < original.getHeight();
@@ -110,13 +108,13 @@ int TextureImage::getFrameCount() const {
 }
 
 RGBAImage TextureImage::getFrame(int frame) const {
-	int width = original_resized.getWidth();
-	// check if texture has this frame, return empty texture if not
-	if ((frame+1) * width > original_resized.getHeight()) {
+    int width = original_resized.getWidth();
+    // check if texture has this frame, return empty texture if not
+    if ((frame + 1) * width > original_resized.getHeight()) {
         LOG(WARNING) << "Texture '" << name << "' does not have frame " << frame << ".";
-		return RGBAImage(width, width);
-	}
-	return original_resized.clip(0, width * frame, width, width);
+        return RGBAImage(width, width);
+    }
+    return original_resized.clip(0, width * frame, width, width);
 }
 
 } // namespace renderer
