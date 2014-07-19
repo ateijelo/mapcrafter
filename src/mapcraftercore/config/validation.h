@@ -143,7 +143,7 @@ public:
 	/**
 	 * Returns a reference to the validation section with a specific name.
 	 */
-	ValidationList& section(const std::string& section);
+    ValidationList &section(const std::string &section);
 
 	/**
 	 * Returns all validation sections.
@@ -165,9 +165,9 @@ public:
 	/**
 	 * Sends this validation map with all (not empty) validation sections to the log.
 	 */
-	void log(std::string logger = "default") const;
+    void log(std::string logger = "default") const;
 
-private:
+  private:
 	// stores indices for validation sections in sections array
 	// (section name -> index in array)
     std::map<std::string, int> sections_order;

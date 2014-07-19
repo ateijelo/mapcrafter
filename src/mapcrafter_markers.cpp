@@ -204,11 +204,11 @@ int main(int argc, char **argv) {
     if (!validation.isEmpty()) {
         if (validation.isCritical())
             LOG(FATAL) << "Your configuration file is invalid!";
-			LOG(FATAL) << "Your configuration file is invalid!";
+        else
             LOG(WARNING) << "Some notes on your configuration file:";
         validation.log();
-		validation.log();
-		LOG(WARNING) << "Please read the documentation about the new configuration file format.";
+        LOG(WARNING) << "Please read the documentation about the new configuration file format.";
+    }
 
     Markers markers = findMarkers(config);
 

@@ -96,7 +96,7 @@ ValidationMap::~ValidationMap() {
 
 }
 
-ValidationList& ValidationMap::section(const std::string& section) {
+ValidationList &ValidationMap::section(const std::string &section) {
     if (!sections_order.count(section)) {
         sections_order[section] = sections.size();
         sections.push_back(std::make_pair(section, ValidationList()));
@@ -109,10 +109,10 @@ const std::vector<std::pair<std::string, ValidationList>> &ValidationMap::getSec
 }
 
 bool ValidationMap::isEmpty() const {
-	for (auto section_it = sections.begin(); section_it != sections.end(); ++section_it)
+    for (auto section_it = sections.begin(); section_it != sections.end(); ++section_it)
         if (!section_it->second.isEmpty())
-			return false;
-	return true;
+            return false;
+    return true;
 }
 
 bool ValidationMap::isCritical() const {
@@ -125,8 +125,8 @@ bool ValidationMap::isCritical() const {
 void ValidationMap::log(std::string logger) const {
     for (auto section_it = sections.begin(); section_it != sections.end(); ++section_it) {
         auto messages = section_it->second.getMessages();
-		if (messages.empty())
-			continue;
+        if (messages.empty())
+            continue;
 
 		if (isCritical()) {
 			LOGN(ERROR, logger) << section_it->first << ":";
@@ -137,7 +137,7 @@ void ValidationMap::log(std::string logger) const {
 			for (auto it = messages.begin(); it != messages.end(); ++it)
 				LOGN(WARNING, logger) << " - " << *it;
 		}
-	}
+    }
 }
 
 std::ostream& operator<<(std::ostream& out, const ValidationMessage& msg) {
