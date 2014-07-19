@@ -85,29 +85,29 @@ std::ostream& operator<<(std::ostream& out, const ValidationMessage& msg);
  * are used as sections in validation maps.
  */
 class ValidationList {
-public:
-	ValidationList();
-	~ValidationList();
+  public:
+    ValidationList();
+    ~ValidationList();
 
 	/**
 	 * Adds a validation message to the list.
 	 */
-	void message(const ValidationMessage& message);
+    void message(const ValidationMessage &message);
 
 	/**
 	 * Adds an info message to the list.
 	 */
-	void info(const std::string& message);
+    void info(const std::string &message);
 
 	/**
 	 * Adds a warning message to the list.
 	 */
-	void warning(const std::string& message);
+    void warning(const std::string &message);
 
 	/**
 	 * Adds an error message to the list.
 	 */
-	void error(const std::string& message);
+    void error(const std::string &message);
 
 	/**
 	 * Returns whether this validation list is empty, i.e. does not contain any messages.
@@ -123,10 +123,10 @@ public:
 	/**
 	 * Returns a list with all contained validation messages.
 	 */
-	const std::vector<ValidationMessage> getMessages() const;
+    const std::vector<ValidationMessage> getMessages() const;
 
-private:
-	std::vector<ValidationMessage> messages;
+  private:
+    std::vector<ValidationMessage> messages;
 };
 
 /**
@@ -136,9 +136,9 @@ private:
  * validation messages.
  */
 class ValidationMap {
-public:
-	ValidationMap();
-	~ValidationMap();
+  public:
+    ValidationMap();
+    ~ValidationMap();
 
 	/**
 	 * Returns a reference to the validation section with a specific name.

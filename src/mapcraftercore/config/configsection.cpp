@@ -49,7 +49,7 @@ ValidationList ConfigSection::parse(const INIConfigSection &section) {
         std::string value = entry_it->second;
 
         if (!parseField(key, value, validation))
-			validation.warning("Unknown configuration option '" + key + "'!");
+            validation.warning("Unknown configuration option '" + key + "'!");
     }
 
     postParse(section, validation);

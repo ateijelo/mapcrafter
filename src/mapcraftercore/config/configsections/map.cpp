@@ -337,7 +337,7 @@ bool MapSection::parseField(const std::string key, const std::string value,
 			rotations_set.insert(r);
 			tile_sets.insert(getTileSet(r));
 		} else {
-			validation.error("Invalid rotation '" + elem + "'!");
+        if (key == "rendermode")
 		}
 	}
 

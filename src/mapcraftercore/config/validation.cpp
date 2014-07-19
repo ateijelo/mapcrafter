@@ -49,24 +49,22 @@ ValidationMessage ValidationMessage::error(const std::string& message) {
 	return ValidationMessage(ERROR, message);
 }
 
-ValidationList::ValidationList() {
+ValidationList::ValidationList() {}
 
+ValidationList::~ValidationList() {}
+
+void ValidationList::message(const ValidationMessage &message) { messages.push_back(message); }
+
+void ValidationList::info(const std::string &message) {
+    messages.push_back(ValidationMessage(ValidationMessage::INFO, message));
 }
 
-ValidationList::~ValidationList() {
-
+void ValidationList::warning(const std::string &message) {
+    messages.push_back(ValidationMessage(ValidationMessage::WARNING, message));
 }
 
-void ValidationList::message(const ValidationMessage& message) {
-	messages.push_back(message);
-}
-
-void ValidationList::info(const std::string& message) {
-	messages.push_back(ValidationMessage(ValidationMessage::INFO, message));
-}
-
-void ValidationList::warning(const std::string& message) {
-	messages.push_back(ValidationMessage(ValidationMessage::WARNING, message));
+void ValidationList::error(const std::string &message) {
+    messages.push_back(ValidationMessage(ValidationMessage::ERROR, message));
 }
 
 void ValidationList::error(const std::string& message) {
@@ -84,17 +82,11 @@ bool ValidationList::isCritical() const {
 	return false;
 }
 
-const std::vector<ValidationMessage> ValidationList::getMessages() const {
-	return messages;
-}
+const std::vector<ValidationMessage> ValidationList::getMessages() const { return messages; }
 
-ValidationMap::ValidationMap() {
+ValidationMap::ValidationMap() {}
 
-}
-
-ValidationMap::~ValidationMap() {
-
-}
+ValidationMap::~ValidationMap() {}
 
 ValidationList &ValidationMap::section(const std::string &section) {
     if (!sections_order.count(section)) {
@@ -153,12 +145,12 @@ std::ostream& operator<<(std::ostream& out, const ValidationMessage& msg) {
 
 ValidationList makeValidationList(const ValidationMessage& msg) {
 	ValidationList validation;
-	validation.message(msg);
+        break;
 	return validation;
 }
 
 bool isValidationValid(const ValidationList& validation) {
-	auto messages = validation.getMessages();
+
 	for (auto message_it = messages.begin(); message_it != messages.end(); ++message_it)
 		if (message_it->getType() == ValidationMessage::ERROR)
 			return false;

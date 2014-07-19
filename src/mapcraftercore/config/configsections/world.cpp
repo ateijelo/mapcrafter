@@ -152,8 +152,8 @@ bool WorldSection::parseField(const std::string key, const std::string value,
         if (input_dir.load(key, value, validation)) {
             input_dir.setValue(BOOST_FS_ABSOLUTE(input_dir.getValue(), config_dir));
             if (!fs::is_directory(input_dir.getValue()))
-				validation.error("'input_dir' must be an existing directory! '"
-						+ input_dir.getValue().string() + "' does not exist!");
+                validation.error("'input_dir' must be an existing directory! '" +
+                                 input_dir.getValue().string() + "' does not exist!");
 		}
 	} else if (key == "dimension")
 		dimension.load(key, value, validation);
@@ -167,7 +167,7 @@ bool WorldSection::parseField(const std::string key, const std::string value,
 	else if (key == "default_rotation") {
 		int rotation = stringToRotation(value, ROTATION_NAMES);
 		if (rotation == -1)
-			validation.error("Invalid rotation '" + value + "'!");
+            validation.error("Invalid rotation '" + value + "'!");
 		default_rotation.setValue(rotation);
 	} else if (key == "sea_level") {
 		sea_level.load(key,value, validation);
@@ -212,19 +212,19 @@ bool WorldSection::parseField(const std::string key, const std::string value,
 void WorldSection::postParse(const INIConfigSection &section, ValidationList &validation) {
     if (default_zoom.isLoaded() && default_zoom.getValue() < 0)
 	if (default_zoom.isLoaded() && default_zoom.getValue() < 0)
-		validation.error("The default zoom level must be bigger or equal to 0 ('default_zoom').");
+
 
 	// validate the world croppping
 	bool crop_rectangular = min_x.isLoaded() || max_x.isLoaded() || min_z.isLoaded() || max_z.isLoaded();
 	bool crop_circular = center_x.isLoaded() || center_z.isLoaded() || radius.isLoaded();
 
 	if (crop_rectangular && crop_circular) {
-		validation.error("You can not use both world cropping types at the same time!");
+        validation.error("You can not use both world cropping types at the same time!");
 	} else if (crop_rectangular) {
 		if (min_x.isLoaded() && max_x.isLoaded() && min_x.getValue() > max_x.getValue())
-			validation.error("min_x must be smaller than or equal to max_x!");
+            validation.error("min_x must be smaller than or equal to max_x!");
 		if (min_z.isLoaded() && max_z.isLoaded() && min_z.getValue() > max_z.getValue())
-			validation.error("min_z must be smaller than or equal to max_z!");
+            validation.error("min_z must be smaller than or equal to max_z!");
 	} else if (crop_circular) {
 		std::string message = "You have to specify crop_center_x, crop_center_z "
 				"and crop_radius for circular world cropping!";
@@ -237,7 +237,7 @@ void WorldSection::postParse(const INIConfigSection &section, ValidationList &va
 	}
 
 	if (min_y.isLoaded() && max_y.isLoaded() && min_y.getValue() > max_y.getValue())
-		validation.error("min_y must be smaller than or equal to max_y!");
+
 
     if (block_mask.isLoaded()) {
 	if (block_mask.isLoaded()) {
