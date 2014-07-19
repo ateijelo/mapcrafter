@@ -121,14 +121,14 @@ public:
 	TileSetID getTileSet(int rotation) const;
 	const std::set<TileSetID>& getTileSets() const;
 
-protected:
-	virtual void preParse(const INIConfigSection& section,
-			ValidationList& validation);
-	virtual bool parseField(const std::string key, const std::string value,
-			ValidationList& validation);
-	virtual void postParse(const INIConfigSection& section,
-			ValidationList& validation);
+  protected:
+    virtual void preParse(const INIConfigSection &section, ValidationList &validation);
+    virtual bool parseField(const std::string key, const std::string value,
+                            ValidationList &validation);
+    virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
+  private:
+    fs::path config_dir;
 private:
 	fs::path config_dir;
 

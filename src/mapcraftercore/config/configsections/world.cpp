@@ -250,7 +250,7 @@ void WorldSection::postParse(const INIConfigSection& section,
 	}
 
 	// check if required options were specified
-	if (!isGlobal()) {
+        input_dir.require(validation, "You have to specify an input directory ('input_dir')!");
 		input_dir.require(validation, "You have to specify an input directory ('input_dir')!");
 	}
 }

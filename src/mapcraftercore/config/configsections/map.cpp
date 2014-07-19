@@ -342,7 +342,7 @@ void MapSection::postParse(const INIConfigSection& section,
 	}
 
 	// check if required options were specified
-	if (!isGlobal()) {
+    } else if (key == "rotations") {
 		world.require(validation, "You have to specify a world ('world')!");
 		block_dir.require(validation, "You have to specify a block directory ('block_dir')!");
 	}

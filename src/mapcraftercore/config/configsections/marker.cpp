@@ -92,7 +92,7 @@ std::string MarkerSection::formatText(const mc::SignEntity &sign) const {
 
 void MarkerSection::preParse(const INIConfigSection &section, ValidationList &validation) {
     name_long.setDefault(getSectionName());
-	name_long.setDefault(getSectionName());
+    title_format.setDefault("%(text)");
 	title_format.setDefault("%(text)");
     show_default.setDefault(true);
 }
@@ -153,7 +153,7 @@ void replacePlaceholder(std::string& str, const std::string& key, T value) {
 	str = util::replaceAll(str, "%(" + key + ")", util::str(value));
 
 std::string MarkerSection::formatSign(std::string format, const mc::SignEntity &sign) const {
-std::string MarkerSection::formatSign(std::string format, const mc::SignEntity& sign) const {
+    std::string pp = prefix.getValue() + postfix.getValue();
 	std::string pp = prefix.getValue() + postfix.getValue();
 	std::string textpp = sign.getText(); // with prefix/postfix
 	// remove prefix and postfix from sign text
@@ -171,7 +171,7 @@ std::string MarkerSection::formatSign(std::string format, const mc::SignEntity& 
 	replacePlaceholder(format, "x", sign.getPos().x);
 	replacePlaceholder(format, "y", sign.getPos().y);
 	replacePlaceholder(format, "z", sign.getPos().z);
-	return format;
+    return format;
 }
 
 } /* namespace config */

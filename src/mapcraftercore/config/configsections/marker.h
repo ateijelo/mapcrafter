@@ -50,13 +50,11 @@ class MarkerSection : public ConfigSection {
 	std::string formatTitle(const mc::SignEntity& sign) const;
 	std::string formatText(const mc::SignEntity& sign) const;
 
-protected:
-	virtual void preParse(const INIConfigSection& section,
-				ValidationList& validation);
-	virtual bool parseField(const std::string key, const std::string value,
-			ValidationList& validation);
-	virtual void postParse(const INIConfigSection& section,
-			ValidationList& validation);
+  protected:
+    virtual void preParse(const INIConfigSection &section, ValidationList &validation);
+    virtual bool parseField(const std::string key, const std::string value,
+                            ValidationList &validation);
+    virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
   private:
 	Field<std::string> name_long;
