@@ -118,7 +118,7 @@ class ValidationList {
 	 * Returns whether this validation list is critical, i.e. contains at least one
 	 * error message.
 	 */
-	bool isCritical() const;
+    bool isCritical() const;
 
 	/**
 	 * Returns a list with all contained validation messages.
@@ -160,7 +160,7 @@ class ValidationMap {
 	/**
 	 * Returns if this validation map contains a critical (error-) validation message.
 	 */
-	bool isCritical() const;
+    bool isCritical() const;
 
 	/**
 	 * Sends this validation map with all (not empty) validation sections to the log.
