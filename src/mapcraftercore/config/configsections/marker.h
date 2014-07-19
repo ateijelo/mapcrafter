@@ -32,7 +32,7 @@ class MarkerSection : public ConfigSection {
     MarkerSection();
     ~MarkerSection();
 
-	virtual std::string getPrettyName() const;
+    virtual std::string getPrettyName() const;
 	virtual void dump(std::ostream& out) const;
 
 	std::string getShortName() const;

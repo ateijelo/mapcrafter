@@ -88,7 +88,7 @@ public:
     MapSection();
 	~MapSection();
 
-	virtual std::string getPrettyName() const;
+    virtual std::string getPrettyName() const;
 	virtual void dump(std::ostream& out) const;
 
 	void setConfigDir(const fs::path& config_dir);

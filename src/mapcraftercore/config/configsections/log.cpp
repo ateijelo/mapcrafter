@@ -62,7 +62,7 @@ LogSection::LogSection() {
 LogSection::~LogSection() {}
 
 std::string LogSection::getPrettyName() const {
-	if (isGlobal())
+    if (isGlobal())
         return "Global log section " + getSectionName();
     return "Log section '" + getSectionName() + "'";
 }
@@ -129,29 +129,17 @@ void LogSection::configureLogging() const {
 #endif
 }
 
-LogSinkType LogSection::getType() const {
-	return type.getValue();
-}
+LogSinkType LogSection::getType() const { return type.getValue(); }
 
-util::LogLevel LogSection::getVerbosity() const {
-	return verbosity.getValue();
-}
+util::LogLevel LogSection::getVerbosity() const { return verbosity.getValue(); }
 
-bool LogSection::getLogProgress() const {
-	return log_progress.getValue();
-}
+bool LogSection::getLogProgress() const { return log_progress.getValue(); }
 
-std::string LogSection::getFormat() const {
-	return format.getValue();
-}
+std::string LogSection::getFormat() const { return format.getValue(); }
 
-std::string LogSection::getDateFormat() const {
-	return date_format.getValue();
-}
+std::string LogSection::getDateFormat() const { return date_format.getValue(); }
 
-fs::path LogSection::getFile() const {
-	return file.getValue();
-}
+fs::path LogSection::getFile() const { return file.getValue(); }
 
 void LogSection::preParse(const INIConfigSection &section, ValidationList &validation) {
     // don't set defaults here, they are set by the logging class

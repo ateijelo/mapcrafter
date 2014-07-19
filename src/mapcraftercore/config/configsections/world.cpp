@@ -62,7 +62,7 @@ WorldSection::~WorldSection() {
 }
 
 std::string WorldSection::getPrettyName() const {
-	if (isGlobal())
+    if (isGlobal())
         return "Global world section";
     return "World section '" + getSectionName() + "'";
 }
@@ -93,33 +93,23 @@ void WorldSection::setConfigDir(const fs::path& config_dir) {
 	this->config_dir = config_dir;
 }
 
-std::string WorldSection::getShortName() {
-	return getSectionName();
-}
+std::string WorldSection::getShortName() { return getSectionName(); }
 
-fs::path WorldSection::getInputDir() const {
-	return input_dir.getValue();
-}
+fs::path WorldSection::getInputDir() const { return input_dir.getValue(); }
 
 mc::Dimension WorldSection::getDimension() const {
 	return dimension.getValue();
 }
 
-std::string WorldSection::getWorldName() const {
-	return world_name.getValue();
-}
+std::string WorldSection::getWorldName() const { return world_name.getValue(); }
 
 mc::BlockPos WorldSection::getDefaultView() const {
 	return default_view.getValue();
 }
 
-int WorldSection::getDefaultZoom() const {
-	return default_zoom.getValue();
-}
+int WorldSection::getDefaultZoom() const { return default_zoom.getValue(); }
 
-int WorldSection::getDefaultRotation() const {
-	return default_rotation.getValue();
-}
+int WorldSection::getDefaultRotation() const { return default_rotation.getValue(); }
 
 int WorldSection::getSeaLevel() const {
 	return sea_level.getValue();
@@ -138,9 +128,9 @@ const mc::WorldCrop WorldSection::getWorldCrop() const {
 }
 
 bool WorldSection::needsWorldCentering() const {
-	// circular cropped worlds and cropped worlds with complete x- and z-bounds
-	return (min_x.isLoaded() && max_x.isLoaded() && min_z.isLoaded() && max_z.isLoaded())
-			|| center_x.isLoaded() || center_z.isLoaded() || radius.isLoaded();
+    // circular cropped worlds and cropped worlds with complete x- and z-bounds
+    return (min_x.isLoaded() && max_x.isLoaded() && min_z.isLoaded() && max_z.isLoaded()) ||
+           center_x.isLoaded() || center_z.isLoaded() || radius.isLoaded();
 }
 
 void WorldSection::preParse(const INIConfigSection& section,

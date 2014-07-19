@@ -31,7 +31,7 @@ MarkerSection::MarkerSection() {
 MarkerSection::~MarkerSection() {}
 
 std::string MarkerSection::getPrettyName() const {
-	if (isGlobal())
+    if (isGlobal())
         return "Global marker section";
     return "Marker section '" + getSectionName() + "'";
 }
@@ -49,61 +49,45 @@ void MarkerSection::dump(std::ostream& out) const {
 	out << "  show_default = " << show_default << std::endl;
 }
 
-std::string MarkerSection::getShortName() const {
-	return getSectionName();
-}
+std::string MarkerSection::getShortName() const { return getSectionName(); }
 
-std::string MarkerSection::getLongName() const {
-	return name_long.getValue();
-}
+std::string MarkerSection::getLongName() const { return name_long.getValue(); }
 
-std::string MarkerSection::getPrefix() const {
-	return prefix.getValue();
-}
+std::string MarkerSection::getPrefix() const { return prefix.getValue(); }
 
 std::string MarkerSection::getPostfix() const {
 	return postfix.getValue();
 }
 
-std::string MarkerSection::getTitleFormat() const {
-	return title_format.getValue();
-}
+std::string MarkerSection::getTitleFormat() const { return title_format.getValue(); }
 
-std::string MarkerSection::getTextFormat() const {
-	return title_format.getValue();
-}
+std::string MarkerSection::getTextFormat() const { return title_format.getValue(); }
 
-std::string MarkerSection::getIcon() const {
-	return icon.getValue();
-}
+std::string MarkerSection::getIcon() const { return icon.getValue(); }
 
-std::string MarkerSection::getIconSize() const {
-	return icon_size.getValue();
-}
+std::string MarkerSection::getIconSize() const { return icon_size.getValue(); }
 
 bool MarkerSection::isMatchedEmpty() const {
 	return match_empty.getValue();
 }
 
-bool MarkerSection::isShownByDefault() const {
-	return show_default.getValue();
-}
+bool MarkerSection::isShownByDefault() const { return show_default.getValue(); }
 
-bool MarkerSection::matchesSign(const mc::SignEntity& sign) const {
-	if (sign.getText().empty() && !match_empty.getValue())
-		return false;
+bool MarkerSection::matchesSign(const mc::SignEntity &sign) const {
+    if (sign.getText().empty() && !match_empty.getValue())
+        return false;
 	// make sure that prefix and postfix don't overlap
 	return util::startswith(sign.getText(), prefix.getValue())
 		&& util::endswith(sign.getText(), postfix.getValue())
 		&& sign.getText().size() >= prefix.getValue().size() + postfix.getValue().size();
 }
 
-std::string MarkerSection::formatTitle(const mc::SignEntity& sign) const {
-	return formatSign(title_format.getValue(), sign);
+std::string MarkerSection::formatTitle(const mc::SignEntity &sign) const {
+    return formatSign(title_format.getValue(), sign);
 }
 
-std::string MarkerSection::formatText(const mc::SignEntity& sign) const {
-	return formatSign(text_format.getValue(), sign);
+std::string MarkerSection::formatText(const mc::SignEntity &sign) const {
+    return formatSign(text_format.getValue(), sign);
 }
 
 void MarkerSection::preParse(const INIConfigSection &section, ValidationList &validation) {

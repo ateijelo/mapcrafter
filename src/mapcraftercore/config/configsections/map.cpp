@@ -140,7 +140,7 @@ MapSection::~MapSection() {
 }
 
 std::string MapSection::getPrettyName() const {
-	if (isGlobal())
+    if (isGlobal())
         return "Global map section";
     return "Map section '" + getSectionName() + "'";
 }
@@ -164,21 +164,13 @@ void MapSection::dump(std::ostream& out) const {
 	out << "  use_image_timestamps = " << use_image_mtimes << std::endl;
 }
 
-void MapSection::setConfigDir(const fs::path& config_dir) {
-	this->config_dir = config_dir;
-}
+void MapSection::setConfigDir(const fs::path &config_dir) { this->config_dir = config_dir; }
 
-std::string MapSection::getShortName() const {
-	return name_short;
-}
+std::string MapSection::getShortName() const { return name_short; }
 
-std::string MapSection::getLongName() const {
-	return name_long;
-}
+std::string MapSection::getLongName() const { return name_long; }
 
-std::string MapSection::getWorld() const {
-	return world.getValue();
-}
+std::string MapSection::getWorld() const { return world.getValue(); }
 
 renderer::RenderViewType MapSection::getRenderView() const {
 	return render_view.getValue();
@@ -192,55 +184,41 @@ renderer::OverlayType MapSection::getOverlay() const {
 	return overlay.getValue();
 }
 
-std::set<int> MapSection::getRotations() const {
-	return rotations_set;
-}
+std::set<int> MapSection::getRotations() const { return rotations_set; }
 
 fs::path MapSection::getBlockDir() const {
 	return block_dir.getValue();
 }
 
-int MapSection::getTextureSize() const {
-	return texture_size.getValue();
-}
+int MapSection::getTextureSize() const { return texture_size.getValue(); }
 
 int MapSection::getTileWidth() const {
 	return tile_width.getValue();
 }
 
-ImageFormat MapSection::getImageFormat() const {
-	return image_format.getValue();
-}
+ImageFormat MapSection::getImageFormat() const { return image_format.getValue(); }
 
 std::string MapSection::getImageFormatSuffix() const {
-	if (getImageFormat() == ImageFormat::PNG)
-		return "png";
-	return "jpg";
+    if (getImageFormat() == ImageFormat::PNG)
+        return "png";
+    return "jpg";
 }
 
 bool MapSection::isPNGIndexed() const {
 	return png_indexed.getValue();
 }
 
-int MapSection::getJPEGQuality() const {
-	return jpeg_quality.getValue();
-}
+int MapSection::getJPEGQuality() const { return jpeg_quality.getValue(); }
 
-double MapSection::getLightingIntensity() const {
-	return lighting_intensity.getValue();
-}
+double MapSection::getLightingIntensity() const { return lighting_intensity.getValue(); }
 
 double MapSection::getLightingWaterIntensity() const {
 	return lighting_water_intensity.getValue();
 }
 
-bool MapSection::renderBiomes() const {
-	return render_biomes.getValue();
-}
+bool MapSection::renderBiomes() const { return render_biomes.getValue(); }
 
-bool MapSection::useImageModificationTimes() const {
-	return use_image_mtimes.getValue();
-}
+bool MapSection::useImageModificationTimes() const { return use_image_mtimes.getValue(); }
 
 TileSetGroupID MapSection::getTileSetGroup() const {
 	return TileSetGroupID(getWorld(), getRenderView(), getTileWidth());
