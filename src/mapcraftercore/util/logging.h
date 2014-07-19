@@ -273,14 +273,14 @@ class LogOutputSink : public FormattedLogSink {
  * This sink logs all messages to a log file.
  */
 class LogFileSink : public FormattedLogSink {
-public:
+  public:
     LogFileSink(const std::string &filename);
-	virtual ~LogFileSink();
+    virtual ~LogFileSink();
 
-	virtual void sinkFormatted(const LogMessage& message, const std::string& formatted);
+    virtual void sinkFormatted(const LogMessage &message, const std::string &formatted);
 
-private:
-	std::ofstream out;
+  private:
+    std::ofstream out;
 };
 
 #ifdef HAVE_SYSLOG_H

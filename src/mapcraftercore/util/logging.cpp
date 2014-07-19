@@ -209,19 +209,16 @@ void LogOutputSink::sinkFormatted(const LogMessage &message, const std::string &
 }
 
 LogFileSink::LogFileSink(const std::string &filename) {
-	out.open(filename, std::fstream::out | std::fstream::app);
+    out.open(filename, std::fstream::out | std::fstream::app);
     if (!out)
         std::cerr << "Internal logging error: Unable to open log file '" << filename << "'!"
                   << std::endl;
 }
 
-LogFileSink::~LogFileSink() {
-	out.close();
-}
+LogFileSink::~LogFileSink() { out.close(); }
 
-void LogFileSink::sinkFormatted(const LogMessage& message,
-		const std::string& formatted) {
-	out << formatted << std::endl;
+void LogFileSink::sinkFormatted(const LogMessage &message, const std::string &formatted) {
+    out << formatted << std::endl;
 }
 
 #ifdef HAVE_SYSLOG_H
