@@ -38,8 +38,8 @@ template <typename T> class ConcurrentQueue {
 
   private:
     std::queue<T> queue;
-	thread_ns::mutex mutex;
-	thread_ns::condition_variable condition_variable;
+    thread_ns::mutex mutex;
+    thread_ns::condition_variable condition_variable;
 };
 
 template <typename T>
@@ -58,7 +58,7 @@ template <typename T> bool ConcurrentQueue<T>::empty() {
 
 template <typename T> void ConcurrentQueue<T>::push(T item) {
     thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
-	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
+    if (queue.empty()) {
         queue.push(item);
         condition_variable.notify_one();
     } else {
@@ -68,7 +68,7 @@ template <typename T> void ConcurrentQueue<T>::push(T item) {
 
 template <typename T> T ConcurrentQueue<T>::pop() {
     thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
-	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
+    while (queue.empty())
         condition_variable.wait(lock);
     T item = queue.front();
     queue.pop();

@@ -35,25 +35,25 @@ ThreadManager::ThreadManager()
 ThreadManager::~ThreadManager() {}
 
 void ThreadManager::addWork(const renderer::RenderWork &work) {
-	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
+    thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
 	work_queue.push(work);
 }
 
 void ThreadManager::addExtraWork(const renderer::RenderWork &work) {
-	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
+    thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
 	work_extra_queue.push(work);
 	condition_wait_jobs.notify_one();
 }
 
 void ThreadManager::setFinished() {
-	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
+    thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
 	this->finished = true;
 	condition_wait_jobs.notify_all();
 	condition_wait_results.notify_all();
 }
 
 bool ThreadManager::getWork(renderer::RenderWork &work) {
-	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
+    thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
 	while (!finished && (work_queue.empty() && work_extra_queue.empty()))
 		condition_wait_jobs.wait(lock);
 	if (finished)
@@ -67,7 +67,7 @@ bool ThreadManager::getWork(renderer::RenderWork &work) {
 
 void ThreadManager::workFinished(const renderer::RenderWork &work,
                                  const renderer::RenderWorkResult &result) {
-	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
+    thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
     if (!result_queue.empty())
         result_queue.push(result);
     else {
@@ -77,7 +77,7 @@ void ThreadManager::workFinished(const renderer::RenderWork &work,
 }
 
 bool ThreadManager::getResult(renderer::RenderWorkResult &result) {
-	thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
+    thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
 	while (!finished && result_queue.empty())
 		condition_wait_results.wait(lock);
 	if (finished)
