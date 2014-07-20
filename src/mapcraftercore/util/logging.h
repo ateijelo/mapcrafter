@@ -370,9 +370,9 @@ class Logging {
     std::map<std::string, LogLevel> sinks_verbosity;
     std::map<std::string, bool> sinks_log_progress;
 
-	thread_ns::mutex loggers_mutex, handle_message_mutex;
+    thread_ns::mutex loggers_mutex, handle_message_mutex;
 
-	static thread_ns::mutex instance_mutex;
+    static thread_ns::mutex instance_mutex;
     static std::shared_ptr<Logging> instance;
 
     friend class LogStream;

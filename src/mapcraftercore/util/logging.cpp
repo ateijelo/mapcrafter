@@ -293,7 +293,7 @@ void Logging::reset() {
 }
 
 Logger &Logging::getLogger(const std::string &name) {
-	thread_ns::unique_lock<thread_ns::mutex> lock(instance_mutex);
+    thread_ns::unique_lock<thread_ns::mutex> lock(loggers_mutex);
     if (!loggers.count(name))
         loggers[name].reset(new Logger(name));
     return *loggers.at(name);
@@ -307,7 +307,7 @@ Logging &Logging::getInstance() {
 }
 
 void Logging::updateMaximumVerbosity() {
-	thread_ns::unique_lock<thread_ns::mutex> lock(handle_message_mutex);
+    LogLevel maximum = LogLevel::EMERGENCY;
     for (auto it = sinks.begin(); it != sinks.end(); ++it)
         maximum = std::max(maximum, getSinkVerbosity(it->first));
     maximum_verbosity = maximum;
