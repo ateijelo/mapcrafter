@@ -67,7 +67,7 @@ template <typename T> class Bounds {
  * Data structure to hold information about which blocks should be hidden/shown.
  */
 class BlockMask {
-public:
+  public:
 	/**
 	 * Describes the state of a block with a specific id.
 	 */
@@ -80,13 +80,13 @@ public:
         PARTIALLY_HIDDEN_SHOWN
     };
 
-	BlockMask();
-	~BlockMask();
+    BlockMask();
+    ~BlockMask();
 
 	/**
 	 * Sets all blocks with a specific id to be hidden/shown;
 	 */
-	void set(uint16_t id, bool shown);
+    void set(uint16_t id, bool shown);
 
 	/**
 	 * Sets a block with a specific id/data to be hidden/shown;
@@ -103,12 +103,12 @@ public:
 	/**
 	 * Sets all blocks from id1 to id2 to be hidden/shown.
 	 */
-	void setRange(uint16_t id1, uint16_t id2, bool shown);
+    void setRange(uint16_t id1, uint16_t id2, bool shown);
 
 	/**
 	 * Sets all blocks to be hidden or shown.
 	 */
-	void setAll(bool shown);
+    void setAll(bool shown);
 
 	/**
 	 * Loads the block mask from a string definition. Throws a std::invalid_argument
@@ -150,15 +150,15 @@ public:
 	/**
 	 * Returns whether a block
 	 */
-	bool isHidden(uint16_t id, uint8_t data) const;
+    bool isHidden(uint16_t id, uint8_t data) const;
 
-private:
+  private:
     std::vector<BlockMask::BlockState> block_states;
 
-	// the actual block mask
-	// 65536 entries for the 16 bit long block id
-	// * 16 entries for the 4 bit block data
-	std::bitset<65536 * 16> block_mask;
+    // the actual block mask
+    // 65536 entries for the 16 bit long block id
+    // * 16 entries for the 4 bit block data
+    std::bitset<65536 * 16> block_mask;
 
 	/**
 	 * Updates whether all, none, or some blocks with a specific id are shown/hidden.
@@ -240,7 +240,7 @@ class WorldCrop {
     /**
      * Returns whether this world has a block mask.
      */
-	bool hasBlockMask() const;
+    bool hasBlockMask() const;
 
     /**
 	 * Returns the block mask of this world. Returns a nullptr if !hasBlockMask().
@@ -274,7 +274,7 @@ class WorldCrop {
     // whether to hide unpopulated chunks
     bool crop_unpopulated_chunks;
 
-	// block mask
+    // block mask
 	std::shared_ptr<BlockMask> block_mask;
 };
 
