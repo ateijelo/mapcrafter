@@ -23,21 +23,21 @@
 #include <boost/filesystem.hpp>
 
 #if BOOST_FILESYSTEM_VERSION == 2
-# define OLD_BOOST_FILESYSTEM 42
+#define OLD_BOOST_FILESYSTEM 42
 #endif
 
 #ifndef BOOST_FILESYSTEM_VERSION
-# define OLD_BOOST_FILESYSTEM 42
+#define OLD_BOOST_FILESYSTEM 42
 #endif
 
 #ifdef OLD_BOOST_FILESYSTEM
-# define BOOST_FS_FILENAME(p) (p).filename()
-# define BOOST_FS_ABSOLUTE(p, b) fs::complete((p), (b))
-# define BOOST_FS_ABSOLUTE1(p) fs::complete((p))
+#define BOOST_FS_FILENAME(p) (p).filename()
+#define BOOST_FS_ABSOLUTE(p, b) fs::complete((p), (b))
+#define BOOST_FS_ABSOLUTE1(p) fs::complete((p))
 #else
-# define BOOST_FS_FILENAME(p) (p).filename().string()
-# define BOOST_FS_ABSOLUTE(p, b) fs::absolute((p), (b))
-# define BOOST_FS_ABSOLUTE1(p) fs::absolute((p))
+#define BOOST_FS_FILENAME(p) (p).filename().string()
+#define BOOST_FS_ABSOLUTE(p, b) fs::absolute((p), (b))
+#define BOOST_FS_ABSOLUTE1(p) fs::absolute((p))
 #endif
 
 #endif /* COMPAT_BOOST_H_ */
