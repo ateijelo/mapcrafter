@@ -37,7 +37,7 @@ BlockMask::~BlockMask() {}
 
 void BlockMask::set(uint16_t id, bool shown) {
     for (size_t i = 0; i < 16; i++)
-		block_mask[16 * id + i] = shown;
+        block_mask[16 * id + i] = shown;
     updateBlockState(id);
 }
 
@@ -57,16 +57,16 @@ void BlockMask::set(uint16_t id, uint8_t data, uint8_t bitmask, bool shown) {
 }
 
 void BlockMask::setRange(uint16_t id1, uint16_t id2, bool shown) {
-	for (size_t id = id1; id <= id2; id++)
+    for (size_t id = id1; id <= id2; id++)
         set(id, shown);
 }
 
 void BlockMask::setAll(bool shown) {
     if (shown) {
-		block_mask.set();
+        block_mask.set();
         std::fill(block_states.begin(), block_states.end(), BlockState::COMPLETELY_SHOWN);
     } else {
-		block_mask.reset();
+        block_mask.reset();
         std::fill(block_states.begin(), block_states.end(), BlockState::COMPLETELY_HIDDEN);
     }
 }
@@ -135,7 +135,7 @@ const BlockMask::BlockState &BlockMask::getBlockState(uint16_t id) const {
 bool BlockMask::isHidden(uint16_t id, uint8_t data) const {
     if (data >= 16)
         return false;
-	return !block_mask[16 * id + data];
+    return !block_mask[16 * id + data];
 }
 
 void BlockMask::updateBlockState(uint16_t id) {
