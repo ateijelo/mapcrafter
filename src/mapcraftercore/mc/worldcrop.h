@@ -275,7 +275,7 @@ class WorldCrop {
     bool crop_unpopulated_chunks;
 
     // block mask
-	std::shared_ptr<BlockMask> block_mask;
+    std::shared_ptr<BlockMask> block_mask;
 };
 
 template <typename T> Bounds<T>::Bounds() : min_set(false), max_set(false) {}
