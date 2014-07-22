@@ -50,10 +50,10 @@ void BlockMask::set(uint16_t id, uint8_t data, bool shown) {
 
 void BlockMask::set(uint16_t id, uint8_t data, uint8_t bitmask, bool shown) {
 	// iterate through every possible block data values and check if (i % bitmask) == data
-	for (uint8_t i = 0; i < 16; i++)
+    for (uint8_t i = 0; i < 16; i++)
         if ((i & bitmask) == data)
-			block_mask[16 * id + i] = shown;
-	updateBlockState(id);
+            block_mask[16 * id + i] = shown;
+    updateBlockState(id);
 }
 
 void BlockMask::setRange(uint16_t id1, uint16_t id2, bool shown) {
@@ -79,7 +79,7 @@ void BlockMask::loadFromStringDefinition(const std::string& definition) {
     while (ss >> group) {
         // whether this group is to be shown/hidden
         bool shown = group[0] != '!';
-		if (!shown)
+        if (!shown)
             group = group.substr(1);
         // just try to convert parts of this block group
         // throw another exception with an error message in case anything is invalid
@@ -124,8 +124,8 @@ void BlockMask::loadFromStringDefinition(const std::string& definition) {
         } catch (std::invalid_argument &exception) {
             throw std::invalid_argument("Invalid block group '" + group + "' (" + exception.what() +
                                         ")");
-		}
-	}
+        }
+    }
 }
 
 const BlockMask::BlockState& BlockMask::getBlockState(uint16_t id) const {

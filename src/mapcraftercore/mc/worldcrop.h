@@ -68,15 +68,15 @@ template <typename T> class Bounds {
  */
 class BlockMask {
   public:
-	/**
-	 * Describes the state of a block with a specific id.
-	 */
+    /**
+     * Describes the state of a block with a specific id.
+     */
     enum BlockState {
-		// all blocks with this id are hidden, independent of the block data
+        // all blocks with this id are hidden, independent of the block data
         COMPLETELY_HIDDEN,
-		// all blocks with this id are shown, also independent of the block data
+        // all blocks with this id are shown, also independent of the block data
         COMPLETELY_SHOWN,
-		// some block with this id are hidden, some are shown, depending of the block data
+        // some block with this id are hidden, some are shown, depending of the block data
         PARTIALLY_HIDDEN_SHOWN
     };
 
@@ -91,14 +91,14 @@ class BlockMask {
 	/**
 	 * Sets a block with a specific id/data to be hidden/shown;
 	 */
-	void set(uint16_t id, uint8_t data, bool shown);
+    void set(uint16_t id, uint8_t data, bool shown);
 
 	/**
 	 * Sets all blocks with specific id and data values to be hidden/shown.
      * Using a bitmask all blocks with data values (block data value & bitmask) == specified data
 	 * are set to be shown/hidden.
 	 */
-	void set(uint16_t id, uint8_t data, uint8_t bitmask, bool shown);
+    void set(uint16_t id, uint8_t data, uint8_t bitmask, bool shown);
 
 	/**
 	 * Sets all blocks from id1 to id2 to be hidden/shown.
