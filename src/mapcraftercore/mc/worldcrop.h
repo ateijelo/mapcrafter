@@ -72,14 +72,14 @@ public:
 	/**
 	 * Describes the state of a block with a specific id.
 	 */
-	enum BlockState {
+    enum BlockState {
 		// all blocks with this id are hidden, independent of the block data
         COMPLETELY_HIDDEN,
 		// all blocks with this id are shown, also independent of the block data
         COMPLETELY_SHOWN,
 		// some block with this id are hidden, some are shown, depending of the block data
-		PARTIALLY_HIDDEN_SHOWN
-	};
+        PARTIALLY_HIDDEN_SHOWN
+    };
 
 	BlockMask();
 	~BlockMask();
@@ -154,7 +154,7 @@ public:
 	bool isHidden(uint16_t id, uint8_t data) const;
 
 private:
-	std::vector<BlockMask::BlockState> block_states;
+    std::vector<BlockMask::BlockState> block_states;
 
 	// the actual block mask
 	// 65536 entries for the 16 bit long block id
@@ -164,7 +164,7 @@ private:
 	/**
 	 * Updates whether all, none, or some blocks with a specific id are shown/hidden.
 	 */
-	void updateBlockState(uint16_t id);
+    void updateBlockState(uint16_t id);
 };
 
 /**

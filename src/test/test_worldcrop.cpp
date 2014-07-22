@@ -128,27 +128,27 @@ BOOST_AUTO_TEST_CASE(world_crop_crop_circular) {
 }
 
 BOOST_AUTO_TEST_CASE(world_crop_block_mask) {
-	mc::BlockMask mask;
-	mask.setAll(true);
-	mask.setRange(0, 2, false);
-	mask.set(3, 1, false);
-	mask.set(4, 2, false);
-	mask.set(4, 2, true);
+    mc::BlockMask mask;
+    mask.setAll(true);
+    mask.setRange(0, 2, false);
+    mask.set(3, 1, false);
+    mask.set(4, 2, false);
+    mask.set(4, 2, true);
     mask.set(5, 3, util::binary<11>::value, false);
 
     BOOST_CHECK_EQUAL(mask.getBlockState(0), mc::BlockMask::BlockState::COMPLETELY_HIDDEN);
     BOOST_CHECK_EQUAL(mask.getBlockState(1), mc::BlockMask::BlockState::COMPLETELY_HIDDEN);
     BOOST_CHECK_EQUAL(mask.getBlockState(2), mc::BlockMask::BlockState::COMPLETELY_HIDDEN);
-	BOOST_CHECK(mask.isHidden(0, 3));
-	BOOST_CHECK(mask.isHidden(1, 2));
-	BOOST_CHECK(mask.isHidden(2, 5));
+    BOOST_CHECK(mask.isHidden(0, 3));
+    BOOST_CHECK(mask.isHidden(1, 2));
+    BOOST_CHECK(mask.isHidden(2, 5));
 
-	BOOST_CHECK_EQUAL(mask.getBlockState(3), mc::BlockMask::BlockState::PARTIALLY_HIDDEN_SHOWN);
-	BOOST_CHECK(mask.isHidden(3, 1));
-	BOOST_CHECK(!mask.isHidden(3, 3));
+    BOOST_CHECK_EQUAL(mask.getBlockState(3), mc::BlockMask::BlockState::PARTIALLY_HIDDEN_SHOWN);
+    BOOST_CHECK(mask.isHidden(3, 1));
+    BOOST_CHECK(!mask.isHidden(3, 3));
 
     BOOST_CHECK_EQUAL(mask.getBlockState(4), mc::BlockMask::BlockState::COMPLETELY_SHOWN);
-	BOOST_CHECK(!mask.isHidden(4, 2));
+    BOOST_CHECK(!mask.isHidden(4, 2));
 
     BOOST_CHECK_EQUAL(mask.getBlockState(5), mc::BlockMask::BlockState::PARTIALLY_HIDDEN_SHOWN);
     BOOST_CHECK(mask.isHidden(5, 3));
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(world_crop_block_mask) {
     BOOST_CHECK(!mask.isHidden(5, 2 | util::binary<1100>::value));
 
     BOOST_CHECK_EQUAL(mask.getBlockState(42), mc::BlockMask::BlockState::COMPLETELY_SHOWN);
-	BOOST_CHECK(!mask.isHidden(42, 0));
+    BOOST_CHECK(!mask.isHidden(42, 0));
 
 	BOOST_CHECK_NO_THROW(mask.loadFromStringDefinition("!* 1 3:2 7-9"));
 	BOOST_CHECK_NO_THROW(mask.loadFromStringDefinition("!17:3b3 !18:3b3"));
