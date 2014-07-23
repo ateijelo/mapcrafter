@@ -302,9 +302,9 @@ void WorldCrop::loadBlockMask(const std::string &definition) {
     try {
         block_mask->loadFromStringDefinition(definition);
     } catch (std::invalid_argument &exception) {
-		block_mask.reset();
+        block_mask.reset();
         throw exception;
-	}
+    }
 }
 
 }
