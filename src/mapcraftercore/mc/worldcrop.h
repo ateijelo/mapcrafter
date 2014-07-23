@@ -238,19 +238,19 @@ public:
     bool hasCropUnpopulatedChunks() const;
     void setCropUnpopulatedChunks(bool crop);
 
-	/**
-	 * Returns whether this world has a block mask.
-	 */
+    /**
+     * Returns whether this world has a block mask.
+     */
 	bool hasBlockMask() const;
 
-	/**
+    /**
 	 * Returns the block mask of this world. Returns a nullptr if !hasBlockMask().
-	 */
+     */
 	const BlockMask* getBlockMask() const;
 
-	/**
+    /**
 	 * Loads the block mask from a string definition. See BlockMask::loadFromString.
-	 */
+     */
 	void loadBlockMask(const std::string& definition);
 
 private:

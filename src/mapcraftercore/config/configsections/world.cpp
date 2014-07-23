@@ -222,14 +222,14 @@ void WorldSection::postParse(const INIConfigSection &section, ValidationList &va
 
     world_crop.setCropUnpopulatedChunks(crop_unpopulated_chunks.getValue());
     if (block_mask.isLoaded()) {
-	if (block_mask.isLoaded()) {
+        try {
 		try {
         } catch (std::invalid_argument &exception) {
 		} catch (std::invalid_argument& exception) {
 			validation.error(std::string("There is a problem parsing the block mask: ")
 				+ exception.what());
 		}
-	}
+
 
     if (!isGlobal()) {
         input_dir.require(validation, "You have to specify an input directory ('input_dir')!");

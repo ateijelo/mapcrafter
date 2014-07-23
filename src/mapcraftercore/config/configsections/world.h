@@ -86,7 +86,7 @@ class WorldSection : public ConfigSection {
     Field<int> center_x, center_z, radius;
 
     Field<bool> crop_unpopulated_chunks;
-	Field<std::string> block_mask;
+    Field<std::string> block_mask;
 
     mc::WorldCrop world_crop;
 };
