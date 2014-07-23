@@ -125,7 +125,7 @@ void WorldSection::preParse(const INIConfigSection &section, ValidationList &val
     default_rotation.setDefault(-1);
     sea_level.setDefault(64);
 
-	crop_unpopulated_chunks.setDefault(false);
+    crop_unpopulated_chunks.setDefault(false);
 }
 
 bool WorldSection::parseField(const std::string key, const std::string value,
@@ -182,8 +182,8 @@ bool WorldSection::parseField(const std::string key, const std::string value,
     else if (key == "crop_radius")
         radius.load(key, value, validation);
 
-	else if (key == "crop_unpopulated_chunks")
-		crop_unpopulated_chunks.load(key, value, validation);
+    else if (key == "crop_unpopulated_chunks")
+        crop_unpopulated_chunks.load(key, value, validation);
 	else if (key == "block_mask")
 		block_mask.load(key, value, validation);
     else

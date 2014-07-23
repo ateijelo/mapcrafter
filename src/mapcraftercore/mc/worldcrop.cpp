@@ -155,7 +155,11 @@ void BlockMask::updateBlockState(uint16_t id) {
 }
 
 WorldCrop::WorldCrop()
-	: type(RECTANGULAR), radius(0), crop_unpopulated_chunks(true) {
+        block_states[id] = BlockState::COMPLETELY_SHOWN;
+    else if (block.none())
+        block_states[id] = BlockState::COMPLETELY_HIDDEN;
+    else
+        block_states[id] = BlockState::PARTIALLY_HIDDEN_SHOWN;
 }
 
 WorldCrop::~WorldCrop() {
@@ -282,7 +286,7 @@ bool WorldCrop::hasCropUnpopulatedChunks() const {
 }
 
 void WorldCrop::setCropUnpopulatedChunks(bool crop_unpopulated_chunks) {
-	this->crop_unpopulated_chunks = crop_unpopulated_chunks;
+    this->crop_unpopulated_chunks = crop_unpopulated_chunks;
 }
 
 bool WorldCrop::hasBlockMask() const {

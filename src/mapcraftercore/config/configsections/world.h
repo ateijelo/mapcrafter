@@ -58,8 +58,8 @@ class WorldSection : public ConfigSection {
     int getDefaultRotation() const;
     int getSeaLevel() const;
 
-	bool hasCropUnpopulatedChunks() const;
-	std::string getBlockMask() const;
+    bool hasCropUnpopulatedChunks() const;
+    std::string getBlockMask() const;
 
     const mc::WorldCrop getWorldCrop() const;
     bool needsWorldCentering() const;
@@ -85,7 +85,7 @@ class WorldSection : public ConfigSection {
     Field<int> min_x, max_x, min_z, max_z;
     Field<int> center_x, center_z, radius;
 
-	Field<bool> crop_unpopulated_chunks;
+    Field<bool> crop_unpopulated_chunks;
 	Field<std::string> block_mask;
 
     mc::WorldCrop world_crop;

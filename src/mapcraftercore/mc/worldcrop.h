@@ -232,11 +232,11 @@ public:
 	 */
 	bool isBlockContainedY(const mc::BlockPos& block) const;
 
-	/**
-	 * Returns/sets whether unpopulated chunks should be cropped.
-	 */
-	bool hasCropUnpopulatedChunks() const;
-	void setCropUnpopulatedChunks(bool crop);
+    /**
+     * Returns/sets whether unpopulated chunks should be cropped.
+     */
+    bool hasCropUnpopulatedChunks() const;
+    void setCropUnpopulatedChunks(bool crop);
 
 	/**
 	 * Returns whether this world has a block mask.
@@ -273,7 +273,7 @@ private:
 	long radius;
 
 	// whether to hide unpopulated chunks
-	bool crop_unpopulated_chunks;
+    bool crop_unpopulated_chunks;
 
 	// block mask
 	std::shared_ptr<BlockMask> block_mask;
