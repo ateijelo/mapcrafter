@@ -83,37 +83,37 @@ class BlockMask {
     BlockMask();
     ~BlockMask();
 
-	/**
-	 * Sets all blocks with a specific id to be hidden/shown;
-	 */
+    /**
+     * Sets all blocks with a specific id to be hidden/shown;
+     */
     void set(uint16_t id, bool shown);
 
-	/**
-	 * Sets a block with a specific id/data to be hidden/shown;
-	 */
+    /**
+     * Sets a block with a specific id/data to be hidden/shown;
+     */
     void set(uint16_t id, uint8_t data, bool shown);
 
-	/**
-	 * Sets all blocks with specific id and data values to be hidden/shown.
+    /**
+     * Sets all blocks with specific id and data values to be hidden/shown.
      * Using a bitmask all blocks with data values (block data value & bitmask) == specified data
-	 * are set to be shown/hidden.
-	 */
+     * are set to be shown/hidden.
+     */
     void set(uint16_t id, uint8_t data, uint8_t bitmask, bool shown);
 
-	/**
-	 * Sets all blocks from id1 to id2 to be hidden/shown.
-	 */
+    /**
+     * Sets all blocks from id1 to id2 to be hidden/shown.
+     */
     void setRange(uint16_t id1, uint16_t id2, bool shown);
 
-	/**
-	 * Sets all blocks to be hidden or shown.
-	 */
+    /**
+     * Sets all blocks to be hidden or shown.
+     */
     void setAll(bool shown);
 
-	/**
+    /**
 	 * Loads the block mask from a string definition. Throws a std::invalid_argument
 	 * exception if the supplied block mask definition is invalid.
-	 *
+     *
 	 * The block mask definition is a space separated list of block groups you want to
 	 * hide/show. If a '!' precedes a block group, all blocks of this block group are
 	 * hidden, otherwise they are shown. Per default, all blocks are shown.
@@ -139,17 +139,17 @@ class BlockMask {
      *                        other bits are used otherwise -> ignoring all those bits)
      *
 	 * TL;DR (except the space at the end): (!?(\*|\d+(:\d+(b\d+)?)?|\d+-\d+) )+
-	 */
+     */
 	void loadFromStringDefinition(const std::string& definition);
 
-	/**
-	 * Returns whether all, none, or some blocks with a specific id are hidden/shown.
-	 */
+    /**
+     * Returns whether all, none, or some blocks with a specific id are hidden/shown.
+     */
 	const BlockMask::BlockState& getBlockState(uint16_t id) const;
 
-	/**
-	 * Returns whether a block
-	 */
+    /**
+     * Returns whether a block
+     */
     bool isHidden(uint16_t id, uint8_t data) const;
 
   private:
@@ -160,9 +160,9 @@ class BlockMask {
     // * 16 entries for the 4 bit block data
     std::bitset<65536 * 16> block_mask;
 
-	/**
-	 * Updates whether all, none, or some blocks with a specific id are shown/hidden.
-	 */
+    /**
+     * Updates whether all, none, or some blocks with a specific id are shown/hidden.
+     */
     void updateBlockState(uint16_t id);
 };
 

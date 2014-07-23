@@ -42,14 +42,14 @@ void BlockMask::set(uint16_t id, bool shown) {
 }
 
 void BlockMask::set(uint16_t id, uint8_t data, bool shown) {
-	if (data >= 16)
-		return;
-	block_mask[16 * id + data] = shown;
+    if (data >= 16)
+        return;
+    block_mask[16 * id + data] = shown;
     updateBlockState(id);
 }
 
 void BlockMask::set(uint16_t id, uint8_t data, uint8_t bitmask, bool shown) {
-	// iterate through every possible block data values and check if (i % bitmask) == data
+    // iterate through every possible block data values and check if (i % bitmask) == data
     for (uint8_t i = 0; i < 16; i++)
         if ((i & bitmask) == data)
             block_mask[16 * id + i] = shown;
@@ -133,13 +133,13 @@ const BlockMask::BlockState& BlockMask::getBlockState(uint16_t id) const {
 }
 
 bool BlockMask::isHidden(uint16_t id, uint8_t data) const {
-	if (data >= 16)
+    if (data >= 16)
         return false;
 	return !block_mask[16 * id + data];
 }
 
 void BlockMask::updateBlockState(uint16_t id) {
-	// copy state of blocks to separate bitset to make checking them all easier
+    // copy state of blocks to separate bitset to make checking them all easier
     std::bitset<16> block;
     for (size_t i = 0; i < 16; i++)
 		block[i] = block_mask[16 * id + i];
