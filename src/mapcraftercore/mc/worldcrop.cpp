@@ -279,9 +279,7 @@ bool WorldCrop::hasBlockMask() const {
     return false;
 }
 
-const BlockMask* WorldCrop::getBlockMask() const {
-	return block_mask.get();
-}
+const BlockMask *WorldCrop::getBlockMask() const { return block_mask.get(); }
 
 void WorldCrop::loadBlockMask(const std::string &definition) {
     block_mask.reset(new BlockMask);
