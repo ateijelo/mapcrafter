@@ -28,9 +28,9 @@ namespace mapcrafter {
 namespace mc {
 
 BlockMask::BlockMask() {
-	// set all blocks to be shown by default
+    // set all blocks to be shown by default
     block_states.resize(65536, BlockState::COMPLETELY_SHOWN);
-	block_mask.set();
+    block_mask.set();
 }
 
 BlockMask::~BlockMask() {}
