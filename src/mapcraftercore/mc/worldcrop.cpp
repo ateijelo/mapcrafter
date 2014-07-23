@@ -267,10 +267,7 @@ bool WorldCrop::isBlockContainedY(const mc::BlockPos &block) const {
     return bounds_y.contains(block.y);
 }
 
-
-bool WorldCrop::hasCropUnpopulatedChunks() const {
-	return crop_unpopulated_chunks;
-}
+bool WorldCrop::hasCropUnpopulatedChunks() const { return crop_unpopulated_chunks; }
 
 void WorldCrop::setCropUnpopulatedChunks(bool crop_unpopulated_chunks) {
     this->crop_unpopulated_chunks = crop_unpopulated_chunks;
