@@ -109,9 +109,7 @@ class ConfigSection {
     // name of this section
     std::string section_name;
 
-	std::string section_name;
-
-	ValidationList validation;
+    ValidationList validation;
 };
 
 std::ostream &operator<<(std::ostream &out, const ConfigSection &section);
