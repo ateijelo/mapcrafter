@@ -61,8 +61,8 @@ public:
 	std::string getSectionName() const;
 
 	/**
-	 * Parses the given configurations section and returns false if there was a critical
-	 * parsing/validation error.
+     * Parses the given configurations section and returns false if there was a critical
+     * parsing/validation error.
 	 */
 	ValidationList parse(const INIConfigSection& section);
 

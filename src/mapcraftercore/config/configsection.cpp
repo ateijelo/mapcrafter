@@ -67,7 +67,7 @@ ValidationList ConfigSection::parse(const INIConfigSection& section) {
 
 	postParse(section, validation);
 
-	return validation;
+    return validation;
 }
 
 void ConfigSection::preParse(const INIConfigSection& section,
