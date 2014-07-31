@@ -61,13 +61,7 @@ void ValidationList::error(const std::string &message) {
     messages.push_back(ValidationMessage(ValidationMessage::ERROR, message));
 }
 
-void ValidationList::error(const std::string& message) {
-	messages.push_back(ValidationMessage(ValidationMessage::ERROR, message));
-}
-
-bool ValidationList::isEmpty() const {
-	return messages.size() == 0;
-}
+bool ValidationList::isEmpty() const { return messages.size() == 0; }
 
 bool ValidationList::isCritical() const {
 	for (auto message_it = messages.begin(); message_it != messages.end(); ++message_it)
