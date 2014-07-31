@@ -112,7 +112,7 @@ public:
 	/**
 	 * Returns whether this validation list is empty, i.e. does not contain any messages.
 	 */
-	bool isEmpty() const;
+    bool isEmpty() const;
 
 	/**
 	 * Returns whether this validation list is critical, i.e. contains at least one
@@ -148,14 +148,14 @@ public:
 	/**
 	 * Returns all validation sections.
 	 */
-	const std::vector<std::pair<std::string, ValidationList>>& getSections() const;
+    const std::vector<std::pair<std::string, ValidationList>> &getSections() const;
 
 	/**
 	 * Returns if this validation map is empty, i.e. does not contain any validation
 	 * sections or if all validation sections are also empty
 	 * (= no validation messages at all).
 	 */
-	bool isEmpty() const;
+    bool isEmpty() const;
 
 	/**
 	 * Returns if this validation map contains a critical (error-) validation message.
@@ -170,9 +170,9 @@ public:
 private:
 	// stores indices for validation sections in sections array
 	// (section name -> index in array)
-	std::map<std::string, int> sections_order;
+    std::map<std::string, int> sections_order;
 	// validation sections with name -> validation section
-	std::vector<std::pair<std::string, ValidationList>> sections;
+    std::vector<std::pair<std::string, ValidationList>> sections;
 };
 
 template <typename T>

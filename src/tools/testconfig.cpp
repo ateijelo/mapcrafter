@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 	config::MapcrafterConfig parser;
     config::ValidationMap validation = parser.parseFile(argv[1]);
 
-	if (!validation.isEmpty()) {
+    if (!validation.isEmpty()) {
         if (validation.isCritical())
 			LOG(FATAL) << "Your configuration file is invalid!";
         else

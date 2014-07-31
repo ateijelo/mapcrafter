@@ -202,7 +202,7 @@ int main(int argc, char **argv) {
     config::ValidationMap validation = config.parseFile(config_file);
 
     if (!validation.isEmpty()) {
-	if (!validation.isEmpty()) {
+        if (validation.isCritical())
             LOG(FATAL) << "Your configuration file is invalid!";
 			LOG(FATAL) << "Your configuration file is invalid!";
             LOG(WARNING) << "Some notes on your configuration file:";
