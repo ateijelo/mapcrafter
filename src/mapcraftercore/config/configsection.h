@@ -64,7 +64,7 @@ public:
      * Parses the given configurations section and returns false if there was a critical
      * parsing/validation error.
 	 */
-	ValidationList parse(const INIConfigSection& section);
+    ValidationList parse(const INIConfigSection &section);
 
 	/**
 	 * Returns the pretty name of the section.

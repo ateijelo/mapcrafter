@@ -132,14 +132,14 @@ MapcrafterConfig::~MapcrafterConfig() {
 }
 
 ValidationMap MapcrafterConfig::parseFile(const std::string& filename) {
-	ValidationMap validation;
+    ValidationMap validation;
 
 	INIConfig config;
 	try {
 		config.loadFile(filename);
 	} catch (INIConfigError& exception) {
 		validation.section("Configuration file").error(exception.what());
-		return validation;
+        return validation;
 	}
 
 	return parse(config, BOOST_FS_ABSOLUTE1(fs::path(filename)).parent_path());

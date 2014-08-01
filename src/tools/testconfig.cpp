@@ -34,10 +34,10 @@ int main(int argc, char **argv) {
 	config::ValidationMap validation = parser.parseFile(argv[1]);
 
 	if (!validation.isEmpty()) {
-		if (validation.isCritical())
+        if (validation.isCritical())
 			LOG(FATAL) << "Your configuration file is invalid!";
-		else
-			LOG(WARNING) << "Some notes on your configuration file:";
+        else
+            LOG(WARNING) << "Some notes on your configuration file:";
 		validation.log();
 		LOG(WARNING) << "Please read the documentation about the new configuration file format.";
 	}

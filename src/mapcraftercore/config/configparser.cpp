@@ -43,7 +43,9 @@ bool ConfigParser::validate() {
                 .info("Global sections do not use the plural "
                       "section name anymore, i.e. it is '[global:section]' instead of "
                       "'[global:sections]'.");
-	return !validation.isCritical();
+    }
+
+    return !validation.isCritical();
 }
 
 const ValidationMap& ConfigParser::getValidation() const {
