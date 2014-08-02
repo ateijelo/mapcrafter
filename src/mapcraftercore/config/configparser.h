@@ -94,10 +94,10 @@ class ConfigParser {
   private:
     // the configuration to be parsed/validated
     INIConfig config;
-	// the configuration to be parsed/validated
+
     // validation messages resulting of validation
     ValidationMap validation;
-	// validation messages resulting of validation
+
     // set of parsed section types
 
 	// set of parsed section types
@@ -117,45 +117,45 @@ void ConfigParser::parseSections(std::vector<Section> &sections, const std::stri
                                  SectionFactory section_factory) {
     parsed_section_types.insert(type);
 
-	// create global section object and parse it if a global section exists in config
+    // create global section object and parse it if a global section exists in config
     Section section_global = section_factory();
     section_global.setGlobal(true);
     if (config.hasSection("global", type)) {
         ValidationList global_validation = section_global.parse(config.getSection("global", type));
 		if (!global_validation.isEmpty())
 			validation.section(section_global.getPrettyName()) = global_validation;
-		// stop parsing here if global section contains critical errors
-		// parsing also the other sections would lead to redundant error messages
+        // stop parsing here if global section contains critical errors
+        // parsing also the other sections would lead to redundant error messages
         if (global_validation.isCritical())
             return;
     }
 
-	// set of used section names, to make sure section names aren't used multiple types
+    // set of used section names, to make sure section names aren't used multiple types
     std::set<std::string> parsed_sections_names;
 
-	// go through all config sections with the specified type and try to parse it
+    // go through all config sections with the specified type and try to parse it
     auto config_sections = config.getSections();
     for (auto config_section_it = config_sections.begin();
          config_section_it != config_sections.end(); ++config_section_it) {
         if (config_section_it->getType() != type)
             continue;
 
-		// create section object as copy from global section object
+        // create section object as copy from global section object
         Section section = section_global;
         section.setGlobal(false);
-		// and parse section
+        // and parse section
         ValidationList section_validation = section.parse(*config_section_it);
 
-		// make sure section name is not in use already, otherwise add to parsed sections
+        // make sure section name is not in use already, otherwise add to parsed sections
         if (parsed_sections_names.count(config_section_it->getName())) {
             section_validation.error(util::capitalize(type) + " name '" +
                                      config_section_it->getName() + "' already used!");
-		} else {
-			parsed_sections_names.insert(config_section_it->getName());
+        } else {
+            parsed_sections_names.insert(config_section_it->getName());
             sections.push_back(section);
-		}
+        }
 
-		// add validation messages (if any) to global validation object
+        // add validation messages (if any) to global validation object
 		if (!section_validation.isEmpty())
 			validation.section(section.getPrettyName()) = section_validation;
     }
