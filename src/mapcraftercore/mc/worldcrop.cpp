@@ -274,9 +274,9 @@ void WorldCrop::setCropUnpopulatedChunks(bool crop_unpopulated_chunks) {
 }
 
 bool WorldCrop::hasBlockMask() const {
-	if (block_mask)
-		return true;
-	return false;
+    if (block_mask)
+        return true;
+    return false;
 }
 
 const BlockMask* WorldCrop::getBlockMask() const {
