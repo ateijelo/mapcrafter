@@ -123,7 +123,7 @@ fs::path findExecutablePath() {
 }
 
 fs::path findExecutableMapcrafterDir(fs::path executable) {
-	std::string filename = BOOST_FS_FILENAME(executable);
+    std::string filename = BOOST_FS_FILENAME(executable);
     // TODO make it independent of name of the tool
     if ((filename == "testconfig" || filename == "mapcrafter_markers" || filename == "test") &&
         BOOST_FS_FILENAME(executable.parent_path()) == "tools")
