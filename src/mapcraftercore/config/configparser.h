@@ -59,28 +59,28 @@ class ConfigParser {
     /**
      * Parses all sections with a specific type and puts the parsed section type objects
      * into the supplied std::vector<Section>.
-	 * into the supplied std::vector<Section>.
+     *
 	 *
 	 * It also parses the global section ([global:<type>], if it exists) and uses it as
-	 * default for the sections. The global section object is created with the supplied
-	 * section factory and all sections are copied from this global section object. The
-	 * section factory is an object that has an operator() which returns a new instance
-	 * of the section type. The default GenericSectionFactory just creates a new instance,
-	 * but you can overwrite this to pass additional options (for example the config
-	 * directory for relative paths) to the section objects.
+     * section factory and all sections are copied from this global section object. The
+     * section factory is an object that has an operator() which returns a new instance
+     * of the section type. The default GenericSectionFactory just creates a new instance,
+     * but you can overwrite this to pass additional options (for example the config
+     * directory for relative paths) to the section objects.
+     */
     template <typename Section, typename SectionFactory = GenericSectionFactory<Section>>
     void parseSections(std::vector<Section> &sections, const std::string &type,
-	void parseSections(std::vector<Section>& sections, const std::string& type,
-			SectionFactory section_factory = GenericSectionFactory<Section>());
+                       SectionFactory section_factory = GenericSectionFactory<Section>());
+
     /**
 	/**
-	 * Same as parseSections(std::vector<Section>& sections... but puts the parsed
-	 * sections into a map with section name -> section object.
+     * sections into a map with section name -> section object.
+     */
 	 */
     void parseSections(std::map<std::string, Section> &sections, const std::string &type,
-	void parseSections(std::map<std::string, Section>& sections,
-			const std::string& type,
-			SectionFactory section_factory = GenericSectionFactory<Section>());
+                       SectionFactory section_factory = GenericSectionFactory<Section>());
+
+    /**
 
 	/**
 	 * Does the remaining validation work after parsing the sections, for example add
@@ -113,12 +113,12 @@ template <typename T> void ConfigParser::parseRootSection(T &section) {
 }
 
 template <typename Section, typename SectionFactory>
-void ConfigParser::parseSections(std::vector<Section>& sections,
-		const std::string& type, SectionFactory section_factory) {
+void ConfigParser::parseSections(std::vector<Section> &sections, const std::string &type,
+                                 SectionFactory section_factory) {
     parsed_section_types.insert(type);
 
 	// create global section object and parse it if a global section exists in config
-	Section section_global = section_factory();
+    Section section_global = section_factory();
     section_global.setGlobal(true);
     if (config.hasSection("global", type)) {
         ValidationList global_validation = section_global.parse(config.getSection("global", type));
@@ -141,7 +141,7 @@ void ConfigParser::parseSections(std::vector<Section>& sections,
             continue;
 
 		// create section object as copy from global section object
-		Section section = section_global;
+        Section section = section_global;
         section.setGlobal(false);
 		// and parse section
         ValidationList section_validation = section.parse(*config_section_it);
@@ -162,10 +162,10 @@ void ConfigParser::parseSections(std::vector<Section>& sections,
 }
 
 template <typename Section, typename SectionFactory>
-void ConfigParser::parseSections(std::map<std::string, Section>& sections,
-		const std::string& type, SectionFactory section_factory) {
-	std::vector<Section> sections_list;
-	parseSections(sections_list, type, section_factory);
+void ConfigParser::parseSections(std::map<std::string, Section> &sections, const std::string &type,
+                                 SectionFactory section_factory) {
+    std::vector<Section> sections_list;
+    parseSections(sections_list, type, section_factory);
     for (auto it = sections_list.begin(); it != sections_list.end(); ++it)
         sections[it->getSectionName()] = *it;
 }
