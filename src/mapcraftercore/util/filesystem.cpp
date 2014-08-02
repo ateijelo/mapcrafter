@@ -128,28 +128,7 @@ fs::path findExecutableMapcrafterDir(fs::path executable) {
     if ((filename == "testconfig" || filename == "mapcrafter_markers" || filename == "test") &&
         BOOST_FS_FILENAME(executable.parent_path()) == "tools")
         return executable.parent_path().parent_path();
-			BOOST_FS_FILENAME(executable.parent_path()) == "tools")
-		return executable.parent_path().parent_path();
-	return executable.parent_path();
-}
-
-PathList findResourceDirs(const fs::path& executable) {
-	fs::path mapcrafter_dir = findExecutableMapcrafterDir(executable);
-	PathList resources = {
-		mapcrafter_dir.parent_path() / "share" / "mapcrafter",
-		mapcrafter_dir / "data",
-	};
-	fs::path home = findHomeDir();
-	if (!home.empty())
-		resources.insert(resources.begin(), home / ".mapcrafter");
-
-	for (PathList::iterator it = resources.begin(); it != resources.end(); ) {
-		if (!fs::is_directory(*it))
-			resources.erase(it);
-		else
-			++it;
-	}
-	return resources;
+    return executable.parent_path();
 }
 
 PathList findTemplateDirs(const fs::path& executable) {
