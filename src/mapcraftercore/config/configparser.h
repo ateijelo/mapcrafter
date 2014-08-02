@@ -99,9 +99,7 @@ class ConfigParser {
     ValidationMap validation;
 
     // set of parsed section types
-
-	// set of parsed section types
-	std::set<std::string> parsed_section_types;
+    std::set<std::string> parsed_section_types;
 };
 
 template <typename T> T GenericSectionFactory<T>::operator()() const { return T(); }
