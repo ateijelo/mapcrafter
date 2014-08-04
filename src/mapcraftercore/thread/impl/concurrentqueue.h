@@ -42,13 +42,9 @@ template <typename T> class ConcurrentQueue {
     thread_ns::condition_variable condition_variable;
 };
 
-template <typename T>
-ConcurrentQueue<T>::ConcurrentQueue() {
-}
+template <typename T> ConcurrentQueue<T>::ConcurrentQueue() {}
 
-template <typename T>
-ConcurrentQueue<T>::~ConcurrentQueue() {
-}
+template <typename T> ConcurrentQueue<T>::~ConcurrentQueue() {}
 
 template <typename T> bool ConcurrentQueue<T>::empty() {
     thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
