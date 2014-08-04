@@ -135,13 +135,7 @@ bool World::getRegion(const RegionPos &pos, RegionFile &region) const {
     region = RegionFile(it->second);
     region.setRotation(rotation);
     region.setWorldCrop(world_crop);
-	RegionMap::const_iterator it = region_files.find(pos);
-	if (it == region_files.end())
-		return false;
-	region = RegionFile(it->second);
-	region.setRotation(rotation);
-	region.setWorldCrop(world_crop);
-	return true;
+    return true;
 }
 
 int World::getMinecraftVersion() const {
