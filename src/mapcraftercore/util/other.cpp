@@ -93,18 +93,12 @@ template <> std::string str<bool>(bool value) { return value ? "true" : "false";
  * Overwrites the string stream solution for string -> string conversion.
  * Why? Converting the string 'This is a test.' would just result in 'This'
  */
-template <>
-std::string as<std::string>(const std::string& from) {
-	return from;
-}
+template <> std::string as<std::string>(const std::string &from) { return from; }
 
 /**
  * Same thing with path -> string conversion.
  */
-template <>
-fs::path as<fs::path>(const std::string& from) {
-	return fs::path(from);
-}
+template <> fs::path as<fs::path>(const std::string &from) { return fs::path(from); }
 
 template <> bool as<bool>(const std::string &from) {
 bool as<bool>(const std::string& from) {
