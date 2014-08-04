@@ -190,19 +190,11 @@ Image<Pixel>::Image(int width, int height) : width(width), height(height) {
     data.resize(width * height);
 }
 
-template <typename Pixel>
-Image<Pixel>::~Image() {
-}
+template <typename Pixel> Image<Pixel>::~Image() {}
 
-template <typename Pixel>
-int Image<Pixel>::getWidth() const {
-	return width;
-}
+template <typename Pixel> int Image<Pixel>::getWidth() const { return width; }
 
-template <typename Pixel>
-int Image<Pixel>::getHeight() const {
-	return height;
-}
+template <typename Pixel> int Image<Pixel>::getHeight() const { return height; }
 
 template <typename Pixel> Pixel Image<Pixel>::getPixel(int x, int y) const {
     if (x >= width || x < 0 || y >= height || y < 0)
@@ -221,10 +213,7 @@ inline const Pixel& Image<Pixel>::pixel(int x, int y) const {
 	return data[y * width + x];
 }
 
-template <typename Pixel>
-Pixel& Image<Pixel>::pixel(int x, int y) {
-	return data[y * width + x];
-}
+template <typename Pixel> Pixel &Image<Pixel>::pixel(int x, int y) { return data[y * width + x]; }
 
 template <typename Pixel> void Image<Pixel>::setSize(int width, int height) {
     this->width = width;
