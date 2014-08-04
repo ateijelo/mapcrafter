@@ -142,15 +142,7 @@ void BlockMask::updateBlockState(uint16_t id) {
     // copy state of blocks to separate bitset to make checking them all easier
     std::bitset<16> block;
     for (size_t i = 0; i < 16; i++)
-		block[i] = block_mask[16 * id + i];
-
-	if (block.all())
-		block_states[id] = BlockState::COMPLETELY_SHOWN;
-	else if (block.none())
-		block_states[id] = BlockState::COMPLETELY_HIDDEN;
-	else
-		block_states[id] = BlockState::PARTIALLY_HIDDEN_SHOWN;
-}
+        block[i] = block_mask[16 * id + i];
 
 WorldCrop::WorldCrop()
         block_states[id] = BlockState::COMPLETELY_SHOWN;
