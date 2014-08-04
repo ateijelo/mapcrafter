@@ -74,9 +74,9 @@ public:
 	 */
 	enum BlockState {
 		// all blocks with this id are hidden, independent of the block data
-		COMPLETELY_HIDDEN,
+        COMPLETELY_HIDDEN,
 		// all blocks with this id are shown, also independent of the block data
-		COMPLETELY_SHOWN,
+        COMPLETELY_SHOWN,
 		// some block with this id are hidden, some are shown, depending of the block data
 		PARTIALLY_HIDDEN_SHOWN
 	};
@@ -96,7 +96,7 @@ public:
 
 	/**
 	 * Sets all blocks with specific id and data values to be hidden/shown.
-	 * Using a bitmask all blocks with data values (block data value & bitmask) == specified data
+     * Using a bitmask all blocks with data values (block data value & bitmask) == specified data
 	 * are set to be shown/hidden.
 	 */
 	void set(uint16_t id, uint8_t data, uint8_t bitmask, bool shown);
@@ -121,24 +121,24 @@ public:
 	 *
 	 * Possible block groups are:
 	 * - All blocks:
-	 *     '*'
+     *     '*'
 	 * - A single block (independent of block data):
 	 *     '[blockid]'
 	 * - A single block with specific block data:
 	 *     '[blockid]:[blockdata]'
 	 * - A range of blocks:
 	 *     '[blockid1]-[blockid2]'
-	 * - All block with a specific id and (block data & bitmask) == specified data:
+     * - All block with a specific id and (block data & bitmask) == specified data:
 	 *     '[blockid]:[blockdata]b[bitmask]'
 	 *
-	 * For example:
-	 * - Hide all blocks except blocks with id 1,7,8,9 or id 3 / data 2:
-	 *     '!* 1 3:2 7-9'
+     * For example:
+     * - Hide all blocks except blocks with id 1,7,8,9 or id 3 / data 2:
+     *     '!* 1 3:2 7-9'
 	 * - Show all blocks except jungle wood and jungle leaves:
 	 *     '!17:3b3 !18:3b3' (Jungle wood and jungle leaves have id 17 and 18
 	 *                        and use data value 3 for first two bits (bitmask 3 = 0b11),
-	 *                        other bits are used otherwise -> ignoring all those bits)
-	 *
+     *                        other bits are used otherwise -> ignoring all those bits)
+     *
 	 * TL;DR (except the space at the end): (!?(\*|\d+(:\d+(b\d+)?)?|\d+-\d+) )+
 	 */
 	void loadFromStringDefinition(const std::string& definition);
@@ -272,7 +272,7 @@ private:
 	BlockPos center;
 	long radius;
 
-	// whether to hide unpopulated chunks
+    // whether to hide unpopulated chunks
     bool crop_unpopulated_chunks;
 
 	// block mask

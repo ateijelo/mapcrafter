@@ -29,7 +29,7 @@ namespace mc {
 
 BlockMask::BlockMask() {
 	// set all blocks to be shown by default
-	block_states.resize(65536, BlockState::COMPLETELY_SHOWN);
+    block_states.resize(65536, BlockState::COMPLETELY_SHOWN);
 	block_mask.set();
 }
 
@@ -53,7 +53,7 @@ void BlockMask::set(uint16_t id, uint8_t data, bool shown) {
 void BlockMask::set(uint16_t id, uint8_t data, uint8_t bitmask, bool shown) {
 	// iterate through every possible block data values and check if (i % bitmask) == data
 	for (uint8_t i = 0; i < 16; i++)
-		if ((i & bitmask) == data)
+        if ((i & bitmask) == data)
 			block_mask[16 * id + i] = shown;
 	updateBlockState(id);
 }
@@ -66,66 +66,66 @@ void BlockMask::setRange(uint16_t id1, uint16_t id2, bool shown) {
 void BlockMask::setAll(bool shown) {
 	if (shown) {
 		block_mask.set();
-		std::fill(block_states.begin(), block_states.end(), BlockState::COMPLETELY_SHOWN);
+        std::fill(block_states.begin(), block_states.end(), BlockState::COMPLETELY_SHOWN);
 	} else {
 		block_mask.reset();
-		std::fill(block_states.begin(), block_states.end(), BlockState::COMPLETELY_HIDDEN);
+        std::fill(block_states.begin(), block_states.end(), BlockState::COMPLETELY_HIDDEN);
 	}
 }
 
 void BlockMask::loadFromStringDefinition(const std::string& definition) {
-	// TL;DR: Parsing this in C++ is annoying
+    // TL;DR: Parsing this in C++ is annoying
 	std::stringstream ss(util::trim(definition));
-	std::string group;
-	// go through the specified block groups and try to parse them...
-	while (ss >> group) {
-		// whether this group is to be shown/hidden
-		bool shown = group[0] != '!';
+    std::string group;
+    // go through the specified block groups and try to parse them...
+    while (ss >> group) {
+        // whether this group is to be shown/hidden
+        bool shown = group[0] != '!';
 		if (!shown)
-			group = group.substr(1);
-		// just try to convert parts of this block group
-		// throw another exception with an error message in case anything is invalid
-		try {
-			if (group.find('-') != std::string::npos) {
-				uint16_t id1 = util::as<uint16_t>(group.substr(0, group.find('-')));
-				uint16_t id2 = util::as<uint16_t>(group.substr(group.find('-') + 1));
-				setRange(id1, id2, shown);
-			} else if (group.find(':') != std::string::npos) {
-				std::string id_part = group.substr(0, group.find(':'));
-				std::string data_part = group.substr(group.find(':') + 1);
-				// bitmask defaults to 15 if not specified
-				// means that exactly that id:data is selected
-				std::string bitmask_part = "15";
+            group = group.substr(1);
+        // just try to convert parts of this block group
+        // throw another exception with an error message in case anything is invalid
+        try {
+            if (group.find('-') != std::string::npos) {
+                uint16_t id1 = util::as<uint16_t>(group.substr(0, group.find('-')));
+                uint16_t id2 = util::as<uint16_t>(group.substr(group.find('-') + 1));
+                setRange(id1, id2, shown);
+            } else if (group.find(':') != std::string::npos) {
+                std::string id_part = group.substr(0, group.find(':'));
+                std::string data_part = group.substr(group.find(':') + 1);
+                // bitmask defaults to 15 if not specified
+                // means that exactly that id:data is selected
+                std::string bitmask_part = "15";
 
-				if (data_part.find('b') != std::string::npos) {
-					bitmask_part = data_part.substr(data_part.find('b') + 1);
-					data_part = data_part.substr(0, data_part.find('b'));
-				}
+                if (data_part.find('b') != std::string::npos) {
+                    bitmask_part = data_part.substr(data_part.find('b') + 1);
+                    data_part = data_part.substr(0, data_part.find('b'));
+                }
 
-				uint16_t id = util::as<uint16_t>(id_part);
+                uint16_t id = util::as<uint16_t>(id_part);
 
-				uint16_t data;
-				data = util::as<uint16_t>(data_part);
-				if (data >= 16)
-					throw std::invalid_argument("Invalid data value '" + data_part
-							+ "', data value is limited to four bits");
+                uint16_t data;
+                data = util::as<uint16_t>(data_part);
+                if (data >= 16)
+                    throw std::invalid_argument("Invalid data value '" + data_part +
+                                                "', data value is limited to four bits");
 
-				uint16_t bitmask;
-				bitmask = util::as<uint16_t>(bitmask_part);
-				if (bitmask >= 16)
-					throw std::invalid_argument("Invalid bitmask '" + bitmask_part
-							+ "', bitmask is limited to four bits");
+                uint16_t bitmask;
+                bitmask = util::as<uint16_t>(bitmask_part);
+                if (bitmask >= 16)
+                    throw std::invalid_argument("Invalid bitmask '" + bitmask_part +
+                                                "', bitmask is limited to four bits");
 
-				set(id, data, bitmask, shown);
-			} else {
-				if (group == "*")
-					setAll(shown);
-				else
-					set(util::as<uint16_t>(group), shown);
-			}
-		} catch (std::invalid_argument& exception) {
-			throw std::invalid_argument("Invalid block group '" + group
-					+ "' (" + exception.what() + ")");
+                set(id, data, bitmask, shown);
+            } else {
+                if (group == "*")
+                    setAll(shown);
+                else
+                    set(util::as<uint16_t>(group), shown);
+            }
+        } catch (std::invalid_argument &exception) {
+            throw std::invalid_argument("Invalid block group '" + group + "' (" + exception.what() +
+                                        ")");
 		}
 	}
 }
@@ -301,11 +301,11 @@ const BlockMask* WorldCrop::getBlockMask() const {
 
 void WorldCrop::loadBlockMask(const std::string& definition) {
 	block_mask.reset(new BlockMask);
-	try {
+    try {
 		block_mask->loadFromStringDefinition(definition);
-	} catch (std::invalid_argument& exception) {
+    } catch (std::invalid_argument &exception) {
 		block_mask.reset();
-		throw exception;
+        throw exception;
 	}
 }
 
