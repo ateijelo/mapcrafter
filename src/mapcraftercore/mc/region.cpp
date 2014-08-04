@@ -116,9 +116,7 @@ void RegionFile::setRotation(int rotation) {
     }
 }
 
-void RegionFile::setWorldCrop(const WorldCrop& world_crop) {
-	this->world_crop = world_crop;
-}
+void RegionFile::setWorldCrop(const WorldCrop &world_crop) { this->world_crop = world_crop; }
 
 bool RegionFile::read() {
     std::ifstream file(filename.c_str(), std::ios_base::binary);
