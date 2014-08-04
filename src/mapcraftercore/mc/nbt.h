@@ -95,8 +95,7 @@ void dumpTag(std::ostream &stream, const std::string &indendation, T tag, P payl
 }
 
 namespace nbtstream {
-template <typename T>
-T read(std::istream& stream);
+template <typename T> T read(std::istream &stream);
 
 template <typename T> void write(std::ostream &stream, T t);
 } // namespace nbtstream
