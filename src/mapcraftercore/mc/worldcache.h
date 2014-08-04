@@ -86,7 +86,7 @@ struct CacheStats {
 /**
  * An entry in the cache with a Key and a Value type. Used with regions and chunks.
  */
-template <typename Key, typename Value>
+template <typename Key, typename Value> struct CacheEntry {
 struct CacheEntry {
 	Key key;
 	Value value;

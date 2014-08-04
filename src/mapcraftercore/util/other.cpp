@@ -119,7 +119,7 @@ fs::path as<fs::path>(const std::string& from) {
 	return fs::path(from);
 }
 
-template <>
+template <> bool as<bool>(const std::string &from) {
 bool as<bool>(const std::string& from) {
 	if (from == "true" || from == "1")
 		return true;

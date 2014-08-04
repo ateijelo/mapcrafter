@@ -150,7 +150,7 @@ public:
 
 	void setFake(bool fake);
 
-	template <typename T>
+    template <typename T> LogStream &operator<<(const T &t) {
 	LogStream& operator<<(const T& t) {
 		(*ss) << t;
 		return *this;

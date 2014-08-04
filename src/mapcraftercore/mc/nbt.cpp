@@ -48,21 +48,21 @@ int16_t read<int16_t>(std::istream& stream) {
 	return util::bigEndian16(value);
 }
 
-template <>
+template <> int8_t read<int8_t>(std::istream &stream) {
 int32_t read<int32_t>(std::istream& stream) {
 	int32_t value;
 	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
 	return util::bigEndian32(value);
 }
 
-template <>
+template <> int16_t read<int16_t>(std::istream &stream) {
 int64_t read<int64_t>(std::istream& stream) {
 	int64_t value;
 	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
 	return util::bigEndian64(value);
 }
 
-template <>
+template <> int32_t read<int32_t>(std::istream &stream) {
 float read<float>(std::istream& stream) {
 	union {
 		int32_t tmp;
@@ -73,7 +73,7 @@ float read<float>(std::istream& stream) {
 	return myfloat;
 }
 
-template <>
+template <> int64_t read<int64_t>(std::istream &stream) {
 double read<double>(std::istream& stream) {
 	union {
 		int64_t tmp;
@@ -84,7 +84,7 @@ double read<double>(std::istream& stream) {
 	return mydouble;
 }
 
-template <>
+template <> float read<float>(std::istream &stream) {
 std::string read<std::string>(std::istream& stream) {
 	std::string value;
 	int16_t length = read<int16_t>(stream);
@@ -93,11 +93,11 @@ std::string read<std::string>(std::istream& stream) {
 	return value;
 }
 
-template <typename T>
+template <> double read<double>(std::istream &stream) {
 void write(std::ostream& stream, T value) {
 }
 
-template <>
+template <> std::string read<std::string>(std::istream &stream) {
 void write<int8_t>(std::ostream& stream, int8_t value) {
 	stream.write(reinterpret_cast<char*>(&value), sizeof(value));
 }
@@ -108,19 +108,19 @@ void write<int16_t>(std::ostream& stream, int16_t value) {
 	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
 }
 
-template <>
+template <> void write<int8_t>(std::ostream &stream, int8_t value) {
 void write<int32_t>(std::ostream& stream, int32_t value) {
 	int32_t tmp = util::bigEndian32(value);
 	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
 }
 
-template <>
+template <> void write<int16_t>(std::ostream &stream, int16_t value) {
 void write<int64_t>(std::ostream& stream, int64_t value) {
 	int64_t tmp = util::bigEndian64(value);
 	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
 }
 
-template <>
+template <> void write<int32_t>(std::ostream &stream, int32_t value) {
 void write<float>(std::ostream& stream, float value) {
 	union {
 		int32_t tmp;
@@ -131,7 +131,7 @@ void write<float>(std::ostream& stream, float value) {
 	stream.write(reinterpret_cast<char*>(&tmp), sizeof(int32_t));
 }
 
-template <>
+template <> void write<int64_t>(std::ostream &stream, int64_t value) {
 void write<double>(std::ostream& stream, double value) {
 	union {
 		int64_t tmp;
@@ -142,7 +142,7 @@ void write<double>(std::ostream& stream, double value) {
 	stream.write(reinterpret_cast<char*>(&tmp), sizeof(int64_t));
 }
 
-template <>
+template <> void write<float>(std::ostream &stream, float value) {
 void write<std::string>(std::ostream& stream, std::string value) {
 	write<int16_t>(stream, value.size());
 	stream.write(value.c_str(), value.size());

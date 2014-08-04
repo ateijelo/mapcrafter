@@ -92,7 +92,7 @@ static const char* TAG_NAMES[] = {
 	"TAG_Long_Array",
 };
 
-template <typename T>
+template <typename T> void dumpTag(std::ostream &stream, const std::string &indendation, T tag) {
 void dumpTag(std::ostream& stream, const std::string& indendation, T tag) {
 	dumpTag(stream, indendation, tag, tag.payload);
 }
@@ -113,7 +113,7 @@ namespace nbtstream {
 template <typename T>
 T read(std::istream& stream);
 
-template <typename T>
+template <typename T> void write(std::ostream &stream, T t);
 void write(std::ostream& stream, T t);
 }
 
@@ -129,14 +129,14 @@ public:
 
 	int8_t getType() const;
 	
-	template <typename T>
+
 	T& cast() {
 		if (type == T::TAG_TYPE)
 			return dynamic_cast<T&>(*this);
 		throw InvalidTagCast("Invalid tag cast");
 	}
 
-	template <typename T>
+    template <typename T> const T &cast() const {
 	const T& cast() const {
 		if (type == T::TAG_TYPE)
 			return dynamic_cast<const T&>(*this);
@@ -165,7 +165,7 @@ public:
 	static const int8_t TAG_TYPE = (int8_t) TagType::TAG_END;
 };
 
-template <typename T, TagType tag_type>
+template <typename T, TagType tag_type> class ScalarTag : public Tag {
 class ScalarTag: public Tag {
 public:
 	ScalarTag(T payload = 0) : Tag(TAG_TYPE), payload(payload) {}
@@ -203,7 +203,7 @@ typedef ScalarTag<int64_t, TagType::TAG_LONG> TagLong;
 typedef ScalarTag<float, TagType::TAG_FLOAT> TagFloat;
 typedef ScalarTag<double, TagType::TAG_DOUBLE> TagDouble;
 
-template <typename T, TagType tag_type>
+template <typename T, TagType tag_type> class TagArray : public Tag {
 class TagArray: public Tag {
 public:
 	TagArray() : Tag(TAG_TYPE) {}
@@ -308,14 +308,14 @@ public:
 
 	bool hasTag(const std::string& name) const;
 	
-	template <typename T>
+    template <typename T> bool hasTag(const std::string &name) const {
 	bool hasTag(const std::string& name) const {
 		if (!hasTag(name))
 			return false;
 		return payload.at(name)->getType() == T::TAG_TYPE;
 	}
 	
-	template <typename T>
+        static_assert(
 	bool hasArray(const std::string& name, int32_t len = -1) const {
 		static_assert(std::is_same<T, TagByteArray>::value
 				|| std::is_same<T, TagIntArray>::value
@@ -327,7 +327,7 @@ public:
 		return len == -1 || (unsigned) len == tag.payload.size();
 	}
 	
-	template <typename T>
+            return false;
 	bool hasList(const std::string& name, int32_t len = -1) const {
 		if (!hasTag<TagList>(name))
 			return false;
@@ -338,12 +338,12 @@ public:
 	Tag& findTag(const std::string& name);
 	const Tag& findTag(const std::string& name) const;
 	
-	template <typename T>
+        return findTag(name).cast<T>();
 	T& findTag(const std::string& name) {
 		return findTag(name).cast<T>();
 	}
 
-	template <typename T>
+    std::map<std::string, TagPtr> payload;
 	const T& findTag(const std::string& name) const {
 		return findTag(name).cast<T>();
 	}

@@ -35,7 +35,7 @@ int16_t bigEndian16(int16_t x);
 int32_t bigEndian32(int32_t x);
 int64_t bigEndian64(int64_t x);
 
-template <typename T>
+template <typename T> std::string str(T value) {
 std::string str(T value) {
 	std::stringstream ss;
 	ss << value;
@@ -54,7 +54,7 @@ std::string str(bool value);
  * is a bit strange. Because converting '42ff' would just result in '42', it is also
  * checked whether the whole string was processed (eof bit of string stream set).
  */
-template <typename T>
+template <typename T> T as(const std::string &from) {
 T as(const std::string& from) {
 	T to;
 	std::stringstream ss(from);
@@ -101,7 +101,7 @@ std::map<std::string, std::string> parseProperties(std::string str);
 /**
  * TODO this is unused, maybe use it for the config option values? ... or remove it
  */
-template <typename T>
+template <typename T> class Nullable {
 class Nullable {
 public:
 	Nullable() : null(true) {}
