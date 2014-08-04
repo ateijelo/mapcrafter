@@ -30,23 +30,7 @@ namespace mc {
 namespace nbt {
 
 namespace nbtstream {
-template <typename T>
-T read(std::istream& stream) {
-}
-
-template <>
-int8_t read<int8_t>(std::istream& stream) {
-	int8_t value;
-	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-	return value;
-}
-
-template <>
-int16_t read<int16_t>(std::istream& stream) {
-	int16_t value;
-	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-	return util::bigEndian16(value);
-}
+template <typename T> T read(std::istream &stream) {}
 
 template <> int8_t read<int8_t>(std::istream &stream) {
     int8_t value;
@@ -112,11 +96,7 @@ template <> std::string read<std::string>(std::istream &stream) {
     return value;
 }
 
-template <>
-void write<int16_t>(std::ostream& stream, int16_t value) {
-	int16_t tmp = util::bigEndian16(value);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
-}
+template <typename T> void write(std::ostream &stream, T value) {}
 
 template <> void write<int8_t>(std::ostream &stream, int8_t value) {
 void write<int32_t>(std::ostream& stream, int32_t value) {
