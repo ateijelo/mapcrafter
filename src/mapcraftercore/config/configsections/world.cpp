@@ -108,9 +108,7 @@ bool WorldSection::hasCropUnpopulatedChunks() const { return crop_unpopulated_ch
 
 std::string WorldSection::getBlockMask() const { return block_mask.getValue(); }
 
-const mc::WorldCrop WorldSection::getWorldCrop() const {
-	return world_crop;
-}
+const mc::WorldCrop WorldSection::getWorldCrop() const { return world_crop; }
 
 bool WorldSection::needsWorldCentering() const {
     // circular cropped worlds and cropped worlds with complete x- and z-bounds
