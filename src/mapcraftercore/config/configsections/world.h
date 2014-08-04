@@ -90,7 +90,7 @@ private:
 	Field<bool> crop_unpopulated_chunks;
 	Field<std::string> block_mask;
 
-	mc::WorldCrop world_crop;
+    mc::WorldCrop world_crop;
 };
 
 } /* namespace config */

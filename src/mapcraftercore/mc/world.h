@@ -105,7 +105,7 @@ public:
 	 * loading the world.
 	 */
 	WorldCrop getWorldCrop() const;
-	void setWorldCrop(const WorldCrop& world_crop);
+    void setWorldCrop(const WorldCrop &world_crop);
 
 	/**
 	 * Loads a world from the specified directory. Returns false if the world- or region
@@ -164,7 +164,7 @@ private:
 
 	// rotation and possible boundaries of the world
 	int rotation;
-	WorldCrop world_crop;
+    WorldCrop world_crop;
 
 	// (hash-) set containing positions of available region files
 	RegionSet available_regions;

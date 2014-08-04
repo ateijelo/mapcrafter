@@ -66,10 +66,10 @@ Markers findMarkers(const config::MapcrafterConfig &config) {
     auto config_markers = config.getMarkers();
     for (auto world_it = config_worlds.begin(); world_it != config_worlds.end(); ++world_it) {
         mc::WorldCrop world_crop = world_it->second.getWorldCrop();
-		mc::WorldCrop world_crop = world_it->second.getWorldCrop();
+        mc::World world(world_it->second.getInputDir().string(), world_it->second.getDimension());
         world.setWorldCrop(world_crop);
         if (!world.load()) {
-		world.setWorldCrop(world_crop);
+            LOG(ERROR) << "Unable to load world " << world_it->first << "!";
             continue;
         }
 
@@ -85,8 +85,8 @@ Markers findMarkers(const config::MapcrafterConfig &config) {
             // don't use signs not contained in the world boundaries
             if (!world_crop.isBlockContainedXZ(sign_it->getPos()) &&
                 !world_crop.isBlockContainedY(sign_it->getPos()))
-			if (!world_crop.isBlockContainedXZ(sign_it->getPos())
-					&& !world_crop.isBlockContainedY(sign_it->getPos()))
+                continue;
+            for (auto marker_it = config_markers.begin(); marker_it != config_markers.end();
                  ++marker_it) {
                 if (!marker_it->matchesSign(*sign_it))
                     continue;

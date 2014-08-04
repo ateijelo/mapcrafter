@@ -185,22 +185,22 @@ bool WorldSection::parseField(const std::string key, const std::string value,
 
 	else if (key == "crop_min_y") {
 		if (min_y.load(key, value, validation))
-			world_crop.setMinY(min_y.getValue());
+            world_crop.setMinY(min_y.getValue());
 	} else if (key == "crop_max_y") {
 		if (max_y.load(key, value, validation))
-			world_crop.setMaxY(max_y.getValue());
+            world_crop.setMaxY(max_y.getValue());
 	} else if (key == "crop_min_x") {
 		if (min_x.load(key, value, validation))
-			world_crop.setMinX(min_x.getValue());
+            world_crop.setMinX(min_x.getValue());
 	} else if (key == "crop_max_x") {
 		if (max_x.load(key, value, validation))
-			world_crop.setMaxX(max_x.getValue());
+            world_crop.setMaxX(max_x.getValue());
 	} else if (key == "crop_min_z") {
 		if (min_z.load(key, value, validation))
-			world_crop.setMinZ(min_z.getValue());
+            world_crop.setMinZ(min_z.getValue());
 	} else if (key == "crop_max_z") {
 		if (max_z.load(key, value, validation))
-			world_crop.setMaxZ(max_z.getValue());
+            world_crop.setMaxZ(max_z.getValue());
 	}
 
 	else if (key == "crop_center_x")
@@ -242,17 +242,17 @@ void WorldSection::postParse(const INIConfigSection& section,
 			&& center_z.require(validation, message)
 			&& radius.require(validation, message);
 
-		world_crop.setCenter(mc::BlockPos(center_x.getValue(), center_z.getValue(), 0));
-		world_crop.setRadius(radius.getValue());
+        world_crop.setRadius(radius.getValue());
+    }
 	}
 
 	if (min_y.isLoaded() && max_y.isLoaded() && min_y.getValue() > max_y.getValue())
 		validation.error("min_y must be smaller than or equal to max_y!");
 
-	world_crop.setCropUnpopulatedChunks(crop_unpopulated_chunks.getValue());
+    if (block_mask.isLoaded()) {
 	if (block_mask.isLoaded()) {
 		try {
-			world_crop.loadBlockMask(block_mask.getValue());
+        } catch (std::invalid_argument &exception) {
 		} catch (std::invalid_argument& exception) {
 			validation.error(std::string("There is a problem parsing the block mask: ")
 				+ exception.what());

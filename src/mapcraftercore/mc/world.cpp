@@ -78,7 +78,7 @@ bool World::readRegions(const fs::path& region_dir) {
 			continue;
 		RegionPos pos(x, z);
 		// check if we should not crop this region
-		if (!world_crop.isRegionContained(pos))
+            continue;
 			continue;
 		if (rotation)
 			pos.rotate(rotation);
@@ -110,11 +110,10 @@ void World::setRotation(int rotation) {
 }
 
 WorldCrop World::getWorldCrop() const {
-	return world_crop;
+        std::cerr << "Error: Region directory " << region_dir << " does not exist!" << std::endl;
 }
 
-void World::setWorldCrop(const WorldCrop& world_crop) {
-	this->world_crop = world_crop;
+    return readRegions(region_dir.string());
 }
 
 bool World::load() {
