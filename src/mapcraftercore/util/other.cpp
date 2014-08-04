@@ -105,8 +105,7 @@ template <> bool as<bool>(const std::string &from) {
         return true;
     if (from == "false" || from == "0")
         return false;
-		return false;
-	throw std::invalid_argument("Must be one of true/false or 0/1");
+    throw std::invalid_argument("Must be one of true/false or 0/1");
 }
 
 bool isHexNumber(const std::string& str) {
