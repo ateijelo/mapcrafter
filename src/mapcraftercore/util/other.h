@@ -62,14 +62,11 @@ template <typename T> T as(const std::string &from) {
     return to;
 }
 
-template <>
-std::string as(const std::string& from);
+template <> std::string as(const std::string &from);
 
-template <>
-fs::path as(const std::string& from);
+template <> fs::path as(const std::string &from);
 
-template <>
-bool as<bool>(const std::string& from);
+template <> bool as<bool>(const std::string &from);
 
 /**
  * Checks if a string is also a valid hexadecimal number (= contains only hex digits).
