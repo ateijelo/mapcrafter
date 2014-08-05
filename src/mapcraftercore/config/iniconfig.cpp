@@ -29,8 +29,7 @@ namespace mapcrafter {
 namespace config {
 
 INIConfigSection::INIConfigSection(const std::string &type, const std::string &name)
-	: type(type), name(name) {
-}
+    : type(type), name(name) {}
 
 INIConfigSection::~INIConfigSection() {
 }
@@ -67,9 +66,7 @@ std::string INIConfigSection::get(const std::string& key,
 	return entries[index].second;
 }
 
-const std::vector<INIConfigEntry>& INIConfigSection::getEntries() const {
-	return entries;
-}
+const std::vector<INIConfigEntry> &INIConfigSection::getEntries() const { return entries; }
 
 void INIConfigSection::set(const std::string &key, const std::string &value) {
 	int index = getEntryIndex(key);
