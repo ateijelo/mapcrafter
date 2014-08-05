@@ -71,9 +71,9 @@ void BlockMask::setAll(bool shown) {
     }
 }
 
-void BlockMask::loadFromStringDefinition(const std::string& definition) {
+void BlockMask::loadFromStringDefinition(const std::string &definition) {
     // TL;DR: Parsing this in C++ is annoying
-	std::stringstream ss(util::trim(definition));
+    std::stringstream ss(util::trim(definition));
     std::string group;
     // go through the specified block groups and try to parse them...
     while (ss >> group) {
@@ -128,7 +128,7 @@ void BlockMask::loadFromStringDefinition(const std::string& definition) {
     }
 }
 
-const BlockMask::BlockState& BlockMask::getBlockState(uint16_t id) const {
+const BlockMask::BlockState &BlockMask::getBlockState(uint16_t id) const {
     return block_states[id];
 }
 
@@ -297,10 +297,10 @@ const BlockMask* WorldCrop::getBlockMask() const {
 	return block_mask.get();
 }
 
-void WorldCrop::loadBlockMask(const std::string& definition) {
+void WorldCrop::loadBlockMask(const std::string &definition) {
     block_mask.reset(new BlockMask);
     try {
-		block_mask->loadFromStringDefinition(definition);
+        block_mask->loadFromStringDefinition(definition);
     } catch (std::invalid_argument &exception) {
 		block_mask.reset();
         throw exception;
