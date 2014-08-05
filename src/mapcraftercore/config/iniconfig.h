@@ -55,10 +55,7 @@ class INIConfigSection {
 
     template <typename T> T get(const std::string &key, T default_value = T()) const;
 
-	template <typename T>
-	T get(const std::string& key, T default_value = T()) const;
-	
-	const std::vector<INIConfigEntry>& getEntries() const;
+    const std::vector<INIConfigEntry> &getEntries() const;
 
     void set(const std::string &key, const std::string &value);
     void remove(const std::string &key);
