@@ -53,10 +53,7 @@ class INIConfigSection {
 
     std::string get(const std::string &key, const std::string &default_value = "") const;
 
-	bool has(const std::string& key) const;
-	
-	std::string get(const std::string& key,
-			const std::string& default_value = "") const;
+    template <typename T> T get(const std::string &key, T default_value = T()) const;
 
 	template <typename T>
 	T get(const std::string& key, T default_value = T()) const;
