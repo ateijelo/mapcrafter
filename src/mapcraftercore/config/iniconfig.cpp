@@ -45,8 +45,8 @@ bool INIConfigSection::isEmpty() const { return entries.size() == 0; }
 
 bool INIConfigSection::has(const std::string &key) const { return getEntryIndex(key) != -1; }
 
-std::string INIConfigSection::get(const std::string& key,
-		const std::string& default_value) const {
+std::string INIConfigSection::get(const std::string &key, const std::string &default_value) const {
+    int index = getEntryIndex(key);
 	int index = getEntryIndex(key);
 	if (index == -1)
 		return default_value;
@@ -69,17 +69,21 @@ void INIConfigSection::remove(const std::string &key) {
 		entries.erase(entries.begin() + index);
 }
 
-int INIConfigSection::getEntryIndex(const std::string& key) const {
-	for (size_t i = 0; i < entries.size(); i++)
-		if (entries[i].first == key)
-			return i;
-	return -1;
-}
+std::ostream &operator<<(std::ostream &out, const INIConfigSection &section) {
+    std::string name = section.getName();
+    std::string type = section.getType();
+
+    if (!name.empty()) {
+        if (type.empty())
+            out << "[" << name << "]" << std::endl;
+        else
+            out << "[" << type << ":" << name << "]" << std::endl;
+    }
 
     auto entries = section.getEntries();
-	std::string name = section.getName();
-	std::string type = section.getType();
-
+    for (auto entry_it = entries.begin(); entry_it != entries.end(); ++entry_it)
+        out << entry_it->first << " = " << entry_it->second << std::endl;
+    return out;
 	if (!name.empty()) {
 		if (type.empty())
 			out << "[" << name << "]" << std::endl;
@@ -100,7 +104,7 @@ INIConfig::~INIConfig() {}
 void INIConfig::load(std::istream& in) {
 	int section = -1;
 	std::string line;
-	size_t line_number = 0;
+    size_t line_number = 0;
 	while (std::getline(in, line)) {
 		line_number++;
 
@@ -211,16 +215,16 @@ const std::vector<INIConfigSection>& INIConfig::getSections() const {
 	return sections;
 }
 
-const INIConfigSection& INIConfig::getSection(const std::string& type,
-		const std::string& name) const {
+        // a line with a new section
+        else if (line[0] == '[') {
 	int index = getSectionIndex(type, name);
 	if (index == -1)
 		return empty_section;
 	return sections.at(index);
             }
 
-INIConfigSection& INIConfig::getSection(const std::string& type,
-		const std::string& name) {
+            std::string type, name;
+            std::string section_name = line.substr(1, line.size() - 2);
 	int index = getSectionIndex(type, name);
 	if (index != -1)
 		return sections[index];
@@ -235,12 +239,103 @@ INIConfigSection& INIConfig::getSection(const std::string& type,
 		sections.erase(sections.begin() + index);
             }
 
-int INIConfig::getSectionIndex(const std::string& type,
-		const std::string& name) const {
-	for (size_t i = 0; i < sections.size(); i++)
-		if (sections[i].getType() == type && sections[i].getName() == name)
-			return i;
-	return -1;
+            section++;
+            sections.push_back(INIConfigSection(type, name));
+        } else {
+            // just a line with key = value
+            std::string key, value;
+            for (size_t i = 0; i < line.size(); i++) {
+                if (line[i] == '=') {
+                    key = line.substr(0, i);
+                    value = line.substr(i + 1, line.size() - i - 1);
+                    break;
+                }
+                if (i == line.size() - 1) {
+                    throw INIConfigError("No '=' found on line " + util::str(line_number) + ".");
+                    return;
+                }
+            }
+
+            key = util::trim(key);
+            value = util::trim(value);
+
+            if (section == -1)
+                root.set(key, value);
+            else
+                sections[section].set(key, value);
+        }
+    }
+}
+
+void INIConfig::loadFile(const std::string &filename) {
+    if (!fs::is_regular_file(filename))
+        throw INIConfigError("'" + filename + "' is not a valid file!");
+    std::ifstream in(filename);
+    if (!in)
+        throw INIConfigError("Unable to read file '" + filename + "'!");
+    else
+        load(in);
+}
+
+void INIConfig::loadString(const std::string &str) {
+    std::stringstream ss(str);
+    load(ss);
+}
+
+void INIConfig::write(std::ostream &out) const {
+    if (!root.isEmpty())
+        out << root << std::endl;
+    for (size_t i = 0; i < sections.size(); i++)
+        if (sections[i].isNamed())
+            out << sections[i] << std::endl;
+}
+
+void INIConfig::writeFile(const std::string &filename) const {
+    std::ofstream out(filename);
+    if (!out)
+        throw INIConfigError("Unable to write file '" + filename + "'!");
+    else
+        write(out);
+}
+
+bool INIConfig::hasSection(const std::string &type, const std::string &name) const {
+    return getSectionIndex(type, name) != -1;
+}
+
+const INIConfigSection &INIConfig::getRootSection() const { return root; }
+
+INIConfigSection &INIConfig::getRootSection() { return root; }
+
+const std::vector<INIConfigSection> &INIConfig::getSections() const { return sections; }
+
+const INIConfigSection &INIConfig::getSection(const std::string &type,
+                                              const std::string &name) const {
+    int index = getSectionIndex(type, name);
+    if (index == -1)
+        return empty_section;
+    return sections.at(index);
+}
+
+INIConfigSection &INIConfig::getSection(const std::string &type, const std::string &name) {
+    int index = getSectionIndex(type, name);
+    if (index != -1)
+        return sections[index];
+    INIConfigSection section(type, name);
+    sections.push_back(section);
+    return sections.back();
+}
+
+void INIConfig::removeSection(const std::string &type, const std::string &name) {
+    int index = getSectionIndex(type, name);
+    if (index == -1)
+        sections.erase(sections.begin() + index);
+}
+
+int INIConfig::getSectionIndex(const std::string &type, const std::string &name) const {
+    for (size_t i = 0; i < sections.size(); i++)
+        if (sections[i].getType() == type && sections[i].getName() == name)
+            return i;
+    return -1;
 }
 
 } /* namespace config */

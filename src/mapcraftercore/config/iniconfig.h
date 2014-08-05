@@ -63,12 +63,12 @@ public:
 	void set(const std::string& key, const std::string& value);
 	void remove(const std::string& key);
 
-private:
-	std::string type, name;
+  private:
+    std::string type, name;
 
-	std::vector<INIConfigEntry> entries;
+    std::vector<INIConfigEntry> entries;
 
-	int getEntryIndex(const std::string& key) const;
+    int getEntryIndex(const std::string &key) const;
 };
 
 std::ostream &operator<<(std::ostream &out, const INIConfigSection &section);
@@ -90,28 +90,26 @@ public:
     const INIConfigSection &getRootSection() const;
     INIConfigSection &getRootSection();
 
-	const INIConfigSection& getSection(const std::string& type,
-			const std::string& name) const;
-	INIConfigSection& getSection(const std::string& type, const std::string& name);
+    const INIConfigSection &getSection(const std::string &type, const std::string &name) const;
+    INIConfigSection &getSection(const std::string &type, const std::string &name);
 
-	const std::vector<INIConfigSection>& getSections() const;
+    const std::vector<INIConfigSection> &getSections() const;
 
 	void removeSection(const std::string& type, const std::string& name);
 
-private:
-	INIConfigSection root;
-	std::vector<INIConfigSection> sections;
+  private:
+    INIConfigSection root;
+    std::vector<INIConfigSection> sections;
 
-	INIConfigSection empty_section;
+    INIConfigSection empty_section;
 
-	int getSectionIndex(const std::string& type, const std::string& name) const;
+    int getSectionIndex(const std::string &type, const std::string &name) const;
 };
 
-template <typename T>
-T INIConfigSection::get(const std::string& key, T default_value) const {
-	if (has(key))
-		return util::as<T>(get(key));
-	return default_value;
+template <typename T> T INIConfigSection::get(const std::string &key, T default_value) const {
+    if (has(key))
+        return util::as<T>(get(key));
+    return default_value;
 }
 
 } /* namespace config */
