@@ -108,40 +108,7 @@ void INIConfig::load(std::istream &in) {
 
         // ignore empty/comment lines
         if (line.empty() || line[0] == '#')
-	load(ss);
-}
-
-void INIConfig::write(std::ostream& out) const {
-	if (!root.isEmpty())
-		out << root << std::endl;
-	for (size_t i = 0; i < sections.size(); i++)
-		if (sections[i].isNamed())
-			out << sections[i] << std::endl;
-}
-
-void INIConfig::writeFile(const std::string& filename) const {
-	std::ofstream out(filename);
-	if (!out)
-		throw INIConfigError("Unable to write file '" + filename + "'!");
-	else
-		write(out);
-}
-
-bool INIConfig::hasSection(const std::string& type, const std::string& name) const {
-	return getSectionIndex(type, name) != -1;
-}
-
-const INIConfigSection& INIConfig::getRootSection() const {
-	return root;
-}
-
-INIConfigSection& INIConfig::getRootSection() {
-	return root;
-}
-
-const std::vector<INIConfigSection>& INIConfig::getSections() const {
-	return sections;
-}
+            continue;
 
         // a line with a new section
         else if (line[0] == '[') {
