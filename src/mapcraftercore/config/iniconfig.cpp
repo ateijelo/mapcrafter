@@ -101,67 +101,7 @@ void INIConfig::load(std::istream &in) {
     std::string line;
     size_t line_number = 0;
     while (std::getline(in, line)) {
-		line_number++;
-
-		// trim the line
-		line = util::trim(line);
-
-		// ignore empty/comment lines
-		if (line.empty() || line[0] == '#')
-			continue;
-
-		// a line with a new section
-		else if (line[0] == '[') {
-			if (line[line.size() - 1] != ']') {
-				throw INIConfigError("Expecting ']' at end of line "
-						+ util::str(line_number) + ".");
-				return;
-			}
-
-			std::string type, name;
-			std::string section_name = line.substr(1, line.size() - 2);
-			std::string::size_type colon = section_name.find(':');
-			if (colon == std::string::npos)
-				name = section_name;
-			else {
-				type = section_name.substr(0, colon);
-				name = section_name.substr(colon+1, std::string::npos);
-			}
-
-			if (name.empty()) {
-				throw INIConfigError("Invalid section name on line "
-						+ util::str(line_number) + ".");
-				return;
-			}
-
-			section++;
-			sections.push_back(INIConfigSection(type, name));
-		} else {
-			// just a line with key = value
-			std::string key, value;
-			for (size_t i = 0; i < line.size(); i++) {
-				if (line[i] == '=') {
-					key = line.substr(0, i);
-					value = line.substr(i + 1, line.size() - i - 1);
-					break;
-				}
-				if (i == line.size() - 1) {
-					throw INIConfigError("No '=' found on line "
-							+ util::str(line_number) + ".");
-					return;
-				}
-			}
-
-			key = util::trim(key);
-			value = util::trim(value);
-
-			if (section == -1)
-				root.set(key, value);
-			else
-				sections[section].set(key, value);
-		}
-	}
-}
+        line_number++;
 
         // trim the line
 	if (!fs::is_regular_file(filename))
