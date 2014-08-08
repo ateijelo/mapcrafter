@@ -134,10 +134,10 @@ ValidationMap MapcrafterConfig::parseFile(const std::string &filename) {
     ValidationMap validation;
 
     INIConfig config;
-	try {
-		config.loadFile(filename);
-	} catch (INIConfigError& exception) {
-		validation.section("Configuration file").error(exception.what());
+    try {
+        config.loadFile(filename);
+    } catch (INIConfigError &exception) {
+        validation.section("Configuration file").error(exception.what());
         return validation;
     }
 

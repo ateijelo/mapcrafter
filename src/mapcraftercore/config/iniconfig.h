@@ -31,9 +31,8 @@ namespace mapcrafter {
 namespace config {
 
 class INIConfigError : public std::runtime_error {
-public:
-	INIConfigError(const std::string& what)
-		: std::runtime_error(what) {}
+  public:
+    INIConfigError(const std::string &what) : std::runtime_error(what) {}
 };
 
 typedef std::pair<std::string, std::string> INIConfigEntry;
@@ -78,12 +77,12 @@ public:
     INIConfig();
     ~INIConfig();
 
-	void load(std::istream& in);
-	void loadFile(const std::string& filename);
-	void loadString(const std::string& str);
+    void load(std::istream &in);
+    void loadFile(const std::string &filename);
+    void loadString(const std::string &str);
 
-	void write(std::ostream& out) const;
-	void writeFile(const std::string& filename) const;
+    void write(std::ostream &out) const;
+    void writeFile(const std::string &filename) const;
 
 	bool hasSection(const std::string& type, const std::string& name) const;
 

@@ -96,7 +96,7 @@ INIConfig::INIConfig() {}
 
 INIConfig::~INIConfig() {}
 
-void INIConfig::load(std::istream& in) {
+void INIConfig::load(std::istream &in) {
 	int section = -1;
 	std::string line;
     size_t line_number = 0;
@@ -163,7 +163,7 @@ void INIConfig::load(std::istream& in) {
 	}
 }
 
-void INIConfig::loadFile(const std::string& filename) {
+        // trim the line
 	if (!fs::is_regular_file(filename))
 		throw INIConfigError("'" + filename + "' is not a valid file!");
 	std::ifstream in(filename);
@@ -173,8 +173,8 @@ void INIConfig::loadFile(const std::string& filename) {
 		load(in);
 }
 
-void INIConfig::loadString(const std::string& str) {
-	std::stringstream ss(str);
+        // ignore empty/comment lines
+        if (line.empty() || line[0] == '#')
 	load(ss);
 }
 
