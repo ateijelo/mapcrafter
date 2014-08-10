@@ -120,8 +120,8 @@ void ConfigParser::parseSections(std::vector<Section> &sections, const std::stri
     section_global.setGlobal(true);
     if (config.hasSection("global", type)) {
         ValidationList global_validation = section_global.parse(config.getSection("global", type));
-		if (!global_validation.isEmpty())
-			validation.section(section_global.getPrettyName()) = global_validation;
+        if (!global_validation.isEmpty())
+            validation.section(section_global.getPrettyName()) = global_validation;
         // stop parsing here if global section contains critical errors
         // parsing also the other sections would lead to redundant error messages
         if (global_validation.isCritical())
@@ -154,8 +154,8 @@ void ConfigParser::parseSections(std::vector<Section> &sections, const std::stri
         }
 
         // add validation messages (if any) to global validation object
-		if (!section_validation.isEmpty())
-			validation.section(section.getPrettyName()) = section_validation;
+        if (!section_validation.isEmpty())
+            validation.section(section.getPrettyName()) = section_validation;
     }
 }
 

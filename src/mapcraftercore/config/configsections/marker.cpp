@@ -32,8 +32,8 @@ MarkerSection::~MarkerSection() {}
 
 std::string MarkerSection::getPrettyName() const {
 	if (isGlobal())
-		return "Global marker section";
-	return "Marker section '" + getSectionName() + "'";
+        return "Global marker section";
+    return "Marker section '" + getSectionName() + "'";
 }
 
 void MarkerSection::dump(std::ostream& out) const {

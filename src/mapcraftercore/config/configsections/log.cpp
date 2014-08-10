@@ -65,8 +65,8 @@ LogSection::~LogSection() {
 
 std::string LogSection::getPrettyName() const {
 	if (isGlobal())
-		return "Global log section " + getSectionName();
-	return "Log section '" + getSectionName() + "'";
+        return "Global log section " + getSectionName();
+    return "Log section '" + getSectionName() + "'";
 }
 
 void LogSection::dump(std::ostream& out) const {

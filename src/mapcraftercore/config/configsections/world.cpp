@@ -63,8 +63,8 @@ WorldSection::~WorldSection() {
 
 std::string WorldSection::getPrettyName() const {
 	if (isGlobal())
-		return "Global world section";
-	return "World section '" + getSectionName() + "'";
+        return "Global world section";
+    return "World section '" + getSectionName() + "'";
 }
 
 void WorldSection::dump(std::ostream& out) const {

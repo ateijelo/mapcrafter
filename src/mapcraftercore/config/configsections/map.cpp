@@ -141,8 +141,8 @@ MapSection::~MapSection() {
 
 std::string MapSection::getPrettyName() const {
 	if (isGlobal())
-		return "Global map section";
-	return "Map section '" + getSectionName() + "'";
+        return "Global map section";
+    return "Map section '" + getSectionName() + "'";
 }
 
 void MapSection::dump(std::ostream& out) const {

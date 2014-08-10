@@ -66,11 +66,11 @@ public:
 	 */
     ValidationList parse(const INIConfigSection &section);
 
-	/**
-	 * Returns the pretty name of the section.
-	 * For example "Map section my_map" or "Global world section".
-	 */
-	virtual std::string getPrettyName() const;
+    /**
+     * Returns the pretty name of the section.
+     * For example "Map section my_map" or "Global world section".
+     */
+    virtual std::string getPrettyName() const;
 
 	/**
 	 * Prints information about the parsed section to a
