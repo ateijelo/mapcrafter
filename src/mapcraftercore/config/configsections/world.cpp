@@ -118,8 +118,7 @@ bool WorldSection::needsWorldCentering() const {
 
 void WorldSection::preParse(const INIConfigSection &section, ValidationList &validation) {
     dimension.setDefault(mc::Dimension::OVERWORLD);
-	dimension.setDefault(mc::Dimension::OVERWORLD);
-	world_name.setDefault(section.getName());
+    world_name.setDefault(section.getName());
 
     default_view.setDefault(mc::BlockPos(0, 0, 0));
 	default_zoom.setDefault(0);
