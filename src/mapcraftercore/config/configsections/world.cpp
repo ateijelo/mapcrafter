@@ -54,8 +54,7 @@ template <> mc::BlockPos as<mc::BlockPos>(const std::string &from) {
 namespace mapcrafter {
 namespace config {
 
-WorldSection::WorldSection() {
-}
+WorldSection::WorldSection() {}
 
 WorldSection::~WorldSection() {}
 
