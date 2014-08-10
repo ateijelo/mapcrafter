@@ -184,9 +184,7 @@ fs::path MapcrafterConfig::getTemplatePath(const std::string &path) const {
     return getTemplateDir() / path;
 }
 
-Color MapcrafterConfig::getBackgroundColor() const {
-	return root_section.getBackgroundColor();
-}
+Color MapcrafterConfig::getBackgroundColor() const { return root_section.getBackgroundColor(); }
 
 bool MapcrafterConfig::hasWorld(const std::string &world) const { return worlds.count(world); }
 
