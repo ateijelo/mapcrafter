@@ -188,12 +188,12 @@ fs::path MapcrafterConfig::getTemplateDir() const {
 	return root_section.getTemplateDir();
 }
 
-fs::path MapcrafterConfig::getOutputPath(const std::string& path) const {
-	return getOutputDir() / path;
+fs::path MapcrafterConfig::getOutputPath(const std::string &path) const {
+    return getOutputDir() / path;
 }
 
-fs::path MapcrafterConfig::getTemplatePath(const std::string& path) const {
-	return getTemplateDir() / path;
+fs::path MapcrafterConfig::getTemplatePath(const std::string &path) const {
+    return getTemplateDir() / path;
 }
 
 Color MapcrafterConfig::getBackgroundColor() const {

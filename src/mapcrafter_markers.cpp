@@ -242,7 +242,7 @@ int main(int argc, char **argv) {
     else {
         if (output_file == "")
             output_file = config.getOutputPath("markers-generated.js").string();
-			output_file = config.getOutputPath("markers-generated.js").string();
+        std::ofstream out(output_file);
         out << createMarkersJSON(config, markers);
         out.close();
         if (!out) {

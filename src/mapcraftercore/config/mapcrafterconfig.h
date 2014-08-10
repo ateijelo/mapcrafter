@@ -88,10 +88,10 @@ public:
 
 	fs::path getOutputDir() const;
 	fs::path getTemplateDir() const;
-	fs::path getOutputPath(const std::string& path) const;
-	fs::path getTemplatePath(const std::string& path) const;
+    fs::path getOutputPath(const std::string &path) const;
+    fs::path getTemplatePath(const std::string &path) const;
 
-	Color getBackgroundColor() const;
+    Color getBackgroundColor() const;
 
 	bool hasWorld(const std::string& world) const;
 	const std::map<std::string, WorldSection>& getWorlds() const;
