@@ -56,8 +56,7 @@ std::ostream &operator<<(std::ostream &out, LogSinkType sink_type) {
     return out;
 }
 
-LogSection::LogSection() {
-}
+LogSection::LogSection() {}
 
 LogSection::~LogSection() {}
 
