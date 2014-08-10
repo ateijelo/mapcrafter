@@ -85,7 +85,7 @@ class INIConfigSection;
 
 class MapSection : public ConfigSection {
 public:
-	MapSection();
+    MapSection();
 	~MapSection();
 
 	virtual std::string getPrettyName() const;

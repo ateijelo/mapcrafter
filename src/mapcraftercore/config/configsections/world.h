@@ -39,7 +39,7 @@ class INIConfigSection;
 
 class WorldSection : public ConfigSection {
 public:
-	WorldSection();
+    WorldSection();
 	~WorldSection();
 
 	virtual std::string getPrettyName() const;

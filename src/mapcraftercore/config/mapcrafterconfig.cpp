@@ -123,8 +123,8 @@ void MapcrafterConfigRootSection::postParse(const INIConfigSection& section,
 }
 
 MapcrafterConfig::MapcrafterConfig() {
-	world_global.setGlobal(true);
-	map_global.setGlobal(true);
+    world_global.setGlobal(true);
+    map_global.setGlobal(true);
 	marker_global.setGlobal(true);
 }
 

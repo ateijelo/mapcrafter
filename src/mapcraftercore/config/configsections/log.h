@@ -36,7 +36,7 @@ std::ostream &operator<<(std::ostream &out, LogSinkType sink_type);
 
 class LogSection : public ConfigSection {
   public:
-	LogSection();
+    LogSection();
     ~LogSection();
 
 	virtual std::string getPrettyName() const;
