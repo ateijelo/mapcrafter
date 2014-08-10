@@ -92,9 +92,7 @@ std::string WorldSection::getShortName() { return getSectionName(); }
 
 fs::path WorldSection::getInputDir() const { return input_dir.getValue(); }
 
-mc::Dimension WorldSection::getDimension() const {
-	return dimension.getValue();
-}
+mc::Dimension WorldSection::getDimension() const { return dimension.getValue(); }
 
 std::string WorldSection::getWorldName() const { return world_name.getValue(); }
 
