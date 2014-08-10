@@ -25,8 +25,7 @@
 namespace mapcrafter {
 namespace config {
 
-MarkerSection::MarkerSection() {
-}
+MarkerSection::MarkerSection() {}
 
 MarkerSection::~MarkerSection() {}
 
