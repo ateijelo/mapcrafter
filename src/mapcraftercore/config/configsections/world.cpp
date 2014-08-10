@@ -26,16 +26,15 @@
 namespace mapcrafter {
 namespace util {
 
-template <>
-mc::Dimension as<mc::Dimension>(const std::string& from) {
-	if (from == "nether")
-		return mc::Dimension::NETHER;
-	else if (from == "overworld")
-		return mc::Dimension::OVERWORLD;
-	else if (from == "end")
-		return mc::Dimension::END;
-	else
-		throw std::invalid_argument("Dimension must be one of 'nether', 'overworld' or 'end'!");
+template <> mc::Dimension as<mc::Dimension>(const std::string &from) {
+    if (from == "nether")
+        return mc::Dimension::NETHER;
+    else if (from == "overworld")
+        return mc::Dimension::OVERWORLD;
+    else if (from == "end")
+        return mc::Dimension::END;
+    else
+        throw std::invalid_argument("Dimension must be one of 'nether', 'overworld' or 'end'!");
 }
 
 template <> mc::BlockPos as<mc::BlockPos>(const std::string &from) {
@@ -49,8 +48,8 @@ template <> mc::BlockPos as<mc::BlockPos>(const std::string &from) {
     return pos;
 }
 
-}
-}
+} // namespace util
+} // namespace mapcrafter
 
 namespace mapcrafter {
 namespace config {
@@ -151,7 +150,7 @@ bool WorldSection::parseField(const std::string key, const std::string value,
                                  input_dir.getValue().string() + "' does not exist!");
         }
 	} else if (key == "dimension")
-		dimension.load(key, value, validation);
+        dimension.load(key, value, validation);
 	else if (key == "world_name")
         world_name.load(key, value, validation);
 

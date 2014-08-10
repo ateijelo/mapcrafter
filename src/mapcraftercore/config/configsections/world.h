@@ -74,8 +74,8 @@ class WorldSection : public ConfigSection {
     fs::path config_dir;
 
     Field<fs::path> input_dir;
-	Field<mc::Dimension> dimension;
-	Field<std::string> world_name;
+    Field<mc::Dimension> dimension;
+    Field<std::string> world_name;
 
     Field<mc::BlockPos> default_view;
 	Field<int> default_zoom, default_rotation;
