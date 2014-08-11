@@ -63,11 +63,11 @@ MapcrafterConfigRootSection::~MapcrafterConfigRootSection() {
 }
 
 std::string MapcrafterConfigRootSection::getPrettyName() const {
-	return "Mapcrafter config root section";
+    return "Mapcrafter config root section";
 }
 
-void MapcrafterConfigRootSection::dump(std::ostream& out) const {
-	out << getPrettyName() << ":" << std::endl;
+void MapcrafterConfigRootSection::dump(std::ostream &out) const {
+    out << getPrettyName() << ":" << std::endl;
 	out << "  output_dir = " << output_dir << std::endl;
 	out << "  template_dir = " << template_dir << std::endl;
 	out << "  color = " << background_color << std::endl;
@@ -125,7 +125,7 @@ void MapcrafterConfigRootSection::postParse(const INIConfigSection& section,
 MapcrafterConfig::MapcrafterConfig() {
     world_global.setGlobal(true);
     map_global.setGlobal(true);
-	marker_global.setGlobal(true);
+    marker_global.setGlobal(true);
 }
 
 MapcrafterConfig::~MapcrafterConfig() {
@@ -160,17 +160,17 @@ ValidationMap MapcrafterConfig::parseString(const std::string &string, fs::path 
 }
 
 void MapcrafterConfig::dump(std::ostream& out) const {
-	out << root_section << std::endl;
-	out << world_global << std::endl;
-	out << map_global << std::endl;
-	out << marker_global << std::endl;
+    out << root_section << std::endl;
+    out << world_global << std::endl;
+    out << map_global << std::endl;
+    out << marker_global << std::endl;
 
-	for (auto it = worlds.begin(); it != worlds.end(); ++it)
-		out << it->second << std::endl;
-	for (auto it = maps.begin(); it != maps.end(); ++it)
-		out << *it << std::endl;
-	for (auto it = markers.begin(); it != markers.end(); ++it)
-		out << *it << std::endl;
+    for (auto it = worlds.begin(); it != worlds.end(); ++it)
+        out << it->second << std::endl;
+    for (auto it = maps.begin(); it != maps.end(); ++it)
+        out << *it << std::endl;
+    for (auto it = markers.begin(); it != markers.end(); ++it)
+        out << *it << std::endl;
 	for (auto it = log_sections.begin(); it != log_sections.end(); ++it)
         out << *it << std::endl;
 }

@@ -47,7 +47,7 @@ enum class Dimension {
 	END,
 };
 
-std::ostream& operator<<(std::ostream& out, Dimension dimension);
+std::ostream &operator<<(std::ostream &out, Dimension dimension);
 
 /**
  * Simple hash function to use regions in unordered_set/map.

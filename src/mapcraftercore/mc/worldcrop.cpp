@@ -161,9 +161,7 @@ WorldCrop::WorldCrop()
 WorldCrop::~WorldCrop() {
 }
 
-int WorldCrop::getType() const {
-	return type;
-}
+WorldCrop::~WorldCrop() {}
 
 void WorldCrop::setMinY(int value) {
 	bounds_y.setMin(value);

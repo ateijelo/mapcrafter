@@ -124,12 +124,12 @@ bool TileSetID::operator<(const TileSetID& other) const {
 	return toString() < other.toString();
 }
 
-std::ostream& operator<<(std::ostream& out, ImageFormat image_format) {
-	if (image_format == ImageFormat::PNG)
-		out << "png";
-	else if (image_format == ImageFormat::JPEG)
-		out << "jpeg";
-	return out;
+std::ostream &operator<<(std::ostream &out, ImageFormat image_format) {
+    if (image_format == ImageFormat::PNG)
+        out << "png";
+    else if (image_format == ImageFormat::JPEG)
+        out << "jpeg";
+    return out;
 }
 
 MapSection::MapSection()
@@ -145,9 +145,9 @@ std::string MapSection::getPrettyName() const {
     return "Map section '" + getSectionName() + "'";
 }
 
-void MapSection::dump(std::ostream& out) const {
-	out << getPrettyName() << ":" << std::endl;
-	out << "  name = " << getLongName() << std::endl;
+void MapSection::dump(std::ostream &out) const {
+    out << getPrettyName() << ":" << std::endl;
+    out << "  name = " << getLongName() << std::endl;
 	out << "  world = " << world << std::endl;
 	out << "  render_view" << render_view << std::endl;
 	out << "  render_mode = " << render_mode << std::endl;

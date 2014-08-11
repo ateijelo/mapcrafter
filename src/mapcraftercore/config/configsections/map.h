@@ -79,7 +79,7 @@ enum class ImageFormat {
 	JPEG
 };
 
-std::ostream& operator<<(std::ostream& out, ImageFormat image_format);
+std::ostream &operator<<(std::ostream &out, ImageFormat image_format);
 
 class INIConfigSection;
 
@@ -89,7 +89,7 @@ public:
 	~MapSection();
 
     virtual std::string getPrettyName() const;
-	virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
     void setConfigDir(const fs::path &config_dir);
 

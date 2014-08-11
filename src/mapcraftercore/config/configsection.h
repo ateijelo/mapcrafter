@@ -71,10 +71,10 @@ class ConfigSection {
      */
     virtual std::string getPrettyName() const;
 
-	/**
-	 * Prints information about the parsed section to a
-	 */
-	virtual void dump(std::ostream& out) const;
+    /**
+     * Prints information about the parsed section to a
+     */
+    virtual void dump(std::ostream &out) const;
 
   protected:
     /**

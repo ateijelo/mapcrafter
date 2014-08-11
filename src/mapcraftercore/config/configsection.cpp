@@ -67,8 +67,8 @@ bool ConfigSection::parseField(const std::string key, const std::string value,
 void ConfigSection::postParse(const INIConfigSection &section, ValidationList &validation) {}
 
 std::ostream &operator<<(std::ostream &out, const ConfigSection &section) {
-	section.dump(out);
-	return out;
+    section.dump(out);
+    return out;
 }
 
 } // namespace config

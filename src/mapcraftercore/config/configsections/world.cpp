@@ -67,8 +67,8 @@ std::string WorldSection::getPrettyName() const {
     return "World section '" + getSectionName() + "'";
 }
 
-void WorldSection::dump(std::ostream& out) const {
-	out << getPrettyName() << ":" << std::endl;
+void WorldSection::dump(std::ostream &out) const {
+    out << getPrettyName() << ":" << std::endl;
 	out << "  input_dir = " << input_dir << std::endl;
 	out << "  dimension = " << dimension << std::endl;
 	out << "  world_name = " << world_name << std::endl;
@@ -115,13 +115,9 @@ int WorldSection::getSeaLevel() const {
 	return sea_level.getValue();
 }
 
-bool WorldSection::hasCropUnpopulatedChunks() const {
-	return crop_unpopulated_chunks.getValue();
-}
+bool WorldSection::hasCropUnpopulatedChunks() const { return crop_unpopulated_chunks.getValue(); }
 
-std::string WorldSection::getBlockMask() const {
-	return block_mask.getValue();
-}
+std::string WorldSection::getBlockMask() const { return block_mask.getValue(); }
 
 const mc::WorldCrop WorldSection::getWorldCrop() const {
 	return world_crop;

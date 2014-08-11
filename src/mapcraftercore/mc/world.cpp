@@ -27,14 +27,14 @@
 namespace mapcrafter {
 namespace mc {
 
-std::ostream& operator<<(std::ostream& out, Dimension dimension) {
-	if (dimension == Dimension::NETHER)
-		out << "nether";
-	else if (dimension == Dimension::OVERWORLD)
-		out << "overworld";
-	else if (dimension == Dimension::END)
-		out << "end";
-	return out;
+std::ostream &operator<<(std::ostream &out, Dimension dimension) {
+    if (dimension == Dimension::NETHER)
+        out << "nether";
+    else if (dimension == Dimension::OVERWORLD)
+        out << "overworld";
+    else if (dimension == Dimension::END)
+        out << "end";
+    return out;
 }
 
 World::World(std::string world_dir, Dimension dimension)

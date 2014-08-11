@@ -42,8 +42,8 @@ int main(int argc, char **argv) {
         LOG(WARNING) << "Please read the documentation about the new configuration file format.";
 	}
 
-	if (validation.isCritical())
-		return 1;
+    if (validation.isCritical())
+        return 1;
 
 	parser.dump(std::cout);
 

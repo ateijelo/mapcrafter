@@ -52,8 +52,8 @@ public:
 	MapcrafterConfigRootSection();
 	~MapcrafterConfigRootSection();
 
-	virtual std::string getPrettyName() const;
-	virtual void dump(std::ostream& out) const;
+    virtual std::string getPrettyName() const;
+    virtual void dump(std::ostream &out) const;
 
 	void setConfigDir(const fs::path& config_dir);
 
@@ -108,17 +108,17 @@ public:
 
 	const std::vector<LogSection>& getLogSections() const;
 
-private:
+  private:
     ValidationMap parse(const INIConfig &config, const fs::path &config_dir);
 
-	WorldSection world_global;
-	MapSection map_global;
-	MarkerSection marker_global;
+    WorldSection world_global;
+    MapSection map_global;
+    MarkerSection marker_global;
 
-	MapcrafterConfigRootSection root_section;
-	std::map<std::string, WorldSection> worlds;
-	std::vector<MapSection> maps;
-	std::vector<MarkerSection> markers;
+    MapcrafterConfigRootSection root_section;
+    std::map<std::string, WorldSection> worlds;
+    std::vector<MapSection> maps;
+    std::vector<MarkerSection> markers;
 	std::vector<LogSection> log_sections;
 };
 
