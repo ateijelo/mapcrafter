@@ -172,7 +172,7 @@ void MapcrafterConfig::dump(std::ostream& out) const {
 	for (auto it = markers.begin(); it != markers.end(); ++it)
 		out << *it << std::endl;
 	for (auto it = log_sections.begin(); it != log_sections.end(); ++it)
-		out << *it << std::endl;
+        out << *it << std::endl;
 }
 
 void MapcrafterConfig::configureLogging() const {

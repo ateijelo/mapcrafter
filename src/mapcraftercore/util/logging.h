@@ -115,7 +115,7 @@ public:
 #endif
 };
 
-std::ostream& operator<<(std::ostream& out, LogLevel level);
+std::ostream &operator<<(std::ostream &out, LogLevel level);
 
 /**
  * Represents a single log message.

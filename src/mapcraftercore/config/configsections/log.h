@@ -32,7 +32,7 @@ namespace config {
 
 enum class LogSinkType { OUTPUT, FILE, SYSLOG };
 
-std::ostream& operator<<(std::ostream& out, LogSinkType sink_type);
+std::ostream &operator<<(std::ostream &out, LogSinkType sink_type);
 
 class LogSection : public ConfigSection {
   public:
@@ -40,7 +40,7 @@ class LogSection : public ConfigSection {
     ~LogSection();
 
 	virtual std::string getPrettyName() const;
-	virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 	void setConfigDir(const fs::path& config_dir);
 	void configureLogging() const;
@@ -56,8 +56,8 @@ class LogSection : public ConfigSection {
     // only for file log
     fs::path getFile() const;
 
-	// only for syslog
-	bool isEnabled() const;
+    // only for syslog
+    bool isEnabled() const;
 
 protected:
 	virtual void preParse(const INIConfigSection& section,

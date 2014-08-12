@@ -46,14 +46,14 @@ template <> util::LogLevel as<util::LogLevel>(const std::string &from) {
 namespace mapcrafter {
 namespace config {
 
-std::ostream& operator<<(std::ostream& out, LogSinkType sink_type) {
-	if (sink_type == LogSinkType::OUTPUT)
-		out << "output";
-	else if (sink_type == LogSinkType::FILE)
-		out << "file";
-	else if (sink_type == LogSinkType::SYSLOG)
-		out << "syslog";
-	return out;
+std::ostream &operator<<(std::ostream &out, LogSinkType sink_type) {
+    if (sink_type == LogSinkType::OUTPUT)
+        out << "output";
+    else if (sink_type == LogSinkType::FILE)
+        out << "file";
+    else if (sink_type == LogSinkType::SYSLOG)
+        out << "syslog";
+    return out;
 }
 
 LogSection::LogSection() {
@@ -67,8 +67,8 @@ std::string LogSection::getPrettyName() const {
     return "Log section '" + getSectionName() + "'";
 }
 
-void LogSection::dump(std::ostream& out) const {
-	out << getPrettyName() << ":" << std::endl;
+void LogSection::dump(std::ostream &out) const {
+    out << getPrettyName() << ":" << std::endl;
 	out << "  type = " << type << std::endl;
 	out << "  verbosity = " << verbosity << std::endl;
 	out << "  log_progress = " << log_progress << std::endl;
