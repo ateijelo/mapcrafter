@@ -119,26 +119,7 @@ void AbstractOutputProgressHandler::setValue(int value) {
     if (last_update + 1 > now && !(last_percentage != max && value == max)) {
         this->value = value;
         return;
-	}
-
-	// now calculate the average speed
-	double average_speed = (double) value / (now - start);
-
-	// eta only when we have an average speed
-	int eta = -1;
-	if (value != max && value != 0 && (now - start) != 0)
-		eta = (max - value) / average_speed;
-
-	// set this as last update
-	last_update = now;
-	last_value = value;
-	last_percentage = percentage;
-
-	this->value = value;
-
-	// call handler
-	update(percentage, average_speed, eta);
-}
+    }
 
     // now calculate the average speed
     double average_speed = (double)value / (now - start);
