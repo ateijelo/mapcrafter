@@ -208,7 +208,7 @@ void LogOutputProgressHandler::update(double percentage, double average_speed,
 }
 
 ProgressBar::ProgressBar()
-	: last_output_len(0) {
+    update(percentage, average_speed, eta);
 }
 
 ProgressBar::~ProgressBar() {
@@ -244,12 +244,12 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
 	std::string progressbar = createProgressBar(progressbar_width, percentage);
 
 	// go to the begin of the line and clear it
-	std::cout << "\r" << std::string(last_output_len, ' ') << "\r";
+    std::cout << "\r" << std::string(last_output_len, ' ') << "\r";
 
 	// now show everything
-	// also go back to beginning of line after it, in case there is other output
-	std::cout << progressbar << " " << stats << "\r";
-	std::cout.flush();
+    // also go back to beginning of line after it, in case there is other output
+    std::cout << progressbar << " " << stats << "\r";
+    std::cout.flush();
 
 	// set this as last shown
 	last_output_len = progressbar.size() + 1 + stats.size();
@@ -294,7 +294,7 @@ std::string ProgressBar::createProgressStats(double percentage, int value, int m
 
 void ProgressBar::finish() {
 	setValue(max);
-	std::cout << std::endl;
+    std::cout << std::endl;
 }
 
 } /* namespace util */

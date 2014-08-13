@@ -406,9 +406,9 @@ bool RenderManager::run(int threads, bool batch) {
             util::ProgressBar *progress_bar = nullptr;
             if (batch || !util::isOutTTY()) {
                 util::Logging::getInstance().setSinkLogProgress("__output__", true);
-				progress_bar = new util::ProgressBar;
-				progress->addHandler(progress_bar);
-			}
+            } else {
+                progress_bar = new util::ProgressBar;
+                progress->addHandler(progress_bar);
             }
 
             util::LogOutputProgressHandler *log_output = new util::LogOutputProgressHandler;
@@ -418,7 +418,7 @@ bool RenderManager::run(int threads, bool batch) {
             renderMap(map_config.getShortName(), *rotation_it, threads, progress.get());
             std::time_t took = std::time(nullptr) - time_start;
 
-				progress_bar->finish();
+            if (progress_bar != nullptr) {
                 progress_bar->finish();
                 delete progress_bar;
             }
