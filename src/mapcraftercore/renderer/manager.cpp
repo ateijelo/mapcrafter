@@ -401,7 +401,7 @@ bool RenderManager::run(int threads, bool batch) {
                       << "." << progress_rotations_all << "] "
                       << "Rendering rotation " << config::ROTATION_NAMES[*rotation_it] << "...";
 
-			std::shared_ptr<util::MultiplexingProgressHandler> progress(new util::MultiplexingProgressHandler);
+            std::shared_ptr<util::MultiplexingProgressHandler> progress(
                 new util::MultiplexingProgressHandler);
             util::ProgressBar *progress_bar = nullptr;
             if (batch || !util::isOutTTY()) {
@@ -409,10 +409,10 @@ bool RenderManager::run(int threads, bool batch) {
 				progress_bar = new util::ProgressBar;
 				progress->addHandler(progress_bar);
 			}
-
+            }
 
             util::LogOutputProgressHandler *log_output = new util::LogOutputProgressHandler;
-
+            progress->addHandler(log_output);
 
             std::time_t time_start = std::time(nullptr);
             renderMap(map_config.getShortName(), *rotation_it, threads, progress.get());

@@ -72,14 +72,24 @@ std::string format_eta(int eta) {
 	return str_seconds;
 }
 
-MultiplexingProgressHandler::MultiplexingProgressHandler()
-	: max(0), value(0) {
-}
+    int days = eta / DAYS;
+    eta -= days * DAYS;
+    int hours = eta / HOURS;
+    eta -= hours * HOURS;
+    int minutes = eta / MINUTES;
+    eta -= minutes * MINUTES;
+    int seconds = eta;
 
-MultiplexingProgressHandler::~MultiplexingProgressHandler() {
-}
+    std::string str_days = util::str(days) + "d";
+    std::string str_hours = util::str(hours) + "h";
+    std::string str_minutes = util::str(minutes) + "m";
+    if (minutes < 10)
+        str_minutes = "0" + str_minutes;
+    std::string str_seconds = util::str(seconds) + "s";
+    if (seconds < 10)
+        str_seconds = "0" + str_seconds;
 
-void MultiplexingProgressHandler::addHandler(IProgressHandler* handler) {
+    if (days > 0)
         return str_days + " " + str_hours;
     if (hours > 0)
         return str_hours + " " + str_minutes;
@@ -88,24 +98,28 @@ void MultiplexingProgressHandler::addHandler(IProgressHandler* handler) {
     return str_seconds;
 }
 
-int MultiplexingProgressHandler::getMax() const {
-	return max;
+MultiplexingProgressHandler::MultiplexingProgressHandler() : max(0), value(0) {}
+
+MultiplexingProgressHandler::~MultiplexingProgressHandler() {}
+
+void MultiplexingProgressHandler::addHandler(IProgressHandler *handler) {
+    handlers.push_back(handler);
 }
+
+int MultiplexingProgressHandler::getMax() const { return max; }
 
 void MultiplexingProgressHandler::setMax(int max) {
-	this->max = max;
-	for (auto handler_it = handlers.begin(); handler_it != handlers.end(); ++handler_it)
-		(*handler_it)->setMax(max);
+    this->max = max;
+    for (auto handler_it = handlers.begin(); handler_it != handlers.end(); ++handler_it)
+        (*handler_it)->setMax(max);
 }
 
-int MultiplexingProgressHandler::getValue() const {
-	return value;
-}
+int MultiplexingProgressHandler::getValue() const { return value; }
 
 void MultiplexingProgressHandler::setValue(int value) {
-	this->value = value;
-	for (auto handler_it = handlers.begin(); handler_it != handlers.end(); ++handler_it)
-		(*handler_it)->setValue(value);
+    this->value = value;
+    for (auto handler_it = handlers.begin(); handler_it != handlers.end(); ++handler_it)
+        (*handler_it)->setValue(value);
 }
 
 DummyProgressHandler::DummyProgressHandler()

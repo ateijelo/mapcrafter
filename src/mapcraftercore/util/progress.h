@@ -43,20 +43,20 @@ public:
 };
 
 class MultiplexingProgressHandler : public IProgressHandler {
-public:
-	MultiplexingProgressHandler();
-	virtual ~MultiplexingProgressHandler();
+  public:
+    MultiplexingProgressHandler();
+    virtual ~MultiplexingProgressHandler();
 
-	void addHandler(IProgressHandler* handler);
+    void addHandler(IProgressHandler *handler);
 
-	virtual int getMax() const;
-	virtual void setMax(int max);
+    virtual int getMax() const;
+    virtual void setMax(int max);
 
-	virtual int getValue() const;
-	virtual void setValue(int value);
+    virtual int getValue() const;
+    virtual void setValue(int value);
 
-protected:
-	int max, value;
+  protected:
+    int max, value;
 
     std::vector<IProgressHandler *> handlers;
 };
