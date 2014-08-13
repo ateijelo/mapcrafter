@@ -107,11 +107,9 @@ int DummyProgressHandler::getValue() const { return value; }
 void DummyProgressHandler::setValue(int value) { this->value = value; }
 
 AbstractOutputProgressHandler::AbstractOutputProgressHandler()
-	: start(std::time(nullptr)), last_update(0), last_value(0), last_percentage(0) {
-}
+    : start(std::time(nullptr)), last_update(0), last_value(0), last_percentage(0) {}
 
-AbstractOutputProgressHandler::~AbstractOutputProgressHandler() {
-}
+AbstractOutputProgressHandler::~AbstractOutputProgressHandler() {}
 
 void AbstractOutputProgressHandler::setValue(int value) {
 	int now = std::time(nullptr);
