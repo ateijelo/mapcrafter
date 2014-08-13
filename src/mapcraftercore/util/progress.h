@@ -82,34 +82,34 @@ protected:
 };
 
 class AbstractOutputProgressHandler : public DummyProgressHandler {
-public:
-	AbstractOutputProgressHandler();
-	virtual ~AbstractOutputProgressHandler();
+  public:
+    AbstractOutputProgressHandler();
+    virtual ~AbstractOutputProgressHandler();
 
-	virtual void setValue(int value);
+    virtual void setValue(int value);
 
-	virtual void update(double percentage, double average_speed, int eta);
+    virtual void update(double percentage, double average_speed, int eta);
 
-protected:
-	// the time of the start of progress
-	int start;
-	// time of last update
-	int last_update;
-	// value of last update
-	int last_value;
-	// percentage of last update
-	int last_percentage;
+  protected:
+    // the time of the start of progress
+    int start;
+    // time of last update
+    int last_update;
+    // value of last update
+    int last_value;
+    // percentage of last update
+    int last_percentage;
 };
 
 class LogOutputProgressHandler : public AbstractOutputProgressHandler {
-public:
-	LogOutputProgressHandler();
-	virtual ~LogOutputProgressHandler();
+  public:
+    LogOutputProgressHandler();
+    virtual ~LogOutputProgressHandler();
 
-	virtual void update(double percentage, double average_speed, int eta);
+    virtual void update(double percentage, double average_speed, int eta);
 
-private:
-	int last_step;
+  private:
+    int last_step;
 };
 
 /**
@@ -117,10 +117,10 @@ private:
  */
 class ProgressBar : public AbstractOutputProgressHandler {
 public:
-	ProgressBar();
+    ProgressBar();
 	virtual ~ProgressBar();
 
-	virtual void update(double percentage, double average_speed, int eta);
+    virtual void update(double percentage, double average_speed, int eta);
 
 	void finish();
 private:

@@ -112,12 +112,12 @@ AbstractOutputProgressHandler::AbstractOutputProgressHandler()
 AbstractOutputProgressHandler::~AbstractOutputProgressHandler() {}
 
 void AbstractOutputProgressHandler::setValue(int value) {
-	int now = std::time(nullptr);
-	// check whether the time since the last shown update
-	// and the change was big enough to show a new update
+    int now = std::time(nullptr);
+    // check whether the time since the last shown update
+    // and the change was big enough to show a new update
 	double percentage = value / (double) max * 100.;
-	if (last_update + 1 > now && !(last_percentage != max && value == max)) {
-		this->value = value;
+    if (last_update + 1 > now && !(last_percentage != max && value == max)) {
+        this->value = value;
         return;
 	}
 
@@ -140,16 +140,18 @@ void AbstractOutputProgressHandler::setValue(int value) {
 	update(percentage, average_speed, eta);
 }
 
-void AbstractOutputProgressHandler::update(double percentage, double average_speed,
-		int eta) {
-}
+    // now calculate the average speed
+    double average_speed = (double)value / (now - start);
 
-LogOutputProgressHandler::LogOutputProgressHandler()
-	: last_step(0) {
-}
+    // eta only when we have an average speed
+    int eta = -1;
+    if (value != max && value != 0 && (now - start) != 0)
+        eta = (max - value) / average_speed;
 
-LogOutputProgressHandler::~LogOutputProgressHandler() {
-}
+    // set this as last update
+    last_update = now;
+    last_value = value;
+    last_percentage = percentage;
 
 void LogOutputProgressHandler::update(double percentage, double average_speed,
 		int eta) {
@@ -166,12 +168,33 @@ void LogOutputProgressHandler::update(double percentage, double average_speed,
 		log << " ETA " << util::format_eta(eta) << ".";
 }
 
-ProgressBar::ProgressBar()
+    // call handler
     update(percentage, average_speed, eta);
 }
 
-ProgressBar::~ProgressBar() {
+void AbstractOutputProgressHandler::update(double percentage, double average_speed, int eta) {}
+
+LogOutputProgressHandler::LogOutputProgressHandler() : last_step(0) {}
+
+LogOutputProgressHandler::~LogOutputProgressHandler() {}
+
+void LogOutputProgressHandler::update(double percentage, double average_speed, int eta) {
+    if (percentage < last_step + 5)
+        return;
+    last_step = percentage;
+
+    // TODO maybe make it possible to specify a format?
+    auto log = LOGN(INFO, "progress");
+    log << std::floor(percentage) << "% complete. ";
+    log << "Processed " << value << "/" << max << " items ";
+    log << "with average " << std::setprecision(1) << std::fixed << average_speed << "/s.";
+    if (eta != -1)
+        log << " ETA " << util::format_eta(eta) << ".";
 }
+
+ProgressBar::ProgressBar() : last_output_len(0) {}
+
+ProgressBar::~ProgressBar() {}
 
 void ProgressBar::update(double percentage, double average_speed, int eta) {
 	// try to determine the width of the terminal
@@ -194,7 +217,7 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
 
 	// create the progress stats: percentage, current/maximum value, speed, eta
 	std::string stats;
-	stats = createProgressStats(percentage, value, max, average_speed, eta);
+    stats = createProgressStats(percentage, value, max, average_speed, eta);
 
 	// now create the progress bar
 	// with the remaining size minus one as size
