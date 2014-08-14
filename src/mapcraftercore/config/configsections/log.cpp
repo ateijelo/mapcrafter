@@ -94,43 +94,43 @@ void LogSection::setConfigDir(const fs::path &config_dir) { this->config_dir = c
 void LogSection::configureLogging() const {
 	// "builtin" log sinks that have only one existing instance (e.g. output, syslog logger)
 	// are named __<name>__, so we have __output__ and __syslog__
-	std::string sink_name = "__" + util::str(getType()) + "__";
+    std::string sink_name = "__" + util::str(getType()) + "__";
 	// the other sinks just use the name of the config section as name
-	if (getType() == LogSinkType::FILE)
-		sink_name = getSectionName();
+    if (getType() == LogSinkType::FILE)
+        sink_name = getSectionName();
 
 	// set generic logging options for sinks (if specified in config)
-	util::Logging& logging = util::Logging::getInstance();
-	if (verbosity.isLoaded())
-		logging.setSinkVerbosity(sink_name, verbosity.getValue());
-	if (log_progress.isLoaded())
-		logging.setSinkLogProgress(sink_name, log_progress.getValue());
+    util::Logging &logging = util::Logging::getInstance();
+    if (verbosity.isLoaded())
+        logging.setSinkVerbosity(sink_name, verbosity.getValue());
+    if (log_progress.isLoaded())
+        logging.setSinkLogProgress(sink_name, log_progress.getValue());
 
 	// try to create file log sink
-	if (getType() == LogSinkType::FILE) {
-		if (logging.getSink(sink_name) != nullptr)
-			LOG(WARNING) << "Unable to configure file log '" << file.getValue()
-					<< "'. Sink name '" << sink_name << "' is already in use!";
-		else
+    if (getType() == LogSinkType::FILE) {
+        if (logging.getSink(sink_name) != nullptr)
+            LOG(WARNING) << "Unable to configure file log '" << file.getValue() << "'. Sink name '"
+                         << sink_name << "' is already in use!";
+        else
 			logging.setSink(sink_name, new util::LogFileSink(file.getValue().string()));
-	}
+    }
 
 	// try to set format of output/file log sink
-	if (getType() == LogSinkType::OUTPUT || getType() == LogSinkType::FILE) {
-		util::LogSink* sink_ptr = logging.getSink(sink_name);
-		util::FormattedLogSink* sink = dynamic_cast<util::FormattedLogSink*>(sink_ptr);
-		if (sink != nullptr) {
-			if (format.isLoaded())
-				sink->setFormat(format.getValue());
-			if (date_format.isLoaded())
-				sink->setDateFormat(date_format.getValue());
-		} else
-			LOG(WARNING) << "Unable to configure log sink '" << sink_name << "'!";
-	}
+    if (getType() == LogSinkType::OUTPUT || getType() == LogSinkType::FILE) {
+        util::LogSink *sink_ptr = logging.getSink(sink_name);
+        util::FormattedLogSink *sink = dynamic_cast<util::FormattedLogSink *>(sink_ptr);
+        if (sink != nullptr) {
+            if (format.isLoaded())
+                sink->setFormat(format.getValue());
+            if (date_format.isLoaded())
+                sink->setDateFormat(date_format.getValue());
+        } else
+            LOG(WARNING) << "Unable to configure log sink '" << sink_name << "'!";
+    }
 
 #ifdef HAVE_SYSLOG_H
 	// try to create syslog sink if it's not enabled already
-	if (getType() == LogSinkType::SYSLOG && logging.getSink(sink_name) == nullptr)
+    if (getType() == LogSinkType::SYSLOG && logging.getSink(sink_name) == nullptr)
 		logging.setSink(sink_name, new util::LogSyslogSink);
 #endif
 }
@@ -177,20 +177,20 @@ bool LogSection::parseField(const std::string key, const std::string value,
 
 void LogSection::postParse(const INIConfigSection &section, ValidationList &validation) {
     std::string section_name = getSectionName();
-	std::string section_name = getSectionName();
+    // "__<name>__" as name is reserved for special builtin sinks
 	// "__<name>__" as name is reserved for special builtin sinks
-	if (!section_name.empty() && section_name[0] == '_')
-		validation.error("Invalid section name '" + section_name + "'! "
-				"Log section names must not start with an underscore!");
+        validation.error("Invalid section name '" + section_name +
+                         "'! "
+                         "Log section names must not start with an underscore!");
 	if (!type.require(validation, "You have to specify a log sink type ('type')!"))
 		return;
 #ifndef HAVE_SYSLOG_H
-	if (getType() == LogSinkType::SYSLOG)
-		validation.error("You have set the log type to syslog, but syslog is not "
-				"available on your platform!");
+    if (getType() == LogSinkType::SYSLOG)
+        validation.error("You have set the log type to syslog, but syslog is not "
+                         "available on your platform!");
 #endif
-	if (getType() == LogSinkType::FILE)
-		file.require(validation, "You have to specify a log file ('file')!");
+    if (getType() == LogSinkType::FILE)
+        file.require(validation, "You have to specify a log file ('file')!");
 }
 
 } /* namespace config */

@@ -240,8 +240,9 @@ void LogOutputSink::sinkFormatted(const LogMessage& message,
 
 LogFileSink::LogFileSink(const std::string& filename) {
 	out.open(filename, std::fstream::out | std::fstream::app);
-	if (!out)
-		std::cerr << "Internal logging error: Unable to open log file '" << filename << "'!" << std::endl;
+    if (!out)
+        std::cerr << "Internal logging error: Unable to open log file '" << filename << "'!"
+                  << std::endl;
 }
 
 LogFileSink::~LogFileSink() {
@@ -311,10 +312,10 @@ void Logging::setSinkLogProgress(const std::string& sink, bool log_progress) {
 	sinks_log_progress[sink] = log_progress;
 }
 
-LogSink* Logging::getSink(const std::string& name) {
-	if (sinks.count(name))
-		return sinks[name].get();
-	return nullptr;
+LogSink *Logging::getSink(const std::string &name) {
+    if (sinks.count(name))
+        return sinks[name].get();
+    return nullptr;
 }
 
 void Logging::setSink(const std::string& name, LogSink* sink) {
@@ -360,8 +361,8 @@ void Logging::handleLogMessage(const LogMessage& message) {
 		return;
 	for (auto it = sinks.begin(); it != sinks.end(); ++it) {
 		// check if this is a progress log message and sink should handle progress messages
-		if (message.logger == "progress" && !getSinkLogProgress(it->first))
-			continue;
+void Logging::handleLogMessage(const LogMessage &message) {
+    thread_ns::unique_lock<thread_ns::mutex> lock(handle_message_mutex);
 		// if sink has the right verbosity, pass log message to the sink
 		if (message.level <= getSinkVerbosity(it->first))
 			(*it->second).sink(message);

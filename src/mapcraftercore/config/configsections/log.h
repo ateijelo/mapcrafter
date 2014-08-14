@@ -43,7 +43,7 @@ class LogSection : public ConfigSection {
     virtual void dump(std::ostream &out) const;
 
     void setConfigDir(const fs::path &config_dir);
-	void configureLogging() const;
+    void configureLogging() const;
 
     LogSinkType getType() const;
     util::LogLevel getVerbosity() const;

@@ -401,16 +401,16 @@ bool RenderManager::run(int threads, bool batch) {
 				<< "Rendering rotation " << config::ROTATION_NAMES[*rotation_it] << "...";
 
 			std::shared_ptr<util::MultiplexingProgressHandler> progress(new util::MultiplexingProgressHandler);
-			util::ProgressBar* progress_bar = nullptr;
+                new util::MultiplexingProgressHandler);
             util::ProgressBar *progress_bar = nullptr;
-				util::Logging::getInstance().setSinkLogProgress("__output__", true);
-			} else {
+            if (batch || !util::isOutTTY()) {
+                util::Logging::getInstance().setSinkLogProgress("__output__", true);
 				progress_bar = new util::ProgressBar;
 				progress->addHandler(progress_bar);
 			}
 
-			util::LogOutputProgressHandler* log_output = new util::LogOutputProgressHandler;
-			progress->addHandler(log_output);
+
+            util::LogOutputProgressHandler *log_output = new util::LogOutputProgressHandler;
 
 
             std::time_t time_start = std::time(nullptr);
