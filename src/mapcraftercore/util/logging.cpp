@@ -286,11 +286,7 @@ void Logging::reset() {
     loggers.clear();
     sinks.clear();
     sinks_verbosity.clear();
-	sinks_log_progress.clear();
-
-	setSink("__output__", new LogOutputSink);
-	setSinkLogProgress("__output__", false);
-}
+    sinks_log_progress.clear();
 
 Logger& Logging::getLogger(const std::string& name) {
 	thread_ns::unique_lock<thread_ns::mutex> lock(loggers_mutex);
