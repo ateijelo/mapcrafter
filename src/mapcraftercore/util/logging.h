@@ -222,7 +222,7 @@ public:
  */
 class FormattedLogSink : public LogSink {
 public:
-	FormattedLogSink();
+    FormattedLogSink();
 	virtual ~FormattedLogSink();
 
 	/**
@@ -260,7 +260,7 @@ protected:
  */
 class LogOutputSink : public FormattedLogSink {
 public:
-	LogOutputSink();
+    LogOutputSink();
 	virtual ~LogOutputSink();
 
 	virtual void sinkFormatted(const LogMessage& message, const std::string& formatted);
@@ -271,7 +271,7 @@ public:
  */
 class LogFileSink : public FormattedLogSink {
 public:
-	LogFileSink(const std::string& filename);
+    LogFileSink(const std::string &filename);
 	virtual ~LogFileSink();
 
 	virtual void sinkFormatted(const LogMessage& message, const std::string& formatted);
@@ -320,14 +320,14 @@ public:
 	 * Returns/sets whether a sink handles progress log messages. Defaults to true.
 	 */
     bool getSinkLogProgress(const std::string &sink) const;
-	void setSinkLogProgress(const std::string& sink, bool log_progress);
+    void setSinkLogProgress(const std::string &sink, bool log_progress);
 
 	/**
 	 * Returns/sets a sink instance. Returns a nullptr if there is no sink with the
 	 * specific name.
 	 */
     LogSink *getSink(const std::string &name);
-	void setSink(const std::string& name, LogSink* sink);
+    void setSink(const std::string &name, LogSink *sink);
 
 	/**
 	 * Resets the configured logging facility.
@@ -365,7 +365,7 @@ protected:
 	std::map<std::string, std::shared_ptr<Logger> > loggers;
 	std::map<std::string, std::shared_ptr<LogSink> > sinks;
 	std::map<std::string, LogLevel> sinks_verbosity;
-	std::map<std::string, bool> sinks_log_progress;
+    std::map<std::string, bool> sinks_log_progress;
 
 	thread_ns::mutex loggers_mutex, handle_message_mutex;
 

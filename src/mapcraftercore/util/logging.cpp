@@ -238,7 +238,7 @@ void LogOutputSink::sinkFormatted(const LogMessage& message,
 		std::cout << formatted << std::endl;
 }
 
-LogFileSink::LogFileSink(const std::string& filename) {
+LogFileSink::LogFileSink(const std::string &filename) {
 	out.open(filename, std::fstream::out | std::fstream::app);
     if (!out)
         std::cerr << "Internal logging error: Unable to open log file '" << filename << "'!"
@@ -302,10 +302,10 @@ void Logging::setSinkVerbosity(const std::string& sink, LogLevel level) {
 	updateMaximumVerbosity();
 }
 
-bool Logging::getSinkLogProgress(const std::string& sink) const {
-	if (sinks_log_progress.count(sink))
-		return sinks_log_progress.at(sink);
-	return true;
+bool Logging::getSinkLogProgress(const std::string &sink) const {
+    if (sinks_log_progress.count(sink))
+        return sinks_log_progress.at(sink);
+    return true;
 }
 
 void Logging::setSinkLogProgress(const std::string& sink, bool log_progress) {
@@ -318,7 +318,7 @@ LogSink *Logging::getSink(const std::string &name) {
     return nullptr;
 }
 
-void Logging::setSink(const std::string& name, LogSink* sink) {
+void Logging::setSink(const std::string &name, LogSink *sink) {
 	sinks[name] = std::shared_ptr<LogSink>(sink);
 }
 

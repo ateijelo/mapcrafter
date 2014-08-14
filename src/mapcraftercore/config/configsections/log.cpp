@@ -103,7 +103,7 @@ void LogSection::configureLogging() const {
             LOG(WARNING) << "Unable to configure file log '" << file.getValue() << "'. Sink name '"
                          << sink_name << "' is already in use!";
         else
-			logging.setSink(sink_name, new util::LogFileSink(file.getValue().string()));
+            logging.setSink(sink_name, new util::LogFileSink(file.getValue().string()));
     }
 
     // try to set format of output/file log sink
@@ -122,7 +122,7 @@ void LogSection::configureLogging() const {
 #ifdef HAVE_SYSLOG_H
     // try to create syslog sink if it's not enabled already
     if (getType() == LogSinkType::SYSLOG && logging.getSink(sink_name) == nullptr)
-		logging.setSink(sink_name, new util::LogSyslogSink);
+        logging.setSink(sink_name, new util::LogSyslogSink);
 #endif
 }
 
@@ -140,9 +140,8 @@ fs::path LogSection::getFile() const { return file.getValue(); }
 
 void LogSection::preParse(const INIConfigSection &section, ValidationList &validation) {
     // don't set defaults here, they are set by the logging class
-	// don't set defaults here, they are set by the logging class
-	// if something is set in the logging config file,
-	// it is overwritten in the logging class then
+    // if something is set in the logging config file,
+    // it is overwritten in the logging class then
 }
 
 bool LogSection::parseField(const std::string key, const std::string value,
@@ -173,8 +172,8 @@ void LogSection::postParse(const INIConfigSection &section, ValidationList &vali
         validation.error("Invalid section name '" + section_name +
                          "'! "
                          "Log section names must not start with an underscore!");
-	if (!type.require(validation, "You have to specify a log sink type ('type')!"))
-		return;
+    if (!type.require(validation, "You have to specify a log sink type ('type')!"))
+        return;
 #ifndef HAVE_SYSLOG_H
     if (getType() == LogSinkType::SYSLOG)
         validation.error("You have set the log type to syslog, but syslog is not "
