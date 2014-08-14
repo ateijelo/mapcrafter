@@ -159,9 +159,7 @@ LogSink::~LogSink() {}
 void LogSink::sink(const LogMessage &message) {}
 
 FormattedLogSink::FormattedLogSink()
-	: format("%(date) [%(level)] [%(logger)] %(message)"),
-	  date_format("%Y-%m-%d %H:%M:%S") {
-}
+    : format("%(date) [%(level)] [%(logger)] %(message)"), date_format("%Y-%m-%d %H:%M:%S") {}
 
 FormattedLogSink::~FormattedLogSink() {}
 
