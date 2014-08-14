@@ -192,8 +192,7 @@ void FormattedLogSink::sink(const LogMessage &message) {
 
 void FormattedLogSink::sinkFormatted(const LogMessage &message, const std::string &formatted) {}
 
-LogOutputSink::LogOutputSink() {
-}
+LogOutputSink::LogOutputSink() {}
 
 LogOutputSink::~LogOutputSink() {
 }
