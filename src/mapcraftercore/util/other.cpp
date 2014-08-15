@@ -87,10 +87,7 @@ int64_t bigEndian64(int64_t x) {
 }
 
 // nicer bool -> string conversion
-template <>
-std::string str<bool>(bool value) {
-	return value ? "true" : "false";
-}
+template <> std::string str<bool>(bool value) { return value ? "true" : "false"; }
 
 /**
  * Overwrites the string stream solution for string -> string conversion.
