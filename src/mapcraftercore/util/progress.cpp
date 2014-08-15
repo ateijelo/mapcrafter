@@ -23,8 +23,6 @@
 #include "logging.h"
 #include "other.h"
 
-#include <iomanip>
-#include <iostream>
 #include <cmath>
 #include <cstdio>
 #include <ctime>
