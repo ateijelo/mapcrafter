@@ -81,9 +81,15 @@ void LogSection::dump(std::ostream &out) const {
 		out << "  file = " << file << std::endl;
 }
 
-void LogSection::setConfigDir(const fs::path& config_dir) {
-	this->config_dir = config_dir;
+    if (getType() == LogSinkType::OUTPUT || getType() == LogSinkType::FILE) {
+        out << "  format = " << format << std::endl;
+        out << "  date_format = " << date_format << std::endl;
+    }
+    if (getType() == LogSinkType::FILE)
+        out << "  file = " << file << std::endl;
 }
+
+void LogSection::setConfigDir(const fs::path &config_dir) { this->config_dir = config_dir; }
 
 void LogSection::configureLogging() const {
 	// "builtin" log sinks that have only one existing instance (e.g. output, syslog logger)
@@ -160,11 +166,11 @@ bool LogSection::parseField(const std::string key, const std::string value,
         format.load(key, value, validation);
     else if (key == "date_format")
         date_format.load(key, value, validation);
-	else if (key == "file") {
+    else if (key == "file") {
 		// file is relative to config file
-		if (file.load(key, value, validation))
-			file.setValue(BOOST_FS_ABSOLUTE(file.getValue(), config_dir));
-	} else
+        if (file.load(key, value, validation))
+            file.setValue(BOOST_FS_ABSOLUTE(file.getValue(), config_dir));
+    } else
         return false;
     return true;
 }

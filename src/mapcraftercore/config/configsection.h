@@ -30,16 +30,15 @@ namespace config {
 /**
  * Customized section factory that passes the config directory to the section objects.
  */
-template <typename T>
-class ConfigDirSectionFactory {
-public:
-	ConfigDirSectionFactory(fs::path config_dir = "");
-	~ConfigDirSectionFactory();
+template <typename T> class ConfigDirSectionFactory {
+  public:
+    ConfigDirSectionFactory(fs::path config_dir = "");
+    ~ConfigDirSectionFactory();
 
-	T operator()() const;
+    T operator()() const;
 
-private:
-	fs::path config_dir;
+  private:
+    fs::path config_dir;
 };
 
 class INIConfigSection;
@@ -118,19 +117,14 @@ private:
 std::ostream& operator<<(std::ostream& out, const ConfigSection& section);
 
 template <typename T>
-ConfigDirSectionFactory<T>::ConfigDirSectionFactory(fs::path config_dir)
-	: config_dir(config_dir) {
-}
+ConfigDirSectionFactory<T>::ConfigDirSectionFactory(fs::path config_dir) : config_dir(config_dir) {}
 
-template <typename T>
-ConfigDirSectionFactory<T>::~ConfigDirSectionFactory() {
-}
+template <typename T> ConfigDirSectionFactory<T>::~ConfigDirSectionFactory() {}
 
-template <typename T>
-T ConfigDirSectionFactory<T>::operator()() const {
-	T section;
-	section.setConfigDir(config_dir);
-	return section;
+template <typename T> T ConfigDirSectionFactory<T>::operator()() const {
+    T section;
+    section.setConfigDir(config_dir);
+    return section;
 }
 
 }
