@@ -45,7 +45,7 @@ struct Color {
 	uint8_t red, green, blue;
 };
 
-std::ostream& operator<<(std::ostream& out, const Color& color);
+std::ostream &operator<<(std::ostream &out, const Color &color);
 
 class MapcrafterConfigRootSection : public ConfigSection {
 public:

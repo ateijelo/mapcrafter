@@ -255,13 +255,12 @@ template <typename T> void Field<T>::setValue(T value) { this->value = value; }
 
 template <typename T> bool Field<T>::isLoaded() const { return loaded; }
 
-template <typename T>
-std::ostream& operator<<(std::ostream& out, Field<T> field) {
-	if (field.isLoaded())
-		out << util::str(field.getValue());
-	else
-		out << "<not specified>";
-	return out;
+template <typename T> std::ostream &operator<<(std::ostream &out, Field<T> field) {
+    if (field.isLoaded())
+        out << util::str(field.getValue());
+    else
+        out << "<not specified>";
+    return out;
 }
 
 } /* namespace config */

@@ -51,9 +51,9 @@ mapcrafter::config::Color as<mapcrafter::config::Color>(const std::string& from)
 namespace mapcrafter {
 namespace config {
 
-std::ostream& operator<<(std::ostream& out, const Color& color) {
-	out << color.hex;
-	return out;
+std::ostream &operator<<(std::ostream &out, const Color &color) {
+    out << color.hex;
+    return out;
 }
 
 MapcrafterConfigRootSection::MapcrafterConfigRootSection() {
@@ -68,9 +68,9 @@ std::string MapcrafterConfigRootSection::getPrettyName() const {
 
 void MapcrafterConfigRootSection::dump(std::ostream &out) const {
     out << getPrettyName() << ":" << std::endl;
-	out << "  output_dir = " << output_dir << std::endl;
-	out << "  template_dir = " << template_dir << std::endl;
-	out << "  color = " << background_color << std::endl;
+    out << "  output_dir = " << output_dir << std::endl;
+    out << "  template_dir = " << template_dir << std::endl;
+    out << "  color = " << background_color << std::endl;
 }
 
 void MapcrafterConfigRootSection::setConfigDir(const fs::path& config_dir) {

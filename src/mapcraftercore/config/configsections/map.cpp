@@ -148,20 +148,20 @@ std::string MapSection::getPrettyName() const {
 void MapSection::dump(std::ostream &out) const {
     out << getPrettyName() << ":" << std::endl;
     out << "  name = " << getLongName() << std::endl;
-	out << "  world = " << world << std::endl;
+    out << "  world = " << world << std::endl;
 	out << "  render_view" << render_view << std::endl;
 	out << "  render_mode = " << render_mode << std::endl;
 	out << "  overlay = " << overlay << std::endl;
-	out << "  rotations = " << rotations << std::endl;
+    out << "  rotations = " << rotations << std::endl;
 	out << "  block_dir = " << block_dir << std::endl;
-	out << "  texture_size = " << texture_size << std::endl;
-	out << "  image_format = " << image_format << std::endl;
+    out << "  texture_size = " << texture_size << std::endl;
+    out << "  image_format = " << image_format << std::endl;
 	out << "  png_indexed = " << png_indexed << std::endl;
-	out << "  jpeg_quality = " << jpeg_quality << std::endl;
-	out << "  lighting_intensity = " << lighting_intensity << std::endl;
+    out << "  jpeg_quality = " << jpeg_quality << std::endl;
+    out << "  lighting_intensity = " << lighting_intensity << std::endl;
 	out << "  lighting_water_intensity = " << lighting_water_intensity << std::endl;
-	out << "  render_biomes = " << render_biomes << std::endl;
-	out << "  use_image_timestamps = " << use_image_mtimes << std::endl;
+    out << "  render_biomes = " << render_biomes << std::endl;
+    out << "  use_image_timestamps = " << use_image_mtimes << std::endl;
 }
 
 void MapSection::setConfigDir(const fs::path &config_dir) { this->config_dir = config_dir; }

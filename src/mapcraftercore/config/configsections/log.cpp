@@ -68,8 +68,8 @@ std::string LogSection::getPrettyName() const {
 
 void LogSection::dump(std::ostream &out) const {
     out << getPrettyName() << ":" << std::endl;
-	out << "  type = " << type << std::endl;
-	out << "  verbosity = " << verbosity << std::endl;
+    out << "  type = " << type << std::endl;
+    out << "  verbosity = " << verbosity << std::endl;
 	out << "  log_progress = " << log_progress << std::endl;
 
 	if (getType() == LogSinkType::OUTPUT || getType() == LogSinkType::FILE) {
