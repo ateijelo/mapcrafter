@@ -228,8 +228,8 @@ LogSyslogSink::LogSyslogSink() { openlog("mapcrafter", 0, LOG_USER); }
 LogSyslogSink::~LogSyslogSink() { closelog(); }
 
 void LogSyslogSink::sink(const LogMessage &message) {
-	syslog(LogLevelHelper::levelToSyslog(message.level),
-			util::replaceAll(message.message, "%", "%%").c_str());
+    syslog(LogLevelHelper::levelToSyslog(message.level),
+           util::replaceAll(message.message, "%", "%%").c_str());
 }
 
 #endif
