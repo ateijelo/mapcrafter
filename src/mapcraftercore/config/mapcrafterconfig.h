@@ -57,13 +57,13 @@ class MapcrafterConfigRootSection : public ConfigSection {
 
     void setConfigDir(const fs::path &config_dir);
 
-	fs::path getOutputDir() const;
-	fs::path getTemplateDir() const;
-	Color getBackgroundColor() const;
+    fs::path getOutputDir() const;
+    fs::path getTemplateDir() const;
+    Color getBackgroundColor() const;
 
-protected:
+  protected:
     virtual void preParse(const INIConfigSection &section, ValidationList &validation);
-			ValidationList& validation);
+    virtual bool parseField(const std::string key, const std::string value,
                             ValidationList &validation);
     virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
@@ -83,7 +83,7 @@ class MapcrafterConfig {
     ValidationMap parseString(const std::string &string, fs::path config_dir = "");
     void dump(std::ostream &out) const;
 
-	void configureLogging() const;
+    void configureLogging() const;
 
     fs::path getOutputDir() const;
     fs::path getTemplateDir() const;

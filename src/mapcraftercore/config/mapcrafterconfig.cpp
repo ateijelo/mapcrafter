@@ -74,16 +74,12 @@ void MapcrafterConfigRootSection::setConfigDir(const fs::path &config_dir) {
     this->config_dir = config_dir;
 }
 
-fs::path MapcrafterConfigRootSection::getOutputDir() const {
-	return output_dir.getValue();
-}
+fs::path MapcrafterConfigRootSection::getOutputDir() const { return output_dir.getValue(); }
 
-fs::path MapcrafterConfigRootSection::getTemplateDir() const {
-	return template_dir.getValue();
-}
+fs::path MapcrafterConfigRootSection::getTemplateDir() const { return template_dir.getValue(); }
 
 Color MapcrafterConfigRootSection::getBackgroundColor() const {
-	return background_color.getValue();
+    return background_color.getValue();
 }
 
 void MapcrafterConfigRootSection::preParse(const INIConfigSection &section,
@@ -173,7 +169,7 @@ void MapcrafterConfig::dump(std::ostream &out) const {
 
 void MapcrafterConfig::configureLogging() const {
     for (auto sink_it = log_sections.begin(); sink_it != log_sections.end(); ++sink_it)
-		sink_it->configureLogging();
+        sink_it->configureLogging();
 }
 
 fs::path MapcrafterConfig::getOutputDir() const {
