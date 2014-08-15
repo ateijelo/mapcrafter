@@ -106,7 +106,7 @@ public:
 	const std::vector<MarkerSection>& getMarkers() const;
 	const MarkerSection& getMarker(const std::string& marker) const;
 
-	const std::vector<LogSection>& getLogSections() const;
+    const std::vector<LogSection> &getLogSections() const;
 
   private:
     ValidationMap parse(const INIConfig &config, const fs::path &config_dir);

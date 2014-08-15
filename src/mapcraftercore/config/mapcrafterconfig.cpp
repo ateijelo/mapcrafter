@@ -249,9 +249,28 @@ const MarkerSection& MapcrafterConfig::getMarker(const std::string& marker) cons
 	throw std::out_of_range("Marker not found!");
 }
 
-const std::vector<LogSection>& MapcrafterConfig::getLogSections() const {
-	return log_sections;
-}
+const std::vector<LogSection> &MapcrafterConfig::getLogSections() const { return log_sections; }
+
+ValidationMap MapcrafterConfig::parse(const config::INIConfig &config, const fs::path &config_dir) {
+    root_section.setConfigDir(config_dir);
+
+    ConfigParser parser(config);
+    parser.parseRootSection(root_section);
+    parser.parseSections(worlds, "world", ConfigDirSectionFactory<WorldSection>(config_dir));
+    parser.parseSections(maps, "map", ConfigDirSectionFactory<MapSection>(config_dir));
+    parser.parseSections(markers, "marker");
+    parser.parseSections(log_sections, "log", ConfigDirSectionFactory<LogSection>(config_dir));
+    parser.validate();
+
+    ValidationMap validation = parser.getValidation();
+
+    // check if all worlds specified for maps exist
+    // 'map_it->getWorld() != ""' because that's already handled by map section class
+    for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it)
+        if (map_it->getWorld() != "" && !hasWorld(map_it->getWorld())) {
+            validation.section(map_it->getPrettyName())
+                .error("World '" + map_it->getWorld() + "' does not exist!");
+        }
 
     return validation;
 }
