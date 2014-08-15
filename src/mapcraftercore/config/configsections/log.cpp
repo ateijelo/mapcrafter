@@ -70,15 +70,7 @@ void LogSection::dump(std::ostream &out) const {
     out << getPrettyName() << ":" << std::endl;
     out << "  type = " << type << std::endl;
     out << "  verbosity = " << verbosity << std::endl;
-	out << "  log_progress = " << log_progress << std::endl;
-
-	if (getType() == LogSinkType::OUTPUT || getType() == LogSinkType::FILE) {
-		out << "  format = " << format << std::endl;
-		out << "  date_format = " << date_format << std::endl;
-	}
-	if (getType() == LogSinkType::FILE)
-		out << "  file = " << file << std::endl;
-}
+    out << "  log_progress = " << log_progress << std::endl;
 
     if (getType() == LogSinkType::OUTPUT || getType() == LogSinkType::FILE) {
         out << "  format = " << format << std::endl;
