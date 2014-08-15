@@ -25,22 +25,12 @@
 namespace mapcrafter {
 namespace config {
 
-LoggingConfig::LoggingConfig() {
-}
+LoggingConfig::LoggingConfig() {}
 
-LoggingConfig::~LoggingConfig() {
-}
+LoggingConfig::~LoggingConfig() {}
 
-ValidationMap LoggingConfig::parse(const std::string& filename) {
-	ValidationMap validation;
-
-	INIConfig config;
-	try {
-		config.loadFile(filename);
-	} catch (INIConfigError& exception) {
-		validation.section("Configuration file").error(exception.what());
-		return validation;
-	}
+ValidationMap LoggingConfig::parse(const std::string &filename) {
+    ValidationMap validation;
 
     INIConfig config;
     try {
@@ -55,37 +45,40 @@ ValidationMap LoggingConfig::parse(const std::string& filename) {
 	parser.parseRootSection(root_section);
 
     // use an empty root section to also get warnings for unknown entries here
-	parser.parseSections(log_sections, "log", ConfigDirSectionFactory<LogSection>(config_dir));
+    ConfigSection root_section;
+    parser.parseRootSection(root_section);
 
-	parser.validate();
+    fs::path config_dir = BOOST_FS_ABSOLUTE1(fs::path(filename)).parent_path();
 	return parser.getValidation();
 }
 
-const std::vector<LogSection>& LoggingConfig::getLogSections() {
-	return log_sections;
+    parser.validate();
+    return parser.getValidation();
 }
 
 const std::vector<LogSection> &LoggingConfig::getLogSections() { return log_sections; }
 
-		LOG(WARNING) << "Unable to find a global logging configuration file!";
-		return;
-	}
+void LoggingConfig::configureLogging(const fs::path &logging_config) {
+    if (logging_config.empty()) {
+        LOG(WARNING) << "Unable to find a global logging configuration file!";
+        return;
+    }
 
-	LoggingConfig config;
-
-	if (!validation.isEmpty()) {
+    LoggingConfig config;
     ValidationMap validation = config.parse(logging_config.string());
     if (!validation.isEmpty()) {
         if (validation.isCritical())
             LOG(FATAL) << "Unable to parse global logging configuration file:";
-		validation.log();
-	}
-	if (validation.isCritical())
-		return;
-
+        else
+            LOG(WARNING) << "There is a problem parsing the global logging configuration file:";
+        validation.log();
+    }
+    if (validation.isCritical())
         return;
 
-		it->configureLogging();
+    auto log_sections = config.getLogSections();
+    for (auto it = log_sections.begin(); it != log_sections.end(); ++it)
+        it->configureLogging();
 }
 
 } /* namespace config */

@@ -120,15 +120,15 @@ void ValidationMap::log(std::string logger) const {
         if (messages.empty())
             continue;
 
-		if (isCritical()) {
-			LOGN(ERROR, logger) << section_it->first << ":";
-			for (auto it = messages.begin(); it != messages.end(); ++it)
-				LOGN(ERROR, logger) << " - " << *it;
-		} else {
-			LOGN(WARNING, logger) << section_it->first << ":";
-			for (auto it = messages.begin(); it != messages.end(); ++it)
-				LOGN(WARNING, logger) << " - " << *it;
-		}
+        if (isCritical()) {
+            LOGN(ERROR, logger) << section_it->first << ":";
+            for (auto it = messages.begin(); it != messages.end(); ++it)
+                LOGN(ERROR, logger) << " - " << *it;
+        } else {
+            LOGN(WARNING, logger) << section_it->first << ":";
+            for (auto it = messages.begin(); it != messages.end(); ++it)
+                LOGN(WARNING, logger) << " - " << *it;
+        }
     }
 }
 
