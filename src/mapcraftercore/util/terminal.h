@@ -44,29 +44,29 @@ enum class TerminalColorStates { ENABLED, DISABLED, AUTO };
  * You can reset the text color with: out << setcolor::reset;
  */
 class setcolor {
-public:
-	setcolor(int type = 0, int color = 0);
-	std::ostream& operator()(std::ostream& out) const;
+  public:
+    setcolor(int type = 0, int color = 0);
+    std::ostream &operator()(std::ostream &out) const;
 
-	static std::ostream& reset(std::ostream& out);
+    static std::ostream &reset(std::ostream &out);
 
     static void setEnabled(TerminalColorStates enabled);
 
-	static const int foreground = 30;
-	static const int background = 40;
+    static const int foreground = 30;
+    static const int background = 40;
 
-	static const int black = 0;
-	static const int red = 1;
-	static const int green = 2;
-	static const int yellow = 3;
-	static const int blue = 4;
-	static const int magenta = 5;
-	static const int cyan = 6;
-	static const int white = 7;
+    static const int black = 0;
+    static const int red = 1;
+    static const int green = 2;
+    static const int yellow = 3;
+    static const int blue = 4;
+    static const int magenta = 5;
+    static const int cyan = 6;
+    static const int white = 7;
 
-private:
-	// type (set foreground/background) and the color code
-	int type, color;
+  private:
+    // type (set foreground/background) and the color code
+    int type, color;
 
     /**
      * Returns whether colored terminal output is enabled.
@@ -76,16 +76,16 @@ private:
 };
 
 class setfgcolor : public setcolor {
-public:
-	setfgcolor(int color) : setcolor(setcolor::foreground, color) {}
+  public:
+    setfgcolor(int color) : setcolor(setcolor::foreground, color) {}
 };
 
 class setbgcolor : public setcolor {
-public:
-	setbgcolor(int color) : setcolor(setcolor::background, color) {}
+  public:
+    setbgcolor(int color) : setcolor(setcolor::background, color) {}
 };
 
-std::ostream& operator<<(std::ostream& out, const setcolor& color);
+std::ostream &operator<<(std::ostream &out, const setcolor &color);
 
 } /* namespace util */
 } /* namespace mapcrafter */

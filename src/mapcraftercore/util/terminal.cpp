@@ -42,11 +42,9 @@ bool isOutTTY() {
 #endif
 }
 
-setcolor::setcolor(int type, int color)
-	: type(type), color(color) {
-}
+setcolor::setcolor(int type, int color) : type(type), color(color) {}
 
-std::ostream& setcolor::operator()(std::ostream& out) const {
+std::ostream &setcolor::operator()(std::ostream &out) const {
     if (!isEnabled())
         return out;
 	if (color == 0) {
@@ -79,11 +77,11 @@ std::ostream& setcolor::operator()(std::ostream& out) const {
 	SetConsoleTextAttribute(hStdout, color_flags);
 	return out;
 #else
-	return out << "\033[1;" << type + color << "m";
+    return out << "\033[1;" << type + color << "m";
 #endif
 }
 
-std::ostream& setcolor::reset(std::ostream& out) {
+std::ostream &setcolor::reset(std::ostream &out) {
     if (!isEnabled())
         return out;
 #ifdef OS_WINDOWS
@@ -114,9 +112,7 @@ bool setcolor::isEnabled() {
 bool setcolor::enabled_initialized = false;
 bool setcolor::enabled = false;
 
-std::ostream& operator<<(std::ostream& out, const setcolor& color) {
-	return color(out);
-}
+std::ostream &operator<<(std::ostream &out, const setcolor &color) { return color(out); }
 
 } /* namespace util */
 } /* namespace mapcrafter */
