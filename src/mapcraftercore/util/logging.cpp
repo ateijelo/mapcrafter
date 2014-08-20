@@ -238,8 +238,7 @@ thread_ns::mutex Logging::instance_mutex;
 std::shared_ptr<Logging> Logging::instance;
 
 Logging::Logging() : default_verbosity(LogLevel::INFO), maximum_verbosity(default_verbosity) {
-	: default_verbosity(LogLevel::INFO), maximum_verbosity(default_verbosity) {
-	reset();
+    reset();
 }
 
 Logging::~Logging() {}
