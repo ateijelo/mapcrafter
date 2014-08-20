@@ -41,8 +41,7 @@ template <typename T> std::string str(T value) {
     return ss.str();
 }
 
-template <>
-std::string str(bool value);
+template <> std::string str(bool value);
 
 /**
  * A lazy function to convert different datatypes. It works by printing the value into a
