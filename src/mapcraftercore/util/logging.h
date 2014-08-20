@@ -310,7 +310,7 @@ class Logging {
 	 * log sinks. The default verbosity defaults to INFO.
 	 */
 	LogLevel getDefaultVerbosity() const;
-	void setDefaultVerbosity(LogLevel level);
+    void setDefaultVerbosity(LogLevel level);
 
 	/**
 	 * Returns/sets the verbosity of a sink, i.e. the minimum log level log messages must
@@ -364,7 +364,7 @@ class Logging {
 	 */
     void handleLogMessage(const LogMessage &message);
 
-	LogLevel default_verbosity, maximum_verbosity;
+    LogLevel default_verbosity, maximum_verbosity;
 	std::map<std::string, std::shared_ptr<Logger> > loggers;
 	std::map<std::string, std::shared_ptr<LogSink> > sinks;
 	std::map<std::string, LogLevel> sinks_verbosity;

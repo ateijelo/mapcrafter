@@ -198,13 +198,13 @@ LogOutputSink::~LogOutputSink() {}
 
 void LogOutputSink::sinkFormatted(const LogMessage &message, const std::string &formatted) {
     int color = 0;
-	int color = 0;
-	if (message.level == LogLevel::WARNING)
-		color = setcolor::yellow;
-	if (message.level < LogLevel::WARNING)
-		color = setcolor::red;
+    if (message.level == LogLevel::WARNING)
+        color = setcolor::yellow;
+    if (message.level < LogLevel::WARNING)
+        color = setcolor::red;
+    if (message.level < LogLevel::NOTICE || message.level == LogLevel::UNKNOWN)
         std::cerr << setfgcolor(color) << formatted << setcolor::reset << std::endl;
-		std::cerr << setfgcolor(color) << formatted << setcolor::reset << std::endl;
+    else
         std::cout << formatted << std::endl;
 }
 
@@ -260,7 +260,7 @@ void Logging::setDefaultVerbosity(LogLevel level) {
 LogLevel Logging::getSinkVerbosity(const std::string& sink) const {
 	if (sinks_verbosity.count(sink))
 		return sinks_verbosity.at(sink);
-	return default_verbosity;
+    return default_verbosity;
 }
 
 void Logging::setSinkVerbosity(const std::string& sink, LogLevel level) {
@@ -289,7 +289,7 @@ void Logging::setSink(const std::string &name, LogSink *sink) {
 }
 
 void Logging::reset() {
-	default_verbosity = maximum_verbosity = LogLevel::INFO;
+    default_verbosity = maximum_verbosity = LogLevel::INFO;
 	loggers.clear();
 	sinks.clear();
 	sinks_verbosity.clear();
