@@ -47,35 +47,35 @@ setcolor::setcolor(int type, int color) : type(type), color(color) {}
 std::ostream &setcolor::operator()(std::ostream &out) const {
     if (!isEnabled())
         return out;
-	if (color == 0) {
-		reset(out);
-		return out;
-	}
+    if (color == 0) {
+        reset(out);
+        return out;
+    }
 #ifdef OS_WINDOWS
-	int color_flags = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-	switch (color) {
-	case black:
-		color_flags = 0;
-		break;
-	case white:
-		color_flags = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-		break;
-	case red:
-		color_flags = FOREGROUND_RED;
-		break;
-	case green:
-		color_flags = FOREGROUND_GREEN;
-		break;
-	case blue:
-		color_flags = FOREGROUND_BLUE;
-		break;
-	case yellow:
-		color_flags = FOREGROUND_RED | FOREGROUND_GREEN;
-		break;
-	}
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdout, color_flags);
-	return out;
+    int color_flags = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+    switch (color) {
+    case black:
+        color_flags = 0;
+        break;
+    case white:
+        color_flags = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+        break;
+    case red:
+        color_flags = FOREGROUND_RED;
+        break;
+    case green:
+        color_flags = FOREGROUND_GREEN;
+        break;
+    case blue:
+        color_flags = FOREGROUND_BLUE;
+        break;
+    case yellow:
+        color_flags = FOREGROUND_RED | FOREGROUND_GREEN;
+        break;
+    }
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hStdout, color_flags);
+    return out;
 #else
     return out << "\033[1;" << type + color << "m";
 #endif
@@ -85,9 +85,9 @@ std::ostream &setcolor::reset(std::ostream &out) {
     if (!isEnabled())
         return out;
 #ifdef OS_WINDOWS
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	return out;
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+    return out;
 #else
     return out << "\033[1;0m";
 #endif
