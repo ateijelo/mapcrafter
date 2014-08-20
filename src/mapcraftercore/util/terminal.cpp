@@ -24,11 +24,11 @@
 #include <cstdio>
 
 #if defined(OS_WINDOWS)
-#  include <io.h>
-#  include <windows.h>
+#include <io.h>
+#include <windows.h>
 #endif
 #ifdef HAVE_UNISTD_H
-#  include <unistd.h>
+#include <unistd.h>
 #endif
 
 namespace mapcrafter {
@@ -36,9 +36,9 @@ namespace util {
 
 bool isOutTTY() {
 #ifdef OS_WIN
-	return _isatty(_fileno(stdout));
+    return _isatty(_fileno(stdout));
 #else
-	return isatty(fileno(stdout));
+    return isatty(fileno(stdout));
 #endif
 }
 
@@ -48,7 +48,7 @@ setcolor::setcolor(int type, int color)
 
 std::ostream& setcolor::operator()(std::ostream& out) const {
     if (!isEnabled())
-		return out;
+        return out;
 	if (color == 0) {
 		reset(out);
 		return out;
@@ -85,13 +85,13 @@ std::ostream& setcolor::operator()(std::ostream& out) const {
 
 std::ostream& setcolor::reset(std::ostream& out) {
     if (!isEnabled())
-		return out;
+        return out;
 #ifdef OS_WINDOWS
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	return out;
 #else
-	return out << "\033[1;0m";
+    return out << "\033[1;0m";
 #endif
 }
 

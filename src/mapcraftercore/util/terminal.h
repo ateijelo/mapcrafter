@@ -68,9 +68,9 @@ private:
 	// type (set foreground/background) and the color code
 	int type, color;
 
-	/**
+    /**
      * Returns whether colored terminal output is enabled.
-	 */
+     */
     static bool isEnabled();
     static bool enabled_initialized, enabled;
 };
