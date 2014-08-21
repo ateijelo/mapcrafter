@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
         throw ex;
     }
 
-	renderer::RenderOpts opts;
+    renderer::RenderOpts opts;
 	std::string arg_color, arg_config;
 
 	po::options_description general("General options");
@@ -58,14 +58,14 @@ int main(int argc, char **argv) {
 	po::options_description logging("Logging/output options");
 	logging.add_options()
 		("logging-config", po::value<fs::path>(&opts.logging_config),
-			"the path to the global logging configuration file to use (automatically determined if not specified)")
+        "color", po::value<std::string>(&arg_color)->default_value("auto"),
 		("color", po::value<std::string>(&arg_color)->default_value("auto"),
 			"whether terminal output is colored (true, false or auto)")
 		("batch,b", "deactivates the animated progress bar and enables the progress logger instead");
 
 	po::options_description renderer("Renderer options");
 	renderer.add_options()
-		("find-resources", "shows available resource paths, for example template/texture directory and global logging configuration file")
+                           "and global logging configuration file")(
 		("config,c", po::value<std::string>(&arg_config),
 			"the path to the configuration file to use (required)")
 		("render-skip,s", po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 			"renders the specified map(s) completely")
 		("render-force-all,F", "force renders all maps")
 		("jobs,j", po::value<int>(&opts.jobs)->default_value(1),
-			"the count of jobs to use when rendering the map");
+    po::options_description all("Allowed options");
 
 	po::options_description all("Allowed options");
 	all.add(general).add(logging).add(renderer);
@@ -108,8 +108,8 @@ int main(int argc, char **argv) {
 	}
 
         std::cout << "Mapcrafter online documentation: <http://docs.mapcrafter.org>" << std::endl;
-		std::cout << all << std::endl;
-		std::cout << "Mapcrafter online documentation: <http://docs.mapcrafter.org>" << std::endl;
+        return 0;
+    }
 		return 0;
     if (vm.count("version")) {
         std::cout << "Mapcrafter version: " << MAPCRAFTER_VERSION;
@@ -162,7 +162,7 @@ int main(int argc, char **argv) {
 	}
 
 	if (!vm.count("config")) {
-		std::cerr << "You have to specify a configuration file!" << std::endl;
+
 		std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
         std::cerr << "You have to specify a configuration file!" << std::endl;
         std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
@@ -171,9 +171,9 @@ int main(int argc, char **argv) {
 	opts.skip_all = vm.count("render-reset");
 	opts.force_all = vm.count("render-force-all");
 	opts.batch = vm.count("batch");
-	if (!vm.count("logging-config"))
-		opts.logging_config = util::findLoggingConfigFile();
-
+    opts.force_all = vm.count("render-force-all");
+    opts.batch = vm.count("batch");
+    if (!vm.count("logging-config"))
 	if (opts.skip_all && opts.force_all) {
 		std::cerr << "You may only use one of --render-reset or --render-force-all!" << std::endl;
 		std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;

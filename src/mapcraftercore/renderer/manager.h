@@ -47,10 +47,10 @@ namespace renderer {
  * This are the render options from the command line.
  */
 struct RenderOpts {
-	fs::path logging_config;
-	bool batch;
+    fs::path logging_config;
+    bool batch;
 
-	fs::path config;
+    fs::path config;
 	std::vector<std::string> render_skip, render_auto, render_force;
 	bool skip_all, force_all;
     int jobs;

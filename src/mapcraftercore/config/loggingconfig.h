@@ -47,7 +47,7 @@ public:
 	 * Parses/validates a global logging configuration file and configures the log sinks.
 	 * Use the util::findLoggingConfigFile() to automatically find the config file.
 	 */
-	static void configureLogging(const fs::path& logging_config);
+    static void configureLogging(const fs::path &logging_config);
 
 private:
 	std::vector<LogSection> log_sections;
