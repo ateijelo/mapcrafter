@@ -177,9 +177,9 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
         terminal_width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-		// seems Windows "terminal" has some problems if we use the full terminal width
-		// so let's just pretend the terminal is a bit smaller
-		terminal_width -= 2;
+        // seems Windows "terminal" has some problems if we use the full terminal width
+        // so let's just pretend the terminal is a bit smaller
+        terminal_width -= 2;
     }
 #endif
 
