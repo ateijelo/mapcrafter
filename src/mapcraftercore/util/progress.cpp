@@ -35,7 +35,7 @@
 #  include <unistd.h> // STDOUT_FILENO
 #endif
 #if defined(OS_WINDOWS)
-#  include <windows.h>
+#include <windows.h>
 #endif
 
 namespace mapcrafter {
@@ -224,13 +224,13 @@ void ProgressBar::update(double percentage, double average_speed, int eta) {
 	if (ws.ws_col != 0)
 		terminal_width = ws.ws_col;
 #elif defined(OS_WINDOWS)
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
-		terminal_width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
+        terminal_width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
 		// seems Windows "terminal" has some problems if we use the full terminal width
 		// so let's just pretend the terminal is a bit smaller
 		terminal_width -= 2;
-	}
+    }
 #endif
 
 	// create the progress stats: percentage, current/maximum value, speed, eta
