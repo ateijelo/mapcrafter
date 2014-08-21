@@ -44,8 +44,8 @@ class LoggingConfig {
     const std::vector<LogSection> &getLogSections();
 
     /**
-	 * Parses/validates a global logging configuration file and configures the log sinks.
-	 * Use the util::findLoggingConfigFile() to automatically find the config file.
+     * Parses/validates a global logging configuration file and configures the log sinks.
+     * Use the util::findLoggingConfigFile() to automatically find the config file.
      */
     static void configureLogging(const fs::path &logging_config);
 
