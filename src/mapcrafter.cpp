@@ -86,9 +86,9 @@ int main(int argc, char **argv) {
     } catch (po::error &ex) {
         std::cerr << "There is a problem parsing the command line arguments: " << ex.what()
                   << std::endl;
-		std::cerr << "There is a problem parsing the command line arguments: "
-				<< ex.what() << std::endl;
-		std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
+        std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
+        return 1;
+    }
 
     po::notify(vm);
 
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
         std::cout << "Mapcrafter online documentation: <http://docs.mapcrafter.org>" << std::endl;
         return 0;
     }
-		return 0;
+
     if (vm.count("version")) {
         std::cout << "Mapcrafter version: " << MAPCRAFTER_VERSION;
         if (strlen(MAPCRAFTER_GITVERSION))
@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
 
 	if (!vm.count("config")) {
 
-		std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
+    if (!vm.count("config")) {
         std::cerr << "You have to specify a configuration file!" << std::endl;
         std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
         return 1;
