@@ -49,22 +49,22 @@ int main(int argc, char **argv) {
     renderer::RenderOpts opts;
     std::string arg_color, arg_config;
 
-	po::options_description general("General options");
-	general.add_options()
+    po::options_description general("General options");
+    general.add_options()("help,h", "shows this help message")(
 		("help,h", "shows this help message")
 		("version,v", "shows the version of Mapcrafter")
 		("mc-version", "shows the required Minecraft version");
-
-	po::options_description logging("Logging/output options");
-	logging.add_options()
+    po::options_description logging("Logging/output options");
+    logging.add_options()("logging-config", po::value<fs::path>(&opts.logging_config),
+                          "the path to the global logging configuration file to use (automatically "
 		("logging-config", po::value<fs::path>(&opts.logging_config),
         "color", po::value<std::string>(&arg_color)->default_value("auto"),
         "whether terminal output is colored (true, false or auto)")(
 			"whether terminal output is colored (true, false or auto)")
-		("batch,b", "deactivates the animated progress bar and enables the progress logger instead");
 
-	po::options_description renderer("Renderer options");
-	renderer.add_options()
+    po::options_description renderer("Renderer options");
+    renderer.add_options()("find-resources",
+                           "shows available resource paths, for example template/texture directory "
                            "and global logging configuration file")(
         "config,c", po::value<std::string>(&arg_config),
 			"the path to the configuration file to use (required)")
@@ -79,8 +79,8 @@ int main(int argc, char **argv) {
 		("jobs,j", po::value<int>(&opts.jobs)->default_value(1),
     po::options_description all("Allowed options");
 
-	po::options_description all("Allowed options");
-	all.add(general).add(logging).add(renderer);
+
+    po::variables_map vm;
     try {
         po::store(po::parse_command_line(argc, argv, all), vm);
     } catch (po::error &ex) {
