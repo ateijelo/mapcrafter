@@ -47,7 +47,7 @@ setcolor::setcolor(int type, int color)
 }
 
 std::ostream& setcolor::operator()(std::ostream& out) const {
-	if (!isEnabled())
+    if (!isEnabled())
 		return out;
 	if (color == 0) {
 		reset(out);
@@ -84,7 +84,7 @@ std::ostream& setcolor::operator()(std::ostream& out) const {
 }
 
 std::ostream& setcolor::reset(std::ostream& out) {
-	if (!isEnabled())
+    if (!isEnabled())
 		return out;
 #ifdef OS_WINDOWS
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -96,19 +96,19 @@ std::ostream& setcolor::reset(std::ostream& out) {
 }
 
 void setcolor::setEnabled(TerminalColorStates state) {
-	if (state == TerminalColorStates::ENABLED)
-		enabled = true;
-	else if (state == TerminalColorStates::DISABLED)
-		enabled = false;
-	else if (state == TerminalColorStates::AUTO)
-		enabled = isOutTTY();
-	enabled_initialized = true;
+    if (state == TerminalColorStates::ENABLED)
+        enabled = true;
+    else if (state == TerminalColorStates::DISABLED)
+        enabled = false;
+    else if (state == TerminalColorStates::AUTO)
+        enabled = isOutTTY();
+    enabled_initialized = true;
 }
 
 bool setcolor::isEnabled() {
-	if (!enabled_initialized)
-		setEnabled(TerminalColorStates::AUTO);
-	return enabled;
+    if (!enabled_initialized)
+        setEnabled(TerminalColorStates::AUTO);
+    return enabled;
 }
 
 bool setcolor::enabled_initialized = false;

@@ -95,18 +95,18 @@ int main(int argc, char **argv) {
     if (arg_color == "true")
         util::setcolor::setEnabled(util::TerminalColorStates::ENABLED);
     else if (arg_color == "false")
-		util::setcolor::setEnabled(util::TerminalColorStates::ENABLED);
+        util::setcolor::setEnabled(util::TerminalColorStates::DISABLED);
     else if (arg_color == "auto")
-		util::setcolor::setEnabled(util::TerminalColorStates::DISABLED);
+        util::setcolor::setEnabled(util::TerminalColorStates::AUTO);
     else {
-		util::setcolor::setEnabled(util::TerminalColorStates::AUTO);
-	else {
+        std::cerr << "Invalid argument '" << arg_color << "' for '--color'." << std::endl;
+        std::cerr << "Allowed arguments are 'true', 'false' or 'auto'." << std::endl;
         std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
-		std::cerr << "Allowed arguments are 'true', 'false' or 'auto'." << std::endl;
-		std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
-		return 1;
-	}
+        return 1;
+    }
 
+    if (vm.count("help")) {
+        std::cout << all << std::endl;
         std::cout << "Mapcrafter online documentation: <http://docs.mapcrafter.org>" << std::endl;
         return 0;
     }
