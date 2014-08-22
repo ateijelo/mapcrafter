@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
                           "determined if not specified)")(
         "color", po::value<std::string>(&arg_color)->default_value("auto"),
         "whether terminal output is colored (true, false or auto)")(
-			"whether terminal output is colored (true, false or auto)")
+        "batch,b", "deactivates the animated progress bar and enables the progress logger instead");
 
     po::options_description renderer("Renderer options");
     renderer.add_options()("find-resources",
