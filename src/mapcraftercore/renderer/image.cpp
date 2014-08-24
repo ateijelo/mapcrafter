@@ -41,11 +41,11 @@ uint8_t clamp(int c) {
         return 0;
     if (c > 255)
         return 255;
-	return c;
+    return c;
 }
 
 RGBAPixel rgba_add_clamp(RGBAPixel value, int r, int g, int b, int a) {
-	return rgba(
+    return rgba(clamp(r + rgba_red(value)), clamp(g + rgba_green(value)),
 		clamp(r + rgba_red(value)),
 		clamp(g + rgba_green(value)),
 		clamp(b + rgba_blue(value)),
