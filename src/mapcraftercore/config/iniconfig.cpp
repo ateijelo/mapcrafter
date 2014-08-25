@@ -90,17 +90,6 @@ std::ostream &operator<<(std::ostream &out, const INIConfigSection &section) {
     for (auto entry_it = entries.begin(); entry_it != entries.end(); ++entry_it)
         out << entry_it->first << " = " << entry_it->second << std::endl;
     return out;
-	if (!name.empty()) {
-		if (type.empty())
-			out << "[" << name << "]" << std::endl;
-		else
-			out << "[" << type << ":" << name << "]" << std::endl;
-	}
-
-	auto entries = section.getEntries();
-	for (auto entry_it = entries.begin(); entry_it != entries.end(); ++entry_it)
-		out << entry_it->first << " = " << entry_it->second << std::endl;
-	return out;
 }
 
 INIConfig::INIConfig() {}
