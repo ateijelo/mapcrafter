@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
     po::options_description logging("Logging/output options");
     logging.add_options()("logging-config", po::value<fs::path>(&opts.logging_config),
                           "the path to the global logging configuration file to use (automatically "
-		("logging-config", po::value<fs::path>(&opts.logging_config),
+                          "determined if not specified)")(
         "color", po::value<std::string>(&arg_color)->default_value("auto"),
         "whether terminal output is colored (true, false or auto)")(
 			"whether terminal output is colored (true, false or auto)")
@@ -68,15 +68,15 @@ int main(int argc, char **argv) {
                            "and global logging configuration file")(
         "config,c", po::value<std::string>(&arg_config),
         "the path to the configuration file to use (required)")(
-		("render-skip,s", po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
+        "render-skip,s", po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
 			"skips rendering the specified map(s)")
 		("render-reset,r", "skips rendering all maps")
-		("render-auto,a", po::value<std::vector<std::string>>(&opts.render_auto)->multitoken(),
+        "renders the specified map(s)")(
 			"renders the specified map(s)")
-		("render-force,f", po::value<std::vector<std::string>>(&opts.render_force)->multitoken(),
+        "renders the specified map(s) completely")("render-force-all,F", "force renders all maps")(
 			"renders the specified map(s) completely")
 		("render-force-all,F", "force renders all maps")
-		("jobs,j", po::value<int>(&opts.jobs)->default_value(1),
+
     po::options_description all("Allowed options");
 
 
