@@ -127,13 +127,13 @@ unsigned int parseHexNumber(const std::string &str) {
 std::string trim(const std::string &str) {
     // removes trailing and leading whitespaces
     std::string trimmed = str;
-	size_t end = trimmed.find_last_not_of(" \t\r\n");
+    size_t end = trimmed.find_last_not_of(" \t\r\n");
     if (end != std::string::npos)
         trimmed = trimmed.substr(0, end + 1);
-	size_t start = trimmed.find_first_not_of(" \t\r\n");
+    size_t start = trimmed.find_first_not_of(" \t\r\n");
     if (start != std::string::npos)
         trimmed = trimmed.substr(start);
-	else if (trimmed.find_first_of(" \t\r\n") != std::string::npos)
+    else if (trimmed.find_first_of(" \t\r\n") != std::string::npos)
         // special case if all characters are whitespaces
         trimmed = "";
     return trimmed;
