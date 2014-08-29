@@ -246,7 +246,7 @@ Logging::~Logging() {}
 LogLevel Logging::getDefaultVerbosity() const { return default_verbosity; }
 
 void Logging::setDefaultVerbosity(LogLevel level) {
-	default_verbosity = level;
+    default_verbosity = level;
 	updateMaximumVerbosity();
 }
 
@@ -256,9 +256,9 @@ LogLevel Logging::getSinkVerbosity(const std::string &sink) const {
     return default_verbosity;
 }
 
-void Logging::setSinkVerbosity(const std::string& sink, LogLevel level) {
-	sinks_verbosity[sink] = level;
-	updateMaximumVerbosity();
+void Logging::setSinkVerbosity(const std::string &sink, LogLevel level) {
+    sinks_verbosity[sink] = level;
+    updateMaximumVerbosity();
 }
 
 bool Logging::getSinkLogProgress(const std::string &sink) const {
@@ -267,8 +267,8 @@ bool Logging::getSinkLogProgress(const std::string &sink) const {
     return true;
 }
 
-void Logging::setSinkLogProgress(const std::string& sink, bool log_progress) {
-	sinks_log_progress[sink] = log_progress;
+void Logging::setSinkLogProgress(const std::string &sink, bool log_progress) {
+    sinks_log_progress[sink] = log_progress;
 }
 
 LogSink *Logging::getSink(const std::string &name) {
@@ -315,14 +315,14 @@ Logging &Logging::getInstance() {
 
 void Logging::updateMaximumVerbosity() {
 	thread_ns::unique_lock<thread_ns::mutex> lock(handle_message_mutex);
-	// return already here if there is no log sink with the right verbosity
+    for (auto it = sinks.begin(); it != sinks.end(); ++it)
         maximum = std::max(maximum, getSinkVerbosity(it->first));
 		return;
 	for (auto it = sinks.begin(); it != sinks.end(); ++it) {
-		// check if this is a progress log message and sink should handle progress messages
+
 void Logging::handleLogMessage(const LogMessage &message) {
     thread_ns::unique_lock<thread_ns::mutex> lock(handle_message_mutex);
-		// if sink has the right verbosity, pass log message to the sink
+    // return already here if there is no log sink with the right verbosity
     if (message.level > maximum_verbosity)
         return;
 	}
