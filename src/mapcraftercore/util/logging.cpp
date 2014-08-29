@@ -243,9 +243,7 @@ Logging::Logging() : default_verbosity(LogLevel::INFO), maximum_verbosity(defaul
 
 Logging::~Logging() {}
 
-LogLevel Logging::getDefaultVerbosity() const {
-	return default_verbosity;
-}
+LogLevel Logging::getDefaultVerbosity() const { return default_verbosity; }
 
 void Logging::setDefaultVerbosity(LogLevel level) {
 	default_verbosity = level;
