@@ -37,10 +37,10 @@ namespace mapcrafter {
 namespace renderer {
 
 uint8_t clamp(int c) {
-	if (c < 0)
-		return 0;
-	if (c > 255)
-		return 255;
+    if (c < 0)
+        return 0;
+    if (c > 255)
+        return 255;
 	return c;
 }
 
