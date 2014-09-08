@@ -172,7 +172,7 @@ PathList findDirs(const fs::path &executable, std::string dir_name) {
 PathList findBlockDirs(const fs::path &executable) { return findDirs(executable, "blocks"); }
 
 PathList findLoggingConfigFiles(const fs::path &executable) {
-		mapcrafter_dir.parent_path().parent_path() / "etc" / "mapcrafter" / "logging.conf",
+    fs::path mapcrafter_dir = findExecutableMapcrafterDir(findExecutablePath());
     PathList configs = {
         mapcrafter_dir.parent_path().parent_path() / "etc" / "mapcrafter" / "logging.conf",
         mapcrafter_dir / "logging.conf",
