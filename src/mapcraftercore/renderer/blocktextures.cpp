@@ -1323,20 +1323,20 @@ BlockTextures::~BlockTextures() {}
  */
 bool BlockTextures::load(const std::string &block_dir, int size, int blur, double water_opacity) {
     if (!fs::exists(block_dir) || !fs::is_directory(block_dir)) {
-		LOG(ERROR) << "Directory '" << block_dir << "' with block textures does not exist.";
+        LOG(ERROR) << "Directory '" << block_dir << "' with block textures does not exist.";
         return false;
     }
 
     // go through all textures and load them
-	bool loaded_all = true;
+    bool loaded_all = true;
     for (size_t i = 0; i < textures.size(); i++) {
         if (!textures[i]->load(block_dir, size, blur, water_opacity)) {
-			LOG(WARNING) << "Unable to load block texture '" << textures[i]->getName() << ".png'.";
-			loaded_all = false;
-		}
+            LOG(WARNING) << "Unable to load block texture '" << textures[i]->getName() << ".png'.";
+            loaded_all = false;
+        }
     }
-	if (!loaded_all)
-		LOG(WARNING) << "Unable to load some block textures.";
+    if (!loaded_all)
+        LOG(WARNING) << "Unable to load some block textures.";
     return true;
 }
 
