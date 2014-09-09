@@ -183,7 +183,7 @@ RGBAImage TextureImage::getFrame(int frame) const {
 	int width = original_resized.getWidth();
 	// check if texture has this frame, return empty texture if not
 	if ((frame+1) * width > original_resized.getHeight()) {
-		LOG(WARNING) << "Texture '" << name << "' does not have frame " << frame << ".";
+        LOG(WARNING) << "Texture '" << name << "' does not have frame " << frame << ".";
 		return RGBAImage(width, width);
 	}
 	return original_resized.clip(0, width * frame, width, width);

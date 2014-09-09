@@ -408,17 +408,17 @@ void MapcrafterConfigHelper::setRenderBehaviors(std::vector<std::string> maps, i
 
                 int r = stringToRotation(rotation, ROTATION_NAMES_SHORT);
                 if (!config.hasMap(map)) {
-			LOG(WARNING) << "Unknown map '" << map << "'.";
+                        LOG(WARNING) << "Unknown map '" << map << "'.";
                         continue;
                 }
 
                 if (!rotation.empty()) {
                         if (r == -1) {
-				LOG(WARNING) << "Unknown rotation '" << rotation << "'.";
+                                LOG(WARNING) << "Unknown rotation '" << rotation << "'.";
                                 continue;
                         }
                         if (!config.getMap(map).getRotations().count(r)) {
-				LOG(WARNING) << "Map '" << map << "' does not have rotation '" << rotation << "'.";
+                                LOG(WARNING) << "Map '" << map << "' does not have rotation '" <<
 rotation << "'."; continue;
                         }
                 }
