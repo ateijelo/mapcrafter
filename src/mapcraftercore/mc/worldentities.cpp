@@ -29,9 +29,9 @@ namespace mc {
  * We assume a line is in the new format if it starts and ends with '"', '{'/'}'
  * or if it is 'null'.
  */
-bool isJSONLine(const std::string& line) {
-	if (line.empty())
-		return false;
+bool isJSONLine(const std::string &line) {
+    if (line.empty())
+        return false;
 	return line == "null" || (line[0] == '"' && line[line.size() - 1] == '"')
 			|| (line[0] == '{' && line[line.size() - 1] == '}');
 }
@@ -42,7 +42,7 @@ bool isJSONLine(const std::string& line) {
  */
 std::string extractTextFromJSON(const picojson::value& value) {
 	if (value.is<picojson::null>())
-		return "";
+        return "";
 	if (value.is<std::string>())
 		return value.get<std::string>();
 	if (value.is<picojson::object>()) {
