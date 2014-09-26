@@ -46,4 +46,3 @@ BOOST_AUTO_TEST_CASE(util_testMath) {
     BOOST_CHECK_EQUAL(util::binary<101000101>::value, 325);
     BOOST_CHECK_EQUAL(util::binary<11011101>::value, 221);
 }
-
