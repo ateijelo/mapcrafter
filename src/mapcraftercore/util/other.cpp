@@ -108,16 +108,16 @@ template <> bool as<bool>(const std::string &from) {
     throw std::invalid_argument("Must be one of true/false or 0/1");
 }
 
-bool isHexNumber(const std::string& str) {
-	for (size_t i = 0; i < str.size(); i++)
-		if (!isxdigit(str[i]))
-			return false;
-	return true;
+bool isHexNumber(const std::string &str) {
+    for (size_t i = 0; i < str.size(); i++)
+        if (!isxdigit(str[i]))
+            return false;
+    return true;
 }
 
-unsigned int parseHexNumber(const std::string& str) {
+unsigned int parseHexNumber(const std::string &str) {
 	std::stringstream ss;
-	ss << std::hex << str;
+    ss << std::hex << str;
 
 	unsigned int x;
 	ss >> x;
