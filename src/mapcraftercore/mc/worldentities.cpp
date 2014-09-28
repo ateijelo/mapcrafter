@@ -41,12 +41,12 @@ bool isJSONLine(const std::string &line) {
  * objects in the "extra" array. Throws a std::runtime_error if the json is invalid.
  */
 std::string extractTextFromJSON(const picojson::value &value) {
-	if (value.is<picojson::null>())
+    if (value.is<picojson::null>())
         return "";
-	if (value.is<std::string>())
-		return value.get<std::string>();
-	if (value.is<picojson::object>()) {
-		const picojson::object& object = value.get<picojson::object>();
+    if (value.is<std::string>())
+        return value.get<std::string>();
+    if (value.is<picojson::object>()) {
+        const picojson::object &object = value.get<picojson::object>();
         if (!object.count("text") || !object.at("text").is<std::string>())
             throw std::runtime_error("No string 'text' found");
         std::string extra = "";
@@ -56,7 +56,7 @@ std::string extractTextFromJSON(const picojson::value &value) {
             picojson::array array = object.at("extra").get<picojson::array>();
             for (auto value_it = array.begin(); value_it != array.end(); ++value_it)
                 extra += extractTextFromJSON(*value_it);
-		}
+        }
         return object.at("text").get<std::string>() + extra;
     }
     throw std::runtime_error("Unknown object type");
@@ -78,8 +78,8 @@ std::string parseJSONLine(const std::string &line) {
         return extractTextFromJSON(value);
     } catch (std::runtime_error &e) {
         LOG(ERROR) << "Invalid json sign line (" << e.what() << "): " << line;
-	}
-	return "";
+    }
+    return "";
 }
 
 SignEntity::SignEntity() {}
