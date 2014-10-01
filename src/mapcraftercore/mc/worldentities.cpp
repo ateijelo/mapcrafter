@@ -32,8 +32,8 @@ namespace mc {
 bool isJSONLine(const std::string &line) {
     if (line.empty())
         return false;
-	return line == "null" || (line[0] == '"' && line[line.size() - 1] == '"')
-			|| (line[0] == '{' && line[line.size() - 1] == '}');
+    return line == "null" || (line[0] == '"' && line[line.size() - 1] == '"') ||
+           (line[0] == '{' && line[line.size() - 1] == '}');
 }
 
 /**
