@@ -34,7 +34,7 @@ RegionFile::RegionFile(const std::string &filename) : filename(filename), rotati
     regionpos = regionpos_original;
 }
 
-bool RegionFile::readHeaders(std::ifstream& file, uint32_t chunk_offsets[1024]) {
+RegionFile::~RegionFile() {}
 
 bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) {
     if (!file)
@@ -47,7 +47,7 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
         chunk_timestamps[i] = 0;
         chunk_data_compression[i] = 0;
 	file.seekg(0, std::ios::end);
-	size_t filesize = file.tellg();
+
 	file.seekg(0, std::ios::beg);
 	// make sure the region file has a header
 	if (filesize < 8192) {
@@ -62,16 +62,16 @@ bool RegionFile::readHeaders(std::ifstream &file, uint32_t chunk_offsets[1024]) 
 			file.read(reinterpret_cast<char*>(&tmp), 4);
             int tmp;
             file.read(reinterpret_cast<char *>(&tmp), 4);
-			uint32_t offset = util::bigEndian32(tmp << 8) * 4096;
-			if (filesize < offset + 5) {
+            if (tmp == 0)
+                continue;
 				LOG(ERROR) << "Corrupt region '" << filename << "': Invalid offset of chunk "
 						<< x << ":" << z << ".";
-				return false;
-			}
+                LOG(ERROR) << "Corrupt region '" << filename << "': Invalid offset of chunk " << x
+                           << ":" << z << ".";
 			//uint8_t sectors = ((uint8_t*) &tmp)[3];
             }
             // uint8_t sectors = ((uint8_t*) &tmp)[3];
-			uint32_t timestamp;
+
 			file.read(reinterpret_cast<char*>(&timestamp), 4);
             uint32_t timestamp;
             file.read(reinterpret_cast<char *>(&timestamp), 4);
@@ -122,11 +122,11 @@ void RegionFile::setWorldCrop(const WorldCrop& world_crop) {
 
 bool RegionFile::read() {
     std::ifstream file(filename.c_str(), std::ios_base::binary);
-	uint32_t chunk_offsets[1024];
+    uint32_t chunk_offsets[1024];
 	if (!readHeaders(file, chunk_offsets))
         return false;
     file.seekg(0, std::ios::end);
-	size_t filesize = file.tellg();
+    size_t filesize = file.tellg();
     file.seekg(0, std::ios::beg);
 
 	std::vector<uint8_t> regiondata(filesize);
@@ -143,7 +143,7 @@ bool RegionFile::read() {
 		int z = (i - x) / 32;
 
 		// get data size and compression type
-		uint32_t size = *(reinterpret_cast<uint32_t*>(&regiondata[offset]));
+        uint32_t size = *(reinterpret_cast<uint32_t *>(&regiondata[offset]));
 		if (size == 0) {
 			LOG(ERROR)  << "Corrupt region '" << filename << "': Size of chunk "
 				<< x << ":" << z << " is zero.";
@@ -151,11 +151,11 @@ bool RegionFile::read() {
 		}
 		size = util::bigEndian32(size) - 1;
 		uint8_t compression = regiondata[offset + 4];
-		if (filesize < offset + 5 + size) {
+        if (filesize < offset + 5 + size) {
 			LOG(ERROR) << "Corrupt region '" << filename << "': Invalid size of chunk "
 				<< x << ":" << z << ".";
-			return false;
-		}
+            return false;
+        }
 
 		chunk_data_compression[i] = compression;
 		chunk_data[i].resize(size);
@@ -167,7 +167,7 @@ bool RegionFile::read() {
 
 bool RegionFile::readOnlyHeaders() {
     std::ifstream file(filename.c_str(), std::ios_base::binary);
-	uint32_t chunk_offsets[1024];
+    uint32_t chunk_offsets[1024];
 	return readHeaders(file, chunk_offsets);
 }
 
@@ -214,12 +214,12 @@ bool RegionFile::write(std::string filename) const {
 
 	// create the header with offsets and timestamps
 	for (int i = 0; i < 1024; i++) {
-		uint32_t offset_big_endian = util::bigEndian32(offsets[i]) >> 8;
+        uint32_t offset_big_endian = util::bigEndian32(offsets[i]) >> 8;
 		out_header.write(reinterpret_cast<char*>(&offset_big_endian), 4);
 	}
 
 	for (int i = 0; i < 1024; i++) {
-		uint32_t timestamp_big_endian = util::bigEndian32(chunk_timestamps[i]);
+        uint32_t timestamp_big_endian = util::bigEndian32(chunk_timestamps[i]);
 		out_header.write(reinterpret_cast<char*>(&timestamp_big_endian), 4);
 	}
 
@@ -248,7 +248,7 @@ bool RegionFile::hasChunk(const ChunkPos &chunk) const {
 	return chunk_exists[getChunkIndex(chunk)];
 }
 
-uint32_t RegionFile::getChunkTimestamp(const ChunkPos& chunk) const {
+uint32_t RegionFile::getChunkTimestamp(const ChunkPos &chunk) const {
 	return chunk_timestamps[getChunkIndex(chunk)];
 }
 
@@ -266,7 +266,7 @@ uint8_t RegionFile::getChunkDataCompression(const ChunkPos& chunk) const {
 
 void RegionFile::setChunkData(const ChunkPos& chunk, const std::vector<uint8_t>& data,
 		uint8_t compression) {
-	size_t index = getChunkIndex(chunk);
+    size_t index = getChunkIndex(chunk);
 	chunk_data[index] = data;
 	chunk_data_compression[index] = compression;
 
@@ -296,7 +296,7 @@ int RegionFile::loadChunk(const ChunkPos &pos, BlockStateRegistry &block_registr
         comp = nbt::Compression::GZIP;
 	else if (compression == 2)
         comp = nbt::Compression::ZLIB;
-	size_t size = chunk_data[index].size();
+    size_t size = chunk_data[index].size();
 
     // set the chunk rotation
     chunk.setRotation(rotation);

@@ -106,7 +106,7 @@ public:
 	/**
 	 * Returns/Sets the timestamp of a specific chunk.
 	 */
-	uint32_t getChunkTimestamp(const ChunkPos& chunk) const;
+    uint32_t getChunkTimestamp(const ChunkPos &chunk) const;
 	void setChunkTimestamp(const ChunkPos& chunk, uint32_t timestamp);
 
 	/**
@@ -150,7 +150,7 @@ public:
     // where x and z are the original local chunk coordinates -- not the rotated ones
 
     // available chunks also as array
-	// available chunks also as array
+    bool chunk_exists[1024];
 	bool chunk_exists[1024];
 	
 	// timestamps of the chunks
@@ -163,7 +163,7 @@ public:
 	/**
 	 * Reads the headers of a region file.
 	 */
-	bool readHeaders(std::ifstream& file, uint32_t chunk_offsets[1024]);
+
 
 	/**
 	 * Calculates the index (chunk_* arrays) for a specific chunks.
