@@ -85,7 +85,7 @@ class WorldEntitiesCache {
     /**
      * Reads the file with the cached entities and returns a timestamp when this cache
      * was updated the last time.
-	unsigned int readCacheFile();
+     */
     unsigned int readCacheFile();
 
     /**

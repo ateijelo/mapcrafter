@@ -188,7 +188,7 @@ void WorldEntitiesCache::writeCacheFile() const {
 }
 
 void WorldEntitiesCache::update(util::IProgressHandler *progress) {
-	unsigned int timestamp = readCacheFile();
+    unsigned int timestamp = readCacheFile();
 
     auto regions = world.getAvailableRegions();
     if (progress != nullptr)
