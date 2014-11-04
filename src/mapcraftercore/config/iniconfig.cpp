@@ -104,14 +104,7 @@ void INIConfig::load(std::istream &in) {
         line_number++;
 
         // trim the line
-	if (!fs::is_regular_file(filename))
-		throw INIConfigError("'" + filename + "' is not a valid file!");
-	std::ifstream in(filename);
-	if (!in)
-		throw INIConfigError("Unable to read file '" + filename + "'!");
-	else
-		load(in);
-}
+        line = util::trim(line);
 
         // ignore empty/comment lines
         if (line.empty() || line[0] == '#')
