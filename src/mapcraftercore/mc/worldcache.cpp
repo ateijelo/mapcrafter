@@ -104,9 +104,9 @@ Chunk *WorldCache::getChunk(const ChunkPos &pos) {
     }
 
     // then try to load the chunk
-	// but make sure we did not already try to load the chunk and it was broken
-	if (chunks_broken.count(pos))
-		return nullptr;
+    // but make sure we did not already try to load the chunk and it was broken
+    if (chunks_broken.count(pos))
+        return nullptr;
 
     int status = region->loadChunk(pos, block_registry, entry.value);
     // the chunk does not exist, chunk in cache was not modified
@@ -117,8 +117,8 @@ Chunk *WorldCache::getChunk(const ChunkPos &pos) {
         // chunkstats.unavailable++;
         //  the chunk is not valid, chunk in cache was probably modified
         entry.used = false;
-		// remember this chunk as broken and do not try to load it again
-		chunks_broken.insert(pos);
+        // remember this chunk as broken and do not try to load it again
+        chunks_broken.insert(pos);
         return nullptr;
     }
 

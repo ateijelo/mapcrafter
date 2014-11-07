@@ -131,10 +131,10 @@ class WorldCache {
     CacheEntry<RegionPos, RegionFile> regioncache[RSIZE];
     CacheEntry<ChunkPos, Chunk> chunkcache[CSIZE];
 
-	// provisional set to keep track of broken regions/chunks
+    // provisional set to keep track of broken regions/chunks
     // we do not want to try to load them again and again
     std::set<RegionPos> regions_broken;
-	std::set<ChunkPos> chunks_broken;
+    std::set<ChunkPos> chunks_broken;
 
     CacheStats regionstats;
     CacheStats chunkstats;
