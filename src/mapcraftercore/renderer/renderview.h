@@ -51,8 +51,8 @@ class TileSet;
 class TileRenderer;
 
 class RenderView {
-public:
-	virtual ~RenderView();
+  public:
+    virtual ~RenderView();
 
     /**
      * Creates an instance of the render view specific block image class.

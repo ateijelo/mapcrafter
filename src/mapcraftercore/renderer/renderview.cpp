@@ -19,6 +19,9 @@
 
 #include "renderview.h"
 
+#include "../config/configsections/map.h"
+#include "../config/configsections/world.h"
+#include "../util.h"
 #include "blockimages.h"
 #include "renderviews/isometricnew/renderview.h"
 #include "renderviews/side/renderview.h"
@@ -32,8 +35,7 @@
 namespace mapcrafter {
 namespace renderer {
 
-RenderView::~RenderView() {
-}
+RenderView::~RenderView() {}
 
 void RenderView::configureBlockImages(BlockImages* block_images,
 	const config::WorldSection& world_config,
