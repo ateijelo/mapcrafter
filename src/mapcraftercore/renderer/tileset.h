@@ -165,9 +165,9 @@ std::ostream &operator<<(std::ostream &stream, const TilePath &path);
 class TileSet {
   public:
     TileSet(int tile_width);
-	virtual ~TileSet();
+    virtual ~TileSet();
 
-	virtual void mapChunkToTiles(const mc::ChunkPos& chunk, std::set<TilePos>& tiles) = 0;
+    virtual void mapChunkToTiles(const mc::ChunkPos &chunk, std::set<TilePos> &tiles) = 0;
 
     /**
      * Scans the tiles of a world.

@@ -241,7 +241,7 @@ void TileSet::findRenderTiles(const mc::World &world, bool auto_center, TilePos 
                  ++tile_it) {
 
                 // and update the bounds
-			mapChunkToTiles(*chunk_it, tiles);
+                tiles_x_min = std::min(tiles_x_min, tile_it->getX());
                 tiles_x_max = std::max(tiles_x_max, tile_it->getX());
                 tiles_y_min = std::min(tiles_y_min, tile_it->getY());
                 tiles_y_max = std::max(tiles_y_max, tile_it->getY());
