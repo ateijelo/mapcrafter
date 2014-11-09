@@ -215,144 +215,138 @@ TilePath TilePath::byTilePos(const TilePos& tile, int depth) {
 
 TileSet::TileSet(int tile_width)
 	: tile_width(tile_width), min_depth(0), depth(0) {
-}
+TileSet::~TileSet() {}
 
-TileSet::~TileSet() {
-}
+void TileSet::findRenderTiles(const mc::World &world, bool auto_center, TilePos &tile_offset) {
+    // clear maybe already calculated tiles
+    render_tiles.clear();
+    required_render_tiles.clear();
 
-void TileSet::findRenderTiles(const mc::World& world, bool auto_center,
-		TilePos& tile_offset) {
-	// clear maybe already calculated tiles
-	render_tiles.clear();
-	required_render_tiles.clear();
+    // the min/max x/y coordinates of the tiles in the world
+    int tiles_x_min = std::numeric_limits<int>::max(),
+        tiles_x_max = std::numeric_limits<int>::min(),
+        tiles_y_min = std::numeric_limits<int>::max(),
+        tiles_y_max = std::numeric_limits<int>::min();
 
-	// the min/max x/y coordinates of the tiles in the world
-	int tiles_x_min = std::numeric_limits<int>::max(),
-	    tiles_x_max = std::numeric_limits<int>::min(),
-	    tiles_y_min = std::numeric_limits<int>::max(),
-	    tiles_y_max = std::numeric_limits<int>::min();
+    // go through all chunks in the world
+    auto regions = world.getAvailableRegions();
+    for (auto region_it = regions.begin(); region_it != regions.end(); ++region_it) {
+        mc::RegionFile region;
+        if (!world.getRegion(*region_it, region) || !region.readOnlyHeaders())
+            continue;
+        const std::set<mc::ChunkPos> &region_chunks = region.getContainingChunks();
+        for (auto chunk_it = region_chunks.begin(); chunk_it != region_chunks.end(); ++chunk_it) {
+            int timestamp = region.getChunkTimestamp(*chunk_it);
 
-	// go through all chunks in the world
-	auto regions = world.getAvailableRegions();
-	for (auto region_it = regions.begin(); region_it != regions.end(); ++region_it) {
-		mc::RegionFile region;
-		if (!world.getRegion(*region_it, region) || !region.readOnlyHeaders())
-			continue;
-		const std::set<mc::ChunkPos>& region_chunks = region.getContainingChunks();
-		for (auto chunk_it = region_chunks.begin(); chunk_it != region_chunks.end();
-		        ++chunk_it) {
-			int timestamp = region.getChunkTimestamp(*chunk_it);
+            // now get all tiles of the chunk
+            std::set<TilePos> tiles;
+            mapChunkToTiles(*chunk_it, tiles);
+            for (std::set<TilePos>::const_iterator tile_it = tiles.begin(); tile_it != tiles.end();
+                 ++tile_it) {
 
-			// now get all tiles of the chunk
-			std::set<TilePos> tiles;
+                // and update the bounds
 			mapChunkToTiles(*chunk_it, tiles);
-			for (std::set<TilePos>::const_iterator tile_it = tiles.begin();
-			        tile_it != tiles.end(); ++tile_it) {
+                tiles_x_max = std::max(tiles_x_max, tile_it->getX());
+                tiles_y_min = std::min(tiles_y_min, tile_it->getY());
+                tiles_y_max = std::max(tiles_y_max, tile_it->getY());
 
-				// and update the bounds
-				tiles_x_min = std::min(tiles_x_min, tile_it->getX());
-				tiles_x_max = std::max(tiles_x_max, tile_it->getX());
-				tiles_y_min = std::min(tiles_y_min, tile_it->getY());
-				tiles_y_max = std::max(tiles_y_max, tile_it->getY());
+                // update tile timestamp
+                if (!render_tiles.count(*tile_it))
+                    tile_timestamps[*tile_it] = timestamp;
+                else
+                    tile_timestamps[*tile_it] = std::max(tile_timestamps[*tile_it], timestamp);
 
-				// update tile timestamp
-				if (!render_tiles.count(*tile_it))
-					tile_timestamps[*tile_it] = timestamp;
-				else
-					tile_timestamps[*tile_it] = std::max(tile_timestamps[*tile_it], timestamp);
+                // insert the tile to the set of available render tiles
+                // and also make it required by default
+                render_tiles.insert(*tile_it);
+                required_render_tiles.insert(*tile_it);
+            }
+        }
+    }
 
-				// insert the tile to the set of available render tiles
-				// and also make it required by default
-				render_tiles.insert(*tile_it);
-				required_render_tiles.insert(*tile_it);
-			}
-		}
-	}
+    // center tiles
+    if (auto_center || tile_offset != TilePos(0, 0)) {
+        // find a tile center if we should do it automatically
+        if (auto_center)
+            tile_offset = TilePos((tiles_x_min + tiles_x_max) / 2, (tiles_y_min + tiles_y_max) / 2);
 
-	// center tiles
-	if (auto_center || tile_offset != TilePos(0, 0)) {
-		// find a tile center if we should do it automatically
-		if (auto_center)
-			tile_offset = TilePos((tiles_x_min + tiles_x_max) / 2, (tiles_y_min + tiles_y_max) / 2);
+        // update all tile positions
+        std::set<TilePos> render_tiles_tmp, required_render_tiles_tmp;
+        std::map<TilePos, int> tile_timestamps_tmp;
+        for (auto it = render_tiles.begin(); it != render_tiles.end(); ++it)
+            render_tiles_tmp.insert(*it - tile_offset);
+        for (auto it = required_render_tiles.begin(); it != required_render_tiles.end(); ++it)
+            required_render_tiles_tmp.insert(*it - tile_offset);
+        for (auto it = tile_timestamps.begin(); it != tile_timestamps.end(); ++it)
+            tile_timestamps_tmp[it->first - tile_offset] = it->second;
 
-		// update all tile positions
-		std::set<TilePos> render_tiles_tmp, required_render_tiles_tmp;
-		std::map<TilePos, int> tile_timestamps_tmp;
-		for (auto it = render_tiles.begin(); it != render_tiles.end(); ++it)
-			render_tiles_tmp.insert(*it - tile_offset);
-		for (auto it = required_render_tiles.begin(); it != required_render_tiles.end(); ++it)
-			required_render_tiles_tmp.insert(*it - tile_offset);
-		for (auto it = tile_timestamps.begin(); it != tile_timestamps.end(); ++it)
-			tile_timestamps_tmp[it->first - tile_offset] = it->second;
+        render_tiles = render_tiles_tmp;
+        required_render_tiles = required_render_tiles_tmp;
+        tile_timestamps = tile_timestamps_tmp;
+        this->tile_offset = tile_offset;
+    }
 
-		render_tiles = render_tiles_tmp;
-		required_render_tiles = required_render_tiles_tmp;
-		tile_timestamps = tile_timestamps_tmp;
-		this->tile_offset = tile_offset;
-	}
-
-	// now get the necessary depth of the tile quadtree
-	for (min_depth = 0; min_depth < 32; min_depth++) {
-		// for each level calculate the radius and check if the tiles fit in this bounds
-		// also don't forget the tile offset
-		int radius = pow(2, min_depth) / 2;
-		if (tiles_x_min - tile_offset.getX() > -radius
-				&& tiles_x_max - tile_offset.getX() < radius
-				&& tiles_y_min - tile_offset.getY() > -radius
-				&& tiles_y_max - tile_offset.getY() < radius)
-			break;
-	}
+    // now get the necessary depth of the tile quadtree
+    for (min_depth = 0; min_depth < 32; min_depth++) {
+        // for each level calculate the radius and check if the tiles fit in this bounds
+        // also don't forget the tile offset
+        int radius = pow(2, min_depth) / 2;
+        if (tiles_x_min - tile_offset.getX() > -radius &&
+            tiles_x_max - tile_offset.getX() < radius &&
+            tiles_y_min - tile_offset.getY() > -radius && tiles_y_max - tile_offset.getY() < radius)
+            break;
+    }
 }
 
-void TileSet::findRequiredCompositeTiles(const std::set<TilePos>& render_tiles,
-		std::set<TilePath>& tiles) {
+void TileSet::findRequiredCompositeTiles(const std::set<TilePos> &render_tiles,
+                                         std::set<TilePath> &tiles) {
 
-	// iterate through the render tiles on the max zoom level
-	// add their parent composite tiles
-	for (std::set<TilePos>::iterator it = render_tiles.begin(); it != render_tiles.end(); ++it) {
-		TilePath path = TilePath::byTilePos(*it, depth);
-		tiles.insert(path.parent());
-	}
+    // iterate through the render tiles on the max zoom level
+    // add their parent composite tiles
+    for (std::set<TilePos>::iterator it = render_tiles.begin(); it != render_tiles.end(); ++it) {
+        TilePath path = TilePath::byTilePos(*it, depth);
+        tiles.insert(path.parent());
+    }
 
-	// now iterate through the composite tiles from bottom to top
-	// and also add their parent composite tiles
-	for (int d = depth - 1; d > 0; d--) {
-		std::set<TilePath> tmp;
-		for (std::set<TilePath>::iterator it = tiles.begin(); it != tiles.end(); ++it) {
-			if (it->getDepth() == d)
-				tmp.insert(it->parent());
-		}
-		for (std::set<TilePath>::iterator it = tmp.begin(); it != tmp.end(); ++it)
-			tiles.insert(*it);
-	}
+    // now iterate through the composite tiles from bottom to top
+    // and also add their parent composite tiles
+    for (int d = depth - 1; d > 0; d--) {
+        std::set<TilePath> tmp;
+        for (std::set<TilePath>::iterator it = tiles.begin(); it != tiles.end(); ++it) {
+            if (it->getDepth() == d)
+                tmp.insert(it->parent());
+        }
+        for (std::set<TilePath>::iterator it = tmp.begin(); it != tmp.end(); ++it)
+            tiles.insert(*it);
+    }
 }
 
 void TileSet::updateContainingRenderTiles() {
-	containing_render_tiles.clear();
-	// initialize every composite tile with 0
-	for (auto it = composite_tiles.begin(); it != composite_tiles.end(); ++it)
-		containing_render_tiles[*it] = 0;
-	// go through all required render tiles
-	// set the containing render tiles for every parent composite tile +1
-	// to have the number of required render tiles in every composite tile
-	for (auto it = required_render_tiles.begin(); it != required_render_tiles.end(); ++it) {
-		TilePath tile = TilePath::byTilePos(*it, depth);
-		while (tile.getDepth() != 0) {
-			tile = tile.parent();
-			containing_render_tiles[tile]++;
-		}
-	}
+    containing_render_tiles.clear();
+    // initialize every composite tile with 0
+    for (auto it = composite_tiles.begin(); it != composite_tiles.end(); ++it)
+        containing_render_tiles[*it] = 0;
+    // go through all required render tiles
+    // set the containing render tiles for every parent composite tile +1
+    // to have the number of required render tiles in every composite tile
+    for (auto it = required_render_tiles.begin(); it != required_render_tiles.end(); ++it) {
+        TilePath tile = TilePath::byTilePos(*it, depth);
+        while (tile.getDepth() != 0) {
+            tile = tile.parent();
+            containing_render_tiles[tile]++;
+        }
+    }
 }
 
-void TileSet::scan(const mc::World& world) {
-	TilePos tile_offset(0, 0);
-	scan(world, false, tile_offset);
-	setDepth(min_depth);
+void TileSet::scan(const mc::World &world) {
+    TilePos tile_offset(0, 0);
+    scan(world, false, tile_offset);
+    setDepth(min_depth);
 }
 
-void TileSet::scan(const mc::World& world, bool auto_center, TilePos& tile_offset) {
-	findRenderTiles(world, auto_center, tile_offset);
-	setDepth(min_depth);
+void TileSet::scan(const mc::World &world, bool auto_center, TilePos &tile_offset) {
+    findRenderTiles(world, auto_center, tile_offset);
+    setDepth(min_depth);
 }
 
 void TileSet::resetRequired() {
@@ -368,101 +362,88 @@ void TileSet::resetRequired() {
 }
 
 void TileSet::scanRequiredByTimestamp(int last_change) {
-	required_render_tiles.clear();
+    required_render_tiles.clear();
 
-	for (std::map<TilePos, int>::iterator it = tile_timestamps.begin();
-			it != tile_timestamps.end(); ++it) {
-		if (it->second >= last_change)
-			required_render_tiles.insert(it->first);
-	}
+    for (std::map<TilePos, int>::iterator it = tile_timestamps.begin(); it != tile_timestamps.end();
+         ++it) {
+        if (it->second >= last_change)
+            required_render_tiles.insert(it->first);
+    }
 
-	required_composite_tiles.clear();
-	findRequiredCompositeTiles(required_render_tiles, required_composite_tiles);
+    required_composite_tiles.clear();
+    findRequiredCompositeTiles(required_render_tiles, required_composite_tiles);
 
-	updateContainingRenderTiles();
+    updateContainingRenderTiles();
 }
 
-void TileSet::scanRequiredByFiletimes(const fs::path& output_dir,
-		std::string image_format) {
-	required_render_tiles.clear();
+void TileSet::scanRequiredByFiletimes(const fs::path &output_dir, std::string image_format) {
+    required_render_tiles.clear();
 
-	for (std::map<TilePos, int>::iterator it = tile_timestamps.begin();
-			it != tile_timestamps.end(); ++it) {
-		TilePath path = TilePath::byTilePos(it->first, depth);
-		fs::path file = output_dir / (path.toString() + "." + image_format);
-		if (!fs::exists(file) || fs::last_write_time(file) <= it->second)
-			required_render_tiles.insert(it->first);
-	}
+    for (std::map<TilePos, int>::iterator it = tile_timestamps.begin(); it != tile_timestamps.end();
+         ++it) {
+        TilePath path = TilePath::byTilePos(it->first, depth);
+        fs::path file = output_dir / (path.toString() + "." + image_format);
+        if (!fs::exists(file) || fs::last_write_time(file) <= it->second)
+            required_render_tiles.insert(it->first);
+    }
 
-	required_composite_tiles.clear();
-	findRequiredCompositeTiles(required_render_tiles, required_composite_tiles);
+    required_composite_tiles.clear();
+    findRequiredCompositeTiles(required_render_tiles, required_composite_tiles);
 
-	updateContainingRenderTiles();
+    updateContainingRenderTiles();
 }
 
 int TileSet::getTileWidth() const {
 	return tile_width;
 }
 
-int TileSet::getMinDepth() const {
-	return min_depth;
-}
+int TileSet::getMinDepth() const { return min_depth; }
 
-int TileSet::getDepth() const {
-	return depth;
-}
+int TileSet::getDepth() const { return depth; }
 
 void TileSet::setDepth(int depth) {
-	// only calculate the composite tiles new when the depth has changed
-	if (this->depth == depth || depth < min_depth)
-		return;
+    // only calculate the composite tiles new when the depth has changed
+    if (this->depth == depth || depth < min_depth)
+        return;
 
-	this->depth = depth;
+    this->depth = depth;
 
-	// clear already calculated composite tiles and recalculate them
-	composite_tiles.clear();
-	required_composite_tiles.clear();
+    // clear already calculated composite tiles and recalculate them
+    composite_tiles.clear();
+    required_composite_tiles.clear();
 
-	findRequiredCompositeTiles(render_tiles, composite_tiles);
-	findRequiredCompositeTiles(required_render_tiles, required_composite_tiles);
+    findRequiredCompositeTiles(render_tiles, composite_tiles);
+    findRequiredCompositeTiles(required_render_tiles, required_composite_tiles);
 
-	updateContainingRenderTiles();
+    updateContainingRenderTiles();
 }
 
-const TilePos& TileSet::getTileOffset() const {
-	return tile_offset;
+const TilePos &TileSet::getTileOffset() const { return tile_offset; }
+
+bool TileSet::hasTile(const TilePath &path) const {
+    if (path.getDepth() == depth)
+        return render_tiles.count(path.getTilePos()) != 0;
+    return composite_tiles.count(path) != 0;
 }
 
-bool TileSet::hasTile(const TilePath& path) const {
-	if (path.getDepth() == depth)
-		return render_tiles.count(path.getTilePos()) != 0;
-	return composite_tiles.count(path) != 0;
+bool TileSet::isTileRequired(const TilePath &path) const {
+    if (path.getDepth() == depth)
+        return required_render_tiles.count(path.getTilePos()) != 0;
+    return required_composite_tiles.count(path) != 0;
 }
 
-bool TileSet::isTileRequired(const TilePath& path) const {
-	if(path.getDepth() == depth)
-		return required_render_tiles.count(path.getTilePos()) != 0;
-	return required_composite_tiles.count(path) != 0;
+int TileSet::getRequiredRenderTilesCount() const { return required_render_tiles.size(); }
+
+const std::set<TilePos> &TileSet::getRequiredRenderTiles() const { return required_render_tiles; }
+
+int TileSet::getRequiredCompositeTilesCount() const { return required_composite_tiles.size(); }
+
+const std::set<TilePath> &TileSet::getRequiredCompositeTiles() const {
+    return required_composite_tiles;
 }
 
-int TileSet::getRequiredRenderTilesCount() const {
-	return required_render_tiles.size();
-}
-
-const std::set<TilePos>& TileSet::getRequiredRenderTiles() const {
-	return required_render_tiles;
-}
-
-int TileSet::getRequiredCompositeTilesCount() const {
-	return required_composite_tiles.size();
-}
-
-const std::set<TilePath>& TileSet::getRequiredCompositeTiles() const {
-	return required_composite_tiles;
-}
-
-int TileSet::getContainingRenderTiles(const TilePath& tile) const {
-	return containing_render_tiles.at(tile);
+int TileSet::getContainingRenderTiles(const TilePath &tile) const {
+    return containing_render_tiles.at(tile);
 }
 
 } // namespace renderer

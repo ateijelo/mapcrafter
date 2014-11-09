@@ -58,15 +58,15 @@ struct TileImage {
 };
 
 class TileRenderer {
-public:
+  public:
     TileRenderer(const RenderView *render_view, mc::BlockStateRegistry &block_registry,
                  BlockImages *images, int tile_width, mc::WorldCache *world,
-	virtual ~TileRenderer();
-
+                 RenderMode *render_mode);
+    virtual ~TileRenderer();
 	void setRenderBiomes(bool render_biomes);
 	void setUsePreblitWater(bool use_preblit_water);
 	void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
-
+    void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
 
 
 	virtual int getTileSize() const = 0;

@@ -24,7 +24,6 @@
 #include <map>
 #include <set>
 #include <vector>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -164,156 +163,155 @@ std::ostream& operator<<(std::ostream& stream, const TilePath& path);
  * This class manages all tiles required to render a world.
  */
 class TileSet {
-public:
+  public:
 	TileSet(int tile_width);
 	virtual ~TileSet();
 
 	virtual void mapChunkToTiles(const mc::ChunkPos& chunk, std::set<TilePos>& tiles) = 0;
 
-	/**
-	 * Scans the tiles of a world.
-	 * If you use the constructor with a world object as parameter, this method is
-	 * automatically called.
-	 *
-	 * The auto_center parameter describes whether it should automatically center the
-	 * found tiles. If set to false (default), it will use tile_offset as center. The
-	 * default value for tile_offset is (0, 0) when using scan without the
-	 * auto_center and tile_offset parameters.
-	 */
-	void scan(const mc::World& world);
-	void scan(const mc::World& world, bool auto_center, TilePos& tile_offset);
+    /**
+     * Scans the tiles of a world.
+     * If you use the constructor with a world object as parameter, this method is
+     * automatically called.
+     *
+     * The auto_center parameter describes whether it should automatically center the
+     * found tiles. If set to false (default), it will use tile_offset as center. The
+     * default value for tile_offset is (0, 0) when using scan without the
+     * auto_center and tile_offset parameters.
+     */
+    void scan(const mc::World &world);
+    void scan(const mc::World &world, bool auto_center, TilePos &tile_offset);
 
 	/**
 	 * Resets which tiles are required / not required. All tiles will be required.
 	 */
 	void resetRequired();
 
-	/**
-	 * Scans which tiles are required by testing which tiles were probably changed since
-	 * the timestamp last_change.
-	 */
-	void scanRequiredByTimestamp(int last_change);
+    /**
+     * Scans which tiles are required by testing which tiles were probably changed since
+     * the timestamp last_change.
+     */
+    void scanRequiredByTimestamp(int last_change);
 
-	/**
-	 * Scans which tiles are required by using the modification times of the already
-	 * rendered image files.
-	 */
-	void scanRequiredByFiletimes(const fs::path& output_dir,
-			std::string image_format = "png");
+    /**
+     * Scans which tiles are required by using the modification times of the already
+     * rendered image files.
+     */
+    void scanRequiredByFiletimes(const fs::path &output_dir, std::string image_format = "png");
 
+    /**
 	/**
 	 * Returns the width of the tiles in chunks.
 	 */
 	int getTileWidth() const;
 
-	/**
-	 * Returns the minimum maximum zoom level required to render all render tiles.
-	 */
-	int getMinDepth() const;
+     * Returns the minimum maximum zoom level required to render all render tiles.
+     */
+    int getMinDepth() const;
 
-	/**
-	 * Returns the actual used maximum zoom level of the tile set.
-	 */
-	int getDepth() const;
+    /**
+     * Returns the actual used maximum zoom level of the tile set.
+     */
+    int getDepth() const;
 
-	/**
-	 * Sets the maximum zoom level to use. The supplied zoom level must be at least
-	 * the minimum maximum zoom level.
-	 */
-	void setDepth(int depth);
+    /**
+     * Sets the maximum zoom level to use. The supplied zoom level must be at least
+     * the minimum maximum zoom level.
+     */
+    void setDepth(int depth);
 
-	/**
-	 * Returns the tile position offset.
-	 */
-	const TilePos& getTileOffset() const;
+    /**
+     * Returns the tile position offset.
+     */
+    const TilePos &getTileOffset() const;
 
-	/**
-	 * Returns if a specific tile is contained in the tile set.
-	 */
-	bool hasTile(const TilePath& path) const;
+    /**
+     * Returns if a specific tile is contained in the tile set.
+     */
+    bool hasTile(const TilePath &path) const;
 
-	/**
-	 * Returns if a specific tile is required, e.g. needs to get rendered.
-	 */
-	bool isTileRequired(const TilePath& path) const;
+    /**
+     * Returns if a specific tile is required, e.g. needs to get rendered.
+     */
+    bool isTileRequired(const TilePath &path) const;
 
-	/**
-	 * Returns the count of required render tiles.
-	 */
-	int getRequiredRenderTilesCount() const;
+    /**
+     * Returns the count of required render tiles.
+     */
+    int getRequiredRenderTilesCount() const;
 
-	/**
-	 * Returns the required render tiles.
-	 */
-	const std::set<TilePos>& getRequiredRenderTiles() const;
+    /**
+     * Returns the required render tiles.
+     */
+    const std::set<TilePos> &getRequiredRenderTiles() const;
 
-	/**
-	 * Returns the count of required composite tiles.
-	 */
-	int getRequiredCompositeTilesCount() const;
+    /**
+     * Returns the count of required composite tiles.
+     */
+    int getRequiredCompositeTilesCount() const;
 
-	/**
-	 * Returns the required composite tiles.
-	 */
-	const std::set<TilePath>& getRequiredCompositeTiles() const;
+    /**
+     * Returns the required composite tiles.
+     */
+    const std::set<TilePath> &getRequiredCompositeTiles() const;
 
-	/**
-	 * Returns the count of required render tiles a specific composite tiles contains.
-	 */
-	int getContainingRenderTiles(const TilePath& tile) const;
+    /**
+     * Returns the count of required render tiles a specific composite tiles contains.
+     */
+    int getContainingRenderTiles(const TilePath &tile) const;
 
-private:
+  private:
+    // width of the tiles in chunks
 	// width of the tiles in chunks
 	int tile_width;
 
-	// the minimum maximum zoom level which would be required to render all tiles
-	int min_depth;
-	// actual maximum zoom level used by the tile set
-	int depth;
+    int min_depth;
+    // actual maximum zoom level used by the tile set
+    int depth;
 
-	// offset of render tiles, used to center the map
-	// tile_offset means, that all render tiles have the position pos,
-	// but are actually rendered as pos+tile_offset
-	TilePos tile_offset;
+    // offset of render tiles, used to center the map
+    // tile_offset means, that all render tiles have the position pos,
+    // but are actually rendered as pos+tile_offset
+    TilePos tile_offset;
 
-	// all available render tiles
-	// (= tiles with the highest zoom level, tree leaves in the quadtree)
-	std::set<TilePos> render_tiles;
-	// the render tiles which actually need to get rendered
-	std::set<TilePos> required_render_tiles;
-	// timestamps of render tiles required to re-render a tile
-	// (= highest timestamp of all chunks in a tile)
-	std::map<TilePos, int> tile_timestamps;
+    // all available render tiles
+    // (= tiles with the highest zoom level, tree leaves in the quadtree)
+    std::set<TilePos> render_tiles;
+    // the render tiles which actually need to get rendered
+    std::set<TilePos> required_render_tiles;
+    // timestamps of render tiles required to re-render a tile
+    // (= highest timestamp of all chunks in a tile)
+    std::map<TilePos, int> tile_timestamps;
 
-	// same here for composite tiles
-	std::set<TilePath> composite_tiles;
-	std::set<TilePath> required_composite_tiles;
+    // same here for composite tiles
+    std::set<TilePath> composite_tiles;
+    std::set<TilePath> required_composite_tiles;
 
-	// count of required render tiles contained in a composite tile
-	std::map<TilePath, int> containing_render_tiles;
+    // count of required render tiles contained in a composite tile
+    std::map<TilePath, int> containing_render_tiles;
 
-	/**
-	 * This method finds out which render level tiles a world has and which maximum
-	 * zoom level would be required to render them.
-	 *
-	 * The auto_center parameter describes whether it should automatically center the
-	 * found tiles. If set to false (default), it will use tile_offset as center.
-	 */
-	void findRenderTiles(const mc::World& world, bool auto_center, TilePos& tile_offset);
+    /**
+     * This method finds out which render level tiles a world has and which maximum
+     * zoom level would be required to render them.
+     *
+     * The auto_center parameter describes whether it should automatically center the
+     * found tiles. If set to false (default), it will use tile_offset as center.
+     */
+    void findRenderTiles(const mc::World &world, bool auto_center, TilePos &tile_offset);
 
-	/**
-	 * This method finds out which composite tiles are needed, depending on a
-	 * list of available/required render tiles, and puts them into a set.
-	 * So we can find out which composite tiles are available and which composite tiles
-	 * need to get rendered.
-	 */
-	void findRequiredCompositeTiles(const std::set<TilePos>& render_tiles,
-			std::set<TilePath>& tiles);
+    /**
+     * This method finds out which composite tiles are needed, depending on a
+     * list of available/required render tiles, and puts them into a set.
+     * So we can find out which composite tiles are available and which composite tiles
+     * need to get rendered.
+     */
+    void findRequiredCompositeTiles(const std::set<TilePos> &render_tiles,
+                                    std::set<TilePath> &tiles);
 
-	/**
-	 * Updates the containing_render_tiles map.
-	 */
-	void updateContainingRenderTiles();
+    /**
+     * Updates the containing_render_tiles map.
+     */
+    void updateContainingRenderTiles();
 };
 
 } // namespace renderer

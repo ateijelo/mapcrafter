@@ -30,7 +30,6 @@
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <cstdint>
 
 namespace fs = boost::filesystem;
 
@@ -68,8 +67,8 @@ struct ColorMap {
  * images which are required to render a map.
  */
 class BlockImages {
-public:
-	virtual ~BlockImages();
+  public:
+    virtual ~BlockImages();
 
 	virtual int getBlockSize() const = 0;
 };
