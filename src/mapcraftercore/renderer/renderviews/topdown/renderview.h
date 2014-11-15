@@ -26,7 +26,7 @@ namespace mapcrafter {
 namespace renderer {
 
 class TopdownRenderView : public RenderView {
-public:
+  public:
     virtual BlockImages *createBlockImages(mc::BlockStateRegistry &block_registry) const;
     virtual TileSet *createTileSet(int tile_width) const;
     virtual TileRenderer *createTileRenderer(mc::BlockStateRegistry &block_registry,

@@ -19,6 +19,9 @@
 
 #include "tilerenderer.h"
 
+#include "../../../mc/pos.h"
+#include "../../../mc/worldcache.h"
+#include "../../../util.h"
 #include "../../biomes.h"
 #include "../../blockimages.h"
 #include "../../image.h"
@@ -46,8 +49,7 @@ TopdownTileRenderer::TopdownTileRenderer(const RenderView *render_view,
 	: TileRenderer(render_view, block_registry, images, tile_width, world, render_mode) {
 }
 
-TopdownTileRenderer::~TopdownTileRenderer() {
-}
+TopdownTileRenderer::~TopdownTileRenderer() {}
 
 int TopdownTileRenderer::getTileSize() const {
 	return images->getBlockSize() * 16 * tile_width;
@@ -76,5 +78,5 @@ void TopdownTileRenderer::renderTopBlocks(const TilePos &tile_pos,
     }
 }
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter

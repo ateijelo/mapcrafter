@@ -19,8 +19,7 @@
 
 #include "renderview.h"
 
-#include "tileset.h"
-#include "tilerenderer.h"
+#include "../../../mc/blockstate.h"
 #include "../../rendermode.h"
 #include "../../rendermodes/overlay.h"
 #include "tilerenderer.h"

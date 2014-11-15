@@ -30,10 +30,11 @@ namespace mapcrafter {
 namespace renderer {
 
 class TopdownTileRenderer : public TileRenderer {
-public:
+  public:
     TopdownTileRenderer(const RenderView *render_view, mc::BlockStateRegistry &block_registry,
                         BlockImages *images, int tile_width, mc::WorldCache *world,
-	~TopdownTileRenderer();
+                        RenderMode *render_mode);
+    ~TopdownTileRenderer();
 
 	virtual int getTileSize() const;
 
@@ -41,7 +42,7 @@ public:
     virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images);
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* TOPDOWN_TILERENDERER_H_ */

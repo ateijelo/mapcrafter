@@ -26,14 +26,14 @@ namespace mapcrafter {
 namespace renderer {
 
 class TopdownTileSet : public TileSet {
-public:
+  public:
     TopdownTileSet(int tile_width);
     virtual ~TopdownTileSet();
 
-	virtual void mapChunkToTiles(const mc::ChunkPos& chunk, std::set<TilePos>& tiles);
+    virtual void mapChunkToTiles(const mc::ChunkPos &chunk, std::set<TilePos> &tiles);
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* TOPDOWN_TILESET_H_ */
