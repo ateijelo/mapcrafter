@@ -68,18 +68,18 @@ class TileRenderer {
     void setUsePreblitWater(bool use_preblit_water);
     void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
 
-
+    virtual void renderTile(const TilePos &tile_pos, RGBAImage &tile);
 
     virtual int getTileSize() const = 0;
     virtual int getTileWidth() const;
     virtual int getTileHeight() const;
-protected:
+
   protected:
     void renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockPos &dir,
                       std::set<TileImage> &tile_images);
     virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images) {}
 
-
+    mc::Block getBlock(const mc::BlockPos &pos, int get = mc::GET_ID);
     uint32_t getBiomeColor(const mc::BlockPos &pos, const BlockImage &block,
                            const mc::Chunk *chunk);
 
@@ -89,7 +89,7 @@ protected:
     RenderedBlockImages *block_images;
     int tile_width;
     mc::WorldCache *world;
-	bool render_biomes;
+    mc::Chunk *current_chunk;
     RenderMode *render_mode;
 
     bool render_biomes;
