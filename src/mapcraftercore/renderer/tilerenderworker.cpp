@@ -103,8 +103,8 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
         // this tile is a render tile, render it
         render_context.tile_renderer->renderTile(
             tile.getTilePos() + render_context.tile_set->getTileOffset(), image);
-		render_context.tile_renderer->renderTile(tile.getTilePos()
-				+ render_context.tile_set->getTileOffset(), image);
+        render_work_result.tiles_rendered++;
+
         /*
         // draws a border on the tile
         uint32_t color = rgba(0, 0, 255, 255);
