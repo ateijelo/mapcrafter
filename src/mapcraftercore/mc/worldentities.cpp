@@ -40,44 +40,44 @@ bool isJSONLine(const std::string &line) {
  * Extracts the sign line text from a json object. Also recursively extracts the json
  * objects in the "extra" array. Throws a std::runtime_error if the json is invalid.
  */
-std::string extractTextFromJSON(const picojson::value& value) {
+std::string extractTextFromJSON(const picojson::value &value) {
 	if (value.is<picojson::null>())
         return "";
 	if (value.is<std::string>())
 		return value.get<std::string>();
 	if (value.is<picojson::object>()) {
 		const picojson::object& object = value.get<picojson::object>();
-		if (!object.count("text") || !object.at("text").is<std::string>())
-			throw std::runtime_error("No string 'text' found");
-		std::string extra = "";
-		if (object.count("extra")) {
-			if (!object.at("extra").is<picojson::array>())
-				throw std::runtime_error("Object 'extra' must be an array");
-			picojson::array array = object.at("extra").get<picojson::array>();
-			for (auto value_it = array.begin(); value_it != array.end(); ++value_it)
-				extra += extractTextFromJSON(*value_it);
+        if (!object.count("text") || !object.at("text").is<std::string>())
+            throw std::runtime_error("No string 'text' found");
+        std::string extra = "";
+        if (object.count("extra")) {
+            if (!object.at("extra").is<picojson::array>())
+                throw std::runtime_error("Object 'extra' must be an array");
+            picojson::array array = object.at("extra").get<picojson::array>();
+            for (auto value_it = array.begin(); value_it != array.end(); ++value_it)
+                extra += extractTextFromJSON(*value_it);
 		}
-		return object.at("text").get<std::string>() + extra;
-	}
-	throw std::runtime_error("Unknown object type");
+        return object.at("text").get<std::string>() + extra;
+    }
+    throw std::runtime_error("Unknown object type");
 }
 
 /**
  * Parses a sign line in the json sign line format. Parses the json with the picojson
  * library and uses the extractTextFromJSON function to extract the actual text.
  */
-std::string parseJSONLine(const std::string& line) {
-	std::string error;
-	picojson::value value;
-	picojson::parse(value, line.begin(), line.end(), &error);
-	if (!error.empty()) {
-		LOG(ERROR) << "Unable to parse sign line json '" << line << "': " << error << ".";
-		return "";
-	}
-	try {
-		return extractTextFromJSON(value);
-	} catch (std::runtime_error& e) {
-		LOG(ERROR) << "Invalid json sign line (" << e.what() << "): "  << line;
+std::string parseJSONLine(const std::string &line) {
+    std::string error;
+    picojson::value value;
+    picojson::parse(value, line.begin(), line.end(), &error);
+    if (!error.empty()) {
+        LOG(ERROR) << "Unable to parse sign line json '" << line << "': " << error << ".";
+        return "";
+    }
+    try {
+        return extractTextFromJSON(value);
+    } catch (std::runtime_error &e) {
+        LOG(ERROR) << "Invalid json sign line (" << e.what() << "): " << line;
 	}
 	return "";
 }
