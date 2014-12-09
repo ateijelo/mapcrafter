@@ -106,30 +106,7 @@ SignEntity::SignEntity(const mc::BlockPos &pos, const Lines &lines)
     text = util::trim(text);
 }
 
-SignEntity::SignEntity(const mc::BlockPos& pos, const Lines& lines)
-	: pos(pos), lines(lines), text() {
-	// check if the lines of this sign are in the new json format (>= mc 1.8)
-	// if yes, extract actual text
-	if (isJSONLine(lines[0]) && isJSONLine(lines[1])
-			&& isJSONLine(lines[2]) && isJSONLine(lines[3])) {
-		this->lines[0] = parseJSONLine(lines[0]);
-		this->lines[1] = parseJSONLine(lines[1]);
-		this->lines[2] = parseJSONLine(lines[2]);
-		this->lines[3] = parseJSONLine(lines[3]);
-	}
-
-	// join the lines as sign text
-	for (int i = 0; i < 4; i++) {
-		std::string line = util::trim(this->lines[i]);
-		if (line.empty())
-			continue;
-		text += line + " ";
-	}
-	text = util::trim(text);
-}
-
-SignEntity::~SignEntity() {
-}
+SignEntity::~SignEntity() {}
 
 const mc::BlockPos& SignEntity::getPos() const {
 	return pos;
