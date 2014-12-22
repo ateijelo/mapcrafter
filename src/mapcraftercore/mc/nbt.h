@@ -152,24 +152,24 @@ template <typename T, TagType tag_type> class ScalarTag : public Tag {
     ScalarTag(T payload = 0) : Tag(TAG_TYPE), payload(payload) {}
 
     virtual Tag &read(std::istream &stream) {
-	virtual Tag& read(std::istream& stream) {
+        payload = nbtstream::read<T>(stream);
         return *this;
     }
 
     virtual void write(std::ostream &stream) const {
-	virtual void write(std::ostream& stream) const {
+        Tag::write(stream);
         nbtstream::write<T>(stream, payload);
     }
 
     virtual void dump(std::ostream &stream, const std::string &indendation = "") const {
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const {
+        if (std::is_same<T, int8_t>::value)
 		if (std::is_same<T, int8_t>::value)
         else
             dumpTag(stream, indendation, *this);
     }
 
     virtual Tag *clone() const { return new ScalarTag<T, tag_type>(*this); }
-	virtual Tag* clone() const {
+
 		return new ScalarTag<T, tag_type>(*this);
 	}
 
@@ -191,7 +191,7 @@ template <typename T, TagType tag_type> class TagArray : public Tag {
     TagArray(const std::vector<T> &payload) : Tag(TAG_TYPE), payload(payload) {}
 
     virtual Tag &read(std::istream &stream) {
-	virtual Tag& read(std::istream& stream) {
+        int32_t length = nbtstream::read<int32_t>(stream);
         payload.resize(length);
         if (std::is_same<T, int8_t>::value)
 		if (std::is_same<T, int8_t>::value)
@@ -203,7 +203,7 @@ template <typename T, TagType tag_type> class TagArray : public Tag {
     }
 
     virtual void write(std::ostream &stream) const {
-	virtual void write(std::ostream& stream) const {
+        Tag::write(stream);
         nbtstream::write<int32_t>(stream, payload.size());
         if (std::is_same<T, int8_t>::value)
 		if (std::is_same<T, int8_t>::value)
@@ -214,11 +214,11 @@ template <typename T, TagType tag_type> class TagArray : public Tag {
     }
 
     virtual void dump(std::ostream &stream, const std::string &indendation = "") const {
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const {
+        dumpTag(stream, indendation, *this, util::str(payload.size()) + " entries");
 		dumpTag(stream, indendation, *this, util::str(payload.size()) + " entries");
 
     virtual Tag *clone() const { return new TagArray<T, tag_type>(*this); }
-	virtual Tag* clone() const {
+
 		return new TagArray<T, tag_type>(*this);
 	}
 
@@ -241,10 +241,7 @@ class TagString : public Tag {
     virtual void dump(std::ostream &stream, const std::string &indendation = "") const;
     virtual Tag *clone() const;
 
-	virtual Tag& read(std::istream& stream);
-	virtual void write(std::ostream& stream) const;
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const;
-	virtual Tag* clone() const;
+    std::string payload;
 
 	std::string payload;
 	
@@ -269,10 +266,10 @@ class TagList : public Tag {
 
 	void operator=(const TagList& other);
 
-	virtual Tag& read(std::istream& stream);
-	virtual void write(std::ostream& stream) const;
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const;
-	virtual Tag* clone() const;
+    virtual Tag &read(std::istream &stream);
+    virtual void write(std::ostream &stream) const;
+    virtual void dump(std::ostream &stream, const std::string &indendation = "") const;
+    virtual Tag *clone() const;
 
     int8_t tag_type;
 	std::vector<TagPtr> payload;
@@ -288,10 +285,10 @@ class TagCompound : public Tag {
 
 	void operator=(const TagCompound& other);
 
-	virtual Tag& read(std::istream& stream);
-	virtual void write(std::ostream& stream) const;
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const;
-	virtual Tag* clone() const;
+    virtual Tag &read(std::istream &stream);
+    virtual void write(std::ostream &stream) const;
+    virtual void dump(std::ostream &stream, const std::string &indendation = "") const;
+    virtual Tag *clone() const;
 
     bool hasTag(const std::string &name) const;
 
