@@ -36,7 +36,7 @@ class TopdownTileRenderer : public TileRenderer {
                         RenderMode *render_mode);
     ~TopdownTileRenderer();
 
-	virtual int getTileSize() const;
+    virtual int getTileSize() const;
 
   protected:
     virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images);

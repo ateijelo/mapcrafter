@@ -68,10 +68,10 @@ class TileRenderer {
     void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
 
 
-	virtual int getTileSize() const = 0;
+
     virtual int getTileSize() const = 0;
     virtual int getTileWidth() const;
-
+    virtual int getTileHeight() const;
 protected:
   protected:
     void renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockPos &dir,
