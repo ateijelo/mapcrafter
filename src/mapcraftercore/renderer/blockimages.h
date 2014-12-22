@@ -64,7 +64,7 @@ class BlockImages {
   public:
     virtual ~BlockImages();
 
-	virtual int getBlockSize() const = 0;
+    virtual int getBlockSize() const = 0;
 };
 
 typedef std::array<float, 4> CornerValues;
