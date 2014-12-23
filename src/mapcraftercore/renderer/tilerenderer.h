@@ -63,7 +63,7 @@ class TileRenderer {
                  BlockImages *images, int tile_width, mc::WorldCache *world,
                  RenderMode *render_mode);
     virtual ~TileRenderer();
-	void setRenderBiomes(bool render_biomes);
+
     void setRenderBiomes(bool render_biomes);
     void setUsePreblitWater(bool use_preblit_water);
     void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
@@ -86,9 +86,9 @@ protected:
     mc::BlockStateRegistry &block_registry;
 
     BlockImages *images;
-	mc::Chunk* current_chunk;
+    RenderedBlockImages *block_images;
     int tile_width;
-
+    mc::WorldCache *world;
 	bool render_biomes;
     RenderMode *render_mode;
 
