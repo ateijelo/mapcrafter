@@ -49,7 +49,7 @@ bool CaveRenderMode::isHidden(const mc::BlockPos &pos, const BlockImage &block_i
     // we need to check if there is sunlight on the surface of the water
     // if yes => no cave, hide block
     // if no  => lake in a cave, show it
-	mc::Block top = getBlock(pos + mc::DIR_TOP,
+    mc::Block top = getBlock(pos + mc::DIR_TOP, mc::GET_ID | mc::GET_SKY_LIGHT);
     const BlockImage *top_image = &block_images->getBlockImage(top.id);
     if (block_image.is_full_water || block_image.is_waterlogged || block_image.is_ice ||
         top_image->is_full_water || top_image->is_waterlogged || top_image->is_ice) {

@@ -111,13 +111,13 @@ class BaseRenderMode : public RenderMode {
      */
     virtual void draw(RGBAImage &image, const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
-protected:
+  protected:
     mc::Block getBlock(const mc::BlockPos &pos, int get = mc::GET_ID);
 
 	BlockImages* images;
     RenderedBlockImages *block_images;
 	mc::WorldCache* world;
-	mc::Chunk** current_chunk;
+    mc::Chunk **current_chunk;
 };
 
 /**
