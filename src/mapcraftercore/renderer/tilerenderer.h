@@ -25,7 +25,6 @@
 #include "image.h"
 
 #include <array>
-#include <vector>
 #include <boost/filesystem.hpp>
 #include <vector>
 
