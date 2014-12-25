@@ -29,8 +29,7 @@ namespace renderer {
 CaveRenderMode::CaveRenderMode(const std::vector<mc::BlockPos> &hidden_dirs)
     : hidden_dirs(hidden_dirs) {}
 
-CaveRenderMode::~CaveRenderMode() {
-}
+CaveRenderMode::~CaveRenderMode() {}
 
 bool CaveRenderMode::isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data) {
 	return false;
