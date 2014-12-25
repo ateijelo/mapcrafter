@@ -23,6 +23,7 @@
 #include "renderview.h"
 // TODO forward-declare once template is gone!
 #include "../mc/worldcache.h"
+#include "../renderer/blockimages.h"
 
 #include <iostream>
 #include <memory>

@@ -20,7 +20,6 @@
 #ifndef RENDERMODES_CAVE_H_
 #define RENDERMODES_CAVE_H_
 
-#include "../rendermode.h"
 #include "../../mc/pos.h"
 #include "../rendermode.h"
 
@@ -32,7 +31,7 @@ namespace renderer {
 class CaveRenderMode : public BaseRenderMode {
   public:
     CaveRenderMode(const std::vector<mc::BlockPos> &hidden_dirs);
-	virtual ~CaveRenderMode();
+    virtual ~CaveRenderMode();
 
     virtual bool isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
