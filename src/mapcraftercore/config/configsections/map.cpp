@@ -134,8 +134,8 @@ void MapSection::dump(std::ostream &out) const {
     out << getPrettyName() << ":" << std::endl;
     out << "  name = " << getLongName() << std::endl;
     out << "  world = " << world << std::endl;
-	out << "  render_view" << render_view << std::endl;
-	out << "  render_mode = " << render_mode << std::endl;
+    out << "  render_view" << render_view << std::endl;
+    out << "  render_mode = " << render_mode << std::endl;
     out << "  overlay = " << overlay << std::endl;
     out << "  rotations = " << rotations << std::endl;
 	out << "  block_dir = " << block_dir << std::endl;
@@ -250,7 +250,7 @@ void MapSection::preParse(const INIConfigSection &section, ValidationList &valid
     overlay.setDefault(renderer::OverlayType::NONE);
     rotations.setDefault("top-left");
 
-	} else if (key == "render_view") {
+    fs::path block_dir_found = util::findBlockDir();
 		if (render_view.load(key, value, validation)) {
 			if (render_view.getValue() == renderer::RenderViewType::ISOMETRICNEW) {
 				validation.error("Using 'isometricnew' for 'render_view' is not necessary anymore! "
