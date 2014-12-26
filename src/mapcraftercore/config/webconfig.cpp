@@ -165,7 +165,7 @@ void WebConfig::writeConfigJS() const {
 
 int WebConfig::getTileSetsMaxZoom(const TileSetGroupID &tile_set) const {
     if (!tile_sets_max_zoom.count(tile_set))
-		return 0;
+        return 0;
     return tile_sets_max_zoom.at(tile_set);
 }
 
@@ -175,7 +175,7 @@ void WebConfig::setTileSetsMaxZoom(const TileSetGroupID &tile_set, int max_zoom)
 
 renderer::TilePos WebConfig::getTileSetTileOffset(const TileSetID &tile_set) const {
     if (!tile_set_tile_offset.count(tile_set))
-		return renderer::TilePos(0, 0);
+        return renderer::TilePos(0, 0);
     return tile_set_tile_offset.at(tile_set);
 }
 
