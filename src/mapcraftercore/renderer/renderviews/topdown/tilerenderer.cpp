@@ -47,9 +47,7 @@ TopdownTileRenderer::TopdownTileRenderer(const RenderView *render_view,
 
 TopdownTileRenderer::~TopdownTileRenderer() {}
 
-int TopdownTileRenderer::getTileSize() const {
-	return images->getBlockSize() * 16 * tile_width;
-}
+int TopdownTileRenderer::getTileSize() const { return images->getBlockSize() * 16 * tile_width; }
 
 void TopdownTileRenderer::renderTopBlocks(const TilePos &tile_pos,
                                           std::set<TileImage> &tile_images) {
