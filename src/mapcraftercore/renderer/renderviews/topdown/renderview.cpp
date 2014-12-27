@@ -33,8 +33,8 @@ BlockImages *TopdownRenderView::createBlockImages(mc::BlockStateRegistry &block_
     return new RenderedBlockImages(block_registry);
 }
 
-TileSet* TopdownRenderView::createTileSet(int tile_width) const {
-	return new TopdownTileSet(tile_width);
+TileSet *TopdownRenderView::createTileSet(int tile_width) const {
+    return new TopdownTileSet(tile_width);
 }
 
 TileRenderer *TopdownRenderView::createTileRenderer(mc::BlockStateRegistry &block_registry,

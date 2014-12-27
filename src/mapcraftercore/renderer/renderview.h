@@ -62,7 +62,7 @@ class RenderView {
     /**
      * Creates an instance of the render view specific tile set class.
      */
-	virtual TileSet* createTileSet(int tile_width) const = 0;
+    virtual TileSet *createTileSet(int tile_width) const = 0;
 
     /**
      * Creates an instance of the render view specific tile renderer class.

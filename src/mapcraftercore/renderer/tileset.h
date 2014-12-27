@@ -164,7 +164,7 @@ std::ostream& operator<<(std::ostream& stream, const TilePath& path);
  */
 class TileSet {
   public:
-	TileSet(int tile_width);
+    TileSet(int tile_width);
 	virtual ~TileSet();
 
 	virtual void mapChunkToTiles(const mc::ChunkPos& chunk, std::set<TilePos>& tiles) = 0;
@@ -200,11 +200,11 @@ class TileSet {
     void scanRequiredByFiletimes(const fs::path &output_dir, std::string image_format = "png");
 
     /**
-	/**
-	 * Returns the width of the tiles in chunks.
-	 */
-	int getTileWidth() const;
+     * Returns the width of the tiles in chunks.
+     */
+    int getTileWidth() const;
 
+    /**
      * Returns the minimum maximum zoom level required to render all render tiles.
      */
     int getMinDepth() const;
@@ -262,9 +262,9 @@ class TileSet {
 
   private:
     // width of the tiles in chunks
-	// width of the tiles in chunks
-	int tile_width;
+    int tile_width;
 
+    // the minimum maximum zoom level which would be required to render all tiles
     int min_depth;
     // actual maximum zoom level used by the tile set
     int depth;

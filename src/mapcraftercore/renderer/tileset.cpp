@@ -213,8 +213,8 @@ TilePath TilePath::byTilePos(const TilePos& tile, int depth) {
     return path;
 }
 
-TileSet::TileSet(int tile_width)
-	: tile_width(tile_width), min_depth(0), depth(0) {
+TileSet::TileSet(int tile_width) : tile_width(tile_width), min_depth(0), depth(0) {}
+
 TileSet::~TileSet() {}
 
 void TileSet::findRenderTiles(const mc::World &world, bool auto_center, TilePos &tile_offset) {
@@ -393,9 +393,7 @@ void TileSet::scanRequiredByFiletimes(const fs::path &output_dir, std::string im
     updateContainingRenderTiles();
 }
 
-int TileSet::getTileWidth() const {
-	return tile_width;
-}
+int TileSet::getTileWidth() const { return tile_width; }
 
 int TileSet::getMinDepth() const { return min_depth; }
 

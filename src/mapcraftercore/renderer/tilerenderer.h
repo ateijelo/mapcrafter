@@ -83,7 +83,7 @@ protected:
                            const mc::Chunk *chunk);
 
     mc::BlockStateRegistry &block_registry;
-	int tile_width;
+
     BlockImages *images;
 	mc::Chunk* current_chunk;
     int tile_width;
