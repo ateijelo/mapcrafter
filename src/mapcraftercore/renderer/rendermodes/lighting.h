@@ -91,12 +91,12 @@ typedef float LightingColor;
 typedef std::array<LightingColor, 4> CornerColors;
 
 class LightingRenderMode : public BaseRenderMode {
-public:
+  public:
     LightingRenderMode(bool day, double lighting_intensity, double lighting_water_intensity,
                        bool simulate_sun_light);
-	virtual ~LightingRenderMode();
+    virtual ~LightingRenderMode();
 
-	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data);
+    virtual bool isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data);
     virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
                       uint16_t id);
 
@@ -104,49 +104,49 @@ public:
     bool day;
     double lighting_intensity, lighting_water_intensity;
     bool simulate_sun_light;
-	/**
-	 * Calculates the color of the light of a block.
-	 *
-	 * This uses the formula 0.8**(15 - max(block_light, sky_light))
-	 * When calculating nightlight, the skylight is reduced by 11.
-	 */
-	LightingColor calculateLightingColor(const LightingData& light) const;
 
-	/**
-	 * Returns the light of a block (sky/block light). This also means that the light is
-	 * estimated if the block is a special transparent block.
-	 */
+    /**
+     * Calculates the color of the light of a block.
+     *
+     * This uses the formula 0.8**(15 - max(block_light, sky_light))
+     * When calculating nightlight, the skylight is reduced by 11.
+     */
+    LightingColor calculateLightingColor(const LightingData &light) const;
+
+    /**
+     * Returns the light of a block (sky/block light). This also means that the light is
+     * estimated if the block is a special transparent block.
 	LightingData getBlockLight(const mc::BlockPos& pos);
 
-	/**
-	 * Returns the lighting color of a block.
-	 */
-     */
 
-	/**
-	 * Returns the lighting color of a corner by calculating the average lighting color of
-	 * the four neighbor blocks.
-	 */
+    /**
+     * Returns the lighting color of a block.
+     */
+    LightingColor getLightingColor(const mc::BlockPos &pos, double intensity);
+
+    /**
+     * Returns the lighting color of a corner by calculating the average lighting color of
+     * the four neighbor blocks.
      */
     LightingColor getCornerColor(const mc::BlockPos &pos, const CornerNeighbors &corner,
+                                 double intensity);
 
-	/**
-	 * Returns the corner lighting colors of a block face.
-	 */
+    /**
+     * Returns the corner lighting colors of a block face.
      */
     CornerColors getCornerColors(const mc::BlockPos &pos, const FaceCorners &corners,
+                                 double intensity = -1);
 
-	/**
-	 * Applies the smooth lighting to a block by adding lighting to the top, left and
-	 * right face (if not covered by another, not transparent, block).
-	 */
+    /**
+     * Applies the smooth lighting to a block by adding lighting to the top, left and
+     * right face (if not covered by another, not transparent, block).
      */
     void doSmoothLight(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
                        uint16_t id, bool use_bottom_corners);
-	/**
-	 * Applies a simple lighting to a block by coloring the whole block with the lighting
-	 * color of the block.
-	 */
+
+    /**
+     * Applies a simple lighting to a block by coloring the whole block with the lighting
+     * color of the block.
      */
     void doSimpleLight(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
                        uint16_t id);
