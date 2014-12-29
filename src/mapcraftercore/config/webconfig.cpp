@@ -153,14 +153,14 @@ bool WebConfig::readConfigJS() {
 }
 
 void WebConfig::writeConfigJS() const {
-	std::ofstream out(config.getOutputPath("config.js").string());
-	if (!out) {
-		LOG(ERROR) << "Unable to write config.js file!";
-		return;
+    std::ofstream out(config.getOutputPath("config.js").string());
+    if (!out) {
+        LOG(ERROR) << "Unable to write config.js file!";
+        return;
     }
     // TODO write world/map config to check if it was changed next time we read config.js?
     out << "var CONFIG = " << util::trim(getConfigJSON().serialize(true)) << ";" << std::endl;
-	out.close();
+    out.close();
 }
 
 int WebConfig::getTileSetsMaxZoom(const TileSetGroupID &tile_set) const {
@@ -220,7 +220,7 @@ picojson::value WebConfig::getConfigJSON() const {
 
     // get used tile set groups
     std::set<TileSetGroupID> tile_sets;
-	auto maps = config.getMaps();
+    auto maps = config.getMaps();
     for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it)
         tile_sets.insert(map_it->getTileSetGroup());
 
@@ -249,10 +249,10 @@ picojson::value WebConfig::getConfigJSON() const {
         auto tile_sets = map_it->getTileSets();
         maps_order_json.push_back(picojson::value(map_it->getShortName()));
 
-		picojson::object map_json;
+        picojson::object map_json;
         map_json["name"] = picojson::value(map_it->getLongName());
         map_json["world"] = picojson::value(map_it->getWorld());
-		map_json["worldName"] = picojson::value(world.getWorldName());
+        map_json["worldName"] = picojson::value(world.getWorldName());
         map_json["worldSeaLevel"] = picojson::value((double)world.getSeaLevel());
         map_json["renderView"] = picojson::value(util::str(map_it->getRenderView()));
         map_json["textureSize"] = picojson::value((double)map_it->getTextureSize());
@@ -270,11 +270,11 @@ picojson::value WebConfig::getConfigJSON() const {
         if (world.getDefaultRotation() != -1)
             map_json["defaultRotation"] = picojson::value((double)world.getDefaultRotation());
 
-		picojson::array rotations_json;
+        picojson::array rotations_json;
         auto rotations = map_it->getRotations();
         for (auto it = rotations.begin(); it != rotations.end(); ++it)
             rotations_json.push_back(picojson::value((double)*it));
-		map_json["rotations"] = picojson::value(rotations_json);
+        map_json["rotations"] = picojson::value(rotations_json);
 
         std::tuple<int, int> tile_size = getMapTileSize(map_it->getShortName());
         picojson::array tile_size_json;
@@ -285,22 +285,22 @@ picojson::value WebConfig::getConfigJSON() const {
         map_json["maxZoom"] = picojson::value((double)getMapMaxZoom(map_it->getShortName()));
 
         picojson::array last_rendered_json;
-		for (int rotation = 0; rotation < 4; rotation++) {
+        for (int rotation = 0; rotation < 4; rotation++) {
             int last_rendered = getMapLastRendered(map_it->getShortName(), rotation);
             last_rendered_json.push_back(picojson::value((double)last_rendered));
-		}
+        }
         map_json["lastRendered"] = picojson::value(last_rendered_json);
 
         map_json["tileSetGroup"] = picojson::value(map_it->getTileSetGroup().toString());
 
         maps_json[map_it->getShortName()] = picojson::value(map_json);
-	}
+    }
 
     config_json["tileSetGroups"] = picojson::value(tile_sets_json);
     config_json["mapsOrder"] = picojson::value(maps_order_json);
 	config_json["maps"] = picojson::value(maps_json);
 
-	return picojson::value(config_json);
+    return picojson::value(config_json);
 }
 
 renderer::TilePos parseTilePosJSON(const picojson::value &value) {

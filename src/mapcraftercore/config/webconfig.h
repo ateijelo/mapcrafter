@@ -22,6 +22,7 @@
 
 #include "../renderer/tileset.h"
 #include "../util/picojson.h"
+#include "mapcrafterconfig.h"
 
 #include <array>
 #include <boost/filesystem.hpp>
@@ -29,7 +30,6 @@
 #include <set>
 #include <tuple>
 #include <vector>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -62,8 +62,8 @@ class WebConfig {
     int getMapLastRendered(const std::string &map, int rotation) const;
     void setMapLastRendered(const std::string &map, int rotation, int last_rendered);
 
-private:
-	MapcrafterConfig config;
+  private:
+    MapcrafterConfig config;
 
     // max max zoom of world/view/tile_width (= max(max zoom of each rotation))
     std::map<TileSetGroupID, int> tile_sets_max_zoom;
@@ -77,7 +77,7 @@ private:
     // last render time of map/rotation
     std::map<std::string, std::array<int, 4>> map_last_rendered;
 
-	picojson::value getConfigJSON() const;
+    picojson::value getConfigJSON() const;
     void parseConfigJSON(const picojson::object &object);
 };
 
