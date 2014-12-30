@@ -218,9 +218,9 @@ void MapSection::preParse(const INIConfigSection &section, ValidationList &valid
 
     texture_size.setDefault(12);
     tile_width.setDefault(1);
-	} else if (key == "render_mode" || key == "rendermode") {
+
     image_format.setDefault(ImageFormat::PNG);
-		if (key == "rendermode")
+    png_indexed.setDefault(false);
 			validation.warning("Using the option 'rendermode' is deprecated. "
 					"It's called 'render_mode' now.");
     lighting_intensity.setDefault(1.0);
