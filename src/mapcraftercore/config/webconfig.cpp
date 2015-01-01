@@ -216,7 +216,7 @@ picojson::value WebConfig::getConfigJSON() const {
     // we'll just call all the tile set group things tile sets here
     // it would be too long otherwise
     picojson::object config_json, maps_json, tile_sets_json;
-	picojson::array maps_order_json;
+    picojson::array maps_order_json;
 
     // get used tile set groups
     std::set<TileSetGroupID> tile_sets;
@@ -298,7 +298,7 @@ picojson::value WebConfig::getConfigJSON() const {
 
     config_json["tileSetGroups"] = picojson::value(tile_sets_json);
     config_json["mapsOrder"] = picojson::value(maps_order_json);
-	config_json["maps"] = picojson::value(maps_json);
+    config_json["maps"] = picojson::value(maps_json);
 
     return picojson::value(config_json);
 }
