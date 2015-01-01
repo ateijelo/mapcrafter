@@ -50,43 +50,43 @@ WebConfig::~WebConfig() {}
 
 bool WebConfig::readConfigJS() {
     // try to read config.js file or migrate old map.settings files
-	if (fs::is_regular_file(config.getOutputPath("config.js"))) {
+    if (fs::is_regular_file(config.getOutputPath("config.js"))) {
         // TODO check if map/world configuration has changed?
         static std::string try_again =
             "Please fix the problem in the config.js file "
+            "or delete the corrupt file (Warning: You will have to render your maps again).";
 
-		std::ifstream in(config.getOutputPath("config.js").string());
-		if (!in) {
+        std::ifstream in(config.getOutputPath("config.js").string());
         if (!in) {
             LOG(FATAL) << "Unable to open config.js file!";
             LOG(FATAL) << try_again;
-		}
-		std::stringstream ss;
-		ss << in.rdbuf();
-		std::string config_data = ss.str();
-		if (!util::startswith(config_data, "var CONFIG = ")) {
+            return false;
+        }
+        std::stringstream ss;
+        ss << in.rdbuf();
+        std::string config_data = ss.str();
         if (!util::startswith(config_data, "var CONFIG = ")) {
-					<< "'var CONFIG = ' is expected at beginning of file!";
+            LOG(FATAL) << "Invalid config.js file! "
                        << "'var CONFIG = ' is expected at beginning of file!";
             LOG(FATAL) << try_again;
-		}
+            return false;
+        }
 
-		config_data = config_data.substr(std::string("var CONFIG = ").size());
-		picojson::value value;
-		std::string json_error;
-		picojson::parse(value, config_data.begin(), config_data.end(), &json_error);
-		if (!json_error.empty()) {
+        config_data = config_data.substr(std::string("var CONFIG = ").size());
+        picojson::value value;
+        std::string json_error;
+        picojson::parse(value, config_data.begin(), config_data.end(), &json_error);
         if (!json_error.empty()) {
             LOG(FATAL) << "Unable to parse json in config.js file: " << json_error;
             LOG(FATAL) << try_again;
-		}
-
+            return false;
+        }
 
         if (!value.is<picojson::object>()) {
             LOG(FATAL) << "Invalid config json object in config.js file!";
             LOG(FATAL) << try_again;
-		}
-
+            return false;
+        }
 
         try {
             parseConfigJSON(value.get<picojson::object>());
@@ -139,12 +139,12 @@ bool WebConfig::readConfigJS() {
             }
 
             // move old map.settings file
-		}
+            fs::rename(settings_file, settings_file.string() + ".old");
         }
 
         // write config.js for first time with data from old map.settings files
         if (map_settings_found)
-	}
+            writeConfigJS();
     }
 
     // if no config.js file was found that's just fine
@@ -185,33 +185,31 @@ void WebConfig::setTileSetTileOffset(const TileSetID &tile_set,
 }
 
 std::tuple<int, int> WebConfig::getMapTileSize(const std::string &map) const {
-	return map_tile_size.at(map);
+    return map_tile_size.at(map);
 }
 
 void WebConfig::setMapTileSize(const std::string &map, std::tuple<int, int> tile_size) {
-	map_tile_size[map] = tile_size;
+    map_tile_size[map] = tile_size;
 }
 
 int WebConfig::getMapMaxZoom(const std::string &map) const {
-	if (!map_max_zoom.count(map))
+    if (!map_max_zoom.count(map))
         return 0;
-	return map_max_zoom.at(map);
+    return map_max_zoom.at(map);
 }
 
 void WebConfig::setMapMaxZoom(const std::string &map, int zoomlevel) {
-	map_max_zoom[map] = zoomlevel;
+    map_max_zoom[map] = zoomlevel;
 }
 
 int WebConfig::getMapLastRendered(const std::string &map, int rotation) const {
-		int rotation) const {
-	if (!map_last_rendered.count(map))
-		return 0;
-	return map_last_rendered.at(map).at(rotation);
+    if (!map_last_rendered.count(map))
+        return 0;
+    return map_last_rendered.at(map).at(rotation);
 }
 
 void WebConfig::setMapLastRendered(const std::string &map, int rotation, int last_rendered) {
-		int rotation, int last_rendered) {
-	map_last_rendered[map][rotation] = last_rendered;
+    map_last_rendered[map][rotation] = last_rendered;
 }
 
 picojson::value WebConfig::getConfigJSON() const {
@@ -267,10 +265,10 @@ picojson::value WebConfig::getConfigJSON() const {
             default_view_json.push_back(picojson::value((double)default_view.y));
             map_json["defaultView"] = picojson::value(default_view_json);
         }
-		if (world.getDefaultZoom() != 0)
-			map_json["defaultZoom"] = picojson::value((double) world.getDefaultZoom());
-		if (world.getDefaultRotation() != -1)
-			map_json["defaultRotation"] = picojson::value((double) world.getDefaultRotation());
+        if (world.getDefaultZoom() != 0)
+            map_json["defaultZoom"] = picojson::value((double)world.getDefaultZoom());
+        if (world.getDefaultRotation() != -1)
+            map_json["defaultRotation"] = picojson::value((double)world.getDefaultRotation());
 
 		picojson::array rotations_json;
         auto rotations = map_it->getRotations();
@@ -286,7 +284,7 @@ picojson::value WebConfig::getConfigJSON() const {
 
         map_json["maxZoom"] = picojson::value((double)getMapMaxZoom(map_it->getShortName()));
 
-		picojson::array last_rendered_json;
+        picojson::array last_rendered_json;
 		for (int rotation = 0; rotation < 4; rotation++) {
             int last_rendered = getMapLastRendered(map_it->getShortName(), rotation);
             last_rendered_json.push_back(picojson::value((double)last_rendered));

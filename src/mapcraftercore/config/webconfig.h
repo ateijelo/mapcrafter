@@ -56,26 +56,26 @@ class WebConfig {
     std::tuple<int, int> getMapTileSize(const std::string &map) const;
     void setMapTileSize(const std::string &map, std::tuple<int, int> tile_size);
 
-	int getMapMaxZoom(const std::string& map) const;
-	void setMapMaxZoom(const std::string& map, int max_zoom);
+    int getMapMaxZoom(const std::string &map) const;
+    void setMapMaxZoom(const std::string &map, int max_zoom);
 
-	int getMapLastRendered(const std::string& map, int rotation) const;
-	void setMapLastRendered(const std::string& map, int rotation, int last_rendered);
+    int getMapLastRendered(const std::string &map, int rotation) const;
+    void setMapLastRendered(const std::string &map, int rotation, int last_rendered);
 
 private:
 	MapcrafterConfig config;
 
     // max max zoom of world/view/tile_width (= max(max zoom of each rotation))
     std::map<TileSetGroupID, int> tile_sets_max_zoom;
-	// tile offset of world/view/tile_width/rotation
+    // tile offset of world/view/tile_width/rotation
     std::map<TileSetID, renderer::TilePos> tile_set_tile_offset;
 
-	// tile size of map
+    // tile size of map
     std::map<std::string, std::tuple<int, int>> map_tile_size;
-	// max zoom of map (= max max zoom level of the world at time of rendering)
-	std::map<std::string, int> map_max_zoom;
-	// last render time of map/rotation
-	std::map<std::string, std::array<int, 4> > map_last_rendered;
+    // max zoom of map (= max max zoom level of the world at time of rendering)
+    std::map<std::string, int> map_max_zoom;
+    // last render time of map/rotation
+    std::map<std::string, std::array<int, 4>> map_last_rendered;
 
 	picojson::value getConfigJSON() const;
     void parseConfigJSON(const picojson::object &object);
