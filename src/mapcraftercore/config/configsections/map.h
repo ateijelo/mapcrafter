@@ -53,7 +53,7 @@ class TileSetGroupID {
 
 	std::string world_name;
     renderer::RenderViewType render_view;
-	int tile_width;
+    int tile_width;
 };
 
 /**
@@ -104,7 +104,7 @@ class MapSection : public ConfigSection {
     int getTextureSize() const;
 	int getTextureBlur() const;
 	double getWaterOpacity() const;
-	int getTileWidth() const;
+    int getTileWidth() const;
 
     ImageFormat getImageFormat() const;
 	std::string getImageFormatSuffix() const;

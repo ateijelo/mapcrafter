@@ -169,9 +169,7 @@ fs::path MapSection::getBlockDir() const { return block_dir.getValue(); }
 
 int MapSection::getTextureSize() const { return texture_size.getValue(); }
 
-int MapSection::getTileWidth() const {
-	return tile_width.getValue();
-}
+int MapSection::getTileWidth() const { return tile_width.getValue(); }
 
 ImageFormat MapSection::getImageFormat() const { return image_format.getValue(); }
 
