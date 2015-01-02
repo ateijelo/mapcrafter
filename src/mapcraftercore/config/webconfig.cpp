@@ -29,17 +29,17 @@ WebConfig::WebConfig(const MapcrafterConfig &config) : config(config) {
     auto maps = config.getMaps();
     for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
         std::string map_name = map_it->getShortName();
-		std::string map_name = map_it->getShortName();
 
-		// set tile size to something != 0 for now,
-		// because Leaflet is sad if the tile size is 0
+        // set tile size to something != 0 for now,
+        // because Leaflet is sad if the tile size is 0
+        // EDIT: apparently it's also sad now if the tile size is 1 or something small
         // seems like it's stuck in a loop trying to loading (many? tile size 1?) tiles
 		// seems like it's stuck in a loop trying to loading (many? tile size 1?) tiles
         map_tile_size[map_name] = std::make_tuple<>(420, 420);
 		map_tile_size[map_name] = std::make_tuple<>(420, 420);
-		map_max_zoom[map_name] = 0;
+        for (int i = 0; i < 4; i++)
 		for (int i = 0; i < 4; i++)
-			map_last_rendered[map_name][i] = 0;
+
         auto tile_sets = map_it->getTileSets();
         for (auto tile_set_it = tile_sets.begin(); tile_set_it != tile_sets.end(); ++tile_set_it)
             tile_sets_max_zoom[*tile_set_it] = 0;
@@ -430,9 +430,9 @@ rotation << "'."; continue;
                 }
 
                 if (r != -1)
-			map_render_behavior[map][r] = behavior;
+                        map_render_behavior[map][r] = behavior;
                 else
-			std::fill(&map_render_behavior[map][0], &map_render_behavior[map][4], behavior);
+                        std::fill(&map_render_behavior[map][0], &map_render_behavior[map][4],
 behavior);
         }
 }
