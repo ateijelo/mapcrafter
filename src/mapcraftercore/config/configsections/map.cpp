@@ -221,8 +221,8 @@ void MapSection::preParse(const INIConfigSection &section, ValidationList &valid
 
     image_format.setDefault(ImageFormat::PNG);
     png_indexed.setDefault(false);
-			validation.warning("Using the option 'rendermode' is deprecated. "
-					"It's called 'render_mode' now.");
+    jpeg_quality.setDefault(85);
+
     lighting_intensity.setDefault(1.0);
     lighting_water_intensity.setDefault(0.85);
 	} else if (key == "rotations") {
