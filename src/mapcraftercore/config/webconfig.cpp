@@ -49,9 +49,9 @@ WebConfig::WebConfig(const MapcrafterConfig &config) : config(config) {
 WebConfig::~WebConfig() {}
 
 bool WebConfig::readConfigJS() {
-	// try to read config.js file or migrate old map.settings files
+    // try to read config.js file or migrate old map.settings files
 	if (fs::is_regular_file(config.getOutputPath("config.js"))) {
-		// TODO check if map/world configuration has changed?
+        // TODO check if map/world configuration has changed?
         static std::string try_again =
             "Please fix the problem in the config.js file "
 
@@ -94,14 +94,14 @@ bool WebConfig::readConfigJS() {
             LOG(FATAL) << "Unable to parse config json: " << exception.what();
             LOG(FATAL) << try_again;
             return false;
-	} else {
-		bool map_settings_found = false;
-		auto maps = config.getMaps();
-		for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
-			std::string map_name = map_it->getShortName();
+        }
+    } else {
+        bool map_settings_found = false;
+        auto maps = config.getMaps();
+        for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
             std::string map_name = map_it->getShortName();
             auto tile_sets = map_it->getTileSets();
-			fs::path settings_file = config.getOutputDir() / map_name / "map.settings";
+
             fs::path settings_file = config.getOutputDir() / map_name / "map.settings";
             if (!fs::is_regular_file(settings_file))
                 continue;
@@ -131,18 +131,18 @@ bool WebConfig::readConfigJS() {
                     int offset_y = section.get<int>("tile_offset_y", 0);
                     renderer::TilePos offset(offset_x, offset_y);
                     tile_set_tile_offset[*tile_set_it] = offset;
-				}
+                    map_last_rendered[map_name][rotation] = section.get<int>("last_render");
                 }
             } catch (config::INIConfigError &exception) {
                 LOG(WARNING) << "Unable to read map.settings file: " << exception.what();
-			}
+                continue;
             }
 
             // move old map.settings file
 		}
+        }
 
-		// write config.js for first time with data from old map.settings files
-		if (map_settings_found)
+        // write config.js for first time with data from old map.settings files
         if (map_settings_found)
 	}
     }
@@ -158,8 +158,8 @@ void WebConfig::writeConfigJS() const {
 		LOG(ERROR) << "Unable to write config.js file!";
 		return;
     }
-	// TODO write world/map config to check if it was changed next time we read config.js?
-	out << "var CONFIG = " << util::trim(getConfigJSON().serialize(true)) << ";" << std::endl;
+    // TODO write world/map config to check if it was changed next time we read config.js?
+    out << "var CONFIG = " << util::trim(getConfigJSON().serialize(true)) << ";" << std::endl;
 	out.close();
 }
 
