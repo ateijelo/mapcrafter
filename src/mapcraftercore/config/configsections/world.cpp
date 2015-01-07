@@ -96,9 +96,7 @@ mc::Dimension WorldSection::getDimension() const { return dimension.getValue(); 
 
 std::string WorldSection::getWorldName() const { return world_name.getValue(); }
 
-mc::BlockPos WorldSection::getDefaultView() const {
-	return default_view.getValue();
-}
+mc::BlockPos WorldSection::getDefaultView() const { return default_view.getValue(); }
 
 int WorldSection::getDefaultZoom() const { return default_zoom.getValue(); }
 
