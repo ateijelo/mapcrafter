@@ -19,6 +19,7 @@
 
 #include "../configsections/world.h"
 #include "../../util.h"
+#include "../iniconfig.h"
 
 #include <sstream>
 
@@ -37,15 +38,15 @@ mc::Dimension as<mc::Dimension>(const std::string& from) {
 		throw std::invalid_argument("Dimension must be one of 'nether', 'overworld' or 'end'!");
 }
 
-template <>
-mc::BlockPos as<mc::BlockPos>(const std::string& from) {
-	std::stringstream ss(util::replaceAll(from, ",", " "));
-	mc::BlockPos pos;
-	ss >> pos.x >> pos.z >> pos.y;
-	if (!ss || !ss.eof())
-		throw std::invalid_argument("Invalid block coordinates '" + from + "', "
-				"must be of the format '<x>,<z>,<y>'!");
-	return pos;
+template <> mc::BlockPos as<mc::BlockPos>(const std::string &from) {
+    std::stringstream ss(util::replaceAll(from, ",", " "));
+    mc::BlockPos pos;
+    ss >> pos.x >> pos.z >> pos.y;
+    if (!ss || !ss.eof())
+        throw std::invalid_argument("Invalid block coordinates '" + from +
+                                    "', "
+                                    "must be of the format '<x>,<z>,<y>'!");
+    return pos;
 }
 
 }
@@ -132,7 +133,7 @@ void WorldSection::preParse(const INIConfigSection &section, ValidationList &val
 	dimension.setDefault(mc::Dimension::OVERWORLD);
 	world_name.setDefault(section.getName());
 
-	default_view.setDefault(mc::BlockPos(0, 0, 0));
+    default_view.setDefault(mc::BlockPos(0, 0, 0));
 	default_zoom.setDefault(0);
 	default_rotation.setDefault(-1);
 	sea_level.setDefault(64);

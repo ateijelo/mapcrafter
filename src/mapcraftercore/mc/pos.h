@@ -90,9 +90,9 @@ class BlockPos {
     int getRow() const;
     int getCol() const;
 
-	bool operator==(const BlockPos& other) const;
-	bool operator!=(const BlockPos& other) const;
-	bool operator<(const BlockPos& other) const;
+    bool operator==(const BlockPos &other) const;
+    bool operator!=(const BlockPos &other) const;
+    bool operator<(const BlockPos &other) const;
 
     BlockPos &operator+=(const BlockPos &p);
     BlockPos &operator-=(const BlockPos &p);

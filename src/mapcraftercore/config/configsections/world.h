@@ -53,7 +53,7 @@ class WorldSection : public ConfigSection {
 	mc::Dimension getDimension() const;
     std::string getWorldName() const;
 
-	mc::BlockPos getDefaultView() const;
+    mc::BlockPos getDefaultView() const;
 	int getDefaultZoom() const;
 	int getDefaultRotation() const;
 	int getSeaLevel() const;
@@ -77,7 +77,7 @@ class WorldSection : public ConfigSection {
 	Field<mc::Dimension> dimension;
 	Field<std::string> world_name;
 
-	Field<mc::BlockPos> default_view;
+    Field<mc::BlockPos> default_view;
 	Field<int> default_zoom, default_rotation;
 	Field<int> sea_level;
 
