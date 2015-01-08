@@ -30,8 +30,7 @@ class SingleThreadDispatcher : public Dispatcher {
     SingleThreadDispatcher();
     virtual ~SingleThreadDispatcher();
 
-	virtual void dispatch(const renderer::RenderContext& context,
-			util::IProgressHandler* progress);
+    virtual void dispatch(const renderer::RenderContext &context, util::IProgressHandler *progress);
 };
 
 } /* namespace thread */
