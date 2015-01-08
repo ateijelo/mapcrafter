@@ -41,9 +41,7 @@ void RenderContext::initializeTileRenderer() {
     render_view->configureTileRenderer(tile_renderer.get(), world_config, map_config);
 }
 
-TileRenderWorker::TileRenderWorker()
-	: progress(nullptr) {
-}
+TileRenderWorker::TileRenderWorker() : progress(nullptr) {}
 
 TileRenderWorker::~TileRenderWorker() {}
 
