@@ -80,9 +80,7 @@ class MultiThreadingDispatcher : public Dispatcher {
     virtual void dispatch(const renderer::RenderContext &context, util::IProgressHandler *progress);
 
   private:
-			util::IProgressHandler* progress);
-private:
-	int thread_count;
+    int thread_count;
 
     ThreadManager manager;
     std::vector<thread_ns::thread> threads;
