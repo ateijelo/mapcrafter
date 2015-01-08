@@ -115,7 +115,7 @@ MultiThreadingDispatcher::~MultiThreadingDispatcher() {
 }
 
 void MultiThreadingDispatcher::dispatch(const renderer::RenderContext& context,
-		util::IProgressHandler* progress) {
+
 	auto tiles = context.tile_set->getRequiredCompositeTiles();
 	if (tiles.size() == 0)
 		return;

@@ -58,7 +58,7 @@ public:
 protected:
 	int max, value;
 
-	std::vector<IProgressHandler*> handlers;
+    std::vector<IProgressHandler *> handlers;
 };
 
 /**

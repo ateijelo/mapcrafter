@@ -115,9 +115,9 @@ class BaseRenderMode : public RenderMode {
   protected:
     mc::Block getBlock(const mc::BlockPos &pos, int get = mc::GET_ID);
 
-	BlockImages* images;
+    BlockImages *images;
     RenderedBlockImages *block_images;
-	mc::WorldCache* world;
+    mc::WorldCache *world;
     mc::Chunk **current_chunk;
 };
 

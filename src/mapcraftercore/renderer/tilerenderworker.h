@@ -96,7 +96,7 @@ public:
 	void setRenderWork(const RenderWork& work);
 	const RenderWorkResult& getRenderWorkResult() const;
 
-	void setProgressHandler(util::IProgressHandler* progress);
+    void setProgressHandler(util::IProgressHandler *progress);
 
     void saveTile(const TilePath &tile, const RGBAImage &image);
     void renderRecursive(const TilePath &path, RGBAImage &image);
@@ -109,7 +109,7 @@ private:
 	RenderWorkResult render_work_result;
 
 	// progress handler
-	util::IProgressHandler* progress;
+    util::IProgressHandler *progress;
 };
 
 } /* namespace render */

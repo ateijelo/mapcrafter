@@ -437,11 +437,11 @@ bool RenderManager::run(int threads, bool batch) {
             std::time_t time_start = std::time(nullptr);
             renderMap(map_config.getShortName(), *rotation_it, threads, progress.get());
             std::time_t took = std::time(nullptr) - time_start;
-			if (progress_bar != nullptr) {
+
 				progress_bar->finish();
-				delete progress_bar;
-			}
-			delete log_output;
+                progress_bar->finish();
+                delete progress_bar;
+            }
 
 			LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/"
 				<< progress_maps << "." << progress_rotations_all << "] "

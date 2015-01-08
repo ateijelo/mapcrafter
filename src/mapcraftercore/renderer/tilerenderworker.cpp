@@ -61,7 +61,7 @@ const RenderWorkResult& TileRenderWorker::getRenderWorkResult() const {
 	return render_work_result;
 }
 
-void TileRenderWorker::setProgressHandler(util::IProgressHandler* progress) {
+void TileRenderWorker::setProgressHandler(util::IProgressHandler *progress) {
 	this->progress = progress;
 }
 
@@ -97,7 +97,7 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
 				/ (tile.toString() + "." + render_context.map_config.getImageFormatSuffix());
 		if ((png && image.readPNG(file.string()))
 				|| (!png && image.readJPEG(file.string()))) {
-			if (render_work.tiles_skip.count(tile) && progress != nullptr)
+                                   render_context.tile_set->getContainingRenderTiles(tile));
 				progress->setValue(progress->getValue()
 						+ render_context.tile_set->getContainingRenderTiles(tile));
 			return;
@@ -136,8 +136,8 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
 		saveTile(tile, image);
 
 		// update progress
-		if (progress != nullptr)
-			progress->setValue(progress->getValue() + 1);
+    } else {
+        // this tile is a composite tile, we need to compose it from its children
 	} else {
 		// this tile is a composite tile, we need to compose it from its children
 		// just check, if children 1, 2, 3, 4 exists, render it, resize it to the half size
@@ -194,10 +194,10 @@ void TileRenderWorker::operator()() {
 	int work = 0;
 	for (auto it = render_work.tiles.begin(); it != render_work.tiles.end(); ++it)
 		work += render_context.tile_set->getContainingRenderTiles(*it);
-	if (progress != nullptr) {
-		progress->setMax(work);
-		progress->setValue(0);
-	}
+    if (progress != nullptr) {
+        progress->setMax(work);
+        progress->setValue(0);
+    }
 	
     RGBAImage image;
 	// iterate through the start composite tiles

@@ -81,10 +81,10 @@ protected:
 
     uint32_t getBiomeColor(const mc::BlockPos &pos, const BlockImage &block,
                            const mc::Chunk *chunk);
-	BlockImages* images;
+
     mc::BlockStateRegistry &block_registry;
 	int tile_width;
-	mc::WorldCache* world;
+    BlockImages *images;
 	mc::Chunk* current_chunk;
     int tile_width;
 

@@ -80,7 +80,12 @@ MultiplexingProgressHandler::~MultiplexingProgressHandler() {
 }
 
 void MultiplexingProgressHandler::addHandler(IProgressHandler* handler) {
-	handlers.push_back(handler);
+        return str_days + " " + str_hours;
+    if (hours > 0)
+        return str_hours + " " + str_minutes;
+    if (minutes > 0)
+        return str_minutes + " " + str_seconds;
+    return str_seconds;
 }
 
 int MultiplexingProgressHandler::getMax() const {
