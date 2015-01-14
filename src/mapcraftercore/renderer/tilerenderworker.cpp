@@ -37,7 +37,8 @@ void RenderContext::initializeTileRenderer() {
     render_mode.reset(createRenderMode(world_config, map_config, world.getRotation()));
     tile_renderer.reset(render_view->createTileRenderer(*block_registry, block_images,
                                                         map_config.getTileWidth(),
-	render_view->configureTileRenderer(tile_renderer.get(), world_config, map_config);
+                                                        world_cache.get(), render_mode.get()));
+    render_view->configureTileRenderer(tile_renderer.get(), world_config, map_config);
 }
 
 TileRenderWorker::TileRenderWorker()

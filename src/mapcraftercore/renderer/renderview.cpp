@@ -42,11 +42,11 @@ void RenderView::configureBlockImages(BlockImages *block_images,
     assert(block_images != nullptr);
 }
 
-void RenderView::configureTileRenderer(TileRenderer* tile_renderer,
-		const config::WorldSection& world_config,
-		const config::MapSection& map_config) const {
+void RenderView::configureTileRenderer(TileRenderer *tile_renderer,
+                                       const config::WorldSection &world_config,
+                                       const config::MapSection &map_config) const {
     assert(tile_renderer != nullptr);
-	tile_renderer->setRenderBiomes(map_config.renderBiomes());
+    tile_renderer->setRenderBiomes(map_config.renderBiomes());
 	tile_renderer->setUsePreblitWater(map_config.getRenderMode() == RenderModeType::PLAIN);
 }
 

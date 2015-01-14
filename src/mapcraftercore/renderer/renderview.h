@@ -70,15 +70,15 @@ class RenderView {
     virtual TileRenderer *createTileRenderer(mc::BlockStateRegistry &block_registry,
                                              BlockImages *images, int tile_width,
                                              mc::WorldCache *world,
+                                             RenderMode *render_mode) const = 0;
 
-	/**
     /**
      * Configures a block images object by calling some (eventually per render view
      * specific) methods of the block images and passing information from the world- and
      * map configuration. It is possible to call these methods manually (for example
      * needed in the testtextures program where we don't want to initialize a whole
-	 *
-	 * If you overwrite this method, you should also call the parent method since it
+     * configuration object just for the block images).
+     *
      * If you overwrite this method, you should also call the parent method since it
      * sets generic block images options (for example whether to render leaves transparent).
      *
@@ -96,10 +96,11 @@ class RenderView {
      * method since it sets generic tile renderer options.
      *
      * It is also very important that you pass only TileRenderer*'s to this method which
-	 */
-	virtual void configureTileRenderer(TileRenderer* tile_renderer,
-			const config::WorldSection& world_config,
-			const config::MapSection& map_config) const;
+     * were created by this render view.
+     */
+    virtual void configureTileRenderer(TileRenderer *tile_renderer,
+                                       const config::WorldSection &world_config,
+                                       const config::MapSection &map_config) const;
 };
 
 enum class RenderViewType {

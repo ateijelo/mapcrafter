@@ -58,21 +58,21 @@ struct RenderContext {
 	BlockImages* block_images;
 	TileSet* tile_set;
     mc::BlockStateRegistry *block_registry;
-	mc::World world;
+    mc::World world;
 
-	std::shared_ptr<mc::WorldCache> world_cache;
+    std::shared_ptr<mc::WorldCache> world_cache;
     std::shared_ptr<RenderMode> render_mode;
 	std::shared_ptr<TileRenderer> tile_renderer;
 
-	/**
-	 * Creates/initializes the world cache and tile renderer with the render view and
-	 * other supplied objects (block images, tile set, world).
-	 *
-	 * This is method is already called in the render management code, but you can copy
-	 * the render context and call this method again if you need multiple tile renderers
-	 * (for multithreading for example).
-	 */
-	void initializeTileRenderer();
+    /**
+     * Creates/initializes the world cache and tile renderer with the render view and
+     * other supplied objects (block images, tile set, world).
+     *
+     * This is method is already called in the render management code, but you can copy
+     * the render context and call this method again if you need multiple tile renderers
+     * (for multithreading for example).
+     */
+    void initializeTileRenderer();
 };
 
 struct RenderWork {
