@@ -99,13 +99,7 @@ const RGBAImage &TextureImage::getOriginal() const { return original; }
 
 bool TextureImage::isAnimated() const { return original.getWidth() < original.getHeight(); }
 
-bool TextureImage::isAnimated() const {
-	return original.getWidth() < original.getHeight();
-}
-
-int TextureImage::getFrameCount() const {
-	return frame_count;
-}
+int TextureImage::getFrameCount() const { return frame_count; }
 
 RGBAImage TextureImage::getFrame(int frame) const {
     int width = original_resized.getWidth();
