@@ -128,22 +128,22 @@ public:
 	RGBAImage(int width = 0, int height = 0);
 	~RGBAImage();
 
-	/**
-	 * Blits one image to another one. Just copies the pixels over without any processing.
-	 */
-	void simpleBlit(const RGBAImage& image, int x, int y);
+    /**
+     * Blits one image to another one. Just copies the pixels over without any processing.
+     */
+    void simpleBlit(const RGBAImage &image, int x, int y);
 
-	/**
-	 * Blits one image to another one. Just copies the pixels over, but skips completely
-	 * transparent pixels (alpha(pixel) == 0).
-	 */
-	void simpleAlphaBlit(const RGBAImage& image, int x, int y);
+    /**
+     * Blits one image to another one. Just copies the pixels over, but skips completely
+     * transparent pixels (alpha(pixel) == 0).
+     */
+    void simpleAlphaBlit(const RGBAImage &image, int x, int y);
 
-	/**
-	 * Blits one image to another one. Also Alphablends transparent pixels of the source
-	 * image with the pixels of the destination image.
-	 */
-	void alphaBlit(const RGBAImage& image, int x, int y);
+    /**
+     * Blits one image to another one. Also Alphablends transparent pixels of the source
+     * image with the pixels of the destination image.
+     */
+    void alphaBlit(const RGBAImage &image, int x, int y);
 	void blendPixel(RGBAPixel color, int x, int y);
 
 	void fill(RGBAPixel color, int x1, int y1, int w, int h);
@@ -178,11 +178,11 @@ public:
 	 */
 	RGBAImage& rotateByShear(double degrees);
 
-	/**
-	 * Applies a simple blur filter to the image. Uses the specified radius for the
-	 * (quadratic) blur effect.
-	 */
-	void blur(RGBAImage& dest, int radius) const;
+    /**
+     * Applies a simple blur filter to the image. Uses the specified radius for the
+     * (quadratic) blur effect.
+     */
+    void blur(RGBAImage &dest, int radius) const;
 
     bool readPNG(const std::string &filename);
     bool writePNG(const std::string &filename) const;

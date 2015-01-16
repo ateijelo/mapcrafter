@@ -160,21 +160,21 @@ RGBAImage::~RGBAImage() {}
 RGBAImage::~RGBAImage() {
     if (x >= width || y >= height)
         return;
-void RGBAImage::simpleBlit(const RGBAImage& image, int x, int y) {
-	if (x >= width || y >= height)
-		return;
 
-	int sx = std::max(0, -x);
-	int sy;
-	for (; sx < image.width && sx+x < width; sx++) {
-		sy = std::max(0, -y);
-		for (; sy < image.height && sy+y < height; sy++) {
-				data[(sy+y) * width + (sx+x)] = image.data[sy * image.width + sx];
-		}
-	}
+    int sx = std::max(0, -x);
+    int sy;
+    for (; sx < image.width && sx + x < width; sx++) {
+        sy = std::max(0, -y);
+        for (; sy < image.height && sy + y < height; sy++) {
+            data[(sy + y) * width + (sx + x)] = image.data[sy * image.width + sx];
+        }
+    }
 }
 
-void RGBAImage::simpleAlphaBlit(const RGBAImage& image, int x, int y) {
+void RGBAImage::simpleAlphaBlit(const RGBAImage &image, int x, int y) {
+    if (x >= width || y >= height)
+        return;
+
     /*
     int dx = MAX(x, 0);
     int sx = MAX(0, -x);
@@ -206,7 +206,7 @@ void RGBAImage::simpleAlphaBlit(const RGBAImage& image, int x, int y) {
 	}
     if (x >= width || y >= height)
         return;
-void RGBAImage::alphaBlit(const RGBAImage& image, int x, int y) {
+
     /*
     int dx = MAX(x, 0);
     int sx = MAX(0, -x);
@@ -407,33 +407,33 @@ RGBAImage& RGBAImage::rotateByShear(double degrees) {
 	return *this;
 }
 
-RGBAPixel blurKernel(const RGBAImage& image, int x, int y, int radius) {
-	int r = 0, g = 0, b = 0, a = 0;
-	int count = 0;
-	for (int dx = -radius; dx <= radius; dx++)
-		for (int dy = -radius; dy <= radius; dy++) {
-			int x2 = x + dx;
-			int y2 = y + dy;
-			if (x2 < 0 || y2 < 0 || x2 >= image.getWidth() || y2 >= image.getHeight())
-				continue;
-			RGBAPixel pixel = image.getPixel(x2, y2);
-			r += rgba_red(pixel);
-			g += rgba_green(pixel);
-			b += rgba_blue(pixel);
-			a += rgba_alpha(pixel);
-			count++;
-		}
-	return rgba(r / count, g / count, b / count, a / count);
+    int r = 0, g = 0, b = 0, a = 0;
+    int count = 0;
+    for (int dx = -radius; dx <= radius; dx++)
+        for (int dy = -radius; dy <= radius; dy++) {
+            int x2 = x + dx;
+            int y2 = y + dy;
+            if (x2 < 0 || y2 < 0 || x2 >= image.getWidth() || y2 >= image.getHeight())
+                continue;
+            RGBAPixel pixel = image.getPixel(x2, y2);
+            r += rgba_red(pixel);
+            g += rgba_green(pixel);
+            b += rgba_blue(pixel);
+            a += rgba_alpha(pixel);
+            count++;
+        }
+    return rgba(r / count, g / count, b / count, a / count);
 }
 
-void RGBAImage::blur(RGBAImage& dest, int radius) const {
-	dest.setSize(width, height);
+void RGBAImage::blur(RGBAImage &dest, int radius) const {
+    dest.setSize(width, height);
 
-	for (int x = 0; x < width; x++)
-		for (int y = 0; y < height; y++)
-			dest.pixel(x, y) = blurKernel(*this, x, y, radius);
+    for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y++)
+            dest.pixel(x, y) = blurKernel(*this, x, y, radius);
 }
 
+bool RGBAImage::readPNG(const std::string &filename) {
 bool RGBAImage::readPNG(const std::string& filename) {
     if (!file) {
         return false;

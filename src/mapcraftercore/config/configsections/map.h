@@ -100,7 +100,7 @@ class MapSection : public ConfigSection {
     std::set<int> getRotations() const;
     fs::path getBlockDir() const;
     int getTextureSize() const;
-	int getTextureBlur() const;
+    int getTextureBlur() const;
     double getWaterOpacity() const;
     int getTileWidth() const;
 
@@ -139,7 +139,7 @@ class MapSection : public ConfigSection {
     Field<fs::path> block_dir;
     Field<int> texture_size, texture_blur, tile_width;
     Field<double> water_opacity;
-	Field<int> texture_size, texture_blur, tile_width;
+
 	Field<double> water_opacity;
 
 	Field<ImageFormat> image_format;

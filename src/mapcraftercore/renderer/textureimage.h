@@ -54,10 +54,10 @@ public:
 	 */
 	bool isAnimated() const;
 
-	/**
-	 * Returns the count of frames this texture has.
-	 */
-	int getFrameCount() const;
+    /**
+     * Returns the count of frames this texture has.
+     */
+    int getFrameCount() const;
 
 	/**
 	 * If the texture is animated, returns a (resized to texture size) frame of it.
@@ -71,8 +71,8 @@ private:
 	// also original resized texture image (used for animated textures)
 	RGBAImage original, original_resized;
 
-	// count of frames of animated texture
-	int frame_count;
+    // count of frames of animated texture
+    int frame_count;
 };
 
 } /* namespace render */
