@@ -37,7 +37,7 @@ namespace mc {
 class BlockPos;
 class BlockStateRegistry;
 class Chunk;
-}
+} // namespace mc
 
 namespace renderer {
 

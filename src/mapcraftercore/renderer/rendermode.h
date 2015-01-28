@@ -35,13 +35,13 @@ namespace mapcrafter {
 namespace config {
 class MapSection;
 class WorldSection;
-}
+} // namespace config
 
 namespace mc {
 struct Block;
 class BlockPos;
 class Chunk;
-}
+} // namespace mc
 
 namespace renderer {
 

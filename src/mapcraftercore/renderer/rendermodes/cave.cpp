@@ -22,7 +22,6 @@
 #include "../../mc/chunk.h"
 #include "../blockimages.h"
 #include "../image.h"
-#include "../../mc/chunk.h"
 
 namespace mapcrafter {
 namespace renderer {

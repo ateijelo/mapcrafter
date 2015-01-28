@@ -20,8 +20,6 @@
 #include "renderview.h"
 
 #include "blockimages.h"
-#include "tileset.h"
-#include "tilerenderer.h"
 #include "renderviews/isometricnew/renderview.h"
 #include "renderviews/side/renderview.h"
 #include "renderviews/topdown/renderview.h"

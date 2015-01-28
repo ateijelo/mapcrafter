@@ -30,12 +30,12 @@ namespace mapcrafter {
 namespace mc {
 class BlockStateRegistry;
 class WorldCache;
-}
+} // namespace mc
 
 namespace config {
 class MapSection;
 class WorldSection;
-}
+} // namespace config
 
 namespace renderer {
 
