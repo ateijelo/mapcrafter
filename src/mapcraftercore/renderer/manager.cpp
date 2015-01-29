@@ -19,9 +19,6 @@
 
 #include "manager.h"
 
-#include "blockimages.h"
-#include "tilerenderworker.h"
-#include "renderview.h"
 #include "../config/loggingconfig.h"
 #include "../mc/blockstate.h"
 #include "../thread/impl/singlethread.h"
