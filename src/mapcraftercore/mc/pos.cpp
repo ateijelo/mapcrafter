@@ -20,6 +20,7 @@
 #include "pos.h"
 
 #include "../util.h"
+#include "chunk.h"
 
 #include <boost/filesystem.hpp>
 #include <cmath>
