@@ -36,7 +36,7 @@ namespace mapcrafter {
 namespace mc {
 class BlockStateRegistry;
 class WorldCache;
-}
+} // namespace mc
 
 namespace renderer {
 
@@ -54,15 +54,15 @@ struct RenderContext {
 	config::WorldSection world_config;
     config::MapSection map_config;
 
-	RenderView* render_view;
-	BlockImages* block_images;
-	TileSet* tile_set;
+    RenderView *render_view;
+    BlockImages *block_images;
+    TileSet *tile_set;
     mc::BlockStateRegistry *block_registry;
     mc::World world;
 
     std::shared_ptr<mc::WorldCache> world_cache;
     std::shared_ptr<RenderMode> render_mode;
-	std::shared_ptr<TileRenderer> tile_renderer;
+    std::shared_ptr<TileRenderer> tile_renderer;
 
     /**
      * Creates/initializes the world cache and tile renderer with the render view and

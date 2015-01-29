@@ -63,7 +63,7 @@ namespace mapcrafter {
 namespace mc {
 class ChunkPos;
 class World;
-}
+} // namespace mc
 
 namespace renderer {
 
