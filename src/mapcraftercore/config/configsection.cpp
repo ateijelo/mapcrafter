@@ -34,9 +34,7 @@ void ConfigSection::setGlobal(bool global) { this->global = global; }
 
 std::string ConfigSection::getSectionName() const { return section_name; }
 
-std::string ConfigSection::getPrettyName() const {
-	return "unknown section";
-}
+std::string ConfigSection::getPrettyName() const { return "unknown section"; }
 
 void ConfigSection::dump(std::ostream& out) const {
 	out << getPrettyName() << std::endl;
