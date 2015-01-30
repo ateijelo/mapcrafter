@@ -36,9 +36,7 @@ std::string ConfigSection::getSectionName() const { return section_name; }
 
 std::string ConfigSection::getPrettyName() const { return "unknown section"; }
 
-void ConfigSection::dump(std::ostream& out) const {
-	out << getPrettyName() << std::endl;
-}
+void ConfigSection::dump(std::ostream &out) const { out << getPrettyName() << std::endl; }
 
 ValidationList ConfigSection::parse(const INIConfigSection& section) {
 	section_name = section.getName();
