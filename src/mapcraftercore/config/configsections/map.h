@@ -20,8 +20,6 @@
 #ifndef SECTIONS_MAP_H_
 #define SECTIONS_MAP_H_
 
-#include "../configsection.h"
-#include "../validation.h"
 #include "../../renderer/rendermode.h"
 #include "../../renderer/renderview.h"
 #include "../configsection.h"
