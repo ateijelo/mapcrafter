@@ -24,6 +24,7 @@
 #include "configsections/map.h"
 #include "configsections/marker.h"
 #include "configsections/world.h"
+#include "validation.h"
 
 #include <iostream>
 #include <map>

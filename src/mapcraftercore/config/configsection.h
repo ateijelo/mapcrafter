@@ -45,8 +45,8 @@ class INIConfigSection;
 
 class ConfigSection {
 public:
-	ConfigSection();
-	virtual ~ConfigSection();
+    ConfigSection();
+    virtual ~ConfigSection();
 
 	/**
      * Gets/sets whether this is a global section.
@@ -114,7 +114,7 @@ public:
 	ValidationList validation;
 };
 
-std::ostream& operator<<(std::ostream& out, const ConfigSection& section);
+std::ostream &operator<<(std::ostream &out, const ConfigSection &section);
 
 template <typename T>
 ConfigDirSectionFactory<T>::ConfigDirSectionFactory(fs::path config_dir) : config_dir(config_dir) {}

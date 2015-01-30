@@ -25,7 +25,7 @@
 #include "renderviews/isometricnew/renderview.h"
 #include "renderviews/side/renderview.h"
 #include "renderviews/topdown/renderview.h"
-#include "../config/configsections/map.h"
+#include "tilerenderer.h"
 #include "../config/configsections/world.h"
 #include "../util.h"
 

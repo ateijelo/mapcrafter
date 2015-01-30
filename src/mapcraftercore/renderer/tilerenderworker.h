@@ -23,6 +23,7 @@
 #include "../config/mapcrafterconfig.h"
 #include "../config/configsections/map.h"
 #include "../config/configsections/world.h"
+#include "../config/mapcrafterconfig.h"
 #include "../mc/world.h"
 
 #include <memory>
