@@ -19,8 +19,8 @@
 
 #include "webconfig.h"
 
-#include "iniconfig.h"
 #include "../util.h"
+#include "iniconfig.h"
 
 namespace mapcrafter {
 namespace config {

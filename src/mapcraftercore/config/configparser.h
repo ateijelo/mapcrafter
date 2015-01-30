@@ -38,10 +38,9 @@ namespace config {
  * All section factories must have a constant operator() that returns a new instance of
  * the section type.
  */
-template <typename T>
-class GenericSectionFactory {
-public:
-	T operator()() const;
+template <typename T> class GenericSectionFactory {
+  public:
+    T operator()() const;
 };
 
 /**
@@ -105,10 +104,7 @@ class ConfigParser {
 	std::set<std::string> parsed_section_types;
 };
 
-template <typename T>
-T GenericSectionFactory<T>::operator()() const {
-	return T();
-}
+template <typename T> T GenericSectionFactory<T>::operator()() const { return T(); }
 
 template <typename T>
 void ConfigParser::parseRootSection(T& section) {
