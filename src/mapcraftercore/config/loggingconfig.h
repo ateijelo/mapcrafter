@@ -25,8 +25,6 @@
 #include <boost/filesystem.hpp>
 #include <string>
 #include <vector>
-#include <boost/filesystem.hpp>
-#include "configsections/log.h"
 
 namespace fs = boost::filesystem;
 
