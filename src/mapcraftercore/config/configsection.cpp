@@ -32,9 +32,7 @@ bool ConfigSection::isGlobal() const { return global; }
 
 void ConfigSection::setGlobal(bool global) { this->global = global; }
 
-std::string ConfigSection::getSectionName() const {
-	return section_name;
-}
+std::string ConfigSection::getSectionName() const { return section_name; }
 
 std::string ConfigSection::getPrettyName() const {
 	return "unknown section";
