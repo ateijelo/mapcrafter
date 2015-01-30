@@ -40,9 +40,7 @@ ValidationMap LoggingConfig::parse(const std::string &filename) {
         return validation;
     }
 
-	// use an empty root section to also get warnings for unknown entries here
-	ConfigSection root_section;
-	parser.parseRootSection(root_section);
+    ConfigParser parser(config);
 
     // use an empty root section to also get warnings for unknown entries here
     ConfigSection root_section;
