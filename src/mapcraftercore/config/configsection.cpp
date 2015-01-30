@@ -24,20 +24,15 @@
 namespace mapcrafter {
 namespace config {
 
-ConfigSection::ConfigSection()
-	: global(false) {
-}
+ConfigSection::ConfigSection() : global(false) {}
 
-ConfigSection::~ConfigSection() {
-}
+ConfigSection::~ConfigSection() {}
 
 bool ConfigSection::isGlobal() const {
 	return global;
 }
 
-void ConfigSection::setGlobal(bool global) {
-	this->global = global;
-}
+void ConfigSection::setGlobal(bool global) { this->global = global; }
 
 std::string ConfigSection::getSectionName() const {
 	return section_name;
@@ -70,18 +65,14 @@ ValidationList ConfigSection::parse(const INIConfigSection& section) {
     return validation;
 }
 
-void ConfigSection::preParse(const INIConfigSection& section,
-		ValidationList& validation) {
-}
+void ConfigSection::preParse(const INIConfigSection &section, ValidationList &validation) {}
 
 bool ConfigSection::parseField(const std::string key, const std::string value,
 		ValidationList& validation) {
 	return false;
 }
 
-void ConfigSection::postParse(const INIConfigSection& section,
-		ValidationList& validation) {
-}
+void ConfigSection::postParse(const INIConfigSection &section, ValidationList &validation) {}
 
 std::ostream& operator<<(std::ostream& out, const ConfigSection& section) {
 	section.dump(out);
