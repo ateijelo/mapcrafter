@@ -28,9 +28,7 @@ ConfigSection::ConfigSection() : global(false) {}
 
 ConfigSection::~ConfigSection() {}
 
-bool ConfigSection::isGlobal() const {
-	return global;
-}
+bool ConfigSection::isGlobal() const { return global; }
 
 void ConfigSection::setGlobal(bool global) { this->global = global; }
 
