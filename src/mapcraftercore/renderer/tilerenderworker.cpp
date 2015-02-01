@@ -36,7 +36,7 @@ void RenderContext::initializeTileRenderer() {
     world_cache.reset(new mc::WorldCache(*block_registry, world));
     render_mode.reset(createRenderMode(world_config, map_config, world.getRotation()));
 	tile_renderer.reset(render_view->createTileRenderer(*block_registry, block_images,
-			map_config.getTileWidth(), world_cache.get(), render_mode.get()));
+                                                        map_config.getTileWidth(),
 	render_view->configureTileRenderer(tile_renderer.get(), world_config, map_config);
 }
 

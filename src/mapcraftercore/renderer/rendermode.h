@@ -55,7 +55,7 @@ class RGBAImage;
  */
 class RenderMode {
   public:
-	virtual ~RenderMode() {}
+    virtual ~RenderMode() {}
 
     /**
      * Sets stuff (block images and world cache) that is required for the render mode
@@ -105,7 +105,7 @@ class BaseRenderMode : public RenderMode {
     /**
      * Dummy implementation of interface method. Returns false as default.
      */
-	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data);
+    virtual bool isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
     /**
      * Dummy implementation of interface method.

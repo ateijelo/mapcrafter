@@ -22,7 +22,6 @@
 
 #include "biomes.h"
 #include "image.h"
-#include "../mc/worldcache.h" // mc::DIR_*
 
 #include <array>
 #include <vector>
@@ -87,7 +86,7 @@ protected:
 	int tile_width;
 	mc::WorldCache* world;
 	mc::Chunk* current_chunk;
-	RenderMode* render_mode;
+    int tile_width;
 
 	bool render_biomes;
 	bool use_preblit_water;
