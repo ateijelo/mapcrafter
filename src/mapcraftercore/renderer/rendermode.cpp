@@ -63,28 +63,28 @@ mc::Block BaseRenderMode::getBlock(const mc::BlockPos &pos, int get) {
 }
 
 MultiplexingRenderMode::~MultiplexingRenderMode() {
-	for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
-		delete *it;
+    for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
+        delete *it;
 }
 
-void MultiplexingRenderMode::addRenderMode(RenderMode* render_mode) {
-	render_modes.push_back(render_mode);
+void MultiplexingRenderMode::addRenderMode(RenderMode *render_mode) {
+    render_modes.push_back(render_mode);
 }
 
 void MultiplexingRenderMode::initialize(const RenderView *render_view, BlockImages *images,
                                         mc::WorldCache *world, mc::Chunk **current_chunk) {
-	for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
+    for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
         (*it)->initialize(render_view, images, world, current_chunk);
 }
 
-bool MultiplexingRenderMode::isHidden(const mc::BlockPos& pos, uint16_t id,
-		uint16_t data) {
-	for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
-		if ((*it)->isHidden(pos, id, data))
-			return true;
-	return false;
+bool MultiplexingRenderMode::isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data) {
+    for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
+        if ((*it)->isHidden(pos, id, data))
+            return true;
+    return false;
 }
 
+bool MultiplexingRenderMode::isHidden(const mc::BlockPos &pos, const BlockImage &block_image) {
     for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
         if ((*it)->isHidden(pos, block_image))
             return true;
@@ -92,12 +92,12 @@ bool MultiplexingRenderMode::isHidden(const mc::BlockPos& pos, uint16_t id,
 }
 
 void MultiplexingRenderMode::draw(RGBAImage &image, const mc::BlockPos &pos, uint16_t id,
-void MultiplexingRenderMode::draw(RGBAImage& image, const mc::BlockPos& pos,
-		uint16_t id, uint16_t data) {
-	for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
-		(*it)->draw(image, pos, id, data);
+                                  uint16_t data) {
+    for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
+        (*it)->draw(image, pos, id, data);
 }
 
+void MultiplexingRenderMode::draw(RGBAImage &image, const BlockImage &block_image,
                                   const mc::BlockPos &pos, uint16_t id) {
     for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
         (*it)->draw(image, block_image, pos, id);

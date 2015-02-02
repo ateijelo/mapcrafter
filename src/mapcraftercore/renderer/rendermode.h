@@ -125,14 +125,14 @@ class BaseRenderMode : public RenderMode {
  * This is a class for a render mode that combines multiple render modes into one.
  */
 class MultiplexingRenderMode : public RenderMode {
-public:
-	virtual ~MultiplexingRenderMode();
+  public:
+    virtual ~MultiplexingRenderMode();
 
     /**
      * Adds a render mode. The supplied render mode is destroyed when this multiplexing
      * render mode is destroyed.
      */
-	void addRenderMode(RenderMode* render_mode);
+    void addRenderMode(RenderMode *render_mode);
 
     /**
      * Passes the supplied render data to the render modes.
@@ -144,19 +144,20 @@ public:
      * Calls this method of each render mode and returns true if one render mode returns
      * true (= false is default).
      */
-	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data);
+    virtual bool isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
     virtual bool isHidden(const mc::BlockPos &pos, const BlockImage &block_image);
 
     /**
      * Calls this method of each render mode.
      */
-	virtual void draw(RGBAImage& image, const mc::BlockPos& pos, uint16_t id, uint16_t data);
+    virtual void draw(RGBAImage &image, const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
     virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
                       uint16_t id);
-protected:
-	std::vector<RenderMode*> render_modes;
+
+  protected:
+    std::vector<RenderMode *> render_modes;
 };
 
 /**
