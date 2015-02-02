@@ -27,8 +27,7 @@ namespace mapcrafter {
 namespace renderer {
 
 CaveRenderMode::CaveRenderMode(const std::vector<mc::BlockPos> &hidden_dirs)
-	: hidden_dirs(hidden_dirs) {
-}
+    : hidden_dirs(hidden_dirs) {}
 
 CaveRenderMode::~CaveRenderMode() {
 }
