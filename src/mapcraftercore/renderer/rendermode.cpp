@@ -147,17 +147,17 @@ std::ostream &operator<<(std::ostream &out, OverlayType overlay) {
 
 RenderMode *createRenderMode(const config::WorldSection &world_config,
                              const config::MapSection &map_config, int rotation) {
-		// hide some walls of caves which would cover the view into the caves
+    RenderModeType type = map_config.getRenderMode();
     OverlayType overlay = map_config.getOverlay();
-			render_mode->addRenderMode(new CaveRenderMode({mc::DIR_SOUTH, mc::DIR_WEST, mc::DIR_TOP}));
-		else
-			render_mode->addRenderMode(new CaveRenderMode({mc::DIR_TOP}));
+    MultiplexingRenderMode *render_mode = new MultiplexingRenderMode();
+
+    // create render mode
 		// if we want some shadows, then simulate the sun light because it's dark in caves
         // nothing
     } else if (type == RenderModeType::CAVE || type == RenderModeType::CAVELIGHT) {
         // hide some walls of caves which would cover the view into the caves
 		render_mode->addRenderMode(new HeightOverlay());
-	}
+            render_mode->addRenderMode(
                 new CaveRenderMode({mc::DIR_SOUTH, mc::DIR_WEST, mc::DIR_TOP}));
         else
             render_mode->addRenderMode(new CaveRenderMode({mc::DIR_TOP}));

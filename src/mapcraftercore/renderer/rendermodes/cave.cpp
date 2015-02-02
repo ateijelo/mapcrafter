@@ -26,7 +26,7 @@
 namespace mapcrafter {
 namespace renderer {
 
-CaveRenderMode::CaveRenderMode(const std::vector<mc::BlockPos>& hidden_dirs)
+CaveRenderMode::CaveRenderMode(const std::vector<mc::BlockPos> &hidden_dirs)
 	: hidden_dirs(hidden_dirs) {
 }
 
@@ -73,12 +73,12 @@ bool CaveRenderMode::isHidden(const mc::BlockPos& pos, const BlockImage& block_i
 		}
 	}
 
-	// so we show all block which aren't touched by sunlight...
-	// and also only the ones that have a transparent block (or air)
-	// on at least one of specific sides
+    // so we show all block which aren't touched by sunlight...
+    // and also only the ones that have a transparent block (or air)
+    // on at least one of specific sides
 	for (auto it = hidden_dirs.begin(); it != hidden_dirs.end(); ++it) {
 		if (block_images->getBlockImage(getBlock(pos + *it).id).is_transparent) {
-			return false;
+            return false;
 		}
 	}
 	return true;

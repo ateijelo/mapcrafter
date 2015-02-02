@@ -22,15 +22,16 @@
 
 #include "overlay.h"
 #include "../rendermode.h"
+#include "overlay.h"
 
 namespace mapcrafter {
 namespace renderer {
 
 class HeightOverlay : public OverlayRenderMode {
-public:
+  public:
 	HeightOverlay();
 
-protected:
+  protected:
 	virtual RGBAPixel getBlockColor(const mc::BlockPos& pos, uint16_t id, uint16_t data);
 
     virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, const BlockImage &block_image);

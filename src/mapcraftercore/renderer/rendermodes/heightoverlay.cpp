@@ -19,8 +19,8 @@
 
 #include "heightoverlay.h"
 
-#include "../image.h"
 #include "../../mc/pos.h"
+#include "../image.h"
 
 namespace mapcrafter {
 namespace renderer {
