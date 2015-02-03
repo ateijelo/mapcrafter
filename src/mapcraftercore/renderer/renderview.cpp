@@ -27,8 +27,7 @@
 #include "renderviews/side/renderview.h"
 #include "renderviews/topdown/renderview.h"
 #include "tilerenderer.h"
-#include "../config/configsections/world.h"
-#include "../util.h"
+#include "tileset.h"
 
 #include <cassert>
 
