@@ -140,7 +140,7 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
     MultiplexingRenderMode *render_mode = new MultiplexingRenderMode();
 
     // create render mode
-		// if we want some shadows, then simulate the sun light because it's dark in caves
+    if (type == RenderModeType::PLAIN) {
         // nothing
     } else if (type == RenderModeType::CAVE || type == RenderModeType::CAVELIGHT) {
         // hide some walls of caves which would cover the view into the caves

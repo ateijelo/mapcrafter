@@ -102,7 +102,7 @@ public:
 
   private:
     bool day;
-	bool simulate_sun_light;
+    double lighting_intensity, lighting_water_intensity;
     bool simulate_sun_light;
 	/**
 	 * Calculates the color of the light of a block.
