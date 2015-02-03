@@ -23,7 +23,6 @@
 #include "../../util.h"
 #include "../configsection.h"
 #include "../validation.h"
-#include "../../util.h"
 
 #include <iostream>
 #include <string>

@@ -21,7 +21,6 @@
 
 #include "logging.h"
 #include "other.h"
-#include "../compat/nullptr.h"
 
 #include <iomanip>
 #include <iostream>

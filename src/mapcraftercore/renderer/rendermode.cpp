@@ -32,6 +32,13 @@
 #include "../mc/pos.h"
 #include "../mc/world.h"
 #include "../util.h"
+#include "blockimages.h"
+#include "image.h"
+#include "rendermodes/cave.h"
+#include "rendermodes/heightoverlay.h"
+#include "rendermodes/lighting.h"
+#include "rendermodes/slimeoverlay.h"
+#include "rendermodes/spawnoverlay.h"
 
 #include <boost/filesystem.hpp>
 
