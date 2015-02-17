@@ -154,8 +154,7 @@ unsigned int WorldEntitiesCache::readCacheFile() {
 
     LOG(DEBUG) << "Read cache file " << cache_file << ". Last modification time was "
                << fs::last_write_time(cache_file) << ".";
-			<< fs::last_write_time(cache_file) << ".";
-	return fs::last_write_time(cache_file);
+    return fs::last_write_time(cache_file);
 }
 
 void WorldEntitiesCache::writeCacheFile() const {
