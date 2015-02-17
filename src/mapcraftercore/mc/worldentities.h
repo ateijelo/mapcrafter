@@ -73,7 +73,7 @@ public:
 	/**
 	 * Updates the entity cache.
 	 */
-	void update(util::IProgressHandler* progress = nullptr);
+    void update(util::IProgressHandler *progress = nullptr);
 
 	std::vector<SignEntity> getSigns(WorldCrop crop = WorldCrop()) const;
 private:
