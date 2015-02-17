@@ -101,10 +101,7 @@ Markers findMarkers(const config::MapcrafterConfig &config) {
             }
         }
     }
-			}
-		}
-	}
-	return markers;
+    return markers;
 }
 
 std::string createMarkersJSON(const config::MapcrafterConfig &config,
