@@ -134,20 +134,7 @@ void AbstractOutputProgressHandler::setValue(int value) {
     last_value = value;
     last_percentage = percentage;
 
-void LogOutputProgressHandler::update(double percentage, double average_speed,
-		int eta) {
-	if (percentage < last_step + 5)
-		return;
-	last_step = percentage;
-
-	// TODO maybe make it possible to specify a format?
-	auto log = LOGN(INFO, "progress");
-	log << std::floor(percentage) << "% complete. ";
-	log << "Processed " << value << "/" << max << " items ";
-	log << "with average " << std::setprecision(1) << std::fixed << average_speed << "/s.";
-	if (eta != -1)
-		log << " ETA " << util::format_eta(eta) << ".";
-}
+    this->value = value;
 
     // call handler
     update(percentage, average_speed, eta);
