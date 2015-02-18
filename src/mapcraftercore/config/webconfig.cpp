@@ -38,7 +38,7 @@ WebConfig::WebConfig(const MapcrafterConfig &config) : config(config) {
         map_tile_size[map_name] = std::make_tuple<>(420, 420);
         map_max_zoom[map_name] = 0;
         for (int i = 0; i < 4; i++)
-		for (int i = 0; i < 4; i++)
+            map_last_rendered[map_name][i] = 0;
 
         auto tile_sets = map_it->getTileSets();
         for (auto tile_set_it = tile_sets.begin(); tile_set_it != tile_sets.end(); ++tile_set_it)

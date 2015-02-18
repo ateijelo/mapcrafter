@@ -41,89 +41,105 @@ namespace mapcrafter {
 namespace renderer {
 
 RenderBehaviors::RenderBehaviors(RenderBehavior default_behavior)
-	: default_behavior(default_behavior) {
-}
+    : default_behavior(default_behavior) {}
 
 RenderBehaviors::~RenderBehaviors() {
 }
 
 RenderBehavior RenderBehaviors::getRenderBehavior(const std::string &map, int rotation) const {
-		int rotation) const {
-	if (!render_behaviors.count(map))
-		return default_behavior;
-	return render_behaviors.at(map).at(rotation);
+    if (!render_behaviors.count(map))
+        return default_behavior;
+    return render_behaviors.at(map).at(rotation);
 }
 
 void RenderBehaviors::setRenderBehavior(const std::string &map, RenderBehavior behavior) {
-		RenderBehavior behavior) {
+    for (int rotation = 0; rotation < 4; rotation++)
 	for (int rotation = 0; rotation < 4; rotation++)
 		render_behaviors[map][rotation] = behavior;
 }
 
 void RenderBehaviors::setRenderBehavior(const std::string &map, int rotation,
-		RenderBehavior behavior) {
+                                        RenderBehavior behavior) {
     // set whole map to default behavior if setting the first rotation
     if (!render_behaviors.count(map))
         setRenderBehavior(map, default_behavior);
-	render_behaviors[map][rotation] = behavior;
+    render_behaviors[map][rotation] = behavior;
 }
 
 bool RenderBehaviors::isCompleteRenderSkip(const std::string &map) const {
-	if (!render_behaviors.count(map))
-		return default_behavior == RenderBehavior::SKIP;
-	for (int rotation = 0; rotation < 4; rotation++)
-		if (render_behaviors.at(map).at(rotation) != RenderBehavior::SKIP)
-			return false;
-	return true;
+    if (!render_behaviors.count(map))
+        return default_behavior == RenderBehavior::SKIP;
+    for (int rotation = 0; rotation < 4; rotation++)
+        if (render_behaviors.at(map).at(rotation) != RenderBehavior::SKIP)
+            return false;
+    return true;
 }
 
 namespace {
 
-void parseRenderBehaviorMaps(const std::vector<std::string>& maps,
+void parseRenderBehaviorMaps(const std::vector<std::string> &maps, RenderBehavior behavior,
                              RenderBehaviors &behaviors, const config::MapcrafterConfig &config) {
-		const config::MapcrafterConfig& config) {
-	for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
-		std::string map = *map_it;
-		std::string rotation;
+    for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
+        std::string map = *map_it;
+        std::string rotation;
 
-		size_t pos = map.find(":");
-		if (pos != std::string::npos) {
-			rotation = map.substr(pos+1);
-			map = map.substr(0, pos);
-		} else {
-			rotation = "";
-		}
+        size_t pos = map.find(":");
+        if (pos != std::string::npos) {
+            rotation = map.substr(pos + 1);
+            map = map.substr(0, pos);
+        } else {
+            rotation = "";
+        }
 
-		// TODO maybe also move that conversion out to a file with global constants
-		int r = -1;
-		if (rotation == "tl") r = 0;
-		if (rotation == "tr") r = 1;
-		if (rotation == "br") r = 2;
-		if (rotation == "bl") r = 3;
+        // TODO maybe also move that conversion out to a file with global constants
+        int r = -1;
+        if (rotation == "tl")
+            r = 0;
+        if (rotation == "tr")
+            r = 1;
+        if (rotation == "br")
+            r = 2;
+        if (rotation == "bl")
+            r = 3;
 
-		if (!config.hasMap(map)) {
-			LOG(WARNING) << "Unknown map '" << map << "'.";
-			continue;
-		}
+        if (!config.hasMap(map)) {
+            LOG(WARNING) << "Unknown map '" << map << "'.";
+            continue;
+        }
 
-		if (!rotation.empty()) {
-			if (r == -1) {
-				LOG(WARNING) << "Unknown rotation '" << rotation << "'.";
-				continue;
-			}
-			if (!config.getMap(map).getRotations().count(r)) {
-				LOG(WARNING) << "Map '" << map << "' does not have rotation '" << rotation << "'.";
-				continue;
-			}
-		}
+        if (!rotation.empty()) {
+            if (r == -1) {
+                LOG(WARNING) << "Unknown rotation '" << rotation << "'.";
+                continue;
+            }
+            if (!config.getMap(map).getRotations().count(r)) {
+                LOG(WARNING) << "Map '" << map << "' does not have rotation '" << rotation << "'.";
+                continue;
+            }
+        }
 
-		if (r != -1)
-			behaviors.setRenderBehavior(map, r, behavior);
-		else
-			behaviors.setRenderBehavior(map, behavior);
-	}
+        if (r != -1)
+            behaviors.setRenderBehavior(map, r, behavior);
+        else
+            behaviors.setRenderBehavior(map, behavior);
+    }
 }
 
+} // namespace
+
+RenderBehaviors RenderBehaviors::fromRenderOpts(const config::MapcrafterConfig &config,
+                                                const RenderOpts &render_opts) {
+    RenderBehaviors behaviors;
+
+    if (render_opts.skip_all)
+        behaviors = RenderBehaviors(RenderBehavior::SKIP);
+    else if (render_opts.force_all)
+        behaviors = RenderBehaviors(RenderBehavior::FORCE);
+    else
+        parseRenderBehaviorMaps(render_opts.render_skip, RenderBehavior::SKIP, behaviors, config);
+    parseRenderBehaviorMaps(render_opts.render_auto, RenderBehavior::AUTO, behaviors, config);
+    parseRenderBehaviorMaps(render_opts.render_force, RenderBehavior::FORCE, behaviors, config);
+    return behaviors;
 }
 
 RenderManager::RenderManager(const config::MapcrafterConfig &config)
