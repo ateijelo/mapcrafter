@@ -25,6 +25,8 @@
 #include "image.h"
 
 #include <array>
+#include <boost/filesystem.hpp>
+#include <cstdint>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
