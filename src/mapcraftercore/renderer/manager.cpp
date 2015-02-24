@@ -172,9 +172,9 @@ bool RenderManager::scanWorlds() {
 	// (some rotations of a map are skipped, but others are not
 	//  => map tile sets are still needed)
 	std::set<config::TileSetID> needed_tile_sets;
-	for (auto map_it = config_maps.begin(); map_it != config_maps.end(); ++map_it) {
-		std::string map = map_it->getShortName();
-		if (render_behaviors.isCompleteRenderSkip(map))
+    for (auto map_it = config_maps.begin(); map_it != config_maps.end(); ++map_it) {
+        std::string map = map_it->getShortName();
+        if (render_behaviors.isCompleteRenderSkip(map))
 			continue;
 
 		// just the rotations that are not to be skipped are required
@@ -191,13 +191,13 @@ bool RenderManager::scanWorlds() {
                 required_rotations.insert(rotation);
         }
 
-		required_maps.push_back(std::make_pair(map, required_rotations));
-	}
+        required_maps.push_back(std::make_pair(map, required_rotations));
+    }
 
 	// store the maximum max zoom level of every tile set with its rotations
     std::map<config::TileSetGroupID, int> tile_sets_max_zoom;
 
-	// iterate through all tile sets that are needed
+    // iterate through all tile sets that are needed
 	for (auto tile_set_it = needed_tile_sets.begin();
 			tile_set_it != needed_tile_sets.end(); ++tile_set_it) {
         config::WorldSection world_config = config.getWorld(tile_set_it->world_name);
@@ -246,13 +246,13 @@ bool RenderManager::scanWorlds() {
         // since TileSetID is a subclass of TileSetGroupID, only the TileSetGroupID-'functionality'
         // is used TADA C++ magic! (object slicing)
         int &max_zoom = tile_sets_max_zoom[*tile_set_it];
-
+        max_zoom = std::max(max_zoom, tile_set->getDepth());
 
         // set world- and tileset object in the map
         worlds[tile_set_it->world_name][tile_set_it->rotation] = world;
+        tile_sets[*tile_set_it] = tile_set;
 
-		// clean up render view
-		delete render_view;
+        // clean up render view
         delete render_view;
 
 	// set calculated max zoom of tile sets
@@ -374,26 +374,26 @@ bool RenderManager::run(int threads, bool batch) {
     if (!scanWorlds())
         return false;
 
-	int progress_maps = 0;
-	int progress_maps_all = required_maps.size();
+    int progress_maps = 0;
+    int progress_maps_all = required_maps.size();
 	int time_start_all = std::time(nullptr);
 
 	// go through all required maps
-	for (auto map_it = required_maps.begin(); map_it != required_maps.end(); ++map_it) {
-		progress_maps++;
+    for (auto map_it = required_maps.begin(); map_it != required_maps.end(); ++map_it) {
+        progress_maps++;
         config::MapSection map_config = config.getMap(map_it->first);
 
 		LOG(INFO) << "[" << progress_maps << "/" << progress_maps_all << "] "
 			<< "Rendering map " << map_config.getShortName() << " (\""
 			<< map_config.getLongName() << "\"):";
 
-		auto required_rotations = map_it->second;
+        auto required_rotations = map_it->second;
 		int progress_rotations = 0;
-		int progress_rotations_all = required_rotations.size();
+        int progress_rotations_all = required_rotations.size();
 
 		// now go through the all required rotations of this map and render them
-		for (auto rotation_it = required_rotations.begin();
-				rotation_it != required_rotations.end(); ++rotation_it) {
+        for (auto rotation_it = required_rotations.begin(); rotation_it != required_rotations.end();
+             ++rotation_it) {
 			progress_rotations++;
 
 			LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/"

@@ -49,7 +49,7 @@ class TileSetGroupID {
     std::string toString() const;
     bool operator<(const TileSetGroupID &other) const;
 
-	std::string world_name;
+    std::string world_name;
     renderer::RenderViewType render_view;
     int tile_width;
 };

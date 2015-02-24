@@ -213,9 +213,9 @@ class RenderManager {
     // (world, render view, rotation) -> tile set
     std::map<config::TileSetID, std::shared_ptr<TileSet>> tile_sets;
 
-	// all required (= not skipped) maps and rotations
-	// as pair (map name, required rotations)
-	std::vector<std::pair<std::string, std::set<int> > > required_maps;
+    // all required (= not skipped) maps and rotations
+    // as pair (map name, required rotations)
+    std::vector<std::pair<std::string, std::set<int>>> required_maps;
 };
 
 } // namespace renderer
