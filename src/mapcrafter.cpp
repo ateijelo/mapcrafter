@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
     }
 
     renderer::RenderOpts opts;
-	std::string arg_color, arg_config;
+    std::string arg_color, arg_config;
 
 	po::options_description general("General options");
 	general.add_options()
@@ -59,14 +59,14 @@ int main(int argc, char **argv) {
 	logging.add_options()
 		("logging-config", po::value<fs::path>(&opts.logging_config),
         "color", po::value<std::string>(&arg_color)->default_value("auto"),
-		("color", po::value<std::string>(&arg_color)->default_value("auto"),
+        "whether terminal output is colored (true, false or auto)")(
 			"whether terminal output is colored (true, false or auto)")
 		("batch,b", "deactivates the animated progress bar and enables the progress logger instead");
 
 	po::options_description renderer("Renderer options");
 	renderer.add_options()
                            "and global logging configuration file")(
-		("config,c", po::value<std::string>(&arg_config),
+        "config,c", po::value<std::string>(&arg_config),
 			"the path to the configuration file to use (required)")
 		("render-skip,s", po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
 			"skips rendering the specified map(s)")
@@ -94,14 +94,14 @@ int main(int argc, char **argv) {
 
     if (arg_color == "true")
         util::setcolor::setEnabled(util::TerminalColorStates::ENABLED);
-	if (arg_color == "true")
+    else if (arg_color == "false")
 		util::setcolor::setEnabled(util::TerminalColorStates::ENABLED);
-	else if (arg_color == "false")
+    else if (arg_color == "auto")
 		util::setcolor::setEnabled(util::TerminalColorStates::DISABLED);
-	else if (arg_color == "auto")
+    else {
 		util::setcolor::setEnabled(util::TerminalColorStates::AUTO);
 	else {
-		std::cerr << "Invalid argument '" << arg_color << "' for '--color'." << std::endl;
+        std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
 		std::cerr << "Allowed arguments are 'true', 'false' or 'auto'." << std::endl;
 		std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
 		return 1;
@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
         std::cerr << "You have to specify a configuration file!" << std::endl;
         std::cerr << "Use '" << argv[0] << " --help' for more information." << std::endl;
         return 1;
-	opts.config = arg_config;
+    }
 	opts.skip_all = vm.count("render-reset");
 	opts.force_all = vm.count("render-force-all");
 	opts.batch = vm.count("batch");
@@ -180,31 +180,31 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	// ###
-	// ### First big step: Load/parse/validate the configuration file
-	// ###
-
-	config::MapcrafterConfig config;
-
-
-	// show infos/warnings/errors if configuration file has something
-	if (!validation.isEmpty()) {
-		if (validation.isCritical())
-			LOG(FATAL) << "Unable to parse configuration file:";
-		else
-			LOG(WARNING) << "There is a problem parsing the configuration file:";
-		validation.log();
-		LOG(WARNING) << "Please have a look at the documentation.";
-	}
-	if (validation.isCritical())
     }
 
-	// parse global logging configuration file and configure logging
-	config::LoggingConfig::configureLogging(opts.logging_config);
+    // ###
+    // ### First big step: Load/parse/validate the configuration file
+    // ###
 
-	// configure logging from this configuration file
-	config.configureLogging();
+    config::MapcrafterConfig config;
+    config::ValidationMap validation = config.parseFile(opts.config.string());
 
+    // show infos/warnings/errors if configuration file has something
+    if (!validation.isEmpty()) {
+        if (validation.isCritical())
+            LOG(FATAL) << "Unable to parse configuration file:";
+        else
+            LOG(WARNING) << "There is a problem parsing the configuration file:";
+        validation.log();
+        LOG(WARNING) << "Please have a look at the documentation.";
+    }
+    if (validation.isCritical())
+        return 1;
+
+    // parse global logging configuration file and configure logging
+    config::LoggingConfig::configureLogging(opts.logging_config);
+
+    // configure logging from this configuration file
 	renderer::RenderManager manager(config);
 	manager.setRenderBehaviors(renderer::RenderBehaviors::fromRenderOpts(config, opts));
 	if (!manager.run(opts.jobs, opts.batch))

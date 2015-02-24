@@ -115,7 +115,7 @@ private:
  * This does the whole rendering process.
  */
 class RenderManager {
-public:
+  public:
 	RenderManager(const config::MapcrafterConfig& config);
 
 	/**
@@ -161,13 +161,13 @@ public:
 	 */
 	const std::vector<std::pair<std::string, std::set<int> > >& getRequiredMaps() const;
 
-private:
+  private:
 	/**
 	 * Copies a file from the template directory to the output directory and replaces the
 	 * variables from the map (every "{key}" in the file becomes "value").
 	 */
     bool copyTemplateFile(const std::string &filename,
-			const std::map<std::string, std::string>& vars) const;
+                          const std::map<std::string, std::string> &vars) const;
 
 	/**
 	 * Copes a file from the template directory to the output directory.
@@ -197,7 +197,7 @@ private:
 	void increaseMaxZoom(const fs::path& dir, std::string image_format,
 			int jpeg_quality = 85) const;
 
-	config::MapcrafterConfig config;
+    config::MapcrafterConfig config;
 	config::WebConfig web_config;
 
 	RenderBehaviors render_behaviors;
@@ -208,9 +208,9 @@ private:
 	// this is automatically done by the renderMap-method
 	std::set<std::string> map_initialized;
 
-	// maps for world- and tile set objects
-	std::map<std::string, std::array<mc::World, 4> > worlds;
-	// (world, render view, rotation) -> tile set
+    // maps for world- and tile set objects
+    std::map<std::string, std::array<mc::World, 4>> worlds;
+    // (world, render view, rotation) -> tile set
 	std::map<config::TileSetID, std::shared_ptr<TileSet> > tile_sets;
 
 	// all required (= not skipped) maps and rotations

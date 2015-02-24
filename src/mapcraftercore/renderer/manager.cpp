@@ -438,82 +438,81 @@ const std::vector<std::pair<std::string, std::set<int> > >& RenderManager::getRe
 	return required_maps;
 }
 
-bool RenderManager::copyTemplateFile(const std::string& filename,
-		const std::map<std::string, std::string>& vars) const {
-	std::ifstream file(config.getTemplatePath(filename).string().c_str());
-	if (!file)
-		return false;
-	std::stringstream ss;
-	ss << file.rdbuf();
-	file.close();
-	std::string data = ss.str();
+bool RenderManager::copyTemplateFile(const std::string &filename,
+                                     const std::map<std::string, std::string> &vars) const {
+    std::ifstream file(config.getTemplatePath(filename).string().c_str());
+    if (!file)
+        return false;
+    std::stringstream ss;
+    ss << file.rdbuf();
+    file.close();
+    std::string data = ss.str();
 
 	for (auto it = vars.begin(); it != vars.end(); ++it)
-		data = util::replaceAll(data, "{" + it->first + "}", it->second);
+        data = util::replaceAll(data, "{" + it->first + "}", it->second);
 
-	std::ofstream out(config.getOutputPath(filename).string().c_str());
-	if (!out)
-		return false;
-	out << data;
-	out.close();
+    std::ofstream out(config.getOutputPath(filename).string().c_str());
+    if (!out)
+        return false;
+    out << data;
+    out.close();
 	return true;
 }
 
-bool RenderManager::copyTemplateFile(const std::string& filename) const {
-	std::map<std::string, std::string> vars;
-	return copyTemplateFile(filename, vars);
+bool RenderManager::copyTemplateFile(const std::string &filename) const {
+    std::map<std::string, std::string> vars;
+    return copyTemplateFile(filename, vars);
 }
 
 bool RenderManager::writeTemplateIndexHtml() const {
-	std::map<std::string, std::string> vars;
-	vars["version"] = MAPCRAFTER_VERSION;
-	if (strlen(MAPCRAFTER_GITVERSION))
-		vars["version"] += std::string(" (") + MAPCRAFTER_GITVERSION + ")";
+    std::map<std::string, std::string> vars;
+    vars["version"] = MAPCRAFTER_VERSION;
+    if (strlen(MAPCRAFTER_GITVERSION))
+        vars["version"] += std::string(" (") + MAPCRAFTER_GITVERSION + ")";
 
-	time_t t = std::time(nullptr);
-	char buffer[256];
-	std::strftime(buffer, sizeof(buffer), "%d.%m.%Y, %H:%M:%S", std::localtime(&t));
-	vars["lastUpdate"] = buffer;
+    time_t t = std::time(nullptr);
+    char buffer[256];
+    std::strftime(buffer, sizeof(buffer), "%d.%m.%Y, %H:%M:%S", std::localtime(&t));
+    vars["lastUpdate"] = buffer;
 
-	vars["backgroundColor"] = config.getBackgroundColor().hex;
+    vars["backgroundColor"] = config.getBackgroundColor().hex;
 
-	return copyTemplateFile("index.html", vars);
+    return copyTemplateFile("index.html", vars);
 }
 
 void RenderManager::writeTemplates() const {
-	if (!fs::is_directory(config.getTemplateDir())) {
+    if (!fs::is_directory(config.getTemplateDir())) {
 		LOG(ERROR) << "The template directory does not exist! Can't copy templates!";
-		return;
-	}
+        return;
+    }
 
-	if (!writeTemplateIndexHtml())
+    if (!writeTemplateIndexHtml())
 		LOG(ERROR) << "Warning: Unable to copy template file index.html!";
 	web_config.writeConfigJS();
 
-	if (!fs::exists(config.getOutputPath("markers.js"))
-			&& !util::copyFile(config.getTemplatePath("markers.js"), config.getOutputPath("markers.js")))
-		LOG(WARNING) << "Unable to copy template file markers.js!";
+    if (!fs::exists(config.getOutputPath("markers.js")) &&
+        !util::copyFile(config.getTemplatePath("markers.js"), config.getOutputPath("markers.js")))
+        LOG(WARNING) << "Unable to copy template file markers.js!";
 
-	// copy all other files and directories
-	fs::directory_iterator end;
-	for (fs::directory_iterator it(config.getTemplateDir()); it != end;
-			++it) {
-		std::string filename = BOOST_FS_FILENAME(it->path());
-		// do not copy the index.html
-		if (filename == "index.html")
-			continue;
-		// and do not overwrite markers.js and markers-generated.js
-		if ((filename == "markers.js" || filename == "markers-generated.js")
-				&& fs::exists(config.getOutputPath(filename)))
-			continue;
-		if (fs::is_regular_file(*it)) {
-			if (!util::copyFile(*it, config.getOutputPath(filename)))
-				LOG(WARNING) << "Unable to copy template file " << filename;
-		} else if (fs::is_directory(*it)) {
-			if (!util::copyDirectory(*it, config.getOutputPath(filename)))
-				LOG(WARNING) << "Unable to copy template directory " << filename;
-		}
-	}
+    // copy all other files and directories
+    fs::directory_iterator end;
+    for (fs::directory_iterator it(config.getTemplateDir()); it != end; ++it) {
+        std::string filename = BOOST_FS_FILENAME(it->path());
+        // do not copy the index.html
+        if (filename == "index.html")
+            continue;
+        // and do not overwrite markers.js and markers-generated.js
+        if ((filename == "markers.js" || filename == "markers-generated.js") &&
+            fs::exists(config.getOutputPath(filename)))
+            continue;
+        if (fs::is_regular_file(*it)) {
+            if (!util::copyFile(*it, config.getOutputPath(filename)))
+                LOG(WARNING) << "Unable to copy template file " << filename;
+        } else if (fs::is_directory(*it)) {
+            if (!util::copyDirectory(*it, config.getOutputPath(filename)))
+                LOG(WARNING) << "Unable to copy template directory " << filename;
+        }
+    }
 }
 
 void RenderManager::initializeMap(const std::string& map) {
@@ -549,8 +548,8 @@ void RenderManager::initializeMap(const std::string& map) {
  * This method increases the max zoom of a rendered map and makes the necessary changes
  * on the tile tree.
  */
-void RenderManager::increaseMaxZoom(const fs::path& dir,
-		std::string image_format, int jpeg_quality) const {
+void RenderManager::increaseMaxZoom(const fs::path &dir, std::string image_format,
+                                    int jpeg_quality) const {
 	// find out tile size by reading old base.png image
 	RGBAImage old_base;
 	if (image_format == "png") {
@@ -561,95 +560,95 @@ void RenderManager::increaseMaxZoom(const fs::path& dir,
 	int w = old_base.getWidth();
 	int h = old_base.getHeight();
 
-	if (fs::exists(dir / "1")) {
-		// at first rename the directories 1 2 3 4 (zoom level 0) and make new directories
-		util::moveFile(dir / "1", dir / "1_");
-		fs::create_directories(dir / "1");
-		// then move the old tile trees one zoom level deeper
-		util::moveFile(dir / "1_", dir / "1/4");
-		// also move the images of the directories
-		util::moveFile(dir / (std::string("1.") + image_format),
-				dir / (std::string("1/4.") + image_format));
-	}
+    if (fs::exists(dir / "1")) {
+        // at first rename the directories 1 2 3 4 (zoom level 0) and make new directories
+        util::moveFile(dir / "1", dir / "1_");
+        fs::create_directories(dir / "1");
+        // then move the old tile trees one zoom level deeper
+        util::moveFile(dir / "1_", dir / "1/4");
+        // also move the images of the directories
+        util::moveFile(dir / (std::string("1.") + image_format),
+                       dir / (std::string("1/4.") + image_format));
+    }
 
-	// do the same for the other directories
-	if (fs::exists(dir / "2")) {
-		util::moveFile(dir / "2", dir / "2_");
-		fs::create_directories(dir / "2");
-		util::moveFile(dir / "2_", dir / "2/3");
-		util::moveFile(dir / (std::string("2.") + image_format),
-				dir / (std::string("2/3.") + image_format));
-	}
-	
-	if (fs::exists(dir / "3")) {
-		util::moveFile(dir / "3", dir / "3_");
-		fs::create_directories(dir / "3");
-		util::moveFile(dir / "3_", dir / "3/2");
-		util::moveFile(dir / (std::string("3.") + image_format),
-				dir / (std::string("3/2.") + image_format));
-	}
-	
-	if (fs::exists(dir / "4")) {
-		util::moveFile(dir / "4", dir / "4_");
-		fs::create_directories(dir / "4");
-		util::moveFile(dir / "4_", dir / "4/1");
-		util::moveFile(dir / (std::string("4.") + image_format),
-				dir / (std::string("4/1.") + image_format));
-	}
+    // do the same for the other directories
+    if (fs::exists(dir / "2")) {
+        util::moveFile(dir / "2", dir / "2_");
+        fs::create_directories(dir / "2");
+        util::moveFile(dir / "2_", dir / "2/3");
+        util::moveFile(dir / (std::string("2.") + image_format),
+                       dir / (std::string("2/3.") + image_format));
+    }
 
-	// now read the images, which belong to the new directories
-	RGBAImage img1, img2, img3, img4;
-	if (image_format == "png") {
-		img1.readPNG((dir / "1/4.png").string());
-		img2.readPNG((dir / "2/3.png").string());
-		img3.readPNG((dir / "3/2.png").string());
-		img4.readPNG((dir / "4/1.png").string());
-	} else {
-		img1.readJPEG((dir / "1/4.jpg").string());
-		img2.readJPEG((dir / "2/3.jpg").string());
-		img3.readJPEG((dir / "3/2.jpg").string());
-		img4.readJPEG((dir / "4/1.jpg").string());
-	}
+    if (fs::exists(dir / "3")) {
+        util::moveFile(dir / "3", dir / "3_");
+        fs::create_directories(dir / "3");
+        util::moveFile(dir / "3_", dir / "3/2");
+        util::moveFile(dir / (std::string("3.") + image_format),
+                       dir / (std::string("3/2.") + image_format));
+    }
 
-	// create images for the new directories
+    if (fs::exists(dir / "4")) {
+        util::moveFile(dir / "4", dir / "4_");
+        fs::create_directories(dir / "4");
+        util::moveFile(dir / "4_", dir / "4/1");
+        util::moveFile(dir / (std::string("4.") + image_format),
+                       dir / (std::string("4/1.") + image_format));
+    }
+
+    // now read the images, which belong to the new directories
+    RGBAImage img1, img2, img3, img4;
+    if (image_format == "png") {
+        img1.readPNG((dir / "1/4.png").string());
+        img2.readPNG((dir / "2/3.png").string());
+        img3.readPNG((dir / "3/2.png").string());
+        img4.readPNG((dir / "4/1.png").string());
+    } else {
+        img1.readJPEG((dir / "1/4.jpg").string());
+        img2.readJPEG((dir / "2/3.jpg").string());
+        img3.readJPEG((dir / "3/2.jpg").string());
+        img4.readJPEG((dir / "4/1.jpg").string());
+    }
+
+    // create images for the new directories
 	RGBAImage new1(w, h), new2(w, h), new3(w, h), new4(w, h);
-	RGBAImage old1, old2, old3, old4;
-	// resize the old images...
+    RGBAImage old1, old2, old3, old4;
+    // resize the old images...
 	img1.resize(old1, 0, 0, InterpolationType::HALF);
 	img2.resize(old2, 0, 0, InterpolationType::HALF);
 	img3.resize(old3, 0, 0, InterpolationType::HALF);
 	img4.resize(old4, 0, 0, InterpolationType::HALF);
 
-	// ...to blit them to the images of the new directories
+    // ...to blit them to the images of the new directories
 	new1.simpleAlphaBlit(old1, w/2, h/2);
 	new2.simpleAlphaBlit(old2, 0, h/2);
 	new3.simpleAlphaBlit(old3, w/2, 0);
-	new4.simpleAlphaBlit(old4, 0, 0);
+    new4.simpleAlphaBlit(old4, 0, 0);
 
-	// now save the new images in the output directory
-	if (image_format == "png") {
-		new1.writePNG((dir / "1.png").string());
-		new2.writePNG((dir / "2.png").string());
-		new3.writePNG((dir / "3.png").string());
-		new4.writePNG((dir / "4.png").string());
-	} else {
-		new1.writeJPEG((dir / "1.jpg").string(), jpeg_quality);
-		new2.writeJPEG((dir / "2.jpg").string(), jpeg_quality);
-		new3.writeJPEG((dir / "3.jpg").string(), jpeg_quality);
-		new4.writeJPEG((dir / "4.jpg").string(), jpeg_quality);
-	}
+    // now save the new images in the output directory
+    if (image_format == "png") {
+        new1.writePNG((dir / "1.png").string());
+        new2.writePNG((dir / "2.png").string());
+        new3.writePNG((dir / "3.png").string());
+        new4.writePNG((dir / "4.png").string());
+    } else {
+        new1.writeJPEG((dir / "1.jpg").string(), jpeg_quality);
+        new2.writeJPEG((dir / "2.jpg").string(), jpeg_quality);
+        new3.writeJPEG((dir / "3.jpg").string(), jpeg_quality);
+        new4.writeJPEG((dir / "4.jpg").string(), jpeg_quality);
+    }
 
-	// don't forget the base.png
+    // don't forget the base.png
 	RGBAImage base(2*h, 2*h);
 	base.simpleAlphaBlit(new1, 0, 0);
 	base.simpleAlphaBlit(new2, w, 0);
 	base.simpleAlphaBlit(new3, 0, h);
 	base.simpleAlphaBlit(new4, w, h);
 	base = base.resize(0, 0, InterpolationType::HALF);
-	if (image_format == "png")
-		base.writePNG((dir / "base.png").string());
-	else
-		base.writeJPEG((dir / "base.jpg").string(), jpeg_quality);
+    if (image_format == "png")
+        base.writePNG((dir / "base.png").string());
+    else
+        base.writeJPEG((dir / "base.jpg").string(), jpeg_quality);
 }
 
 } // namespace renderer
