@@ -20,7 +20,6 @@
 #ifndef MAPCRAFTERCONFIG_H_
 #define MAPCRAFTERCONFIG_H_
 
-#include "validation.h"
 #include "configsections/log.h"
 #include "configsections/map.h"
 #include "configsections/marker.h"
@@ -81,8 +80,8 @@ public:
 	MapcrafterConfig();
 	~MapcrafterConfig();
 
-	ValidationMap parseFile(const std::string& filename);
-	ValidationMap parseString(const std::string& string, fs::path config_dir = "");
+    ValidationMap parseFile(const std::string &filename);
+    ValidationMap parseString(const std::string &string, fs::path config_dir = "");
 	void dump(std::ostream& out) const;
 
 	void configureLogging() const;
@@ -109,7 +108,7 @@ public:
 	const std::vector<LogSection>& getLogSections() const;
 
 private:
-	ValidationMap parse(const INIConfig& config, const fs::path& config_dir);
+    ValidationMap parse(const INIConfig &config, const fs::path &config_dir);
 
 	WorldSection world_global;
 	MapSection map_global;

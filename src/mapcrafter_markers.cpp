@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
 
     config::MapcrafterConfig config;
     config::ValidationMap validation = config.parseFile(config_file);
-	config::ValidationMap validation = config.parseFile(config_file);
+
     if (!validation.isEmpty()) {
 	if (!validation.isEmpty()) {
             LOG(FATAL) << "Your configuration file is invalid!";
