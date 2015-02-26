@@ -116,7 +116,7 @@ private:
  */
 class RenderManager {
   public:
-	RenderManager(const config::MapcrafterConfig& config);
+    RenderManager(const config::MapcrafterConfig &config);
 
 	/**
 	 * Sets how each map should be rendered (auto, force-render, skip).
@@ -203,7 +203,7 @@ class RenderManager {
 	RenderBehaviors render_behaviors;
 
 	// time when we started scanning the worlds, used as last last render time of the maps
-	std::time_t time_started_scanning;
+    std::time_t time_started_scanning;
 	// set of initialized maps, initializeMap-method must be called for each map,
 	// this is automatically done by the renderMap-method
 	std::set<std::string> map_initialized;

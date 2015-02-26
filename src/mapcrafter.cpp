@@ -205,7 +205,7 @@ int main(int argc, char **argv) {
     config::LoggingConfig::configureLogging(opts.logging_config);
 
     // configure logging from this configuration file
-	renderer::RenderManager manager(config);
+    config.configureLogging();
 	manager.setRenderBehaviors(renderer::RenderBehaviors::fromRenderOpts(config, opts));
 	if (!manager.run(opts.jobs, opts.batch))
 		return 1;

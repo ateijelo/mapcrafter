@@ -141,7 +141,7 @@ RenderBehaviors RenderBehaviors::fromRenderOpts(
 	return behaviors;
 }
 
-RenderManager::RenderManager(const config::MapcrafterConfig& config)
+void RenderManager::setRenderBehaviors(const RenderBehaviors &render_behaviors) {
 	: config(config), web_config(config), time_started_scanning(0) {
 }
 
@@ -164,7 +164,7 @@ bool RenderManager::scanWorlds() {
 	auto config_worlds = config.getWorlds();
 	auto config_maps = config.getMaps();
 
-	time_started_scanning = std::time(nullptr);
+    time_started_scanning = std::time(nullptr);
 
 	// first of all check which maps/rotations are required
 	// and which tile sets (world, render view, tile width) with which rotations are needed
@@ -279,50 +279,50 @@ void RenderManager::renderMap(const std::string& map, int rotation, int threads,
 	if (!map_initialized.count(map)) {
 		initializeMap(map);
 		map_initialized.insert(map);
-	}
+    }
 
-	config::MapSection map_config = config.getMap(map);
-	config::WorldSection world_config = config.getWorld(map_config.getWorld());
+    config::MapSection map_config = config.getMap(map);
+    config::WorldSection world_config = config.getWorld(map_config.getWorld());
 
 	// TODO keep block state registry global per map. or are there any reasons to make more global?
 	mc::BlockStateRegistry block_registry;
-	std::shared_ptr<RenderView> render_view(createRenderView(map_config.getRenderView()));
+    std::shared_ptr<RenderView> render_view(createRenderView(map_config.getRenderView()));
 
-	// output a small notice if we render this map incrementally
+    // output a small notice if we render this map incrementally
 	int last_rendered = web_config.getMapLastRendered(map, rotation);
-	if (last_rendered != 0) {
-		std::time_t t = last_rendered;
-		char buffer[256];
-		std::strftime(buffer, sizeof(buffer), "%d %b %Y, %H:%M:%S", std::localtime(&t));
-		LOG(INFO) << "Last rendering was on " << buffer << ".";
-	}
+    if (last_rendered != 0) {
+        std::time_t t = last_rendered;
+        char buffer[256];
+        std::strftime(buffer, sizeof(buffer), "%d %b %Y, %H:%M:%S", std::localtime(&t));
+        LOG(INFO) << "Last rendering was on " << buffer << ".";
+    }
 
 	fs::path output_dir = config.getOutputPath(map + "/" + config::ROTATION_NAMES_SHORT[rotation]);
 	// get the tile set
 	TileSet* tile_set = tile_sets[map_config.getTileSet(rotation)].get();
 	if (render_behaviors.getRenderBehavior(map, rotation) == RenderBehavior::AUTO) {
 		// if incremental render, scan which tiles might have changed
-		LOG(INFO) << "Scanning required tiles...";
+        LOG(INFO) << "Scanning required tiles...";
 		// use the incremental check method specified in the config
-		if (map_config.useImageModificationTimes())
+        if (map_config.useImageModificationTimes())
 			tile_set->scanRequiredByFiletimes(output_dir, map_config.getImageFormatSuffix());
-		else
-			//tile_set->scanRequiredByTimestamp(settings.last_render[rotation]);
+        else
+            // tile_set->scanRequiredByTimestamp(settings.last_render[rotation]);
 			tile_set->scanRequiredByTimestamp(web_config.getMapLastRendered(map, rotation));
 	} else {
 		// or just set all tiles required if force-rendering
 		tile_set->resetRequired();
-	}
+    }
 
 	// maybe we don't have to render anything at all
-	if (tile_set->getRequiredRenderTilesCount() == 0) {
-		LOG(INFO) << "No tiles need to get rendered.";
-		return;
-	}
+    if (tile_set->getRequiredRenderTilesCount() == 0) {
+        LOG(INFO) << "No tiles need to get rendered.";
+        return;
+    }
 
 	// create other stuff for the render dispatcher
 	std::shared_ptr<BlockImages> block_images(render_view->createBlockImages(block_registry));
-	render_view->configureBlockImages(block_images.get(), world_config, map_config);
+    render_view->configureBlockImages(block_images.get(), world_config, map_config);
 
 	RenderedBlockImages* new_block_images = dynamic_cast<RenderedBlockImages*>(block_images.get());
 	if (new_block_images != nullptr) {
@@ -332,35 +332,35 @@ void RenderManager::renderMap(const std::string& map, int rotation, int threads,
 		}
 	}
 
-	RenderContext context;
-	context.output_dir = output_dir;
-	context.background_color = config.getBackgroundColor();
-	context.world_config = config.getWorld(map_config.getWorld());
-	context.map_config = map_config;
-	context.render_view = render_view.get();
-	context.block_images = block_images.get();
+    }
+
+    RenderContext context;
+    context.output_dir = output_dir;
+    context.background_color = config.getBackgroundColor();
+    context.world_config = config.getWorld(map_config.getWorld());
+    context.map_config = map_config;
 	context.tile_set = tile_set;
 	context.block_registry = &block_registry;
-	context.world = worlds[map_config.getWorld()][rotation];
-	context.initializeTileRenderer();
-
+    context.tile_set = tile_set;
+    context.block_registry = &block_registry;
+    context.world = worlds[map_config.getWorld()][rotation];
 	// update map parameters in web config
 	int tile_w = context.tile_renderer->getTileWidth();
 	int tile_h = context.tile_renderer->getTileHeight();
 	web_config.setMapMaxZoom(map, context.tile_set->getDepth());
 	web_config.setMapTileSize(map, std::make_tuple<>(tile_w, tile_h));
 	web_config.writeConfigJS();
-
-	std::shared_ptr<thread::Dispatcher> dispatcher;
+    web_config.setMapTileSize(map, std::make_tuple<>(tile_w, tile_h));
+    web_config.writeConfigJS();
 	if (threads == 1 || tile_set->getRequiredRenderTilesCount() == 1)
-		dispatcher = std::make_shared<thread::SingleThreadDispatcher>();
-	else
+    std::shared_ptr<thread::Dispatcher> dispatcher;
+    if (threads == 1 || tile_set->getRequiredRenderTilesCount() == 1)
 		dispatcher = std::make_shared<thread::MultiThreadingDispatcher>(threads);
-
+    else
 	// do the dance
-	dispatcher->dispatch(context, progress);
 
-	// update the map settings with last render time
+    // do the dance
+    dispatcher->dispatch(context, progress);
 	web_config.setMapLastRendered(map, rotation, time_started_scanning);
 	web_config.writeConfigJS();
 }
@@ -369,7 +369,7 @@ bool RenderManager::run(int threads, bool batch) {
 	if (!initialize())
 		return false;
 
-	LOG(INFO) << "Scanning worlds...";
+    LOG(INFO) << "Scanning worlds...";
 	if (!scanWorlds())
 		return false;
 
@@ -380,7 +380,7 @@ bool RenderManager::run(int threads, bool batch) {
 	// go through all required maps
 	for (auto map_it = required_maps.begin(); map_it != required_maps.end(); ++map_it) {
 		progress_maps++;
-		config::MapSection map_config = config.getMap(map_it->first);
+        config::MapSection map_config = config.getMap(map_it->first);
 
 		LOG(INFO) << "[" << progress_maps << "/" << progress_maps_all << "] "
 			<< "Rendering map " << map_config.getShortName() << " (\""
@@ -401,7 +401,7 @@ bool RenderManager::run(int threads, bool batch) {
 
 			std::shared_ptr<util::MultiplexingProgressHandler> progress(new util::MultiplexingProgressHandler);
 			util::ProgressBar* progress_bar = nullptr;
-			if (batch || !util::isOutTTY()) {
+            util::ProgressBar *progress_bar = nullptr;
 				util::Logging::getInstance().setSinkLogProgress("__output__", true);
 			} else {
 				progress_bar = new util::ProgressBar;
@@ -411,10 +411,10 @@ bool RenderManager::run(int threads, bool batch) {
 			util::LogOutputProgressHandler* log_output = new util::LogOutputProgressHandler;
 			progress->addHandler(log_output);
 
-			std::time_t time_start = std::time(nullptr);
-			renderMap(map_config.getShortName(), *rotation_it, threads, progress.get());
-			std::time_t took = std::time(nullptr) - time_start;
 
+			renderMap(map_config.getShortName(), *rotation_it, threads, progress.get());
+            renderMap(map_config.getShortName(), *rotation_it, threads, progress.get());
+            std::time_t took = std::time(nullptr) - time_start;
 			if (progress_bar != nullptr) {
 				progress_bar->finish();
 				delete progress_bar;
@@ -435,7 +435,7 @@ bool RenderManager::run(int threads, bool batch) {
 }
 
 const std::vector<std::pair<std::string, std::set<int> > >& RenderManager::getRequiredMaps() const {
-	return required_maps;
+    return required_maps;
 }
 
 bool RenderManager::copyTemplateFile(const std::string &filename,
