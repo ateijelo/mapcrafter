@@ -253,7 +253,7 @@ bool RenderManager::scanWorlds() {
 
         // clean up render view
         delete render_view;
-
+    }
 
     // set calculated max zoom of tile sets
     for (auto tile_set_it = needed_tile_sets.begin(); tile_set_it != needed_tile_sets.end();
@@ -263,7 +263,7 @@ bool RenderManager::scanWorlds() {
         tile_sets[*tile_set_it]->setDepth(max_zoom);
         web_config.setTileSetsMaxZoom(*tile_set_it, max_zoom);
     }
-	writeTemplates();
+
     writeTemplates();
     return true;
 }
