@@ -159,9 +159,7 @@ std::string MapSection::getWorld() const { return world.getValue(); }
 
 renderer::RenderViewType MapSection::getRenderView() const { return render_view.getValue(); }
 
-renderer::RenderModeType MapSection::getRenderMode() const {
-	return render_mode.getValue();
-}
+renderer::RenderModeType MapSection::getRenderMode() const { return render_mode.getValue(); }
 
 renderer::OverlayType MapSection::getOverlay() const { return overlay.getValue(); }
 
