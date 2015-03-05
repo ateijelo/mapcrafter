@@ -63,7 +63,7 @@ class TileRenderer {
                  RenderMode *render_mode);
     virtual ~TileRenderer();
 	void setRenderBiomes(bool render_biomes);
-	void setUsePreblitWater(bool use_preblit_water);
+    void setRenderBiomes(bool render_biomes);
     void setUsePreblitWater(bool use_preblit_water);
     void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
 
@@ -89,7 +89,7 @@ protected:
     int tile_width;
 
 	bool render_biomes;
-	bool use_preblit_water;
+    RenderMode *render_mode;
 
     bool render_biomes;
     bool use_preblit_water;
