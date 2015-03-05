@@ -73,9 +73,9 @@ bool TilePos::operator<(const TilePos &other) const {
     return x < other.x;
 }
 
-std::ostream& operator<<(std::ostream& stream, const TilePos& tile) {
-	stream << tile.getX() << ":" << tile.getY();
-	return stream;
+std::ostream &operator<<(std::ostream &stream, const TilePos &tile) {
+    stream << tile.getX() << ":" << tile.getY();
+    return stream;
 }
 
 TilePath::TilePath() {
@@ -91,7 +91,7 @@ const std::vector<int>& TilePath::getPath() const {
 }
 
 TilePath TilePath::parent() const {
-	TilePath copy(*this);
+    TilePath copy(*this);
     copy.path.pop_back();
     return copy;
 }
@@ -118,36 +118,30 @@ TilePos TilePath::getTilePos() const {
     return TilePos(x, y);
 }
 
-TilePath& TilePath::operator+=(int node) {
-	path.push_back(node);
-	return *this;
+TilePath &TilePath::operator+=(int node) {
+    path.push_back(node);
+    return *this;
 }
 
-TilePath TilePath::operator+(int node) const {
-	return TilePath(*this) += node;
-}
+TilePath TilePath::operator+(int node) const { return TilePath(*this) += node; }
 
-bool TilePath::operator==(const TilePath& other) const {
-	return path == other.path;
-}
+bool TilePath::operator==(const TilePath &other) const { return path == other.path; }
 
-bool TilePath::operator<(const TilePath& other) const {
-	return path < other.path;
-}
+bool TilePath::operator<(const TilePath &other) const { return path < other.path; }
 
-std::ostream& operator<<(std::ostream& stream, const TilePath& path) {
-	stream << path.toString();
-	return stream;
+std::ostream &operator<<(std::ostream &stream, const TilePath &path) {
+    stream << path.toString();
+    return stream;
 }
 
 std::string TilePath::toString() const {
-	std::stringstream ss;
-	for (size_t i = 0; i < path.size(); i++) {
-		ss << path[i];
-		if (i != path.size() - 1)
-			ss << "/";
-	}
-	return ss.str();
+    std::stringstream ss;
+    for (size_t i = 0; i < path.size(); i++) {
+        ss << path[i];
+        if (i != path.size() - 1)
+            ss << "/";
+    }
+    return ss.str();
 }
 
 TilePath TilePath::byTilePos(const TilePos &tile, int depth) {
