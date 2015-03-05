@@ -78,8 +78,7 @@ std::ostream &operator<<(std::ostream &stream, const TilePos &tile) {
     return stream;
 }
 
-TilePath::TilePath() {
-}
+TilePath::TilePath() {}
 
 TilePath::~TilePath() {
 }
