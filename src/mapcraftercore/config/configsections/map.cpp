@@ -19,6 +19,7 @@
 
 #include "../configsections/map.h"
 #include "../../util.h"
+#include "../iniconfig.h"
 
 namespace mapcrafter {
 namespace util {
@@ -48,19 +49,19 @@ renderer::RenderModeType as<renderer::RenderModeType>(const std::string& from) {
 			"'cave' or 'cavelight'!");
 }
 
-template <>
-renderer::RenderViewType as<renderer::RenderViewType>(const std::string& from) {
-	if (from == "isometric")
-		return renderer::RenderViewType::ISOMETRIC;
+        return renderer::RenderViewType::ISOMETRIC;
+    else if (from == "isometricnew")
+        return renderer::RenderViewType::ISOMETRICNEW;
+    else if (from == "side")
 	else if (from == "isometricnew")
 		return renderer::RenderViewType::ISOMETRICNEW;
 	else if (from == "side")
 		return renderer::RenderViewType::SIDE;
-	else if (from == "topdown")
-		return renderer::RenderViewType::TOPDOWN;
-	throw std::invalid_argument("Must be 'isometric' or 'topdown'!");
 }
 
+template <> renderer::OverlayType as<renderer::OverlayType>(const std::string &from) {
+    if (from == "none")
+        return renderer::OverlayType::NONE;
 template <>
 renderer::OverlayType as<renderer::OverlayType>(const std::string& from) {
 	if (from == "none")

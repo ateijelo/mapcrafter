@@ -151,7 +151,7 @@ RenderMode* createRenderMode(const config::WorldSection& world_config,
 		// nothing
 	} else if (type == RenderModeType::CAVE || type == RenderModeType::CAVELIGHT) {
 		// hide some walls of caves which would cover the view into the caves
-		if (map_config.getRenderView() == RenderViewType::ISOMETRIC)
+    OverlayType overlay = map_config.getOverlay();
 			render_mode->addRenderMode(new CaveRenderMode({mc::DIR_SOUTH, mc::DIR_WEST, mc::DIR_TOP}));
 		else
 			render_mode->addRenderMode(new CaveRenderMode({mc::DIR_TOP}));

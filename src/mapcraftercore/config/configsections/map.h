@@ -24,6 +24,8 @@
 #include "../validation.h"
 #include "../../renderer/rendermode.h"
 #include "../../renderer/renderview.h"
+#include "../configsection.h"
+#include "../validation.h"
 
 #include <boost/filesystem.hpp>
 #include <iostream>
@@ -50,7 +52,7 @@ public:
 	bool operator<(const TileSetGroupID& other) const;
 
 	std::string world_name;
-	renderer::RenderViewType render_view;
+    renderer::RenderViewType render_view;
 	int tile_width;
 };
 
@@ -97,7 +99,7 @@ class MapSection : public ConfigSection {
     std::string getLongName() const;
     std::string getWorld() const;
 
-	renderer::RenderViewType getRenderView() const;
+    renderer::RenderViewType getRenderView() const;
 	renderer::RenderModeType getRenderMode() const;
 	renderer::OverlayType getOverlay() const;
 	std::set<int> getRotations() const;
@@ -135,7 +137,7 @@ class MapSection : public ConfigSection {
 
     Field<renderer::RenderViewType> render_view;
     Field<renderer::RenderModeType> render_mode;
-	Field<renderer::RenderViewType> render_view;
+    Field<renderer::OverlayType> overlay;
 	Field<renderer::RenderModeType> render_mode;
 	Field<renderer::OverlayType> overlay;
 

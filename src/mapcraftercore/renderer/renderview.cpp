@@ -51,23 +51,32 @@ void RenderView::configureTileRenderer(TileRenderer* tile_renderer,
 	tile_renderer->setUsePreblitWater(map_config.getRenderMode() == RenderModeType::PLAIN);
 }
 
-std::ostream& operator<<(std::ostream& out, RenderViewType render_view) {
-	switch (render_view) {
-	case RenderViewType::ISOMETRIC: return out << "isometric";
+std::ostream &operator<<(std::ostream &out, RenderViewType render_view) {
+    switch (render_view) {
+    case RenderViewType::ISOMETRIC:
 	case RenderViewType::SIDE: return out << "side";
-	case RenderViewType::TOPDOWN: return out << "topdown";
-	default: return out << "unknown";
-	}
+    case RenderViewType::SIDE:
+        return out << "side";
+    case RenderViewType::TOPDOWN:
+        return out << "topdown";
+    default:
+        return out << "unknown";
+    }
 }
 
-RenderView* createRenderView(RenderViewType render_view) {
-	switch (render_view) {
+RenderView *createRenderView(RenderViewType render_view) {
+    switch (render_view) {
 	case RenderViewType::ISOMETRIC: return new NewIsometricRenderView();
 	case RenderViewType::SIDE: return new SideRenderView();
-	case RenderViewType::TOPDOWN: return new TopdownRenderView();
+    case RenderViewType::SIDE:
 	// thou shalt not return nullptr!
 	default: assert(false); return nullptr;
-	}
+        return new TopdownRenderView();
+    // thou shalt not return nullptr!
+    default:
+        assert(false);
+        return nullptr;
+    }
 }
 
 } /* namespace renderer */
