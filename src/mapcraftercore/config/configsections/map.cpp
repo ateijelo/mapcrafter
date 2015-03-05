@@ -157,9 +157,7 @@ std::string MapSection::getLongName() const { return name_long; }
 
 std::string MapSection::getWorld() const { return world.getValue(); }
 
-renderer::RenderViewType MapSection::getRenderView() const {
-	return render_view.getValue();
-}
+renderer::RenderViewType MapSection::getRenderView() const { return render_view.getValue(); }
 
 renderer::RenderModeType MapSection::getRenderMode() const {
 	return render_mode.getValue();
