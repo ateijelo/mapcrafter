@@ -164,13 +164,7 @@ protected:
  * Types of (of other base render modes composed) render modes that are available for
  * the user.
  */
-enum class RenderModeType {
-	PLAIN,
-	DAYLIGHT,
-	NIGHTLIGHT,
-	CAVE,
-	CAVELIGHT
-};
+enum class RenderModeType { PLAIN, DAYLIGHT, NIGHTLIGHT, CAVE, CAVELIGHT };
 
 enum class OverlayType {
 	NONE,
@@ -179,7 +173,7 @@ enum class OverlayType {
 	SPAWNNIGHT,
 };
 
-std::ostream& operator<<(std::ostream& out, RenderModeType render_mode);
+std::ostream &operator<<(std::ostream &out, RenderModeType render_mode);
 std::ostream& operator<<(std::ostream& out, OverlayType overlay);
 
 /**

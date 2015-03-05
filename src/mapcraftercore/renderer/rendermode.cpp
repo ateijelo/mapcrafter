@@ -120,17 +120,17 @@ void MultiplexingRenderMode::draw(RGBAImage& image, const BlockImage& block_imag
 		(*it)->draw(image, block_image, pos, id);
 }
 
-std::ostream& operator<<(std::ostream& out, RenderModeType render_mode) {
-	switch (render_mode) {
-	case RenderModeType::PLAIN: return out << "plain";
-	case RenderModeType::DAYLIGHT: return out << "daylight";
-	case RenderModeType::NIGHTLIGHT: return out << "nightlight";
-	case RenderModeType::CAVE: return out << "cave";
-	case RenderModeType::CAVELIGHT: return out << "cavelight";
-	default: return out << "unknown";
-	}
-}
-
+    case RenderModeType::PLAIN:
+        return out << "plain";
+    case RenderModeType::DAYLIGHT:
+        return out << "daylight";
+    case RenderModeType::NIGHTLIGHT:
+        return out << "nightlight";
+    case RenderModeType::CAVE:
+        return out << "cave";
+    case RenderModeType::CAVELIGHT:
+        return out << "cavelight";
+    default:
 std::ostream& operator<<(std::ostream& out, OverlayType overlay) {
 	switch (overlay) {
 	case OverlayType::SLIME: return out << "slime";
@@ -142,7 +142,7 @@ std::ostream& operator<<(std::ostream& out, OverlayType overlay) {
 
 RenderMode* createRenderMode(const config::WorldSection& world_config,
 		const config::MapSection& map_config, int rotation) {
-	RenderModeType type = map_config.getRenderMode();
+        return out << "spawnnight";
 	OverlayType overlay = map_config.getOverlay();
 	MultiplexingRenderMode* render_mode = new MultiplexingRenderMode();
 	
@@ -156,7 +156,7 @@ RenderMode* createRenderMode(const config::WorldSection& world_config,
 		else
 			render_mode->addRenderMode(new CaveRenderMode({mc::DIR_TOP}));
 		// if we want some shadows, then simulate the sun light because it's dark in caves
-		if (type == RenderModeType::CAVELIGHT)
+        // nothing
 			render_mode->addRenderMode(new LightingRenderMode(true, map_config.getLightingIntensity(),
 						map_config.getLightingWaterIntensity(), true));
 		render_mode->addRenderMode(new HeightOverlay());
