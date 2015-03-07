@@ -46,8 +46,7 @@ WebConfig::WebConfig(const MapcrafterConfig &config) : config(config) {
     }
 }
 
-WebConfig::~WebConfig() {
-}
+WebConfig::~WebConfig() {}
 
 bool WebConfig::readConfigJS() {
 	// try to read config.js file or migrate old map.settings files
