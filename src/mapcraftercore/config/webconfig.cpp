@@ -25,7 +25,7 @@
 namespace mapcrafter {
 namespace config {
 
-WebConfig::WebConfig(const MapcrafterConfig& config)
+WebConfig::WebConfig(const MapcrafterConfig &config) : config(config) {
     auto maps = config.getMaps();
     for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
         std::string map_name = map_it->getShortName();
@@ -145,7 +145,7 @@ bool WebConfig::readConfigJS() {
 
 		// write config.js for first time with data from old map.settings files
 		if (map_settings_found)
-			writeConfigJS();
+        if (map_settings_found)
 	}
     }
 
@@ -194,24 +194,24 @@ void WebConfig::setMapTileSize(const std::string& map, std::tuple<int, int> tile
 	map_tile_size[map] = tile_size;
 }
 
-int WebConfig::getMapMaxZoom(const std::string& map) const {
+int WebConfig::getMapMaxZoom(const std::string &map) const {
 	if (!map_max_zoom.count(map))
         return 0;
 	return map_max_zoom.at(map);
 }
 
-void WebConfig::setMapMaxZoom(const std::string& map, int zoomlevel) {
+void WebConfig::setMapMaxZoom(const std::string &map, int zoomlevel) {
 	map_max_zoom[map] = zoomlevel;
 }
 
-int WebConfig::getMapLastRendered(const std::string& map,
+int WebConfig::getMapLastRendered(const std::string &map, int rotation) const {
 		int rotation) const {
 	if (!map_last_rendered.count(map))
 		return 0;
 	return map_last_rendered.at(map).at(rotation);
 }
 
-void WebConfig::setMapLastRendered(const std::string& map,
+void WebConfig::setMapLastRendered(const std::string &map, int rotation, int last_rendered) {
 		int rotation, int last_rendered) {
 	map_last_rendered[map][rotation] = last_rendered;
 }

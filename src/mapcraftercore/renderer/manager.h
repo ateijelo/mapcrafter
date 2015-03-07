@@ -198,7 +198,7 @@ class RenderManager {
 			int jpeg_quality = 85) const;
 
     config::MapcrafterConfig config;
-	config::WebConfig web_config;
+    config::WebConfig web_config;
 
     RenderBehaviors render_behaviors;
 

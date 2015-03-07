@@ -40,11 +40,11 @@ class MapcrafterConfig;
 
 class WebConfig {
   public:
-	WebConfig(const MapcrafterConfig& config);
-	~WebConfig();
+    WebConfig(const MapcrafterConfig &config);
+    ~WebConfig();
 
     bool readConfigJS();
-	void writeConfigJS() const;
+    void writeConfigJS() const;
 
     int getTileSetsMaxZoom(const TileSetGroupID &tile_set) const;
     void setTileSetsMaxZoom(const TileSetGroupID &tile_set, int max_zoom);

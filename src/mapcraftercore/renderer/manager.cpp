@@ -290,7 +290,7 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     std::shared_ptr<RenderView> render_view(createRenderView(map_config.getRenderView()));
 
     // output a small notice if we render this map incrementally
-	int last_rendered = web_config.getMapLastRendered(map, rotation);
+    int last_rendered = web_config.getMapLastRendered(map, rotation);
     if (last_rendered != 0) {
         std::time_t t = last_rendered;
         char buffer[256];
@@ -309,7 +309,7 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
 			tile_set->scanRequiredByFiletimes(output_dir, map_config.getImageFormatSuffix());
         else
             // tile_set->scanRequiredByTimestamp(settings.last_render[rotation]);
-			tile_set->scanRequiredByTimestamp(web_config.getMapLastRendered(map, rotation));
+            tile_set->scanRequiredByTimestamp(web_config.getMapLastRendered(map, rotation));
 	} else {
 		// or just set all tiles required if force-rendering
 		tile_set->resetRequired();
@@ -350,7 +350,7 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
 	int tile_h = context.tile_renderer->getTileHeight();
 	web_config.setMapMaxZoom(map, context.tile_set->getDepth());
 	web_config.setMapTileSize(map, std::make_tuple<>(tile_w, tile_h));
-	web_config.writeConfigJS();
+    web_config.setMapMaxZoom(map, context.tile_set->getDepth());
     web_config.setMapTileSize(map, std::make_tuple<>(tile_w, tile_h));
     web_config.writeConfigJS();
 	if (threads == 1 || tile_set->getRequiredRenderTilesCount() == 1)
@@ -362,8 +362,10 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
 
     // do the dance
     dispatcher->dispatch(context, progress);
-	web_config.setMapLastRendered(map, rotation, time_started_scanning);
-	web_config.writeConfigJS();
+
+    // update the map settings with last render time
+    web_config.setMapLastRendered(map, rotation, time_started_scanning);
+    web_config.writeConfigJS();
 }
 
 bool RenderManager::run(int threads, bool batch) {
@@ -490,7 +492,7 @@ void RenderManager::writeTemplates() const {
 
     if (!writeTemplateIndexHtml())
 		LOG(ERROR) << "Warning: Unable to copy template file index.html!";
-	web_config.writeConfigJS();
+    web_config.writeConfigJS();
 
     if (!fs::exists(config.getOutputPath("markers.js")) &&
         !util::copyFile(config.getTemplatePath("markers.js"), config.getOutputPath("markers.js")))
