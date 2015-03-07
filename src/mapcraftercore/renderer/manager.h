@@ -69,42 +69,42 @@ enum class RenderBehavior {
  */
 class RenderBehaviors {
 public:
-	/**
-	 * Constructor. You can specify a default render behavior which is used if no
-	 * render behavior is specified for a map. The default default render behavior is
-	 * auto.
-	 */
-	RenderBehaviors(RenderBehavior default_behavior = RenderBehavior::AUTO);
-	~RenderBehaviors();
+    /**
+     * Constructor. You can specify a default render behavior which is used if no
+     * render behavior is specified for a map. The default default render behavior is
+     * auto.
+     */
+    RenderBehaviors(RenderBehavior default_behavior = RenderBehavior::AUTO);
+    ~RenderBehaviors();
 
-	/**
-	 * Returns the render behavior of a specific map and rotation of it.
-	 */
+    /**
+     * Returns the render behavior of a specific map and rotation of it.
+     */
 	RenderBehavior getRenderBehavior(const std::string& map, int rotation) const;
 
-	/**
-	 * Sets the render behavior of a whole map.
-	 */
+    /**
+     * Sets the render behavior of a whole map.
+     */
 	void setRenderBehavior(const std::string& map, RenderBehavior behavior);
 
-	/**
-	 * Sets the render behavior of a single rotation of a map.
-	 */
+    /**
+     * Sets the render behavior of a single rotation of a map.
+     */
 	void setRenderBehavior(const std::string& map, int rotation, RenderBehavior behavior);
 
-	/**
-	 * Checks whether a map is completely to be skipped.
-	 */
+    /**
+     * Checks whether a map is completely to be skipped.
+     */
 	bool isCompleteRenderSkip(const std::string& map) const;
 
-	/**
-	 * Parses the render behaviors of the maps from the command line arguments.
-	 */
-	static RenderBehaviors fromRenderOpts(const config::MapcrafterConfig& config,
+    /**
+     * Parses the render behaviors of the maps from the command line arguments.
+     */
+    static RenderBehaviors fromRenderOpts(const config::MapcrafterConfig &config,
 			const RenderOpts& render_opts);
 
 private:
-	// default behavior for maps if nothing specified
+    // default behavior for maps if nothing specified
 	RenderBehavior default_behavior;
 
 	// render behavior of each map: map -> (rotation -> render behavior)
@@ -121,7 +121,7 @@ class RenderManager {
 	/**
 	 * Sets how each map should be rendered (auto, force-render, skip).
 	 */
-	void setRenderBehaviors(const RenderBehaviors& render_behaviors);
+    void setRenderBehaviors(const RenderBehaviors &render_behaviors);
 
 	/**
 	 * Some basic initialization things. blah.
@@ -200,7 +200,7 @@ class RenderManager {
     config::MapcrafterConfig config;
 	config::WebConfig web_config;
 
-	RenderBehaviors render_behaviors;
+    RenderBehaviors render_behaviors;
 
 	// time when we started scanning the worlds, used as last last render time of the maps
     std::time_t time_started_scanning;

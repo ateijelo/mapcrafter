@@ -206,7 +206,7 @@ int main(int argc, char **argv) {
 
     // configure logging from this configuration file
     config.configureLogging();
-	manager.setRenderBehaviors(renderer::RenderBehaviors::fromRenderOpts(config, opts));
+
 	if (!manager.run(opts.jobs, opts.batch))
 		return 1;
     if (!manager.run(opts.jobs, opts.batch))
