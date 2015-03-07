@@ -43,8 +43,7 @@ namespace renderer {
 RenderBehaviors::RenderBehaviors(RenderBehavior default_behavior)
     : default_behavior(default_behavior) {}
 
-RenderBehaviors::~RenderBehaviors() {
-}
+RenderBehaviors::~RenderBehaviors() {}
 
 RenderBehavior RenderBehaviors::getRenderBehavior(const std::string &map, int rotation) const {
     if (!render_behaviors.count(map))
