@@ -240,12 +240,12 @@ bool MapSection::parseField(const std::string key, const std::string value,
             if (render_view.getValue() == renderer::RenderViewType::ISOMETRICNEW) {
                 validation.error("Using 'isometricnew' for 'render_view' is not necessary anymore! "
                                  "Just use 'isometric' or 'topdown'.");
-		if (r != -1) {
+            }
         }
-			tile_sets.insert(getTileSet(r));
-		} else {
+    } else if (key == "render_mode" || key == "rendermode") {
+        render_mode.load(key, value, validation);
         if (key == "rendermode")
-		}
+            validation.warning("Using the option 'rendermode' is deprecated. "
                                "It's called 'render_mode' now.");
     } else if (key == "overlay") {
         overlay.load(key, value, validation);

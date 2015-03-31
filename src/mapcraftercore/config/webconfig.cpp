@@ -41,8 +41,8 @@ WebConfig::WebConfig(const MapcrafterConfig& config)
 		for (int i = 0; i < 4; i++)
 			map_last_rendered[map_name][i] = 0;
         auto tile_sets = map_it->getTileSets();
-		auto tile_sets = map_it->getTileSets();
-		for (auto tile_set_it = tile_sets.begin(); tile_set_it != tile_sets.end(); ++tile_set_it)
+        for (auto tile_set_it = tile_sets.begin(); tile_set_it != tile_sets.end(); ++tile_set_it)
+            tile_sets_max_zoom[*tile_set_it] = 0;
 			tile_sets_max_zoom[*tile_set_it] = 0;
 	}
 }
@@ -102,7 +102,7 @@ bool WebConfig::readConfigJS() {
 		for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
 			std::string map_name = map_it->getShortName();
 			auto tile_sets = map_it->getTileSets();
-
+            auto tile_sets = map_it->getTileSets();
 			fs::path settings_file = config.getOutputDir() / map_name / "map.settings";
             fs::path settings_file = config.getOutputDir() / map_name / "map.settings";
             if (!fs::is_regular_file(settings_file))
@@ -182,7 +182,7 @@ renderer::TilePos WebConfig::getTileSetTileOffset(const TileSetID &tile_set) con
 }
 
 void WebConfig::setTileSetTileOffset(const TileSetID &tile_set,
-		const renderer::TilePos& tile_offset) {
+                                     const renderer::TilePos &tile_offset) {
     tile_set_tile_offset[tile_set] = tile_offset;
 }
 

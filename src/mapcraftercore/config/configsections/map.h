@@ -67,7 +67,7 @@ class TileSetID : public TileSetGroupID {
   public:
     TileSetID();
     TileSetID(const std::string &world_name, renderer::RenderViewType render_view, int tile_width,
-			int tile_width, int rotation);
+              int rotation);
     TileSetID(const TileSetGroupID &group, int rotation);
 
     std::string toString() const;

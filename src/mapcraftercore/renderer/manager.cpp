@@ -178,18 +178,18 @@ bool RenderManager::scanWorlds() {
 			continue;
 
 		// just the rotations that are not to be skipped are required
-		std::set<int> required_rotations;
-		auto map_tile_sets = map_it->getTileSets();
+        std::set<int> required_rotations;
+        auto map_tile_sets = map_it->getTileSets();
 		for (auto tile_set_it = map_tile_sets.begin();
 				tile_set_it != map_tile_sets.end(); ++tile_set_it) {
-			int rotation = tile_set_it->rotation;
+            int rotation = tile_set_it->rotation;
 			// but we have to scan every rotation of every map to make sure that all
 			// rotations of a map use the same zoom level, especially when just one
 			// rotation is rendered but the other ones are skipped
 			needed_tile_sets.insert(*tile_set_it);
 			if (render_behaviors.getRenderBehavior(map, rotation) != RenderBehavior::SKIP)
-				required_rotations.insert(rotation);
-		}
+                required_rotations.insert(rotation);
+        }
 
 		required_maps.push_back(std::make_pair(map, required_rotations));
 	}
@@ -200,16 +200,16 @@ bool RenderManager::scanWorlds() {
 	// iterate through all tile sets that are needed
 	for (auto tile_set_it = needed_tile_sets.begin();
 			tile_set_it != needed_tile_sets.end(); ++tile_set_it) {
-		config::WorldSection world_config = config.getWorld(tile_set_it->world_name);
-		RenderView* render_view = createRenderView(tile_set_it->render_view);
+        config::WorldSection world_config = config.getWorld(tile_set_it->world_name);
+        RenderView *render_view = createRenderView(tile_set_it->render_view);
 
-		// load the world
-		mc::World world(world_config.getInputDir().string(),
-				world_config.getDimension());
-		world.setRotation(tile_set_it->rotation);
-		world.setWorldCrop(world_config.getWorldCrop());
-		if (!world.load()) {
-			LOG(FATAL) << "Unable to load world " << tile_set_it->world_name << "!";
+        // load the world
+        mc::World world(world_config.getInputDir().string(), world_config.getDimension());
+        world.setRotation(tile_set_it->rotation);
+        world.setWorldCrop(world_config.getWorldCrop());
+        if (!world.load()) {
+            LOG(FATAL) << "Unable to load world " << tile_set_it->world_name << "!";
+            return false;
         }
 		}
 		int world_version = world.getMinecraftVersion();
@@ -228,28 +228,28 @@ bool RenderManager::scanWorlds() {
 		}
 
 		// create a tile set for this world
-		std::shared_ptr<TileSet> tile_set(render_view->createTileSet(tile_set_it->tile_width));
+        // create a tile set for this world
 		// and scan the tiles of this world,
-		// we automatically center the tiles for cropped worlds, but only...
-		//  - the circular cropped ones and
+        // and scan the tiles of this world,
+        // we automatically center the tiles for cropped worlds, but only...
 		//  - the ones with completely specified x- AND z-bounds
-		if (world_config.needsWorldCentering()) {
-			TilePos tile_offset;
-			tile_set->scan(world, true, tile_offset);
-			web_config.setTileSetTileOffset(*tile_set_it, tile_offset);
-		} else {
-			tile_set->scan(world);
-		}
-
+        //  - the ones with completely specified x- AND z-bounds
+        if (world_config.needsWorldCentering()) {
+            TilePos tile_offset;
+            tile_set->scan(world, true, tile_offset);
+            web_config.setTileSetTileOffset(*tile_set_it, tile_offset);
+        } else {
+            tile_set->scan(world);
+        }
 
         // key of this tile_sets_max_zoom map is a TileSetGroupID, not TileSetID as we access it
         // since TileSetID is a subclass of TileSetGroupID, only the TileSetGroupID-'functionality'
         // is used TADA C++ magic! (object slicing)
-		max_zoom = std::max(max_zoom, tile_set->getDepth());
+        int &max_zoom = tile_sets_max_zoom[*tile_set_it];
 
-		// set world- and tileset object in the map
-		worlds[tile_set_it->world_name][tile_set_it->rotation] = world;
-		tile_sets[*tile_set_it] = tile_set;
+
+        // set world- and tileset object in the map
+        worlds[tile_set_it->world_name][tile_set_it->rotation] = world;
 
 		// clean up render view
 		delete render_view;
@@ -260,10 +260,10 @@ bool RenderManager::scanWorlds() {
 			tile_set_it != needed_tile_sets.end(); ++tile_set_it) {
          ++tile_set_it) {
         // same here like above, C++ magic
-		tile_sets[*tile_set_it]->setDepth(max_zoom);
+        int max_zoom = tile_sets_max_zoom[*tile_set_it];
         tile_sets[*tile_set_it]->setDepth(max_zoom);
-	}
-
+        web_config.setTileSetsMaxZoom(*tile_set_it, max_zoom);
+    }
 	writeTemplates();
     writeTemplates();
     return true;
