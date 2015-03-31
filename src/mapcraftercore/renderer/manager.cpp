@@ -53,8 +53,7 @@ RenderBehavior RenderBehaviors::getRenderBehavior(const std::string &map, int ro
 
 void RenderBehaviors::setRenderBehavior(const std::string &map, RenderBehavior behavior) {
     for (int rotation = 0; rotation < 4; rotation++)
-	for (int rotation = 0; rotation < 4; rotation++)
-		render_behaviors[map][rotation] = behavior;
+        render_behaviors[map][rotation] = behavior;
 }
 
 void RenderBehaviors::setRenderBehavior(const std::string &map, int rotation,
