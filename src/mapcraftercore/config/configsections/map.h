@@ -70,7 +70,7 @@ class TileSetID : public TileSetGroupID {
 			int tile_width, int rotation);
 	TileSetID(const TileSetGroupID& group, int rotation);
 
-	std::string toString() const;
+    std::string toString() const;
     bool operator<(const TileSetID &other) const;
 
     int rotation;

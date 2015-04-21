@@ -86,11 +86,11 @@ TileSetGroupID::TileSetGroupID(const std::string &world_name, renderer::RenderVi
     : world_name(world_name), render_view(render_view), tile_width(tile_width) {}
 
 std::string TileSetGroupID::toString() const {
-	std::string repr = "";
-	repr += world_name + "_";
-	repr += util::str(render_view) + "_";
+    std::string repr = "";
+    repr += world_name + "_";
+    repr += util::str(render_view) + "_";
     repr += "t" + util::str(tile_width);
-	return repr;
+    return repr;
 }
 
 bool TileSetGroupID::operator<(const TileSetGroupID &other) const {
