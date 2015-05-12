@@ -50,7 +50,7 @@ void traverseReduceOctree(Octree *octree) {
     }
 }
 
-void testOctreeWithImage(const RGBAImage& image) {
+void testOctreeWithImage(const RGBAImage &image) {
     std::set<RGBAPixel> colors;
     int r = 0, g = 0, b = 0, count = 0;
 
@@ -66,7 +66,7 @@ void testOctreeWithImage(const RGBAImage& image) {
             b += rgba_blue(color);
             count++;
 
-			Octree::findOrCreateNode(&octree, color)->setColor(color);
+            Octree::findOrCreateNode(&octree, color)->setColor(color);
         }
     }
 
@@ -129,17 +129,17 @@ BOOST_AUTO_TEST_CASE(image_palette) {
 BOOST_AUTO_TEST_CASE(image_quantization_octree) {
 	std::srand(std::time(0));
 
-	// create a random image to test octree with
+    // create a random image to test octree with
     BOOST_TEST_MESSAGE("Testing random image.");
 	RGBAImage random(1000, 1000);
 	for (int x = 0; x < random.getWidth(); x++)
 		for (int y = 0; y < random.getHeight(); y++)
 			random.setPixel(x, y, rgba(rand() % 256, rand() % 256, rand() % 256, 255));
-	testOctreeWithImage(random);
+    testOctreeWithImage(random);
 
-	// and also check it with this cute platypus
+    // and also check it with this cute platypus
 	BOOST_TEST_MESSAGE("Testing platypus.");
 	RGBAImage platypus;
 	platypus.readPNG("data/platypus.png");
-	testOctreeWithImage(platypus);
+    testOctreeWithImage(platypus);
 }
