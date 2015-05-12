@@ -20,9 +20,9 @@
 #include "../mapcraftercore/renderer/image.h"
 #include "../mapcraftercore/renderer/image/quantization.h"
 
+#include <boost/test/unit_test.hpp>
 #include <cstdlib>
 #include <set>
-#include <boost/test/unit_test.hpp>
 
 namespace renderer = mapcrafter::renderer;
 using namespace renderer;
@@ -33,55 +33,55 @@ void traverseCheckOctree(const Octree *octree) {
     BOOST_CHECK(octree->isRoot() == !octree->isLeaf());
     BOOST_CHECK(octree->hasColor() == octree->isLeaf());
     for (int i = 0; i < 16; i++) {
-		if (octree->hasChildren(i))
+        if (octree->hasChildren(i))
             traverseCheckOctree(octree->getChildren(i));
-	}
+    }
 }
 
-void traverseReduceOctree(Octree* octree) {
+void traverseReduceOctree(Octree *octree) {
     for (int i = 0; i < 16; i++) {
-		if (!octree->hasChildren(i))
-			continue;
+        if (!octree->hasChildren(i))
+            continue;
         traverseReduceOctree(octree->getChildren(i));
     }
     if (octree->isLeaf() && !octree->isRoot()) {
         octree->reduceToParent();
         delete octree;
-	}
+    }
 }
 
 void testOctreeWithImage(const RGBAImage& image) {
-	std::set<RGBAPixel> colors;
-	int r = 0, g = 0, b = 0, count = 0;
+    std::set<RGBAPixel> colors;
+    int r = 0, g = 0, b = 0, count = 0;
 
-	Octree octree;
+    Octree octree;
 
 	// insert all pixels into an octree
 	for (int x = 0; x < image.getWidth(); x++) {
 		for (int y = 0; y < image.getHeight(); y++) {
 			RGBAPixel color = image.getPixel(x, y);
 			colors.insert(color);
-			r += rgba_red(color);
-			g += rgba_green(color);
-			b += rgba_blue(color);
-			count++;
+            r += rgba_red(color);
+            g += rgba_green(color);
+            b += rgba_blue(color);
+            count++;
 
 			Octree::findOrCreateNode(&octree, color)->setColor(color);
-		}
-	}
+        }
+    }
 
-	// make sure that all colors are inserted correctly
+    // make sure that all colors are inserted correctly
     BOOST_CHECK(octree.isRoot() && !octree.isLeaf());
-	BOOST_CHECK(!octree.hasColor());
+    BOOST_CHECK(!octree.hasColor());
 
-	// reduce all colors up to the root of the tree
-	// the color should be the overall average color
-	traverseReduceOctree(&octree);
-	BOOST_CHECK(octree.hasColor());
+    // reduce all colors up to the root of the tree
+    // the color should be the overall average color
+    traverseReduceOctree(&octree);
+    BOOST_CHECK(octree.hasColor());
 
-	RGBAPixel average1 = octree.getColor();
-	RGBAPixel average2 = rgba(r / count, g / count, b / count, 255);
-	BOOST_CHECK_EQUAL(average1, average2);
+    RGBAPixel average1 = octree.getColor();
+    RGBAPixel average2 = rgba(r / count, g / count, b / count, 255);
+    BOOST_CHECK_EQUAL(average1, average2);
 
 	BOOST_TEST_MESSAGE("Overall colors: " << colors.size());
 	BOOST_TEST_MESSAGE("Pixels per color: " << (double) (image.getWidth() * image.getHeight()) / colors.size());
@@ -143,4 +143,3 @@ BOOST_AUTO_TEST_CASE(image_quantization_octree) {
 	platypus.readPNG("data/platypus.png");
 	testOctreeWithImage(platypus);
 }
-

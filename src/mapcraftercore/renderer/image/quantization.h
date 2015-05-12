@@ -82,7 +82,7 @@ class Octree {
 	/**
 	 * Returns whether this node is a leaf.
 	 */
-	bool isLeaf() const;
+    bool isLeaf() const;
 
 	/**
 	 * Returns whether this node has a specific children.

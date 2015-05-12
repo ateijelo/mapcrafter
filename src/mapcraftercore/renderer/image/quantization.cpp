@@ -48,9 +48,9 @@ bool Octree::isRoot() const { return parent == nullptr; }
 
 bool Octree::isLeaf() const {
     for (int i = 0; i < 16; i++)
-		if (children[i])
-			return false;
-	return true;
+        if (children[i])
+            return false;
+    return true;
 }
 
 bool Octree::hasChildren(int index) const {
@@ -142,24 +142,24 @@ void Octree::updateParents() {
 
 namespace {
 
-int nth_bit(int x, int n) {
-	return (x >> n) & 1;
-}
+int nth_bit(int x, int n) { return (x >> n) & 1; }
 
-}
+} // namespace
 
+Octree *Octree::findOrCreateNode(Octree *octree, RGBAPixel color) {
+    assert(octree != nullptr);
 Octree* Octree::findOrCreateNode(Octree* octree, RGBAPixel color) {
 	assert(octree != nullptr);
 
-	uint8_t red = rgba_red(color);
-	uint8_t green = rgba_green(color);
-	uint8_t blue = rgba_blue(color);
-    Octree *node = octree;
+    uint8_t blue = rgba_blue(color);
+    uint8_t alpha = rgba_alpha(color);
 
-	Octree* node = octree;
+    Octree *node = octree;
+    for (int i = 7; i >= 8 - OCTREE_COLOR_BITS; i--) {
+        int index = (nth_bit(red, i) << 3) | (nth_bit(green, i) << 2) | nth_bit(blue, i) << 1 |
                     nth_bit(alpha, i);
         node = node->getChildren(index);
-		node = node->getChildren(index);
+        assert(node != nullptr);
 		assert(node != nullptr);
 	}
 	return node;
