@@ -90,7 +90,7 @@ public:
 	/**
 	 * Returns the count of children of this node.
 	 */
-	int getChildrenCount() const;
+    int getChildrenCount() const;
 
 	/**
 	 * Returns the index'd children. Creates it if it doesn't exist.
@@ -148,7 +148,7 @@ public:
 	 * Returns the leaf node which should represent a specific color. It traverses to
 	 * the leaf node and creates all nodes on that path if they don't exist.
 	 */
-	static Octree* findOrCreateNode(Octree* octree, RGBAPixel color);
+    static Octree *findOrCreateNode(Octree *octree, RGBAPixel color);
 
     /**
 	 * Finds the index of the color (from the color palette) which is the nearest to

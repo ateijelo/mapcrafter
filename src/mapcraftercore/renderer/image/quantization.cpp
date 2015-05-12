@@ -19,7 +19,6 @@
 
 #include "quantization.h"
 
-#include <set>
 #include <queue>
 
 namespace mapcrafter {
@@ -64,11 +63,11 @@ bool Octree::hasChildren(int index) const {
 }
 
 int Octree::getChildrenCount() const {
-	int count = 0;
+    int count = 0;
     for (int i = 0; i < 16; i++)
-		if (children[i])
-			count++;
-	return count;
+        if (children[i])
+            count++;
+    return count;
 }
 
 Octree* Octree::getChildren(int index) {
@@ -385,5 +384,5 @@ void octreeColorQuantize(const RGBAImage &image, size_t max_colors, std::vector<
 		delete internal_octree;
 }
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
