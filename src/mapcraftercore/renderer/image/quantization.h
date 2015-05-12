@@ -20,8 +20,6 @@
 #ifndef IMAGE_QUANTIZATION_H_
 #define IMAGE_QUANTIZATION_H_
 
-#include "palette.h"
-#include "../image.h"
 #include "../../util.h"
 #include "../image.h"
 #include "palette.h"
