@@ -23,6 +23,8 @@
 #include "palette.h"
 #include "../image.h"
 #include "../../util.h"
+#include "../image.h"
+#include "palette.h"
 
 #include <vector>
 
@@ -46,7 +48,7 @@ const int OCTREE_COLOR_BITS = 5;
  * Octrees are cool! \o/
  */
 class Octree {
-public:
+  public:
 	/**
 	 * Constructor.
 	 */
@@ -55,17 +57,17 @@ public:
 	/**
 	 * Yeah, destructor.
 	 */
-	~Octree();
+    ~Octree();
 
 	/**
 	 * Returns the parent of this node.
 	 */
-	Octree* getParent();
+    Octree *getParent();
 
 	/**
 	 * Returns the (const) parent of this node.
 	 */
-	const Octree* getParent() const;
+    const Octree *getParent() const;
 
     /**
      * Returns the level of the node (distance to root node).
@@ -85,7 +87,7 @@ public:
 	/**
 	 * Returns whether this node has a specific children.
 	 */
-	bool hasChildren(int index) const;
+    bool hasChildren(int index) const;
 
 	/**
 	 * Returns the count of children of this node.
@@ -95,22 +97,22 @@ public:
 	/**
 	 * Returns the index'd children. Creates it if it doesn't exist.
 	 */
-	Octree* getChildren(int index);
+    Octree *getChildren(int index);
 
 	/**
 	 * Returns the (const) index'd children. Returns nullptr if it doesn't exist.
 	 */
-	const Octree* getChildren(int index) const;
+    const Octree *getChildren(int index) const;
 
 	/**
 	 * Returns whether this node has a color (= reference > 0).
 	 */
-	bool hasColor() const;
+    bool hasColor() const;
 
 	/**
 	 * Returns the color of the node (as average of the red, green and blue values).
 	 */
-	RGBAPixel getColor() const;
+    RGBAPixel getColor() const;
 
     /**
      * Returns how many color this node represents.
@@ -120,7 +122,7 @@ public:
 	/**
 	 * Adds a color to this node.
 	 */
-	void setColor(RGBAPixel color);
+    void setColor(RGBAPixel color);
 
     /**
      * Reduces the colors of this node to the parent node and automatically removes the
@@ -160,15 +162,15 @@ public:
      */
 	static int findNearestColor(const Octree* octree, RGBAPixel color);
 
-protected:
+  protected:
 	// parent and children of this node
-	Octree* parent;
+    Octree *parent;
     Octree *children[16];
     int level;
 
 	// how many colors this node represents
 	// only leaves or reduced nodes have a reference != 0
-	int reference;
+    int reference;
 	// sum of represented colors -> average is color of this node
     int red, green, blue, alpha;
 
@@ -265,8 +267,7 @@ protected:
 void octreeColorQuantize(const RGBAImage& image, size_t max_colors,
 		std::vector<RGBAPixel>& colors, Octree** octree = nullptr);
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* IMAGE_QUANTIZATION_H_ */
-

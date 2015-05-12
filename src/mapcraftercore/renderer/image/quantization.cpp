@@ -28,22 +28,19 @@ namespace renderer {
 Octree::Octree(Octree *parent, int level)
     : parent(parent), level(level), reference(0), red(0), green(0), blue(0), alpha(0),
       color_id(-1) {
-		children[i] = nullptr;
+    for (int i = 0; i < 16; i++)
+        children[i] = nullptr;
 }
 
 Octree::~Octree() {
     for (int i = 0; i < 16; i++)
-		if (children[i])
-			delete children[i];
+        if (children[i])
+            delete children[i];
 }
 
-Octree* Octree::getParent() {
-	return parent;
-}
+Octree *Octree::getParent() { return parent; }
 
-const Octree* Octree::getParent() const {
-	return parent;
-}
+const Octree *Octree::getParent() const { return parent; }
 
 int Octree::getLevel() const { return level; }
 
@@ -58,7 +55,7 @@ bool Octree::isLeaf() const {
 
 bool Octree::hasChildren(int index) const {
     assert(index >= 0 && index < 16);
-	return children[index] != nullptr;
+    return children[index] != nullptr;
 }
 
 int Octree::getChildrenCount() const {
@@ -69,26 +66,24 @@ int Octree::getChildrenCount() const {
     return count;
 }
 
-Octree* Octree::getChildren(int index) {
+Octree *Octree::getChildren(int index) {
     assert(index >= 0 && index < 16);
-	if (!children[index])
+    if (!children[index])
         children[index] = new Octree(this, level + 1);
-	return children[index];
+    return children[index];
 }
 
-const Octree* Octree::getChildren(int index) const {
+const Octree *Octree::getChildren(int index) const {
     assert(index >= 0 && index < 16);
-	if (!children[index])
-		return nullptr;
-	return children[index];
+    if (!children[index])
+        return nullptr;
+    return children[index];
 }
 
-bool Octree::hasColor() const {
-	return reference > 0;
-}
+bool Octree::hasColor() const { return reference > 0; }
 
 RGBAPixel Octree::getColor() const {
-	assert(hasColor());
+    assert(hasColor());
     return rgba(red / reference, green / reference, blue / reference, alpha / reference);
 }
 
@@ -97,10 +92,10 @@ int Octree::getCount() const {
 }
 
 void Octree::setColor(RGBAPixel color) {
-	reference++;
-	red += rgba_red(color);
-	green += rgba_green(color);
-	blue += rgba_blue(color);
+    reference++;
+    red += rgba_red(color);
+    green += rgba_green(color);
+    blue += rgba_blue(color);
     alpha += rgba_alpha(color);
 }
 
