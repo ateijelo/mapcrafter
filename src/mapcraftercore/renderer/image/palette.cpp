@@ -22,18 +22,13 @@
 namespace mapcrafter {
 namespace renderer {
 
-Palette::~Palette() {
-}
+Palette::~Palette() {}
 
-SimplePalette::SimplePalette() {
-}
+SimplePalette::SimplePalette() {}
 
-SimplePalette::SimplePalette(const std::vector<RGBAPixel>& colors)
-	: colors(colors) {
-}
+SimplePalette::SimplePalette(const std::vector<RGBAPixel> &colors) : colors(colors) {}
 
-SimplePalette::~SimplePalette() {
-}
+SimplePalette::~SimplePalette() {}
 
 const std::vector<RGBAPixel>& SimplePalette::getColors() const {
 	return colors;
@@ -41,16 +36,16 @@ const std::vector<RGBAPixel>& SimplePalette::getColors() const {
 
 int SimplePalette::getNearestColor(const RGBAPixel &color) {
 	int best_color = 0;
-	int min_distance = -1;
+    int min_distance = -1;
 	for (size_t i = 0; i < colors.size(); i++) {
         int distance = rgba_distance2(color, colors[i]);
-		if (min_distance == -1 || distance < min_distance) {
+        if (min_distance == -1 || distance < min_distance) {
 			best_color = i;
-			min_distance = distance;
-		}
-	}
-	return best_color;
+            min_distance = distance;
+        }
+    }
+    return best_color;
 }
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter

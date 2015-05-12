@@ -38,7 +38,7 @@ class Palette;
  */
 void imageDither(RGBAImage &image, Palette &palette, std::vector<int> &data);
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* IMAGE_DITHERING_H_ */

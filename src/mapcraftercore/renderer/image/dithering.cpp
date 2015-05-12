@@ -19,8 +19,8 @@
 
 #include "dithering.h"
 
-#include "palette.h"
 #include "../image.h"
+#include "palette.h"
 
 namespace mapcrafter {
 namespace renderer {
@@ -33,13 +33,13 @@ void imageDither(RGBAImage &image, Palette &palette, std::vector<int> &data) {
 	int height = image.getHeight();
 	data.resize(width * height);
 
-	for (int y = 0; y < image.getHeight(); y++) {
-		for (int x = 0; x < image.getWidth(); x++) {
-			RGBAPixel old_color = image.pixel(x, y);
+    for (int y = 0; y < image.getHeight(); y++) {
+        for (int x = 0; x < image.getWidth(); x++) {
+            RGBAPixel old_color = image.pixel(x, y);
             // find nearest palette color and use it
 			int color_id = palette.getNearestColor(old_color);
 			RGBAPixel new_color = palette.getColors()[color_id];
-			image.pixel(x, y) = new_color;
+            image.pixel(x, y) = new_color;
 			data[y * width + x] = color_id;
 
             // do the floyd-steinberg error diffusion magic
@@ -67,5 +67,5 @@ void imageDither(RGBAImage &image, Palette &palette, std::vector<int> &data) {
 	}
 }
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
