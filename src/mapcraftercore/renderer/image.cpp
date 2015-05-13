@@ -567,28 +567,28 @@ void setRowPixel(png_byte *line, int bit_depth, int x, uint8_t index) {
 } // namespace
 
 bool RGBAImage::writeIndexedPNG(const std::string &filename, int palette_bits,
-	std::ofstream file(filename.c_str(), std::ios::binary);
-	if (!file) {
-		return false;
-	}
+                                bool dithered) const {
+    std::ofstream file(filename.c_str(), std::ios::binary);
+    if (!file) {
+        return false;
+    }
 
-	png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if (png == NULL)
-		return false;
+    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (png == NULL)
+        return false;
 
-	png_infop info = png_create_info_struct(png);
-	if (info == NULL) {
-		png_destroy_write_struct(&png, NULL);
-		return false;
-	}
+    png_infop info = png_create_info_struct(png);
+    if (info == NULL) {
+        png_destroy_write_struct(&png, NULL);
+        return false;
+    }
 
-	if (setjmp(png_jmpbuf(png))) {
-		png_destroy_write_struct(&png, &info);
-		return false;
-	}
+    if (setjmp(png_jmpbuf(png))) {
+        png_destroy_write_struct(&png, &info);
+        return false;
+    }
 
-
-	png_set_write_fn(png, (png_voidp) &file, pngWriteData, NULL);
+    int palette_size = 1 << palette_bits;
     png_set_write_fn(png, (png_voidp)&file, pngWriteData, NULL);
     png_set_IHDR(png, info, width, height, palette_bits, PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
@@ -599,11 +599,11 @@ bool RGBAImage::writeIndexedPNG(const std::string &filename, int palette_bits,
     octreeColorQuantize(*this, palette_size, colors, &octree);
     palette_size = colors.size();
     // std::cout << "Finished quantization. " << palette_size << " colors." << std::endl;
-	png_color* palette = (png_color*) png_malloc(png, palette_size * sizeof(png_color));
-	if (palette == NULL) {
-		png_destroy_write_struct(&png, &info);
-		return false;
-	}
+
+    png_color *palette = (png_color *)png_malloc(png, palette_size * sizeof(png_color));
+    if (palette == NULL) {
+        png_destroy_write_struct(&png, &info);
+        return false;
 	
 	png_byte* palette_alpha = (png_byte*) png_malloc(png, palette_size * sizeof(png_byte));
 	if (palette == NULL) {
@@ -611,17 +611,17 @@ bool RGBAImage::writeIndexedPNG(const std::string &filename, int palette_bits,
 		png_destroy_write_struct(&png, &info);
 		return false;
 	}
+    }
 
-	for (int i = 0; i < palette_size; i++) {
     for (int i = 0; i < palette_size; i++) {
         palette[i].red = rgba_red(colors[i]);
         palette[i].green = rgba_green(colors[i]);
 		palette_alpha[i] = rgba_alpha(colors[i]);
-	}
+        palette_alpha[i] = rgba_alpha(colors[i]);
+    }
 
-	png_set_PLTE(png, info, palette, palette_size);
 	png_set_tRNS(png, info, palette_alpha, palette_size, NULL);
-
+    png_set_tRNS(png, info, palette_alpha, palette_size, NULL);
 
     OctreePalette p(colors);
     // OctreePalette2 p(colors);
@@ -643,17 +643,17 @@ bool RGBAImage::writeIndexedPNG(const std::string &filename, int palette_bits,
             } else {
                 setRowPixel(rows[y], palette_bits, x, p.getNearestColor(pixel(x, y)));
             }
-	}
+        }
+    }
 
-	png_set_rows(png, info, rows);
+    png_set_rows(png, info, rows);
 
-	//if (mapcrafter::util::isBigEndian())
-	//	png_write_png(png, info, PNG_TRANSFORM_BGR | PNG_TRANSFORM_SWAP_ALPHA, NULL);
-	//else
-		png_write_png(png, info, PNG_TRANSFORM_IDENTITY, NULL);
+    // if (mapcrafter::util::isBigEndian())
+    //	png_write_png(png, info, PNG_TRANSFORM_BGR | PNG_TRANSFORM_SWAP_ALPHA, NULL);
+    // else
+    png_write_png(png, info, PNG_TRANSFORM_IDENTITY, NULL);
 
-	file.close();
-	for (int y = 0; y < height; y++)
+    file.close();
     for (int y = 0; y < height; y++)
         png_free(png, rows[y]);
     png_free(png, rows);
