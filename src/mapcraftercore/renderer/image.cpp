@@ -598,15 +598,15 @@ bool RGBAImage::writeIndexedPNG(const std::string& filename, int palette_bits, b
 	int palette_size = 1 << palette_bits;
 	png_set_write_fn(png, (png_voidp) &file, pngWriteData, NULL);
 	png_set_IHDR(png, info, width, height, palette_bits, PNG_COLOR_TYPE_PALETTE,
-			PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_set_IHDR(png, info, width, height, palette_bits, PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
-	//std::cout << "Doing quantization." << std::endl;
-	Octree* octree;
-	std::vector<RGBAPixel> colors;
+    // std::cout << "Doing quantization." << std::endl;
+    Octree *octree;
 	octreeColorQuantize(*this, palette_size, colors, &octree);
-	palette_size = colors.size();
-	//std::cout << "Finished quantization. " << palette_size << " colors." << std::endl;
-
+    octreeColorQuantize(*this, palette_size, colors, &octree);
+    palette_size = colors.size();
+    // std::cout << "Finished quantization. " << palette_size << " colors." << std::endl;
 	png_color* palette = (png_color*) png_malloc(png, palette_size * sizeof(png_color));
 	if (palette == NULL) {
 		png_destroy_write_struct(&png, &info);
@@ -621,9 +621,9 @@ bool RGBAImage::writeIndexedPNG(const std::string& filename, int palette_bits, b
 	}
 
 	for (int i = 0; i < palette_size; i++) {
-		palette[i].red = rgba_red(colors[i]);
-		palette[i].green = rgba_green(colors[i]);
-		palette[i].blue = rgba_blue(colors[i]);
+    for (int i = 0; i < palette_size; i++) {
+        palette[i].red = rgba_red(colors[i]);
+        palette[i].green = rgba_green(colors[i]);
 		palette_alpha[i] = rgba_alpha(colors[i]);
 	}
 
@@ -639,18 +639,18 @@ bool RGBAImage::writeIndexedPNG(const std::string& filename, int palette_bits, b
         RGBAImage copy = *this;
 	}
 
-	png_bytep* rows = (png_bytep*) png_malloc(png, height * sizeof(png_bytep));
-	for (int y = 0; y < height; y++) {
-		rows[y] = (png_byte*) png_malloc(png, width * sizeof(png_byte));
+
+    png_bytep *rows = (png_bytep *)png_malloc(png, height * sizeof(png_bytep));
+    for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++)
 			rows[y][x] = 0;
-		for (int x = 0; x < width; x++) {
+            rows[y][x] = 0;
 			if (dithered) {
 				setRowPixel(rows[y], palette_bits, x, data_dithered[y * width + x]);
 			} else {
             } else {
 			}
-		}
+            }
 	}
 
 	png_set_rows(png, info, rows);

@@ -131,12 +131,12 @@ public:
 	/**
 	 * Returns the color palette index of the color associated with this node (if any).
 	 */
-	int getColorID() const;
+    int getColorID() const;
 
 	/**
 	 * Sets the color palette index.
 	 */
-	void setColorID(int color_id);
+    void setColorID(int color_id);
 
 	/**
 	 * Adds this color to the subtree colors array of all parent nodes. Set the color
@@ -150,14 +150,14 @@ public:
 	 */
 	static Octree* findOrCreateNode(Octree* octree, RGBAPixel color);
 
-	/**
+    /**
 	 * Finds the index of the color (from the color palette) which is the nearest to
 	 * a specified color.
-	 *
+     *
 	 * This only works if the nodes have cached the available colors in their subtrees,
 	 * e.g. you have to create an octree, insert your palette colors, give them IDs,
 	 * and call the updateParents-method on the nodes of the palette colors.
-	 */
+     */
 	static int findNearestColor(const Octree* octree, RGBAPixel color);
 
 protected:
@@ -174,7 +174,7 @@ protected:
 	
 	
 	// index of the belonging color in the color palette (if any)
-	int color_id;
+    // TODO link with color palette?
 	// TODO link with color palette?
 	// array of palette colors (color index, color) in subtrees of this node
 	std::vector<std::pair<int, RGBAPixel>> subtree_colors;

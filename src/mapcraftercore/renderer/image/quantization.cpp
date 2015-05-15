@@ -126,13 +126,19 @@ void Octree::reduceToParent() {
 	}
 }
 
-void Octree::setColorID(int color_id) {
-	this->color_id = color_id;
+    for (int i = 0; i < 16; i++) {
+        if (parent->children[i] == this) {
+            parent->children[i] = nullptr;
+            break;
+        }
+    }
 }
 
+void Octree::setColorID(int color_id) { this->color_id = color_id; }
+
 int Octree::getColorID() const {
-	assert(color_id != -1);
-	return color_id;
+    assert(color_id != -1);
+    return color_id;
 }
 
 void Octree::updateParents() {
