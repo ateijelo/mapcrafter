@@ -144,7 +144,7 @@ class Octree {
 	 * Adds this color to the subtree colors array of all parent nodes. Set the color
 	 * index BEFORE you call this method.
 	 */
-	void updateParents();
+    void updateParents();
 
 	/**
 	 * Returns the leaf node which should represent a specific color. It traverses to
@@ -160,7 +160,7 @@ class Octree {
 	 * e.g. you have to create an octree, insert your palette colors, give them IDs,
 	 * and call the updateParents-method on the nodes of the palette colors.
      */
-	static int findNearestColor(const Octree* octree, RGBAPixel color);
+    static int findNearestColor(const Octree *octree, RGBAPixel color);
 
   protected:
 	// parent and children of this node
@@ -211,22 +211,22 @@ class SubPalette {
  * somtimes, but good enough.
  */
 class OctreePalette : public Palette {
-public:
+  public:
 	/**
 	 * Constructor. Takes an array of palette colors.
 	 */
-	OctreePalette(const std::vector<RGBAPixel>& colors);
+    OctreePalette(const std::vector<RGBAPixel> &colors);
 
-	virtual ~OctreePalette();
+    virtual ~OctreePalette();
 
-	virtual const std::vector<RGBAPixel>& getColors() const;
+    virtual const std::vector<RGBAPixel> &getColors() const;
     virtual int getNearestColor(const RGBAPixel &color);
 
-protected:
+  protected:
 	// available colors
-	std::vector<RGBAPixel> colors;
+    std::vector<RGBAPixel> colors;
 	// octree used to efficiently find nearest colors
-	Octree octree;
+    Octree octree;
 };
 
 /**

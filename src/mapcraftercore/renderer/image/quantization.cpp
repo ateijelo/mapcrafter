@@ -123,11 +123,11 @@ int Octree::getColorID() const {
 }
 
 void Octree::updateParents() {
-	Octree* node = parent;
-	while (node) {
-		node->subtree_colors.push_back(std::make_pair(color_id, getColor()));
-		node = node->getParent();
-	}
+    Octree *node = parent;
+    while (node) {
+        node->subtree_colors.push_back(std::make_pair(color_id, getColor()));
+        node = node->getParent();
+    }
 }
 
 namespace {
@@ -155,40 +155,40 @@ Octree* Octree::findOrCreateNode(Octree* octree, RGBAPixel color) {
 	return node;
 }
 
-int Octree::findNearestColor(const Octree* octree, RGBAPixel color) {
-	assert(octree != nullptr);
+    assert(octree != nullptr);
 
-	uint8_t red = rgba_red(color);
-	uint8_t green = rgba_green(color);
-	uint8_t blue = rgba_blue(color);
+    uint8_t red = rgba_red(color);
+    uint8_t green = rgba_green(color);
+    uint8_t blue = rgba_blue(color);
+    uint8_t alpha = rgba_alpha(color);
 
-
-	const Octree* node = octree;
+    const Octree *node = octree;
+    for (int i = 7; i >= 8 - OCTREE_COLOR_BITS; i--) {
         if (node->hasColor())
-		if (node->hasColor())
-			break;
+            break;
+        int index = (nth_bit(red, i) << 3) | (nth_bit(green, i) << 2) | nth_bit(blue, i) << 1 |
                     nth_bit(alpha, i);
-		if (node->hasChildren(index))
-			node = node->getChildren(index);
-		else
-			break;
-	}
+        if (node->hasChildren(index))
+            node = node->getChildren(index);
+        else
+            break;
+    }
 
-	if (node->hasColor())
-		return node->getColorID();
-	auto& colors = node->subtree_colors;
-	int min_distance = -1;
-	int best_color = -1;
-	for (auto it = colors.begin(); it != colors.end(); ++it) {
+    if (node->hasColor())
+        return node->getColorID();
+    auto &colors = node->subtree_colors;
+    int min_distance = -1;
+    int best_color = -1;
+    for (auto it = colors.begin(); it != colors.end(); ++it) {
         int distance = rgba_distance2(color, it->second);
-		if (best_color == -1 || distance < min_distance) {
-			min_distance = distance;
-			best_color = it->first;
-		}
-	}
+        if (best_color == -1 || distance < min_distance) {
+            min_distance = distance;
+            best_color = it->first;
+        }
+    }
 	// this shouldn't happen if all the colors are cached
 	assert(best_color != -1);
-	return best_color;
+    return best_color;
 }
 
 SubPalette::SubPalette(const std::vector<RGBAPixel> &palette_colors)
@@ -244,25 +244,25 @@ void SubPalette::initialize(const RGBAPixel &c) {
 
 OctreePalette::OctreePalette(const std::vector<RGBAPixel> &colors) : colors(colors) {
     // add each color to the octree, assign a palette index and update parents
-OctreePalette::OctreePalette(const std::vector<RGBAPixel>& colors)
-	: colors(colors) {
+    for (size_t i = 0; i < colors.size(); i++) {
+        RGBAPixel color = colors[i];
 	// add each color to the octree, assign a palette index and update parents
-	for (size_t i = 0; i < colors.size(); i++) {
-		RGBAPixel color = colors[i];
-		Octree* node = Octree::findOrCreateNode(&octree, color);
-		node->setColor(color);
-		node->setColorID(i);
-		node->updateParents();
-	}
+        node->setColor(color);
+        node->setColorID(i);
+        node->updateParents();
+    }
 }
 
-OctreePalette::~OctreePalette() {
+OctreePalette::~OctreePalette() {}
+
+const std::vector<RGBAPixel> &OctreePalette::getColors() const { return colors; }
+
+int OctreePalette::getNearestColor(const RGBAPixel &color) {
+    // now just automagically find the best color
+    return Octree::findNearestColor(&octree, color);
 }
 
-const std::vector<RGBAPixel>& OctreePalette::getColors() const {
-	return colors;
-}
-
+OctreePalette2::OctreePalette2(const std::vector<RGBAPixel> &colors) : colors(colors) {
 int OctreePalette::getNearestColor(const RGBAPixel& color) {
 	// now just automagically find the best color
 	return Octree::findNearestColor(&octree, color);
