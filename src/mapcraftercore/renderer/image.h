@@ -177,7 +177,7 @@ class RGBAImage : public Image<RGBAPixel> {
 
     bool readPNG(const std::string &filename);
     bool writePNG(const std::string &filename) const;
-	bool writeIndexedPNG(const std::string& filename, int palette_bits = 8, bool dithered = true) const;
+    bool writeIndexedPNG(const std::string &filename, int palette_bits = 8,
                          bool dithered = true) const;
 
 	bool writeJPEG(const std::string& filename, int quality,

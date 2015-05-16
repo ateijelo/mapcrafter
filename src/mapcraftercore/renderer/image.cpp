@@ -551,30 +551,30 @@ bool RGBAImage::writePNG(const std::string &filename) const {
 
 namespace {
 
-void setRowPixel(png_byte* line, int bit_depth, int x, uint8_t index) {
-	if (bit_depth == 8) {
-		line[x] = index;
-	} else if (bit_depth == 4) {
-		index &= 0xf;
-		if ((x % 2) == 0)
-			line[x/2] = (line[x/2] & 0x0f) | (index << 4);
-		else
-			line[x/2] = (line[x/2] & 0xf0) | index;
-	} else if (bit_depth == 2) {
-		index &= 0x3;
+void setRowPixel(png_byte *line, int bit_depth, int x, uint8_t index) {
+    if (bit_depth == 8) {
+        line[x] = index;
+    } else if (bit_depth == 4) {
+        index &= 0xf;
+        if ((x % 2) == 0)
+            line[x / 2] = (line[x / 2] & 0x0f) | (index << 4);
+        else
+            line[x / 2] = (line[x / 2] & 0xf0) | index;
+    } else if (bit_depth == 2) {
+        index &= 0x3;
 		int mod = 3 - (x % 4);
-		line[x/4] = (line[x/4] & ~(0x3 << mod*2)) | (index << mod*2);
-	} else if (bit_depth == 1) {
-		if (index)
-			line[x/8] |= (1 << (7 - (x % 8)));
-		else
-			line[x/8] &= ~(1 << (7 - (x % 8)));
-	}
+        line[x / 4] = (line[x / 4] & ~(0x3 << mod * 2)) | (index << mod * 2);
+    } else if (bit_depth == 1) {
+        if (index)
+            line[x / 8] |= (1 << (7 - (x % 8)));
+        else
+            line[x / 8] &= ~(1 << (7 - (x % 8)));
+    }
 }
 
-}
+} // namespace
 
-bool RGBAImage::writeIndexedPNG(const std::string& filename, int palette_bits, bool dithered) const {
+bool RGBAImage::writeIndexedPNG(const std::string &filename, int palette_bits,
 	std::ofstream file(filename.c_str(), std::ios::binary);
 	if (!file) {
 		return false;
@@ -595,9 +595,9 @@ bool RGBAImage::writeIndexedPNG(const std::string& filename, int palette_bits, b
 		return false;
 	}
 
-	int palette_size = 1 << palette_bits;
+
 	png_set_write_fn(png, (png_voidp) &file, pngWriteData, NULL);
-	png_set_IHDR(png, info, width, height, palette_bits, PNG_COLOR_TYPE_PALETTE,
+    png_set_write_fn(png, (png_voidp)&file, pngWriteData, NULL);
     png_set_IHDR(png, info, width, height, palette_bits, PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
@@ -633,23 +633,23 @@ bool RGBAImage::writeIndexedPNG(const std::string& filename, int palette_bits, b
 
     OctreePalette p(colors);
     // OctreePalette2 p(colors);
-	std::vector<int> data_dithered;
-	if (dithered) {
-		RGBAImage copy = *this;
-        RGBAImage copy = *this;
-	}
 
+    std::vector<int> data_dithered;
+    if (dithered) {
+        RGBAImage copy = *this;
+        imageDither(copy, p, data_dithered);
+    }
 
     png_bytep *rows = (png_bytep *)png_malloc(png, height * sizeof(png_bytep));
     for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++)
-			rows[y][x] = 0;
+        rows[y] = (png_byte *)png_malloc(png, width * sizeof(png_byte));
+        for (int x = 0; x < width; x++)
             rows[y][x] = 0;
-			if (dithered) {
-				setRowPixel(rows[y], palette_bits, x, data_dithered[y * width + x]);
-			} else {
+        for (int x = 0; x < width; x++) {
+            if (dithered) {
+                setRowPixel(rows[y], palette_bits, x, data_dithered[y * width + x]);
             } else {
-			}
+                setRowPixel(rows[y], palette_bits, x, p.getNearestColor(pixel(x, y)));
             }
 	}
 
