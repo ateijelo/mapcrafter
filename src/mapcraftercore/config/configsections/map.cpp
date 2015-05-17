@@ -141,7 +141,7 @@ void MapSection::dump(std::ostream &out) const {
     out << "  block_dir = " << block_dir << std::endl;
     out << "  texture_size = " << texture_size << std::endl;
     out << "  image_format = " << image_format << std::endl;
-	out << "  png_indexed = " << png_indexed << std::endl;
+    out << "  png_indexed = " << png_indexed << std::endl;
     out << "  jpeg_quality = " << jpeg_quality << std::endl;
     out << "  lighting_intensity = " << lighting_intensity << std::endl;
 	out << "  lighting_water_intensity = " << lighting_water_intensity << std::endl;
@@ -185,9 +185,7 @@ std::string MapSection::getImageFormatSuffix() const {
     return "jpg";
 }
 
-bool MapSection::isPNGIndexed() const {
-	return png_indexed.getValue();
-}
+bool MapSection::isPNGIndexed() const { return png_indexed.getValue(); }
 
 int MapSection::getJPEGQuality() const { return jpeg_quality.getValue(); }
 

@@ -108,7 +108,7 @@ class MapSection : public ConfigSection {
 
     ImageFormat getImageFormat() const;
 	std::string getImageFormatSuffix() const;
-	bool isPNGIndexed() const;
+    bool isPNGIndexed() const;
     int getJPEGQuality() const;
 
 	double getLightingIntensity() const;
