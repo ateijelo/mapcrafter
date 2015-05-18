@@ -347,7 +347,7 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     context.initializeTileRenderer();
 
     // update map parameters in web config
-	web_config.setMapMaxZoom(map, context.tile_set->getDepth());
+    int tile_w = context.tile_renderer->getTileWidth();
     int tile_h = context.tile_renderer->getTileHeight();
     web_config.setMapMaxZoom(map, context.tile_set->getDepth());
     web_config.setMapTileSize(map, std::make_tuple<>(tile_w, tile_h));
