@@ -233,7 +233,7 @@ bool MapSection::parseField(const std::string key, const std::string value,
                             ValidationList &validation) {
     if (key == "name") {
         name_long = value;
-	tile_sets.clear();
+    } else if (key == "world") {
         world.load(key, value, validation);
     } else if (key == "render_view") {
         if (render_view.load(key, value, validation)) {
