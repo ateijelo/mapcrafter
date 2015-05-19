@@ -176,8 +176,7 @@ class Octree {
     int color_id;
     // TODO link with color palette?
     // array of palette colors (color index, color) in subtrees of this node
-	// array of palette colors (color index, color) in subtrees of this node
-	std::vector<std::pair<int, RGBAPixel>> subtree_colors;
+    std::vector<std::pair<int, RGBAPixel>> subtree_colors;
 };
 
 /**
