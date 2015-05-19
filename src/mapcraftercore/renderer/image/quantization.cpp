@@ -186,8 +186,8 @@ int Octree::findNearestColor(const Octree *octree, RGBAPixel color) {
             best_color = it->first;
         }
     }
-	// this shouldn't happen if all the colors are cached
-	assert(best_color != -1);
+    // this shouldn't happen if all the colors are cached
+    assert(best_color != -1);
     return best_color;
 }
 
@@ -246,7 +246,7 @@ OctreePalette::OctreePalette(const std::vector<RGBAPixel> &colors) : colors(colo
     // add each color to the octree, assign a palette index and update parents
     for (size_t i = 0; i < colors.size(); i++) {
         RGBAPixel color = colors[i];
-	// add each color to the octree, assign a palette index and update parents
+        Octree *node = Octree::findOrCreateNode(&octree, color);
         node->setColor(color);
         node->setColorID(i);
         node->updateParents();

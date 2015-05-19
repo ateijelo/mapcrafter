@@ -49,24 +49,24 @@ const int OCTREE_COLOR_BITS = 5;
  */
 class Octree {
   public:
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
     Octree(Octree *parent = nullptr, int level = 0);
 
-	/**
-	 * Yeah, destructor.
-	 */
+    /**
+     * Yeah, destructor.
+     */
     ~Octree();
 
-	/**
-	 * Returns the parent of this node.
-	 */
+    /**
+     * Returns the parent of this node.
+     */
     Octree *getParent();
 
-	/**
-	 * Returns the (const) parent of this node.
-	 */
+    /**
+     * Returns the (const) parent of this node.
+     */
     const Octree *getParent() const;
 
     /**
@@ -79,39 +79,39 @@ class Octree {
      */
     bool isRoot() const;
 
-	/**
-	 * Returns whether this node is a leaf.
-	 */
+    /**
+     * Returns whether this node is a leaf.
+     */
     bool isLeaf() const;
 
-	/**
-	 * Returns whether this node has a specific children.
-	 */
+    /**
+     * Returns whether this node has a specific children.
+     */
     bool hasChildren(int index) const;
 
-	/**
-	 * Returns the count of children of this node.
-	 */
+    /**
+     * Returns the count of children of this node.
+     */
     int getChildrenCount() const;
 
-	/**
-	 * Returns the index'd children. Creates it if it doesn't exist.
-	 */
+    /**
+     * Returns the index'd children. Creates it if it doesn't exist.
+     */
     Octree *getChildren(int index);
 
-	/**
-	 * Returns the (const) index'd children. Returns nullptr if it doesn't exist.
-	 */
+    /**
+     * Returns the (const) index'd children. Returns nullptr if it doesn't exist.
+     */
     const Octree *getChildren(int index) const;
 
-	/**
-	 * Returns whether this node has a color (= reference > 0).
-	 */
+    /**
+     * Returns whether this node has a color (= reference > 0).
+     */
     bool hasColor() const;
 
-	/**
-	 * Returns the color of the node (as average of the red, green and blue values).
-	 */
+    /**
+     * Returns the color of the node (as average of the red, green and blue values).
+     */
     RGBAPixel getColor() const;
 
     /**
@@ -119,9 +119,9 @@ class Octree {
      */
     int getCount() const;
 
-	/**
-	 * Adds a color to this node.
-	 */
+    /**
+     * Adds a color to this node.
+     */
     void setColor(RGBAPixel color);
 
     /**
@@ -130,54 +130,54 @@ class Octree {
      */
     void reduceToParent();
 
-	/**
-	 * Returns the color palette index of the color associated with this node (if any).
-	 */
+    /**
+     * Returns the color palette index of the color associated with this node (if any).
+     */
     int getColorID() const;
 
-	/**
-	 * Sets the color palette index.
-	 */
+    /**
+     * Sets the color palette index.
+     */
     void setColorID(int color_id);
 
-	/**
-	 * Adds this color to the subtree colors array of all parent nodes. Set the color
-	 * index BEFORE you call this method.
-	 */
+    /**
+     * Adds this color to the subtree colors array of all parent nodes. Set the color
+     * index BEFORE you call this method.
+     */
     void updateParents();
 
-	/**
-	 * Returns the leaf node which should represent a specific color. It traverses to
-	 * the leaf node and creates all nodes on that path if they don't exist.
-	 */
+    /**
+     * Returns the leaf node which should represent a specific color. It traverses to
+     * the leaf node and creates all nodes on that path if they don't exist.
+     */
     static Octree *findOrCreateNode(Octree *octree, RGBAPixel color);
 
     /**
-	 * Finds the index of the color (from the color palette) which is the nearest to
-	 * a specified color.
+     * Finds the index of the color (from the color palette) which is the nearest to
+     * a specified color.
      *
-	 * This only works if the nodes have cached the available colors in their subtrees,
-	 * e.g. you have to create an octree, insert your palette colors, give them IDs,
-	 * and call the updateParents-method on the nodes of the palette colors.
+     * This only works if the nodes have cached the available colors in their subtrees,
+     * e.g. you have to create an octree, insert your palette colors, give them IDs,
+     * and call the updateParents-method on the nodes of the palette colors.
      */
     static int findNearestColor(const Octree *octree, RGBAPixel color);
 
   protected:
-	// parent and children of this node
+    // parent and children of this node
     Octree *parent;
     Octree *children[16];
     int level;
 
-	// how many colors this node represents
-	// only leaves or reduced nodes have a reference != 0
+    // how many colors this node represents
+    // only leaves or reduced nodes have a reference != 0
     int reference;
-	// sum of represented colors -> average is color of this node
+    // sum of represented colors -> average is color of this node
     int red, green, blue, alpha;
 
     // index of the belonging color in the color palette (if any)
-	// index of the belonging color in the color palette (if any)
+    int color_id;
     // TODO link with color palette?
-	// TODO link with color palette?
+    // array of palette colors (color index, color) in subtrees of this node
 	// array of palette colors (color index, color) in subtrees of this node
 	std::vector<std::pair<int, RGBAPixel>> subtree_colors;
 };
@@ -212,9 +212,9 @@ class SubPalette {
  */
 class OctreePalette : public Palette {
   public:
-	/**
-	 * Constructor. Takes an array of palette colors.
-	 */
+    /**
+     * Constructor. Takes an array of palette colors.
+     */
     OctreePalette(const std::vector<RGBAPixel> &colors);
 
     virtual ~OctreePalette();
@@ -223,9 +223,9 @@ class OctreePalette : public Palette {
     virtual int getNearestColor(const RGBAPixel &color);
 
   protected:
-	// available colors
+    // available colors
     std::vector<RGBAPixel> colors;
-	// octree used to efficiently find nearest colors
+    // octree used to efficiently find nearest colors
     Octree octree;
 };
 
@@ -264,8 +264,8 @@ protected:
  * colors in the supplied vector and also the used octree to quantize the colors in the
  * octree pointer pointer if you need it.
  */
-void octreeColorQuantize(const RGBAImage& image, size_t max_colors,
-		std::vector<RGBAPixel>& colors, Octree** octree = nullptr);
+void octreeColorQuantize(const RGBAImage &image, size_t max_colors, std::vector<RGBAPixel> &colors,
+                         Octree **octree = nullptr);
 
 } // namespace renderer
 } // namespace mapcrafter
