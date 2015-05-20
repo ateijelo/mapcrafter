@@ -199,9 +199,7 @@ TileSetID MapSection::getTileSet(int rotation) const {
     return TileSetID(getWorld(), getRenderView(), getTileWidth(), rotation);
 }
 
-const std::set<TileSetID>& MapSection::getTileSets() const {
-	return tile_sets;
-}
+const std::set<TileSetID> &MapSection::getTileSets() const { return tile_sets; }
 
 void MapSection::preParse(const INIConfigSection &section, ValidationList &validation) {
     name_short = getSectionName();
