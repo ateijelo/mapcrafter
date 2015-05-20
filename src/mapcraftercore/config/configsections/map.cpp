@@ -83,8 +83,7 @@ TileSetGroupID::TileSetGroupID()
 
 TileSetGroupID::TileSetGroupID(const std::string &world_name, renderer::RenderViewType render_view,
                                int tile_width)
-	: world_name(world_name), render_view(render_view), tile_width(tile_width) {
-}
+    : world_name(world_name), render_view(render_view), tile_width(tile_width) {}
 
 std::string TileSetGroupID::toString() const {
 	std::string repr = "";
