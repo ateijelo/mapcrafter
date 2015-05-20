@@ -179,7 +179,7 @@ std::ostream &operator<<(std::ostream &out, OverlayType overlay);
 /**
  * Creates the render mode for a map config section.
  */
-RenderMode* createRenderMode(const config::WorldSection& world_config,
+RenderMode *createRenderMode(const config::WorldSection &world_config,
 		const config::MapSection& map_config, int rotation);
 
 } /* namespace render */

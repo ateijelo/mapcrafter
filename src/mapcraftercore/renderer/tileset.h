@@ -76,13 +76,13 @@ class TilePos {
 	TilePos(int x = 0, int y = 0);
 
 	/**
-	 * Returns x tile coordinate.
+     * Returns x tile coordinate.
 	 */
     int getX() const;
 
-	/**
-	 * Returns the y tile coordinate.
-	 */
+    /**
+     * Returns the y tile coordinate.
+     */
     int getY() const;
 
 	// some operations with tile positions
@@ -100,7 +100,7 @@ private:
 	int x, y;
 };
 
-std::ostream& operator<<(std::ostream& stream, const TilePos& tile);
+std::ostream &operator<<(std::ostream &stream, const TilePos &tile);
 
 /**
  * This class represents the path to a tile in the quadtree.
@@ -148,11 +148,11 @@ class TilePath {
 	 */
     std::string toString() const;
 
-	/**
-	 * Constructs a path (with a specified zoom level) to a tile position.
-	 * Opposite of getTilePos-method.
-	 */
-	static TilePath byTilePos(const TilePos& tile, int depth);
+    /**
+     * Constructs a path (with a specified zoom level) to a tile position.
+     * Opposite of getTilePos-method.
+     */
+    static TilePath byTilePos(const TilePos &tile, int depth);
 
 private:
 	std::vector<int> path;

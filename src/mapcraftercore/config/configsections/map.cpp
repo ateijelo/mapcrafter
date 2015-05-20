@@ -81,8 +81,8 @@ namespace config {
 TileSetGroupID::TileSetGroupID()
     : render_view(renderer::RenderViewType::ISOMETRIC), tile_width(1) {}
 
-TileSetGroupID::TileSetGroupID(const std::string& world_name,
-		renderer::RenderViewType render_view, int tile_width)
+TileSetGroupID::TileSetGroupID(const std::string &world_name, renderer::RenderViewType render_view,
+                               int tile_width)
 	: world_name(world_name), render_view(render_view), tile_width(tile_width) {
 }
 
@@ -90,29 +90,26 @@ std::string TileSetGroupID::toString() const {
 	std::string repr = "";
 	repr += world_name + "_";
 	repr += util::str(render_view) + "_";
-	repr += "t" + util::str(tile_width);
+    repr += "t" + util::str(tile_width);
 	return repr;
 }
 
-bool TileSetGroupID::operator<(const TileSetGroupID& other) const {
-	return toString() < other.toString();
+bool TileSetGroupID::operator<(const TileSetGroupID &other) const {
+    return toString() < other.toString();
 }
 
-TileSetID::TileSetID()
-	: TileSetGroupID(), rotation(0) {
-}
+TileSetID::TileSetID() : TileSetGroupID(), rotation(0) {}
 
-TileSetID::TileSetID(const std::string& world_name,
-		renderer::RenderViewType render_view, int tile_width, int rotation)
-	: TileSetGroupID(world_name, render_view, tile_width), rotation(rotation) {
-}
+TileSetID::TileSetID(const std::string &world_name, renderer::RenderViewType render_view,
+                     int tile_width, int rotation)
+    : TileSetGroupID(world_name, render_view, tile_width), rotation(rotation) {}
 
 TileSetID::TileSetID(const TileSetGroupID& group, int rotation)
 	: TileSetGroupID(group.world_name, group.render_view, group.tile_width), rotation(rotation) {
 }
 
 std::string TileSetID::toString() const {
-	return TileSetGroupID::toString() + "_r" + util::str(rotation);
+    return TileSetGroupID::toString() + "_r" + util::str(rotation);
 }
 
 bool TileSetID::operator<(const TileSetID &other) const { return toString() < other.toString(); }
@@ -211,11 +208,11 @@ bool MapSection::renderBiomes() const { return render_biomes.getValue(); }
 bool MapSection::useImageModificationTimes() const { return use_image_mtimes.getValue(); }
 
 TileSetGroupID MapSection::getTileSetGroup() const {
-	return TileSetGroupID(getWorld(), getRenderView(), getTileWidth());
+    return TileSetGroupID(getWorld(), getRenderView(), getTileWidth());
 }
 
 TileSetID MapSection::getTileSet(int rotation) const {
-	return TileSetID(getWorld(), getRenderView(), getTileWidth(), rotation);
+    return TileSetID(getWorld(), getRenderView(), getTileWidth(), rotation);
 }
 
 const std::set<TileSetID>& MapSection::getTileSets() const {

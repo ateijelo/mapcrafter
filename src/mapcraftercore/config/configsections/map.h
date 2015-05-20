@@ -43,13 +43,13 @@ namespace config {
  * independent of the rotation of the used world.
  */
 class TileSetGroupID {
-public:
-	TileSetGroupID();
-	TileSetGroupID(const std::string& world_name, renderer::RenderViewType render_view,
-			int tile_width);
+  public:
+    TileSetGroupID();
+    TileSetGroupID(const std::string &world_name, renderer::RenderViewType render_view,
+                   int tile_width);
 
-	std::string toString() const;
-	bool operator<(const TileSetGroupID& other) const;
+    std::string toString() const;
+    bool operator<(const TileSetGroupID &other) const;
 
 	std::string world_name;
     renderer::RenderViewType render_view;
@@ -64,16 +64,16 @@ public:
  * some attributes of the tile sets need to be stored across different rotations.
  */
 class TileSetID : public TileSetGroupID {
-public:
-	TileSetID();
-	TileSetID(const std::string& world_name, renderer::RenderViewType render_view,
+  public:
+    TileSetID();
+    TileSetID(const std::string &world_name, renderer::RenderViewType render_view, int tile_width,
 			int tile_width, int rotation);
 	TileSetID(const TileSetGroupID& group, int rotation);
 
 	std::string toString() const;
-	bool operator<(const TileSetID& other) const;
+    bool operator<(const TileSetID &other) const;
 
-	int rotation;
+    int rotation;
 };
 
 enum class ImageFormat { PNG, JPEG };
@@ -116,9 +116,9 @@ class MapSection : public ConfigSection {
     bool renderBiomes() const;
     bool useImageModificationTimes() const;
 
-	TileSetGroupID getTileSetGroup() const;
-	TileSetID getTileSet(int rotation) const;
-	const std::set<TileSetID>& getTileSets() const;
+    TileSetGroupID getTileSetGroup() const;
+    TileSetID getTileSet(int rotation) const;
+    const std::set<TileSetID> &getTileSets() const;
 
   protected:
     virtual void preParse(const INIConfigSection &section, ValidationList &validation);
@@ -152,7 +152,7 @@ class MapSection : public ConfigSection {
 	Field<bool> cave_high_contrast;
 	Field<bool> render_biomes, use_image_mtimes;
 
-	std::set<TileSetID> tile_sets;
+    std::set<TileSetID> tile_sets;
 };
 
 } /* namespace config */

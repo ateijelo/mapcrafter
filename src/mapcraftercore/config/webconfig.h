@@ -49,7 +49,7 @@ class WebConfig {
 	int getTileSetsMaxZoom(const TileSetGroupID& tile_set) const;
 	void setTileSetsMaxZoom(const TileSetGroupID& tile_set, int max_zoom);
 
-	renderer::TilePos getTileSetTileOffset(const TileSetID& tile_set) const;
+    renderer::TilePos getTileSetTileOffset(const TileSetID &tile_set) const;
 	void setTileSetTileOffset(const TileSetID& tile_set,
 			const renderer::TilePos& tile_offset);
 
