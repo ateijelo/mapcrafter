@@ -50,8 +50,7 @@ class WebConfig {
     void setTileSetsMaxZoom(const TileSetGroupID &tile_set, int max_zoom);
 
     renderer::TilePos getTileSetTileOffset(const TileSetID &tile_set) const;
-	void setTileSetTileOffset(const TileSetID& tile_set,
-			const renderer::TilePos& tile_offset);
+    void setTileSetTileOffset(const TileSetID &tile_set, const renderer::TilePos &tile_offset);
 
     std::tuple<int, int> getMapTileSize(const std::string &map) const;
     void setMapTileSize(const std::string &map, std::tuple<int, int> tile_size);
