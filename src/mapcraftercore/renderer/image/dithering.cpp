@@ -36,26 +36,26 @@ void imageDither(RGBAImage& image, Palette& palette, std::vector<int>& data) {
 	for (int y = 0; y < image.getHeight(); y++) {
 		for (int x = 0; x < image.getWidth(); x++) {
 			RGBAPixel old_color = image.pixel(x, y);
-			// find nearest palette color and use it
+            // find nearest palette color and use it
 			int color_id = palette.getNearestColor(old_color);
 			RGBAPixel new_color = palette.getColors()[color_id];
 			image.pixel(x, y) = new_color;
 			data[y * width + x] = color_id;
 
-			// do the floyd-steinberg error diffusion magic
+            // do the floyd-steinberg error diffusion magic
 			int error_r = rgba_red(old_color) - rgba_red(new_color);
 			int error_g = rgba_green(old_color) - rgba_green(new_color);
 			int error_b = rgba_blue(old_color) - rgba_blue(new_color);
 			int error_a = rgba_alpha(old_color) - rgba_alpha(new_color);
 
-			image.setPixel(x+1, y, rgba_add_clamp(image.getPixel(x+1, y),
-						error_r * 7/16,
-						error_g * 7/16,
+            image.setPixel(x + 1, y,
+                           rgba_add_clamp(image.getPixel(x + 1, y), error_r * 7 / 16,
+                                          error_g * 7 / 16, error_b * 7 / 16, error_a * 7 / 16));
 						error_b * 7/16,
 						error_a * 7/16));
-			image.setPixel(x-1, y+1, rgba_add_clamp(image.getPixel(x-1, y+1),
-						error_r * 3/16,
-						error_g * 3/16,
+                                          error_g * 3 / 16, error_b * 3 / 16, error_a * 3 / 16));
+            image.setPixel(x, y + 1,
+                           rgba_add_clamp(image.getPixel(x, y + 1), error_r * 5 / 16,
 						error_b * 3/16,
 						error_a * 3/16));
 			image.setPixel(x, y+1, rgba_add_clamp(image.getPixel(x, y+1),
