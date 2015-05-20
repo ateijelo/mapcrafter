@@ -79,8 +79,7 @@ namespace mapcrafter {
 namespace config {
 
 TileSetGroupID::TileSetGroupID()
-	: render_view(renderer::RenderViewType::ISOMETRIC), tile_width(1) {
-}
+    : render_view(renderer::RenderViewType::ISOMETRIC), tile_width(1) {}
 
 TileSetGroupID::TileSetGroupID(const std::string& world_name,
 		renderer::RenderViewType render_view, int tile_width)
@@ -116,9 +115,7 @@ std::string TileSetID::toString() const {
 	return TileSetGroupID::toString() + "_r" + util::str(rotation);
 }
 
-bool TileSetID::operator<(const TileSetID& other) const {
-	return toString() < other.toString();
-}
+bool TileSetID::operator<(const TileSetID &other) const { return toString() < other.toString(); }
 
 std::ostream &operator<<(std::ostream &out, ImageFormat image_format) {
     if (image_format == ImageFormat::PNG)
