@@ -83,10 +83,10 @@ void MultiplexingRenderMode::addRenderMode(RenderMode* render_mode) {
 	render_modes.push_back(render_mode);
 }
 
-void MultiplexingRenderMode::initialize(const RenderView* render_view, 
-		BlockImages* images, mc::WorldCache* world, mc::Chunk** current_chunk) {
+void MultiplexingRenderMode::initialize(const RenderView *render_view, BlockImages *images,
+                                        mc::WorldCache *world, mc::Chunk **current_chunk) {
 	for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
-		(*it)->initialize(render_view, images, world, current_chunk);
+        (*it)->initialize(render_view, images, world, current_chunk);
 }
 
 bool MultiplexingRenderMode::isHidden(const mc::BlockPos& pos, uint16_t id,

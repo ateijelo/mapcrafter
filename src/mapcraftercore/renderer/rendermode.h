@@ -56,30 +56,30 @@ class RenderMode {
   public:
 	virtual ~RenderMode() {}
 
-	/**
-	 * Sets stuff (block images and world cache) that is required for the render mode
-	 * to operate. There is a pointer to the current chunk that is used by the tile
-	 * renderer, that way you (mostly) don't need to access the world cache.
-	 *
-	 * The render view is required because some render modes need render view specific
-	 * methods to modify the block images.
-	 */
-	virtual void initialize(const RenderView* render_view, BlockImages* images,
-			mc::WorldCache* world, mc::Chunk** current_chunk) = 0;
+    /**
+     * Sets stuff (block images and world cache) that is required for the render mode
+     * to operate. There is a pointer to the current chunk that is used by the tile
+     * renderer, that way you (mostly) don't need to access the world cache.
+     *
+     * The render view is required because some render modes need render view specific
+     * methods to modify the block images.
+     */
+    virtual void initialize(const RenderView *render_view, BlockImages *images,
+                            mc::WorldCache *world, mc::Chunk **current_chunk) = 0;
 
-	/**
-	 * This method is called by the tile renderer to check if a block should be hidden.
-	 */
-	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data) = 0;
+    /**
+     * This method is called by the tile renderer to check if a block should be hidden.
+     */
+    virtual bool isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data) = 0;
 
 	virtual bool isHidden(const mc::BlockPos& pos, const BlockImage& block_image) { return false; }
 
-	/**
-	 * This method is called by the tile renderer so you can modify block images that
-	 * are about to be rendered.
-	 */
-	virtual void draw(RGBAImage& image, const mc::BlockPos& pos, uint16_t id,
-			uint16_t data) = 0;
+    /**
+     * This method is called by the tile renderer so you can modify block images that
+     * are about to be rendered.
+     */
+    virtual void draw(RGBAImage &image, const mc::BlockPos &pos, uint16_t id, uint16_t data) = 0;
+
     virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
                       uint16_t id) {}
 };
@@ -90,25 +90,25 @@ class RenderMode {
  * account).
  */
 class BaseRenderMode : public RenderMode {
-public:
-	BaseRenderMode();
-	virtual ~BaseRenderMode();
+  public:
+    BaseRenderMode();
+    virtual ~BaseRenderMode();
 
-	/**
-	 * Stores the supplied stuff from the tile renderer and creates the render mode
-	 * renderer with the render view.
-	 */
-	virtual void initialize(const RenderView* render_view, BlockImages* images,
-			mc::WorldCache* world, mc::Chunk** current_chunk);
+    /**
+     * Stores the supplied stuff from the tile renderer and creates the render mode
+     * renderer with the render view.
+     */
+    virtual void initialize(const RenderView *render_view, BlockImages *images,
+                            mc::WorldCache *world, mc::Chunk **current_chunk);
 
-	/**
-	 * Dummy implementation of interface method. Returns false as default.
-	 */
+    /**
+     * Dummy implementation of interface method. Returns false as default.
+     */
 	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data);
 
-	/**
-	 * Dummy implementation of interface method.
-	 */
+    /**
+     * Dummy implementation of interface method.
+     */
     virtual void draw(RGBAImage &image, const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
 protected:
@@ -127,29 +127,29 @@ class MultiplexingRenderMode : public RenderMode {
 public:
 	virtual ~MultiplexingRenderMode();
 
-	/**
-	 * Adds a render mode. The supplied render mode is destroyed when this multiplexing
-	 * render mode is destroyed.
-	 */
+    /**
+     * Adds a render mode. The supplied render mode is destroyed when this multiplexing
+     * render mode is destroyed.
+     */
 	void addRenderMode(RenderMode* render_mode);
 
-	/**
-	 * Passes the supplied render data to the render modes.
-	 */
-	virtual void initialize(const RenderView* render_view, BlockImages* images,
-			mc::WorldCache* world, mc::Chunk** current_chunk);
+    /**
+     * Passes the supplied render data to the render modes.
+     */
+    virtual void initialize(const RenderView *render_view, BlockImages *images,
+                            mc::WorldCache *world, mc::Chunk **current_chunk);
 
-	/**
-	 * Calls this method of each render mode and returns true if one render mode returns
-	 * true (= false is default).
-	 */
+    /**
+     * Calls this method of each render mode and returns true if one render mode returns
+     * true (= false is default).
+     */
 	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data);
 
 	virtual bool isHidden(const mc::BlockPos& pos, const BlockImage& block_image);
 
-	/**
-	 * Calls this method of each render mode.
-	 */
+    /**
+     * Calls this method of each render mode.
+     */
 	virtual void draw(RGBAImage& image, const mc::BlockPos& pos, uint16_t id, uint16_t data);
 
     virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
