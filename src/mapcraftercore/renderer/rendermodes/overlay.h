@@ -17,7 +17,6 @@
  * along with Mapcrafter.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef RENDERMODES_OVERLAY_H_
 #define RENDERMODES_OVERLAY_H_
 
@@ -59,8 +58,7 @@ class OverlayRenderMode : public BaseRenderMode {
     OverlayMode overlay_mode;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* RENDERMODES_OVERLAY_H_ */
-

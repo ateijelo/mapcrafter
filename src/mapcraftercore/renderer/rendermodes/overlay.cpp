@@ -19,6 +19,7 @@
 
 #include "overlay.h"
 
+#include "../../mc/pos.h"
 #include "../blockimages.h"
 #include "../image.h"
 
@@ -57,6 +58,17 @@ void OverlayRenderMode::draw(RGBAImage &image, const BlockImage &block_image,
             color_left = getBlockColor(pos + mc::DIR_WEST, block_images->getBlockImage(left.id));
             color_right = getBlockColor(pos + mc::DIR_SOUTH, block_images->getBlockImage(right.id));
 
-}
+            if (rgba_alpha(color_top) != 0)
+                blockImageTintHighContrast(image, block_image.uv_image, FACE_UP_INDEX, color_top);
+            if (rgba_alpha(color_left) != 0)
+                blockImageTintHighContrast(image, block_image.uv_image, FACE_LEFT_INDEX,
+                                           color_left);
+            if (rgba_alpha(color_right) != 0)
+                blockImageTintHighContrast(image, block_image.uv_image, FACE_RIGHT_INDEX,
+                                           color_right);
+        }
+    }
 }
 
+} // namespace renderer
+} // namespace mapcrafter
