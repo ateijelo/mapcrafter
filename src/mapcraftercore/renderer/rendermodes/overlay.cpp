@@ -21,15 +21,13 @@
 
 #include "../blockimages.h"
 #include "../image.h"
-#include "../../mc/pos.h"
 
 namespace mapcrafter {
 namespace renderer {
 
 OverlayRenderMode::OverlayRenderMode(OverlayMode overlay_mode) : overlay_mode(overlay_mode) {}
 
-OverlayRenderMode::~OverlayRenderMode() {
-}
+OverlayRenderMode::~OverlayRenderMode() {}
 
 void OverlayRenderMode::draw(RGBAImage &image, const BlockImage &block_image,
                              const mc::BlockPos &pos, uint16_t id) {

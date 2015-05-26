@@ -20,7 +20,6 @@
 #ifndef RENDERMODES_HEIGHTOVERLAY_H_
 #define RENDERMODES_HEIGHTOVERLAY_H_
 
-#include "overlay.h"
 #include "../rendermode.h"
 #include "overlay.h"
 

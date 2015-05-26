@@ -43,14 +43,14 @@ enum class OverlayMode {
  * if there should be no color.
  */
 class OverlayRenderMode : public BaseRenderMode {
-public:
+  public:
     OverlayRenderMode(OverlayMode overlay_mode);
-	virtual ~OverlayRenderMode();
+    virtual ~OverlayRenderMode();
 
     virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
                       uint16_t id);
 
-protected:
+  protected:
     virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, const BlockImage &block_image) {
         return 0;
     }
