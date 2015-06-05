@@ -131,25 +131,25 @@ void MultiplexingRenderMode::draw(RGBAImage& image, const BlockImage& block_imag
     case RenderModeType::CAVELIGHT:
         return out << "cavelight";
     default:
-std::ostream& operator<<(std::ostream& out, OverlayType overlay) {
-	switch (overlay) {
-	case OverlayType::SLIME: return out << "slime";
+        return out << "unknown";
+    }
+}
 	case OverlayType::SPAWNDAY: return out << "spawnday";
 	case OverlayType::SPAWNNIGHT: return out << "spawnnight";
-	default: return out << "unknown";
-	}
-}
-
+    switch (overlay) {
+    case OverlayType::SLIME:
+        return out << "slime";
+    case OverlayType::SPAWNDAY:
 RenderMode* createRenderMode(const config::WorldSection& world_config,
 		const config::MapSection& map_config, int rotation) {
         return out << "spawnnight";
-	OverlayType overlay = map_config.getOverlay();
-	MultiplexingRenderMode* render_mode = new MultiplexingRenderMode();
-	
-	// create render mode
-	if (type == RenderModeType::PLAIN) {
-		// nothing
-	} else if (type == RenderModeType::CAVE || type == RenderModeType::CAVELIGHT) {
+    default:
+        return out << "unknown";
+    }
+}
+
+RenderMode *createRenderMode(const config::WorldSection &world_config,
+                             const config::MapSection &map_config, int rotation) {
 		// hide some walls of caves which would cover the view into the caves
     OverlayType overlay = map_config.getOverlay();
 			render_mode->addRenderMode(new CaveRenderMode({mc::DIR_SOUTH, mc::DIR_WEST, mc::DIR_TOP}));
@@ -161,39 +161,39 @@ RenderMode* createRenderMode(const config::WorldSection& world_config,
 						map_config.getLightingWaterIntensity(), true));
 		render_mode->addRenderMode(new HeightOverlay());
 	}
-	else if (type == RenderModeType::DAYLIGHT) {
-		render_mode->addRenderMode(new LightingRenderMode(true,
+                new CaveRenderMode({mc::DIR_SOUTH, mc::DIR_WEST, mc::DIR_TOP}));
+        else
 					map_config.getLightingIntensity(), map_config.getLightingWaterIntensity(),
-					world_config.getDimension() == mc::Dimension::END));
-	} else if (type == RenderModeType::NIGHTLIGHT) {
-		render_mode->addRenderMode(new LightingRenderMode(false,
+        // if we want some shadows, then simulate the sun light because it's dark in caves
+        if (type == RenderModeType::CAVELIGHT)
+            render_mode->addRenderMode(
 					map_config.getLightingIntensity(), map_config.getLightingWaterIntensity(),
-					world_config.getDimension() == mc::Dimension::END));
-	} else {
-		// this shouldn't happen
+                                       map_config.getLightingWaterIntensity(), true));
+        render_mode->addRenderMode(new HeightOverlay());
+    } else if (type == RenderModeType::DAYLIGHT) {
 		delete render_mode;
-		assert(false);
-		return nullptr;
-	}
-	
-	// create overlay
-	if (overlay == OverlayType::NONE) {
-		// nothing
-	} else if (overlay == OverlayType::SLIME) {
+            true, map_config.getLightingIntensity(), map_config.getLightingWaterIntensity(),
+            world_config.getDimension() == mc::Dimension::END));
+    } else if (type == RenderModeType::NIGHTLIGHT) {
+        render_mode->addRenderMode(new LightingRenderMode(
+            false, map_config.getLightingIntensity(), map_config.getLightingWaterIntensity(),
+            world_config.getDimension() == mc::Dimension::END));
+    } else {
+        // this shouldn't happen
 		mc::World world(world_config.getInputDir().string(), world_config.getDimension());
 		render_mode->addRenderMode(new SlimeOverlay(world.getWorldDir(), rotation));
 	} else if (overlay == OverlayType::SPAWNDAY) {
 		render_mode->addRenderMode(new SpawnOverlay(true));
 	} else if (overlay == OverlayType::SPAWNNIGHT) {
 		render_mode->addRenderMode(new SpawnOverlay(false));
-	} else {
-		// this shouldn't happen
+    if (overlay == OverlayType::NONE) {
+        // nothing
 		delete render_mode;
-		assert(false);
-		return nullptr;
-	}
-
-	return render_mode;
+        mc::World world(world_config.getInputDir().string(), world_config.getDimension());
+        render_mode->addRenderMode(new SlimeOverlay(world.getWorldDir(), rotation));
+    } else if (overlay == OverlayType::SPAWNDAY) {
+        render_mode->addRenderMode(new SpawnOverlay(true));
+    } else if (overlay == OverlayType::SPAWNNIGHT) {
 }
 
 } /* namespace render */

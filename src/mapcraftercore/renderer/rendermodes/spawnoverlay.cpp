@@ -28,7 +28,7 @@ SpawnOverlay::SpawnOverlay(bool day)
 	: OverlayRenderMode(OverlayMode::PER_FACE), day(day) {
 }
 
-SpawnOverlay::~SpawnOverlay() {
+RGBAPixel SpawnOverlay::getBlockColor(const mc::BlockPos &pos, const BlockImage &block_image) {
 }
 
 RGBAPixel SpawnOverlay::getBlockColor(const mc::BlockPos& pos, uint16_t id, uint16_t data) {
@@ -49,3 +49,5 @@ RGBAPixel SpawnOverlay::getBlockColor(const mc::BlockPos& pos, const BlockImage&
 }
 }
 
+} // namespace renderer
+} // namespace mapcrafter

@@ -98,7 +98,7 @@ class MapSection : public ConfigSection {
 
     renderer::RenderViewType getRenderView() const;
     renderer::RenderModeType getRenderMode() const;
-	renderer::OverlayType getOverlay() const;
+    renderer::OverlayType getOverlay() const;
 	std::set<int> getRotations() const;
 	fs::path getBlockDir() const;
     int getTextureSize() const;
@@ -136,7 +136,7 @@ class MapSection : public ConfigSection {
     Field<renderer::RenderModeType> render_mode;
     Field<renderer::OverlayType> overlay;
     Field<std::string> rotations;
-	Field<renderer::OverlayType> overlay;
+    std::set<int> rotations_set;
 
     Field<fs::path> block_dir;
 

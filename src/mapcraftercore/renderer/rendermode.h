@@ -167,14 +167,14 @@ protected:
 enum class RenderModeType { PLAIN, DAYLIGHT, NIGHTLIGHT, CAVE, CAVELIGHT };
 
 enum class OverlayType {
-	NONE,
-	SLIME,
+    NONE,
+    SLIME,
 	SPAWNDAY,
 	SPAWNNIGHT,
 };
 
 std::ostream &operator<<(std::ostream &out, RenderModeType render_mode);
-std::ostream& operator<<(std::ostream& out, OverlayType overlay);
+std::ostream &operator<<(std::ostream &out, OverlayType overlay);
 
 /**
  * Creates the render mode for a map config section.

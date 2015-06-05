@@ -17,7 +17,6 @@
  * along with Mapcrafter.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef RENDERMODES_SPAWNOVERLAY_H_
 #define RENDERMODES_SPAWNOVERLAY_H_
 
@@ -27,19 +26,19 @@ namespace mapcrafter {
 namespace renderer {
 
 class SpawnOverlay : public OverlayRenderMode {
-public:
+  public:
 	SpawnOverlay(bool day);
-	virtual ~SpawnOverlay();
+    virtual ~SpawnOverlay();
 
-protected:
-	virtual RGBAPixel getBlockColor(const mc::BlockPos& pos, uint16_t id, uint16_t data);
+  protected:
+    virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
 	virtual RGBAPixel getBlockColor(const mc::BlockPos& pos, const BlockImage& block_image);
 
 	bool day;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* RENDERMODES_SPAWNOVERLAY_H_ */

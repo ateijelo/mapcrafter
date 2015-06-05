@@ -62,12 +62,12 @@ template <> renderer::RenderViewType as<renderer::RenderViewType>(const std::str
 template <> renderer::OverlayType as<renderer::OverlayType>(const std::string &from) {
     if (from == "none")
         return renderer::OverlayType::NONE;
-template <>
-renderer::OverlayType as<renderer::OverlayType>(const std::string& from) {
-	if (from == "none")
-		return renderer::OverlayType::NONE;
-	else if (from == "slime")
-		return renderer::OverlayType::SLIME;
+    else if (from == "slime")
+        return renderer::OverlayType::SLIME;
+    else if (from == "spawnday")
+        return renderer::OverlayType::SPAWNDAY;
+    else if (from == "spawnnight")
+        return renderer::OverlayType::SPAWNNIGHT;
 	else if (from == "spawnday")
 		return renderer::OverlayType::SPAWNDAY;
 	else if (from == "spawnnight")
@@ -150,7 +150,7 @@ void MapSection::dump(std::ostream &out) const {
     out << "  world = " << world << std::endl;
 	out << "  render_view" << render_view << std::endl;
 	out << "  render_mode = " << render_mode << std::endl;
-	out << "  overlay = " << overlay << std::endl;
+    out << "  overlay = " << overlay << std::endl;
     out << "  rotations = " << rotations << std::endl;
 	out << "  block_dir = " << block_dir << std::endl;
     out << "  texture_size = " << texture_size << std::endl;
@@ -179,9 +179,7 @@ renderer::RenderModeType MapSection::getRenderMode() const {
 	return render_mode.getValue();
 }
 
-renderer::OverlayType MapSection::getOverlay() const {
-	return overlay.getValue();
-}
+renderer::OverlayType MapSection::getOverlay() const { return overlay.getValue(); }
 
 std::set<int> MapSection::getRotations() const { return rotations_set; }
 
@@ -278,8 +276,8 @@ void MapSection::preParse(const INIConfigSection &section, ValidationList &valid
 		if (key == "rendermode")
 			validation.warning("Using the option 'rendermode' is deprecated. "
 					"It's called 'render_mode' now.");
-	} else if (key == "overlay") {
-		overlay.load(key, value, validation);
+    lighting_intensity.setDefault(1.0);
+    lighting_water_intensity.setDefault(0.85);
 	} else if (key == "rotations") {
 		rotations.load(key, value ,validation);
 	} else if (key == "block_dir") {

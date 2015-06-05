@@ -72,7 +72,7 @@ inline RGBAPixel rgba_multiply_scalar(RGBAPixel value, uint32_t factor) {
 }
 
 RGBAPixel rgba_add_clamp(RGBAPixel value, int r, int g, int b, int a = 0);
-RGBAPixel rgba_add_clamp(RGBAPixel value, const std::tuple<int, int, int>& values);
+RGBAPixel rgba_add_clamp(RGBAPixel value, const std::tuple<int, int, int> &values);
 RGBAPixel rgba_multiply(RGBAPixel value, double r, double g, double b, double a = 1);
 int rgba_distance2(RGBAPixel value1, RGBAPixel value2);
 

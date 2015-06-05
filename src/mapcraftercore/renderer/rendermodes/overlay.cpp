@@ -26,9 +26,7 @@
 namespace mapcrafter {
 namespace renderer {
 
-OverlayRenderMode::OverlayRenderMode(OverlayMode overlay_mode)
-	: overlay_mode(overlay_mode) {
-}
+OverlayRenderMode::OverlayRenderMode(OverlayMode overlay_mode) : overlay_mode(overlay_mode) {}
 
 OverlayRenderMode::~OverlayRenderMode() {
 }

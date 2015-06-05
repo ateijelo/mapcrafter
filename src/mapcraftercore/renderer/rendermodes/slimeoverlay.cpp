@@ -43,8 +43,7 @@ SlimeOverlay::SlimeOverlay(fs::path world_dir, int rotation)
 	}
 }
 
-SlimeOverlay::~SlimeOverlay() {
-}
+SlimeOverlay::~SlimeOverlay() {}
 
 bool SlimeOverlay::isSlimeChunk(const mc::ChunkPos& chunk, long long world_seed) {
 	int32_t chunkx = chunk.x, chunkz = chunk.z;
@@ -59,9 +58,9 @@ bool SlimeOverlay::isSlimeChunk(const mc::ChunkPos& chunk, long long world_seed)
 	return random.nextInt(10) == 0;
 }
 
-RGBAPixel SlimeOverlay::getBlockColor(const mc::BlockPos& pos, uint16_t id, uint16_t data) {
+RGBAPixel SlimeOverlay::getBlockColor(const mc::BlockPos &pos, uint16_t id, uint16_t data) {
 	// get original (not rotated) chunk position
-	mc::ChunkPos chunk(pos);
+    mc::ChunkPos chunk(pos);
 	if (rotation) {
 		// -rotation = -rotation + 4 (mod 4), rotate accepts only positive numbers
 		chunk.rotate(-rotation + 4);
@@ -76,6 +75,9 @@ RGBAPixel SlimeOverlay::getBlockColor(const mc::BlockPos& pos, const BlockImage&
 	return getBlockColor(pos, 0, 0);
 }
 
-}
+RGBAPixel SlimeOverlay::getBlockColor(const mc::BlockPos &pos, const BlockImage &block_image) {
+    return getBlockColor(pos, 0, 0);
 }
 
+} // namespace renderer
+} // namespace mapcrafter
