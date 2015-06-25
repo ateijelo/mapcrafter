@@ -390,9 +390,7 @@ void WebConfig::parseConfigJSON(const picojson::object &object) {
                    << ", " << map_last_rendered[map_name][1] << ", "
                    << map_last_rendered[map_name][2] << ", " << map_last_rendered[map_name][3]
                    << "]";
-			<< map_last_rendered[map_name][2] << ", "
-			<< map_last_rendered[map_name][3] << "]";
-	}
+    }
 }
 
 /*
