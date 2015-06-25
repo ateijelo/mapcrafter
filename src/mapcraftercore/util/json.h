@@ -35,8 +35,7 @@ class JSONError : public std::runtime_error {
 template <typename T> T json_get(const picojson::object &object, const std::string &key) {
     if (object.count(key) && object.at(key).is<T>())
         return object.at(key).get<T>();
-		return object.at(key).get<T>();
-	throw JSONError("Unable to find/convert '" + key + "' of json object!");
+    throw JSONError("Unable to find/convert '" + key + "' of json object!");
 }
 
 template <>
