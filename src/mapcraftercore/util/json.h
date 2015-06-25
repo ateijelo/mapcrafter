@@ -32,9 +32,9 @@ class JSONError : public std::runtime_error {
     JSONError(const std::string &message = "") : std::runtime_error(message) {}
 };
 
-template <typename T>
-T json_get(const picojson::object& object, const std::string& key) {
-	if (object.count(key) && object.at(key).is<T>())
+template <typename T> T json_get(const picojson::object &object, const std::string &key) {
+    if (object.count(key) && object.at(key).is<T>())
+        return object.at(key).get<T>();
 		return object.at(key).get<T>();
 	throw JSONError("Unable to find/convert '" + key + "' of json object!");
 }
@@ -47,7 +47,7 @@ inline picojson::value json_get<picojson::value>(const picojson::object &object,
     throw JSONError("Unable to find/convert '" + key + "' of json object!");
 }
 
-}
-}
+} // namespace util
+} // namespace mapcrafter
 
 #endif /* JSON_H_ */
