@@ -46,8 +46,8 @@ class WebConfig {
     bool readConfigJS();
 	void writeConfigJS() const;
 
-	int getTileSetsMaxZoom(const TileSetGroupID& tile_set) const;
-	void setTileSetsMaxZoom(const TileSetGroupID& tile_set, int max_zoom);
+    int getTileSetsMaxZoom(const TileSetGroupID &tile_set) const;
+    void setTileSetsMaxZoom(const TileSetGroupID &tile_set, int max_zoom);
 
     renderer::TilePos getTileSetTileOffset(const TileSetID &tile_set) const;
 	void setTileSetTileOffset(const TileSetID& tile_set,
@@ -65,10 +65,10 @@ class WebConfig {
 private:
 	MapcrafterConfig config;
 
-	// max max zoom of world/view/tile_width (= max(max zoom of each rotation))
-	std::map<TileSetGroupID, int> tile_sets_max_zoom;
+    // max max zoom of world/view/tile_width (= max(max zoom of each rotation))
+    std::map<TileSetGroupID, int> tile_sets_max_zoom;
 	// tile offset of world/view/tile_width/rotation
-	std::map<TileSetID, renderer::TilePos> tile_set_tile_offset;
+    std::map<TileSetID, renderer::TilePos> tile_set_tile_offset;
 
 	// tile size of map
 	std::map<std::string, std::tuple<int, int>> map_tile_size;
@@ -78,7 +78,7 @@ private:
 	std::map<std::string, std::array<int, 4> > map_last_rendered;
 
 	picojson::value getConfigJSON() const;
-	void parseConfigJSON(const picojson::object& object);
+    void parseConfigJSON(const picojson::object &object);
 };
 
 } /* namespace config */

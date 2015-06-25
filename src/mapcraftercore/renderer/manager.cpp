@@ -261,7 +261,7 @@ bool RenderManager::scanWorlds() {
          ++tile_set_it) {
         // same here like above, C++ magic
 		tile_sets[*tile_set_it]->setDepth(max_zoom);
-		web_config.setTileSetsMaxZoom(*tile_set_it, max_zoom);
+        tile_sets[*tile_set_it]->setDepth(max_zoom);
 	}
 
 	writeTemplates();
