@@ -137,15 +137,15 @@ class RenderManager {
 	 * Returns false if a fatal error occured (for example unable to read a world)
 	 * and rendering the maps won't work.
 	 */
-	bool scanWorlds();
+    bool scanWorlds();
 
 	/**
 	 * Renders a map/rotation with a specified count of threads and logs the progress to
 	 * the progress handler. It renders the map only if it is specified as auto-render or
 	 * force-render in the render behaviors.
 	 */
-	void renderMap(const std::string& map, int rotation, int threads,
-			util::IProgressHandler* progress);
+    void renderMap(const std::string &map, int rotation, int threads,
+                   util::IProgressHandler *progress);
 
 	/**
 	 * Does the whole rendering work by calling initialize, scanWorlds and renderMap
@@ -154,7 +154,7 @@ class RenderManager {
 	 * You should either call this method or initialize, scanWorlds and renderMap on your
 	 * own.
 	 */
-	bool run(int threads, bool batch);
+    bool run(int threads, bool batch);
 
 	/**
 	 * Returns which maps with which rotations need to get rendered.
@@ -189,7 +189,7 @@ class RenderManager {
 	 * Does some basic initialization work of a map (check if max zoom level of already
 	 * rendered map has increased for now).
 	 */
-	void initializeMap(const std::string& map);
+    void initializeMap(const std::string &map);
 
 	/**
 	 * Increases the max zoom level of a map (given as directory, the one with base.png).
@@ -202,11 +202,11 @@ class RenderManager {
 
     RenderBehaviors render_behaviors;
 
-	// time when we started scanning the worlds, used as last last render time of the maps
+    // time when we started scanning the worlds, used as last last render time of the maps
     std::time_t time_started_scanning;
-	// set of initialized maps, initializeMap-method must be called for each map,
-	// this is automatically done by the renderMap-method
-	std::set<std::string> map_initialized;
+    // set of initialized maps, initializeMap-method must be called for each map,
+    // this is automatically done by the renderMap-method
+    std::set<std::string> map_initialized;
 
     // maps for world- and tile set objects
     std::map<std::string, std::array<mc::World, 4>> worlds;
