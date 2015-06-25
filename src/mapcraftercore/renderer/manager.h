@@ -129,7 +129,7 @@ class RenderManager {
 	 * Returns false if a fatal error occured (for example unable to create the output
 	 * directory) and scanning the worlds and rendering them won't work.
 	 */
-	bool initialize();
+    bool initialize();
 
 	/**
 	 * Scans the worlds and create the tile sets.

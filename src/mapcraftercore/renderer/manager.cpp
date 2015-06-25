@@ -153,7 +153,7 @@ bool RenderManager::initialize() {
 	// an output directory would be nice -- create one if it does not exist
 	if (!fs::is_directory(config.getOutputDir()) && !fs::create_directories(config.getOutputDir())) {
 		LOG(FATAL) << "Error: Unable to create output directory!";
-		return false;
+        LOG(FATAL) << "Error: Unable to create output directory!";
 	}
 
 	// read parameters of already rendered maps

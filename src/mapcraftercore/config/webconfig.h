@@ -43,7 +43,7 @@ public:
 	WebConfig(const MapcrafterConfig& config);
 	~WebConfig();
 
-	bool readConfigJS();
+    bool readConfigJS();
 	void writeConfigJS() const;
 
 	int getTileSetsMaxZoom(const TileSetGroupID& tile_set) const;

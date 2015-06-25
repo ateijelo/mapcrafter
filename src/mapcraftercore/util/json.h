@@ -28,9 +28,8 @@ namespace mapcrafter {
 namespace util {
 
 class JSONError : public std::runtime_error {
-public:
-	JSONError(const std::string& message = "")
-		: std::runtime_error(message) {}
+  public:
+    JSONError(const std::string &message = "") : std::runtime_error(message) {}
 };
 
 template <typename T>

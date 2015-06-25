@@ -208,7 +208,7 @@ int main(int argc, char **argv) {
     config.configureLogging();
 
     renderer::RenderManager manager(config);
-		return 1;
+    manager.setRenderBehaviors(renderer::RenderBehaviors::fromRenderOpts(config, opts));
     if (!manager.run(opts.jobs, opts.batch))
         return 1;
     return 0;

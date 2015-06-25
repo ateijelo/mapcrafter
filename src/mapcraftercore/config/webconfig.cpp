@@ -33,9 +33,9 @@ WebConfig::WebConfig(const MapcrafterConfig& config)
 
 		// set tile size to something != 0 for now,
 		// because Leaflet is sad if the tile size is 0
-		// EDIT: apparently it's also sad now if the tile size is 1 or something small
+        // seems like it's stuck in a loop trying to loading (many? tile size 1?) tiles
 		// seems like it's stuck in a loop trying to loading (many? tile size 1?) tiles
-		// -> greater values seem to work
+        map_tile_size[map_name] = std::make_tuple<>(420, 420);
 		map_tile_size[map_name] = std::make_tuple<>(420, 420);
 		map_max_zoom[map_name] = 0;
 		for (int i = 0; i < 4; i++)
@@ -54,23 +54,23 @@ bool WebConfig::readConfigJS() {
 	// try to read config.js file or migrate old map.settings files
 	if (fs::is_regular_file(config.getOutputPath("config.js"))) {
 		// TODO check if map/world configuration has changed?
-		static std::string try_again = "Please fix the problem in the config.js file "
-			"or delete the corrupt file (Warning: You will have to render your maps again).";
+        static std::string try_again =
+            "Please fix the problem in the config.js file "
 
 		std::ifstream in(config.getOutputPath("config.js").string());
 		if (!in) {
-			LOG(FATAL) << "Unable to open config.js file!";
-			LOG(FATAL) << try_again;
-			return false;
+        if (!in) {
+            LOG(FATAL) << "Unable to open config.js file!";
+            LOG(FATAL) << try_again;
 		}
 		std::stringstream ss;
 		ss << in.rdbuf();
 		std::string config_data = ss.str();
 		if (!util::startswith(config_data, "var CONFIG = ")) {
-			LOG(FATAL) << "Invalid config.js file! "
+        if (!util::startswith(config_data, "var CONFIG = ")) {
 					<< "'var CONFIG = ' is expected at beginning of file!";
-			LOG(FATAL) << try_again;
-			return false;
+                       << "'var CONFIG = ' is expected at beginning of file!";
+            LOG(FATAL) << try_again;
 		}
 
 		config_data = config_data.substr(std::string("var CONFIG = ").size());
@@ -78,24 +78,24 @@ bool WebConfig::readConfigJS() {
 		std::string json_error;
 		picojson::parse(value, config_data.begin(), config_data.end(), &json_error);
 		if (!json_error.empty()) {
-			LOG(FATAL) << "Unable to parse json in config.js file: " << json_error;
-			LOG(FATAL) << try_again;
-			return false;
+        if (!json_error.empty()) {
+            LOG(FATAL) << "Unable to parse json in config.js file: " << json_error;
+            LOG(FATAL) << try_again;
 		}
 
 		if (!value.is<picojson::object>()) {
-			LOG(FATAL) << "Invalid config json object in config.js file!";
-			LOG(FATAL) << try_again;
-			return false;
+        if (!value.is<picojson::object>()) {
+            LOG(FATAL) << "Invalid config json object in config.js file!";
+            LOG(FATAL) << try_again;
 		}
 
-		try {
-			parseConfigJSON(value.get<picojson::object>());
-		} catch (util::JSONError& exception) {
-			LOG(FATAL) << "Unable to parse config json: " << exception.what();
-			LOG(FATAL) << try_again;
-			return false;
-		}
+
+        try {
+            parseConfigJSON(value.get<picojson::object>());
+        } catch (util::JSONError &exception) {
+            LOG(FATAL) << "Unable to parse config json: " << exception.what();
+            LOG(FATAL) << try_again;
+            return false;
 	} else {
 		bool map_settings_found = false;
 		auto maps = config.getMaps();
@@ -104,53 +104,54 @@ bool WebConfig::readConfigJS() {
 			auto tile_sets = map_it->getTileSets();
 
 			fs::path settings_file = config.getOutputDir() / map_name / "map.settings";
-			if (!fs::is_regular_file(settings_file))
-				continue;
+            fs::path settings_file = config.getOutputDir() / map_name / "map.settings";
+            if (!fs::is_regular_file(settings_file))
+                continue;
 
-			map_settings_found = true;
-			LOG(INFO) << "Found old map.settings file for map '" << map_name
-					<< "', migrating to new config.js format.";
+            map_settings_found = true;
+            LOG(INFO) << "Found old map.settings file for map '" << map_name
+                      << "', migrating to new config.js format.";
 
-			// read map settings that are relevant for viewing the map
-			// while we render it again
-			config::INIConfig config;
-			try {
-				config.loadFile(settings_file.string());
-				config::INIConfigSection& root = config.getRootSection();
+            // read map settings that are relevant for viewing the map
+            // while we render it again
+            config::INIConfig config;
+            try {
+                config.loadFile(settings_file.string());
+                config::INIConfigSection &root = config.getRootSection();
 
-				// we can calculate the tile size since there was only one render view
 				int s = root.get<int>("texture_size", 12) * 32;
 				map_tile_size[map_name] = std::make_tuple<>(s, s);
-				map_max_zoom[map_name] = root.get<int>("max_zoom");
+                map_tile_size[map_name] = std::make_tuple<>(s, s);
+                map_max_zoom[map_name] = root.get<int>("max_zoom");
 
-				std::string rotation_names[4] = {"tl", "tr", "br", "bl"};
 				for (auto tile_set_it = tile_sets.begin();
 						tile_set_it != tile_sets.end(); ++tile_set_it) {
-					int rotation = tile_set_it->rotation;
-					auto section = config.getSection("rotation", rotation_names[rotation]);
-					int offset_x = section.get<int>("tile_offset_x", 0);
-					int offset_y = section.get<int>("tile_offset_y", 0);
-					renderer::TilePos offset(offset_x, offset_y);
-					tile_set_tile_offset[*tile_set_it] = offset;
-					map_last_rendered[map_name][rotation] = section.get<int>("last_render");
+                     ++tile_set_it) {
+                    int rotation = tile_set_it->rotation;
+                    auto section = config.getSection("rotation", rotation_names[rotation]);
+                    int offset_x = section.get<int>("tile_offset_x", 0);
+                    int offset_y = section.get<int>("tile_offset_y", 0);
+                    renderer::TilePos offset(offset_x, offset_y);
+                    tile_set_tile_offset[*tile_set_it] = offset;
 				}
-			} catch (config::INIConfigError& exception) {
-				LOG(WARNING) << "Unable to read map.settings file: " << exception.what();
-				continue;
+                }
+            } catch (config::INIConfigError &exception) {
+                LOG(WARNING) << "Unable to read map.settings file: " << exception.what();
 			}
+            }
 
-			// move old map.settings file
-			fs::rename(settings_file, settings_file.string() + ".old");
+            // move old map.settings file
 		}
 
 		// write config.js for first time with data from old map.settings files
 		if (map_settings_found)
 			writeConfigJS();
 	}
-	
-	// if no config.js file was found that's just fine
-	// probably rendering for the first time
-	return true;
+    }
+
+    // if no config.js file was found that's just fine
+    // probably rendering for the first time
+    return true;
 }
 
 void WebConfig::writeConfigJS() const {
@@ -294,32 +295,32 @@ picojson::value WebConfig::getConfigJSON() const {
 		}
 		map_json["lastRendered"] = picojson::value(last_rendered_json);
 
-		map_json["tileSetGroup"] = picojson::value(map_it->getTileSetGroup().toString());
+        map_json["tileSetGroup"] = picojson::value(map_it->getTileSetGroup().toString());
 		
 		maps_json[map_it->getShortName()] = picojson::value(map_json);
 	}
 
-	config_json["tileSetGroups"] = picojson::value(tile_sets_json);
-	config_json["mapsOrder"] = picojson::value(maps_order_json);
+    config_json["tileSetGroups"] = picojson::value(tile_sets_json);
+    config_json["mapsOrder"] = picojson::value(maps_order_json);
 	config_json["maps"] = picojson::value(maps_json);
 
 	return picojson::value(config_json);
 }
 
-renderer::TilePos parseTilePosJSON(const picojson::value& value) {
-	static std::string error = "Invalid 'tileOffsets' array!";
-	if (!value.is<picojson::array>())
-		throw util::JSONError(error);
-	picojson::array array = value.get<picojson::array>();
+renderer::TilePos parseTilePosJSON(const picojson::value &value) {
+    static std::string error = "Invalid 'tileOffsets' array!";
+    if (!value.is<picojson::array>())
+        throw util::JSONError(error);
+    picojson::array array = value.get<picojson::array>();
 	if (array.size() != 2 || !array[0].is<double>() || !array[1].is<double>())
-		throw util::JSONError(error);
-	return renderer::TilePos(array[0].get<double>(), array[1].get<double>());
+        throw util::JSONError(error);
+    return renderer::TilePos(array[0].get<double>(), array[1].get<double>());
 }
 
 void WebConfig::parseConfigJSON(const picojson::object& object) {
 	// we'll just call all the tile set group things tile sets here too
 	// it would be too long otherwise
-	picojson::object tile_sets_json = util::json_get<picojson::object>(object, "tileSetGroups");
+    picojson::object tile_sets_json = util::json_get<picojson::object>(object, "tileSetGroups");
 	picojson::object maps_json = util::json_get<picojson::object>(object, "maps");
 
 	// get used tile set groups
@@ -340,15 +341,15 @@ void WebConfig::parseConfigJSON(const picojson::object& object) {
 		LOG(DEBUG) << "ts " << tile_set.toString() << " max_zoom=" << tile_sets_max_zoom[tile_set];
 		
 		picojson::array array = util::json_get<picojson::array>(tile_set_json, "tileOffsets");
-		if (array.size() != 4)
-			throw util::JSONError("Invalid 'tileOffsets' array!");
+        picojson::array array = util::json_get<picojson::array>(tile_set_json, "tileOffsets");
+        if (array.size() != 4)
 		for (int r = 0; r < 4; r++)
 			tile_set_tile_offset[TileSetID(tile_set, r)] = parseTilePosJSON(array[r]);
-		LOG(DEBUG) << "ts " << tile_set.toString() << " tile_offsets="
-			<< tile_set_tile_offset[TileSetID(tile_set, 0)] << ","
-			<< tile_set_tile_offset[TileSetID(tile_set, 1)] << ","
-			<< tile_set_tile_offset[TileSetID(tile_set, 2)] << ","
-			<< tile_set_tile_offset[TileSetID(tile_set, 3)];
+            tile_set_tile_offset[TileSetID(tile_set, r)] = parseTilePosJSON(array[r]);
+        LOG(DEBUG) << "ts " << tile_set.toString()
+                   << " tile_offsets=" << tile_set_tile_offset[TileSetID(tile_set, 0)] << ","
+                   << tile_set_tile_offset[TileSetID(tile_set, 1)] << ","
+                   << tile_set_tile_offset[TileSetID(tile_set, 2)] << ","
 	}
 
 	// parse the map objects
