@@ -43,8 +43,7 @@ WebConfig::WebConfig(const MapcrafterConfig &config) : config(config) {
         auto tile_sets = map_it->getTileSets();
         for (auto tile_set_it = tile_sets.begin(); tile_set_it != tile_sets.end(); ++tile_set_it)
             tile_sets_max_zoom[*tile_set_it] = 0;
-			tile_sets_max_zoom[*tile_set_it] = 0;
-	}
+    }
 }
 
 WebConfig::~WebConfig() {
