@@ -144,11 +144,7 @@ RenderManager::RenderManager(const config::MapcrafterConfig &config)
     : config(config), web_config(config), time_started_scanning(0) {}
 
 void RenderManager::setRenderBehaviors(const RenderBehaviors &render_behaviors) {
-	: config(config), web_config(config), time_started_scanning(0) {
-}
-
-void RenderManager::setRenderBehaviors(const RenderBehaviors& render_behaviors) {
-	this->render_behaviors = render_behaviors;
+    this->render_behaviors = render_behaviors;
 }
 
 bool RenderManager::initialize() {
