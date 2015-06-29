@@ -350,15 +350,15 @@ void TileSet::scan(const mc::World &world, bool auto_center, TilePos &tile_offse
 }
 
 void TileSet::resetRequired() {
-	required_render_tiles.clear();
+    required_render_tiles.clear();
 
-	for (auto it = tile_timestamps.begin(); it != tile_timestamps.end(); ++it)
-		required_render_tiles.insert(it->first);
+    for (auto it = tile_timestamps.begin(); it != tile_timestamps.end(); ++it)
+        required_render_tiles.insert(it->first);
 
-	required_composite_tiles.clear();
-	findRequiredCompositeTiles(required_render_tiles, required_composite_tiles);
+    required_composite_tiles.clear();
+    findRequiredCompositeTiles(required_render_tiles, required_composite_tiles);
 
-	updateContainingRenderTiles();
+    updateContainingRenderTiles();
 }
 
 void TileSet::scanRequiredByTimestamp(int last_change) {

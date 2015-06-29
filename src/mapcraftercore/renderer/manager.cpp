@@ -174,8 +174,9 @@ bool RenderManager::initialize() {
         LOG(FATAL) << "Error: Unable to create output directory!";
 	}
 
-	// read parameters of already rendered maps
-	return web_config.readConfigJS();
+
+    // read parameters of already rendered maps
+    return web_config.readConfigJS();
 }
 
 bool RenderManager::scanWorlds() {
@@ -184,8 +185,8 @@ bool RenderManager::scanWorlds() {
 
     time_started_scanning = std::time(nullptr);
 
-	// first of all check which maps/rotations are required
-	// and which tile sets (world, render view, tile width) with which rotations are needed
+    // first of all check which maps/rotations are required
+    // and which tile sets (world, render view, tile width) with which rotations are needed
 	//	all needed tile sets = all tile sets of maps that are not completely skipped
 	// (some rotations of a map are skipped, but others are not
 	//  => map tile sets are still needed)
@@ -212,7 +213,7 @@ bool RenderManager::scanWorlds() {
         required_maps.push_back(std::make_pair(map, required_rotations));
     }
 
-	// store the maximum max zoom level of every tile set with its rotations
+    // store the maximum max zoom level of every tile set with its rotations
     std::map<config::TileSetGroupID, int> tile_sets_max_zoom;
 
     // iterate through all tile sets that are needed
@@ -244,13 +245,13 @@ bool RenderManager::scanWorlds() {
             LOG(ERROR) << "Mapcrafter supports only worlds of Minecraft 1.13 and newer";
             LOG(ERROR) << "See Mapcrafter legacy for rendering of older worlds. TODO";
             return false;
+        }
 
-		// create a tile set for this world
         // create a tile set for this world
-		// and scan the tiles of this world,
+        std::shared_ptr<TileSet> tile_set(render_view->createTileSet(tile_set_it->tile_width));
         // and scan the tiles of this world,
         // we automatically center the tiles for cropped worlds, but only...
-		//  - the ones with completely specified x- AND z-bounds
+        //  - the circular cropped ones and
         //  - the ones with completely specified x- AND z-bounds
         if (world_config.needsWorldCentering()) {
             TilePos tile_offset;
@@ -273,7 +274,7 @@ bool RenderManager::scanWorlds() {
         // clean up render view
         delete render_view;
 
-	// set calculated max zoom of tile sets
+
 	for (auto tile_set_it = needed_tile_sets.begin();
 			tile_set_it != needed_tile_sets.end(); ++tile_set_it) {
          ++tile_set_it) {
@@ -294,7 +295,7 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
         render_behaviors.getRenderBehavior(map, rotation) == RenderBehavior::SKIP)
         return;
 
-	// do some initialization stuff for every map once
+    // do some initialization stuff for every map once
     if (!map_initialized.count(map)) {
         initializeMap(map);
         map_initialized.insert(map);
@@ -316,30 +317,30 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
         LOG(INFO) << "Last rendering was on " << buffer << ".";
     }
 
-	fs::path output_dir = config.getOutputPath(map + "/" + config::ROTATION_NAMES_SHORT[rotation]);
-	// get the tile set
-	TileSet* tile_set = tile_sets[map_config.getTileSet(rotation)].get();
-	if (render_behaviors.getRenderBehavior(map, rotation) == RenderBehavior::AUTO) {
-		// if incremental render, scan which tiles might have changed
+    fs::path output_dir = config.getOutputPath(map + "/" + config::ROTATION_NAMES_SHORT[rotation]);
+    // get the tile set
+    TileSet *tile_set = tile_sets[map_config.getTileSet(rotation)].get();
+    if (render_behaviors.getRenderBehavior(map, rotation) == RenderBehavior::AUTO) {
+        // if incremental render, scan which tiles might have changed
         LOG(INFO) << "Scanning required tiles...";
-		// use the incremental check method specified in the config
+        // use the incremental check method specified in the config
         if (map_config.useImageModificationTimes())
-			tile_set->scanRequiredByFiletimes(output_dir, map_config.getImageFormatSuffix());
+            tile_set->scanRequiredByFiletimes(output_dir, map_config.getImageFormatSuffix());
         else
             // tile_set->scanRequiredByTimestamp(settings.last_render[rotation]);
             tile_set->scanRequiredByTimestamp(web_config.getMapLastRendered(map, rotation));
-	} else {
-		// or just set all tiles required if force-rendering
-		tile_set->resetRequired();
+    } else {
+        // or just set all tiles required if force-rendering
+        tile_set->resetRequired();
     }
 
-	// maybe we don't have to render anything at all
+    // maybe we don't have to render anything at all
     if (tile_set->getRequiredRenderTilesCount() == 0) {
         LOG(INFO) << "No tiles need to get rendered.";
         return;
     }
 
-	// create other stuff for the render dispatcher
+    // create other stuff for the render dispatcher
     std::shared_ptr<BlockImages> block_images(render_view->createBlockImages(block_registry));
     render_view->configureBlockImages(block_images.get(), world_config, map_config);
 
@@ -358,12 +359,12 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     context.background_color = config.getBackgroundColor();
     context.world_config = config.getWorld(map_config.getWorld());
     context.map_config = map_config;
-	context.tile_set = tile_set;
+    context.render_view = render_view.get();
     context.block_images = block_images.get();
     context.tile_set = tile_set;
     context.block_registry = &block_registry;
     context.world = worlds[map_config.getWorld()][rotation];
-	// update map parameters in web config
+    context.initializeTileRenderer();
 
     // update map parameters in web config
 	web_config.setMapMaxZoom(map, context.tile_set->getDepth());
@@ -376,7 +377,7 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     if (threads == 1 || tile_set->getRequiredRenderTilesCount() == 1)
         dispatcher = std::make_shared<thread::SingleThreadDispatcher>();
     else
-	// do the dance
+        dispatcher = std::make_shared<thread::MultiThreadingDispatcher>(threads);
 
     // do the dance
     dispatcher->dispatch(context, progress);
@@ -398,7 +399,7 @@ bool RenderManager::run(int threads, bool batch) {
     int progress_maps_all = required_maps.size();
 	int time_start_all = std::time(nullptr);
 
-	// go through all required maps
+    // go through all required maps
     for (auto map_it = required_maps.begin(); map_it != required_maps.end(); ++map_it) {
         progress_maps++;
         config::MapSection map_config = config.getMap(map_it->first);
@@ -411,7 +412,7 @@ bool RenderManager::run(int threads, bool batch) {
 		int progress_rotations = 0;
         int progress_rotations_all = required_rotations.size();
 
-		// now go through the all required rotations of this map and render them
+        // now go through the all required rotations of this map and render them
         for (auto rotation_it = required_rotations.begin(); rotation_it != required_rotations.end();
              ++rotation_it) {
 			progress_rotations++;
@@ -456,7 +457,7 @@ bool RenderManager::run(int threads, bool batch) {
     return true;
 }
 
-const std::vector<std::pair<std::string, std::set<int> > >& RenderManager::getRequiredMaps() const {
+const std::vector<std::pair<std::string, std::set<int>>> &RenderManager::getRequiredMaps() const {
     return required_maps;
 }
 
@@ -470,7 +471,7 @@ bool RenderManager::copyTemplateFile(const std::string &filename,
     file.close();
     std::string data = ss.str();
 
-	for (auto it = vars.begin(); it != vars.end(); ++it)
+    for (auto it = vars.begin(); it != vars.end(); ++it)
         data = util::replaceAll(data, "{" + it->first + "}", it->second);
 
     std::ofstream out(config.getOutputPath(filename).string().c_str());
@@ -504,12 +505,12 @@ bool RenderManager::writeTemplateIndexHtml() const {
 
 void RenderManager::writeTemplates() const {
     if (!fs::is_directory(config.getTemplateDir())) {
-		LOG(ERROR) << "The template directory does not exist! Can't copy templates!";
+        LOG(ERROR) << "The template directory does not exist! Can't copy templates!";
         return;
     }
 
     if (!writeTemplateIndexHtml())
-		LOG(ERROR) << "Warning: Unable to copy template file index.html!";
+        LOG(ERROR) << "Warning: Unable to copy template file index.html!";
     web_config.writeConfigJS();
 
     if (!fs::exists(config.getOutputPath("markers.js")) &&
@@ -542,7 +543,7 @@ void RenderManager::initializeMap(const std::string &map) {
 
     // get the max zoom level calculated of the current tile set
     int max_zoom = web_config.getTileSetsMaxZoom(map_config.getTileSetGroup());
-	// get the old max zoom level (from config.js), will be 0 if not rendered yet
+    // get the old max zoom level (from config.js), will be 0 if not rendered yet
     int old_max_zoom = web_config.getMapMaxZoom(map);
     // if map already rendered: check if the zoom level of the world has increased
     if (old_max_zoom != 0 && old_max_zoom < max_zoom) {
@@ -551,8 +552,8 @@ void RenderManager::initializeMap(const std::string &map) {
         LOG(INFO) << "I will move some files around...";
 
         // if zoom level has increased, increase zoom levels of tile sets
-		auto rotations = map_config.getRotations();
-		for (auto rotation_it = rotations.begin(); rotation_it != rotations.end(); ++rotation_it) {
+        auto rotations = map_config.getRotations();
+        for (auto rotation_it = rotations.begin(); rotation_it != rotations.end(); ++rotation_it) {
             fs::path output_dir =
                 config.getOutputPath(map + "/" + config::ROTATION_NAMES_SHORT[*rotation_it]);
             for (int i = old_max_zoom; i < max_zoom; i++)
@@ -561,7 +562,7 @@ void RenderManager::initializeMap(const std::string &map) {
     }
 
     // update the template with the max zoom level
-	// (calculated with tile set in scanWorlds-method)
+    // (calculated with tile set in scanWorlds-method)
     web_config.setMapMaxZoom(map, max_zoom);
     web_config.writeConfigJS();
 }
