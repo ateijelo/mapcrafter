@@ -25,11 +25,11 @@ namespace renderer {
 
 class RGBAImage;
 
-void imageResizeSimple(const RGBAImage& image, RGBAImage& dest, int width, int height);
-void imageResizeBilinear(const RGBAImage& image, RGBAImage& dest, int width, int height);
-void imageResizeHalf(const RGBAImage& image, RGBAImage& dest);
+void imageResizeSimple(const RGBAImage &image, RGBAImage &dest, int width, int height);
+void imageResizeBilinear(const RGBAImage &image, RGBAImage &dest, int width, int height);
+void imageResizeHalf(const RGBAImage &image, RGBAImage &dest);
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* IMAGE_SCALING_H_ */

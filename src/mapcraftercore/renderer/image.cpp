@@ -327,38 +327,38 @@ RGBAImage RGBAImage::move(int xOffset, int yOffset) const {
     return img;
 }
 
-void RGBAImage::resize(RGBAImage& dest, int width, int height, InterpolationType interpolation) const {
-	if (width == getWidth() && height == getHeight()) {
+void RGBAImage::resize(RGBAImage &dest, int width, int height,
+                       InterpolationType interpolation) const {
     if (width == getWidth() && height == getHeight()) {
         dest = *this;
         return;
-	if (interpolation == InterpolationType::AUTO) {
-		interpolation = InterpolationType::BILINEAR;
-		if (width > getWidth() || height > getWidth())
-			interpolation = InterpolationType::NEAREST;
-		if (width == getWidth() / 2 && height == getHeight() / 2)
-			interpolation = InterpolationType::HALF;
+    }
+    if (interpolation == InterpolationType::AUTO) {
+        interpolation = InterpolationType::BILINEAR;
+        if (width > getWidth() || height > getWidth())
+            interpolation = InterpolationType::NEAREST;
+        if (width == getWidth() / 2 && height == getHeight() / 2)
             interpolation = InterpolationType::HALF;
     }
-	if (interpolation == InterpolationType::NEAREST) {
-		imageResizeSimple(*this, dest, width, height);
-	} else if (interpolation == InterpolationType::BILINEAR) {
-		imageResizeBilinear(*this, dest, width, height);
-	} else if (interpolation == InterpolationType::HALF) {
-		imageResizeHalf(*this, dest);
-	} else {
-		// should not happen
-		assert(false);
+
+    if (interpolation == InterpolationType::NEAREST) {
+        imageResizeSimple(*this, dest, width, height);
+    } else if (interpolation == InterpolationType::BILINEAR) {
+        imageResizeBilinear(*this, dest, width, height);
+    } else if (interpolation == InterpolationType::HALF) {
+        imageResizeHalf(*this, dest);
+    } else {
+        // should not happen
         assert(false);
     }
 }
 
 RGBAImage RGBAImage::resize(int width, int height, InterpolationType interpolation) const {
-	if (width == getWidth() && height == getHeight())
-		return *this;
-	RGBAImage temp;
-	resize(temp, width, height, interpolation);
-	return temp;
+    if (width == getWidth() && height == getHeight())
+        return *this;
+    RGBAImage temp;
+    resize(temp, width, height, interpolation);
+    return temp;
 }
 
 

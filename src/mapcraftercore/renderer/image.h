@@ -103,14 +103,14 @@ const int ROTATE_180 = 2;
 const int ROTATE_270 = 3;
 
 enum class InterpolationType {
-	// nearest-neighbor interpolation, simple one
-	NEAREST,
-	// bilinear interpolation, fancy one
-	BILINEAR,
-	// special interpolation tweaked for resizing to (width/2, height/2)
-	HALF,
-	// automatically choose an interpolation type
-	AUTO
+    // nearest-neighbor interpolation, simple one
+    NEAREST,
+    // bilinear interpolation, fancy one
+    BILINEAR,
+    // special interpolation tweaked for resizing to (width/2, height/2)
+    HALF,
+    // automatically choose an interpolation type
+    AUTO
 };
 
 // TODO better documentation...
@@ -146,12 +146,12 @@ class RGBAImage : public Image<RGBAPixel> {
 	RGBAImage rotate(int rotation) const;
 	RGBAImage flip(bool flip_x, bool flip_y) const;
 	RGBAImage move(int x_off, int y_off) const;
-	
-	void resize(RGBAImage& dest, int width, int height,
-			InterpolationType interpolation = InterpolationType::AUTO) const;
 
-	RGBAImage resize(int width, int height,
-			InterpolationType interpolation = InterpolationType::AUTO) const;
+    void resize(RGBAImage &dest, int width, int height,
+                InterpolationType interpolation = InterpolationType::AUTO) const;
+
+    RGBAImage resize(int width, int height,
+                     InterpolationType interpolation = InterpolationType::AUTO) const;
 
 	/**
 	 * (In-place) Shearing along the x-axis by a specific factor.
