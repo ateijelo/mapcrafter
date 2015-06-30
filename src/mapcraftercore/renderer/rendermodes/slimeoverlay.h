@@ -41,9 +41,9 @@ class SlimeOverlay : public OverlayRenderMode {
 
     virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, const BlockImage &block_image);
 
-	fs::path world_dir;
+    fs::path world_dir;
     int rotation;
-	long long world_seed;
+    long long world_seed;
 };
 
 } // namespace renderer

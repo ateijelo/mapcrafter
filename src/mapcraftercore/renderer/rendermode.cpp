@@ -165,7 +165,7 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
             world_config.getDimension() == mc::Dimension::END));
     } else {
         // this shouldn't happen
-		mc::World world(world_config.getInputDir().string(), world_config.getDimension());
+        delete render_mode;
         assert(false);
         return nullptr;
     }
