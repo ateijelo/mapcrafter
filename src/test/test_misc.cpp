@@ -19,8 +19,8 @@
 
 #include "../mapcraftercore/renderer/rendermodes/slimeoverlay.h"
 
-#include <set>
 #include <boost/test/unit_test.hpp>
+#include <set>
 
 using namespace mapcrafter::renderer;
 namespace mc = mapcrafter::mc;
@@ -30,9 +30,9 @@ namespace mc = mapcrafter::mc;
  */
 
 BOOST_AUTO_TEST_CASE(misc_testSlimeOverlay1) {
-	long long world_seed = 42;
+    long long world_seed = 42;
 
-	std::set<mc::ChunkPos> slimes = {
+    std::set<mc::ChunkPos> slimes = {
 		mc::ChunkPos(-9, 0),
 		mc::ChunkPos(-9, 8),
 		mc::ChunkPos(-8, -8),
@@ -82,23 +82,23 @@ BOOST_AUTO_TEST_CASE(misc_testSlimeOverlay1) {
 		mc::ChunkPos(10, 1),
 	};
 
-	for (int x = -10; x < 10; x++) {
-		for (int z = -10; z < 10; z++) {
-			mc::ChunkPos chunk(x, z);
-			bool is_slime = SlimeOverlay::isSlimeChunk(chunk, world_seed);
-			if (slimes.count(chunk)) {
-				BOOST_CHECK_MESSAGE(is_slime, chunk << " must be a slime chunk!");
-			} else {
-				BOOST_CHECK_MESSAGE(!is_slime, chunk << " must not be a slime chunk!");
-			}
-		}
-	}
+    for (int x = -10; x < 10; x++) {
+        for (int z = -10; z < 10; z++) {
+            mc::ChunkPos chunk(x, z);
+            bool is_slime = SlimeOverlay::isSlimeChunk(chunk, world_seed);
+            if (slimes.count(chunk)) {
+                BOOST_CHECK_MESSAGE(is_slime, chunk << " must be a slime chunk!");
+            } else {
+                BOOST_CHECK_MESSAGE(!is_slime, chunk << " must not be a slime chunk!");
+            }
+        }
+    }
 }
 
 BOOST_AUTO_TEST_CASE(misc_testSlimeOverlay2) {
-	long long world_seed = 73;
+    long long world_seed = 73;
 
-	std::set<mc::ChunkPos> slimes = {
+    std::set<mc::ChunkPos> slimes = {
 		mc::ChunkPos(6177, 1554),
 		mc::ChunkPos(3552, 6651),
 		mc::ChunkPos(1868, 1935),
@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE(misc_testSlimeOverlay2) {
 		mc::ChunkPos(7633, 3534),
 	};
 
-	std::set<mc::ChunkPos> not_slimes = {
+    std::set<mc::ChunkPos> not_slimes = {
 		mc::ChunkPos(-5021, 8664),
 		mc::ChunkPos(8193, 1041),
 		mc::ChunkPos(-150, 933),
@@ -144,9 +144,10 @@ BOOST_AUTO_TEST_CASE(misc_testSlimeOverlay2) {
 		mc::ChunkPos(940, -305),
 	};
 
-	for (auto it = slimes.begin(); it != slimes.end(); ++it)
-		BOOST_CHECK_MESSAGE(SlimeOverlay::isSlimeChunk(*it, world_seed), *it << " must be a slime chunk!");
-	for (auto it = not_slimes.begin(); it != not_slimes.end(); ++it)
-		BOOST_CHECK_MESSAGE(!SlimeOverlay::isSlimeChunk(*it, world_seed), *it << " must not be a slime chunk!");
+    for (auto it = slimes.begin(); it != slimes.end(); ++it)
+        BOOST_CHECK_MESSAGE(SlimeOverlay::isSlimeChunk(*it, world_seed),
+                            *it << " must be a slime chunk!");
+    for (auto it = not_slimes.begin(); it != not_slimes.end(); ++it)
+        BOOST_CHECK_MESSAGE(!SlimeOverlay::isSlimeChunk(*it, world_seed),
+                            *it << " must not be a slime chunk!");
 }
-

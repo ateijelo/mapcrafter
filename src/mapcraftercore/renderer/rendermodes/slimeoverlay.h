@@ -34,7 +34,7 @@ class SlimeOverlay : public OverlayRenderMode {
     SlimeOverlay(fs::path world_dir, int rotation);
     virtual ~SlimeOverlay();
 
-	static bool isSlimeChunk(const mc::ChunkPos& chunk, long long world_seed);
+    static bool isSlimeChunk(const mc::ChunkPos &chunk, long long world_seed);
 
   protected:
     virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, uint16_t id, uint16_t data);
