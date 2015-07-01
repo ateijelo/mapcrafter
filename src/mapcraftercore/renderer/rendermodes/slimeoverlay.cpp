@@ -64,12 +64,7 @@ RGBAPixel SlimeOverlay::getBlockColor(const mc::BlockPos &pos, uint16_t id, uint
     if (rotation) {
         // -rotation = -rotation + 4 (mod 4), rotate accepts only positive numbers
         chunk.rotate(-rotation + 4);
-	}
-
-	if (isSlimeChunk(chunk, world_seed))
-		return rgba(60, 200, 20, 255);
-	return rgba(0, 0, 0, 0);
-}
+    }
 
     if (isSlimeChunk(chunk, world_seed))
         return rgba(60, 200, 20, 255);
