@@ -167,26 +167,26 @@ bool RenderManager::scanWorlds() {
 
     // first of all check which maps/rotations are required
     // and which tile sets (world, render view, tile width) with which rotations are needed
-	//	all needed tile sets = all tile sets of maps that are not completely skipped
-	// (some rotations of a map are skipped, but others are not
-	//  => map tile sets are still needed)
-	std::set<config::TileSetID> needed_tile_sets;
+    //	all needed tile sets = all tile sets of maps that are not completely skipped
+    // (some rotations of a map are skipped, but others are not
+    //  => map tile sets are still needed)
+    std::set<config::TileSetID> needed_tile_sets;
     for (auto map_it = config_maps.begin(); map_it != config_maps.end(); ++map_it) {
         std::string map = map_it->getShortName();
         if (render_behaviors.isCompleteRenderSkip(map))
 			continue;
 
-		// just the rotations that are not to be skipped are required
+        // just the rotations that are not to be skipped are required
         std::set<int> required_rotations;
         auto map_tile_sets = map_it->getTileSets();
-		for (auto tile_set_it = map_tile_sets.begin();
-				tile_set_it != map_tile_sets.end(); ++tile_set_it) {
+        for (auto tile_set_it = map_tile_sets.begin(); tile_set_it != map_tile_sets.end();
+             ++tile_set_it) {
             int rotation = tile_set_it->rotation;
-			// but we have to scan every rotation of every map to make sure that all
-			// rotations of a map use the same zoom level, especially when just one
-			// rotation is rendered but the other ones are skipped
-			needed_tile_sets.insert(*tile_set_it);
-			if (render_behaviors.getRenderBehavior(map, rotation) != RenderBehavior::SKIP)
+            // but we have to scan every rotation of every map to make sure that all
+            // rotations of a map use the same zoom level, especially when just one
+            // rotation is rendered but the other ones are skipped
+            needed_tile_sets.insert(*tile_set_it);
+            if (render_behaviors.getRenderBehavior(map, rotation) != RenderBehavior::SKIP)
                 required_rotations.insert(rotation);
         }
 
@@ -197,8 +197,8 @@ bool RenderManager::scanWorlds() {
     std::map<config::TileSetGroupID, int> tile_sets_max_zoom;
 
     // iterate through all tile sets that are needed
-	for (auto tile_set_it = needed_tile_sets.begin();
-			tile_set_it != needed_tile_sets.end(); ++tile_set_it) {
+    for (auto tile_set_it = needed_tile_sets.begin(); tile_set_it != needed_tile_sets.end();
+         ++tile_set_it) {
         config::WorldSection world_config = config.getWorld(tile_set_it->world_name);
         RenderView *render_view = createRenderView(tile_set_it->render_view);
 
@@ -255,8 +255,8 @@ bool RenderManager::scanWorlds() {
         delete render_view;
 
 
-	for (auto tile_set_it = needed_tile_sets.begin();
-			tile_set_it != needed_tile_sets.end(); ++tile_set_it) {
+    // set calculated max zoom of tile sets
+    for (auto tile_set_it = needed_tile_sets.begin(); tile_set_it != needed_tile_sets.end();
          ++tile_set_it) {
         // same here like above, C++ magic
         int max_zoom = tile_sets_max_zoom[*tile_set_it];
