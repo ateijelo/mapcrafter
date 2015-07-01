@@ -405,8 +405,8 @@ bool RenderManager::run(int threads, bool batch) {
         config::MapSection map_config = config.getMap(map_it->first);
 
 		LOG(INFO) << "[" << progress_maps << "/" << progress_maps_all << "] "
-			<< "Rendering map " << map_config.getShortName() << " (\""
-			<< map_config.getLongName() << "\"):";
+                  << "Rendering map " << map_config.getShortName() << " (\""
+                  << map_config.getLongName() << "\"):";
 
         auto required_rotations = map_it->second;
 		int progress_rotations = 0;
@@ -417,9 +417,9 @@ bool RenderManager::run(int threads, bool batch) {
              ++rotation_it) {
 			progress_rotations++;
 
-			LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/"
-				<< progress_maps << "." << progress_rotations_all << "] "
-				<< "Rendering rotation " << config::ROTATION_NAMES[*rotation_it] << "...";
+            LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/" << progress_maps
+                      << "." << progress_rotations_all << "] "
+                      << "Rendering rotation " << config::ROTATION_NAMES[*rotation_it] << "...";
 
 			std::shared_ptr<util::MultiplexingProgressHandler> progress(new util::MultiplexingProgressHandler);
                 new util::MultiplexingProgressHandler);
@@ -444,9 +444,9 @@ bool RenderManager::run(int threads, bool batch) {
             }
 
 			LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/"
-				<< progress_maps << "." << progress_rotations_all << "] "
-				<< "Rendering rotation " << config::ROTATION_NAMES[*rotation_it]
-				<< " took " << took << " seconds.";
+            LOG(INFO) << "[" << progress_maps << "." << progress_rotations << "/" << progress_maps
+                      << "." << progress_rotations_all << "] "
+                      << "Rendering rotation " << config::ROTATION_NAMES[*rotation_it] << " took "
                       << took << " seconds.";
         }
     }

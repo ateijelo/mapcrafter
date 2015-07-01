@@ -31,16 +31,17 @@ namespace renderer {
 SlimeOverlay::SlimeOverlay(fs::path world_dir, int rotation)
     : OverlayRenderMode(OverlayMode::PER_BLOCK), world_dir(world_dir), rotation(rotation),
       world_seed(0) {
-	try {
-		nbt::NBTFile level_dat;
-		level_dat.readNBT((world_dir / "level.dat").string().c_str());
+    try {
+        nbt::NBTFile level_dat;
+        level_dat.readNBT((world_dir / "level.dat").string().c_str());
 
-		nbt::TagCompound data = level_dat.findTag<nbt::TagCompound>("Data");
-		nbt::TagLong random_seed = data.findTag<nbt::TagLong>("RandomSeed");
-		world_seed = random_seed.payload;
-	} catch (nbt::NBTError& e) {
-		LOG(ERROR) << "Unable to read world seed from level.dat file for slime overlay: " << e.what();
-	}
+        nbt::TagCompound data = level_dat.findTag<nbt::TagCompound>("Data");
+        nbt::TagLong random_seed = data.findTag<nbt::TagLong>("RandomSeed");
+        world_seed = random_seed.payload;
+    } catch (nbt::NBTError &e) {
+        LOG(ERROR) << "Unable to read world seed from level.dat file for slime overlay: "
+                   << e.what();
+    }
 }
 
 SlimeOverlay::~SlimeOverlay() {}
