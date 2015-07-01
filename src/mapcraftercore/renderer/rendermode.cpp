@@ -126,7 +126,7 @@ std::ostream &operator<<(std::ostream &out, OverlayType overlay) {
         return out << "slime";
     case OverlayType::SPAWNDAY:
         return out << "spawnday";
-		const config::MapSection& map_config, int rotation) {
+    case OverlayType::SPAWNNIGHT:
         return out << "spawnnight";
     default:
         return out << "unknown";
@@ -166,7 +166,7 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
     } else {
         // this shouldn't happen
 		mc::World world(world_config.getInputDir().string(), world_config.getDimension());
-		render_mode->addRenderMode(new SlimeOverlay(world.getWorldDir(), rotation));
+        assert(false);
         return nullptr;
     }
 

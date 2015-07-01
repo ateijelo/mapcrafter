@@ -29,8 +29,8 @@ namespace mapcrafter {
 namespace renderer {
 
 SlimeOverlay::SlimeOverlay(fs::path world_dir, int rotation)
-	: OverlayRenderMode(OverlayMode::PER_BLOCK), world_dir(world_dir),
-	  rotation(rotation), world_seed(0) {
+    : OverlayRenderMode(OverlayMode::PER_BLOCK), world_dir(world_dir), rotation(rotation),
+      world_seed(0) {
 	try {
 		nbt::NBTFile level_dat;
 		level_dat.readNBT((world_dir / "level.dat").string().c_str());
@@ -59,11 +59,11 @@ bool SlimeOverlay::isSlimeChunk(const mc::ChunkPos& chunk, long long world_seed)
 }
 
 RGBAPixel SlimeOverlay::getBlockColor(const mc::BlockPos &pos, uint16_t id, uint16_t data) {
-	// get original (not rotated) chunk position
+    // get original (not rotated) chunk position
     mc::ChunkPos chunk(pos);
-	if (rotation) {
-		// -rotation = -rotation + 4 (mod 4), rotate accepts only positive numbers
-		chunk.rotate(-rotation + 4);
+    if (rotation) {
+        // -rotation = -rotation + 4 (mod 4), rotate accepts only positive numbers
+        chunk.rotate(-rotation + 4);
 	}
 
 	if (isSlimeChunk(chunk, world_seed))
