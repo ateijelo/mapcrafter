@@ -19,13 +19,6 @@
 
 #include "rendermode.h"
 
-#include "blockimages.h"
-#include "image.h"
-#include "rendermodes/cave.h"
-#include "rendermodes/lighting.h"
-#include "rendermodes/heightoverlay.h"
-#include "rendermodes/slimeoverlay.h"
-#include "rendermodes/spawnoverlay.h"
 #include "../config/configsections/map.h"
 #include "../config/configsections/world.h"
 #include "../mc/chunk.h"
