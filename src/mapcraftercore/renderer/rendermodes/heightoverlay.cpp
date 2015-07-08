@@ -25,11 +25,11 @@
 namespace mapcrafter {
 namespace renderer {
 
-HeightOverlay::HeightOverlay()
-	: OverlayRenderMode(OverlayMode::PER_BLOCK) {
+HeightOverlay::HeightOverlay() : OverlayRenderMode(OverlayMode::PER_BLOCK) {}
+
 }
 
-RGBAPixel HeightOverlay::getBlockColor(const mc::BlockPos& pos, uint16_t id, uint16_t data) {
+    int r = h1 * 128.0 + 128.0;
 	// TODO make the gradient configurable
 	double h1 = (double) (64 - pos.y) / 64;
 	if (pos.y > 64)

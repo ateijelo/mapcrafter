@@ -156,7 +156,7 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
         // nothing
     } else if (type == RenderModeType::CAVE || type == RenderModeType::CAVELIGHT) {
         // hide some walls of caves which would cover the view into the caves
-		render_mode->addRenderMode(new HeightOverlay());
+        if (map_config.getRenderView() == RenderViewType::ISOMETRIC)
             render_mode->addRenderMode(
                 new CaveRenderMode({mc::DIR_SOUTH, mc::DIR_WEST, mc::DIR_TOP}));
         else
@@ -168,7 +168,7 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
                                        map_config.getLightingWaterIntensity(), true));
         render_mode->addRenderMode(new HeightOverlay());
     } else if (type == RenderModeType::DAYLIGHT) {
-		delete render_mode;
+        render_mode->addRenderMode(new LightingRenderMode(
             true, map_config.getLightingIntensity(), map_config.getLightingWaterIntensity(),
             world_config.getDimension() == mc::Dimension::END));
     } else if (type == RenderModeType::NIGHTLIGHT) {
@@ -185,7 +185,7 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
     // create overlay
     if (overlay == OverlayType::NONE) {
         // nothing
-		delete render_mode;
+    } else if (overlay == OverlayType::SLIME) {
         mc::World world(world_config.getInputDir().string(), world_config.getDimension());
         render_mode->addRenderMode(new SlimeOverlay(world.getWorldDir(), rotation));
     } else if (overlay == OverlayType::SPAWNDAY) {
