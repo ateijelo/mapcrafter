@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
         std::cerr << "There seems to be an issue with your locale, please verify your environment:"
                   << ex.what() << std::endl;
         throw ex;
-	}
+    }
 
 	renderer::RenderOpts opts;
 	std::string arg_color, arg_config;
