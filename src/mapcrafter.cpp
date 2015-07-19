@@ -38,11 +38,11 @@ using namespace mapcrafter;
 
 int main(int argc, char **argv) {
 
-	try {
-		std::string locale = std::locale("").name();
-	} catch (std::runtime_error& ex) {
-		std::cerr << "There seems to be an issue with your locale, please verify your environment:"
-			<< ex.what() << std::endl;
+    try {
+        std::string locale = std::locale("").name();
+    } catch (std::runtime_error &ex) {
+        std::cerr << "There seems to be an issue with your locale, please verify your environment:"
+                  << ex.what() << std::endl;
 		throw ex;
 	}
 
@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
 		fs::path mapcrafter_bin = util::findExecutablePath();
 		std::cout << "Your home directory: " << util::findHomeDir().string() << std::endl;
 		std::cout << "Mapcrafter binary: " << mapcrafter_bin.string() << std::endl;
-
+        std::cout << "Resource directories:" << std::endl;
 		util::PathList resources = util::findResourceDirs(mapcrafter_bin);
 		std::cout << "Resource directories:" << std::endl;
 		for (size_t i = 0; i < resources.size(); i++)
