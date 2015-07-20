@@ -105,15 +105,7 @@ void Octree::reduceToParent() {
     parent->red += red;
     parent->green += green;
     parent->blue += blue;
-	parent->alpha += alpha;
-	
-	for (int i = 0; i < 16; i++) {
-		if (parent->children[i] == this) {
-			parent->children[i] = nullptr;
-			break;
-		}
-	}
-}
+    parent->alpha += alpha;
 
     for (int i = 0; i < 16; i++) {
         if (parent->children[i] == this) {
