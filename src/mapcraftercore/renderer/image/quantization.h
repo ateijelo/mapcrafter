@@ -50,7 +50,7 @@ public:
 	/**
 	 * Constructor.
 	 */
-	Octree(Octree* parent = nullptr, int level = 0);
+    Octree(Octree *parent = nullptr, int level = 0);
 
 	/**
 	 * Yeah, destructor.
@@ -67,10 +67,10 @@ public:
 	 */
 	const Octree* getParent() const;
 
-	/**
-	 * Returns the level of the node (distance to root node).
-	 */
-	int getLevel() const;
+    /**
+     * Returns the level of the node (distance to root node).
+     */
+    int getLevel() const;
 
     /**
      * Returns whether this node is the root of the tree.
@@ -112,9 +112,9 @@ public:
 	 */
 	RGBAPixel getColor() const;
 
-	/**
-	 * Returns how many color this node represents.
-	 */
+    /**
+     * Returns how many color this node represents.
+     */
     int getCount() const;
 
 	/**
@@ -122,11 +122,11 @@ public:
 	 */
 	void setColor(RGBAPixel color);
 
-	/**
-	 * Reduces the colors of this node to the parent node and automatically removes the
-	 * node from the parent. You have to delete the node after that on your own.
-	 */
-	void reduceToParent();
+    /**
+     * Reduces the colors of this node to the parent node and automatically removes the
+     * node from the parent. You have to delete the node after that on your own.
+     */
+    void reduceToParent();
 
 	/**
 	 * Returns the color palette index of the color associated with this node (if any).
@@ -164,15 +164,15 @@ protected:
 	// parent and children of this node
 	Octree* parent;
     Octree *children[16];
-	int level;
+    int level;
 
 	// how many colors this node represents
 	// only leaves or reduced nodes have a reference != 0
 	int reference;
 	// sum of represented colors -> average is color of this node
     int red, green, blue, alpha;
-	
-	
+
+    // index of the belonging color in the color palette (if any)
 	// index of the belonging color in the color palette (if any)
     // TODO link with color palette?
 	// TODO link with color palette?
