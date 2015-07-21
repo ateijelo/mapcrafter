@@ -87,9 +87,7 @@ RGBAPixel Octree::getColor() const {
     return rgba(red / reference, green / reference, blue / reference, alpha / reference);
 }
 
-int Octree::getCount() const {
-	return reference;
-}
+int Octree::getCount() const { return reference; }
 
 void Octree::setColor(RGBAPixel color) {
     reference++;
