@@ -39,10 +39,10 @@ const int OCTREE_COLOR_BITS = 5;
 /**
  * Represents an octree (actually a hextree) which is used for color quantization.
  *
- * Have a look at this: 
+ * Have a look at this:
  *  - http://www.cubic.org/docs/octree.htm
  *  - http://rosettacode.org/wiki/Color_quantization#C
- * 
+ *
  * Octrees are cool! \o/
  */
 class Octree {
@@ -72,10 +72,10 @@ public:
 	 */
 	int getLevel() const;
 
-	/**
-	 * Returns whether this node is the root of the tree.
-	 */
-	bool isRoot() const;
+    /**
+     * Returns whether this node is the root of the tree.
+     */
+    bool isRoot() const;
 
 	/**
 	 * Returns whether this node is a leaf.
@@ -115,7 +115,7 @@ public:
 	/**
 	 * Returns how many color this node represents.
 	 */
-	int getCount() const;
+    int getCount() const;
 
 	/**
 	 * Adds a color to this node.

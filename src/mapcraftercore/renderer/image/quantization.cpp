@@ -49,9 +49,7 @@ int Octree::getLevel() const {
 	return level;
 }
 
-bool Octree::isRoot() const {
-	return parent == nullptr;
-}
+bool Octree::isRoot() const { return parent == nullptr; }
 
 bool Octree::isLeaf() const {
 	for (int i = 0; i < 16; i++)
@@ -110,7 +108,7 @@ void Octree::setColor(RGBAPixel color) {
 
 void Octree::reduceToParent() {
 	assert(isLeaf());
-	assert(!isRoot());
+    assert(!isRoot());
 	
 	parent->reference += reference;
 	parent->red += red;
@@ -322,8 +320,8 @@ struct NodeComparator {
 		if (node1->getLevel() != node2->getLevel())
 			return node1->getLevel() < node2->getLevel();
 		// reduce nodes with fewer colors first
-		if (node1->getCount() != node2->getCount())
-			return node1->getCount() > node2->getCount();
+        if (node1->getCount() != node2->getCount())
+            return node1->getCount() > node2->getCount();
 		return node1 < node2;
 	};
 };
@@ -333,7 +331,7 @@ struct NodeComparator {
 /**
  * Simple octree color quantization: Similar to http://rosettacode.org/wiki/Color_quantization#C
  */
-void octreeColorQuantize(const RGBAImage& image, size_t max_colors,
+void octreeColorQuantize(const RGBAImage &image, size_t max_colors, std::vector<RGBAPixel> &colors,
 		std::vector<RGBAPixel>& colors, Octree** octree) {
 	assert(max_colors > 0);
 
@@ -350,7 +348,7 @@ void octreeColorQuantize(const RGBAImage& image, size_t max_colors,
 			Octree* node = Octree::findOrCreateNode(internal_octree, color);
 			node->setColor(color);
 			// add the leaf only once to the queue
-			if (node->getCount() == 1)
+            if (node->getCount() == 1)
 				queue.push(node);
 		}
 	}
@@ -358,7 +356,7 @@ void octreeColorQuantize(const RGBAImage& image, size_t max_colors,
 	// now: reduce the leaves until we have less colors than maximum
 	while (queue.size() > max_colors) {
 		Octree* node = queue.top();
-		assert(node->isLeaf());
+        assert(node->isLeaf());
 		queue.pop();
 		
 		// add the color value of the leaf to the parent
@@ -374,10 +372,10 @@ void octreeColorQuantize(const RGBAImage& image, size_t max_colors,
 
 	// gather the quantized colors
 	while (queue.size()) {
-		Octree* node = queue.top();
-		assert(node->isLeaf());
-		node->setColorID(colors.size());
-		colors.push_back(node->getColor());
+        Octree *node = queue.top();
+        assert(node->isLeaf());
+        node->setColorID(colors.size());
+        colors.push_back(node->getColor());
 		queue.pop();
 	}
 
