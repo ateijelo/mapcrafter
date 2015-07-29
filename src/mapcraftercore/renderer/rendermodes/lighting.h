@@ -92,8 +92,8 @@ typedef std::array<LightingColor, 4> CornerColors;
 
 class LightingRenderMode : public BaseRenderMode {
 public:
-	LightingRenderMode(bool day, double lighting_intensity,
-			double lighting_water_intensity, bool simulate_sun_light);
+    LightingRenderMode(bool day, double lighting_intensity, double lighting_water_intensity,
+                       bool simulate_sun_light);
 	virtual ~LightingRenderMode();
 
 	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data);
@@ -101,7 +101,7 @@ public:
 
 private:
 	bool day;
-	double lighting_intensity, lighting_water_intensity;
+    bool day;
 	bool simulate_sun_light;
 
 	/**
@@ -121,20 +121,20 @@ private:
 	/**
 	 * Returns the lighting color of a block.
 	 */
-	LightingColor getLightingColor(const mc::BlockPos& pos, double intensity);
+     */
 
 	/**
 	 * Returns the lighting color of a corner by calculating the average lighting color of
 	 * the four neighbor blocks.
 	 */
-	LightingColor getCornerColor(const mc::BlockPos& pos, const CornerNeighbors& corner,
-			double intensity);
+     */
+    LightingColor getCornerColor(const mc::BlockPos &pos, const CornerNeighbors &corner,
 
 	/**
 	 * Returns the corner lighting colors of a block face.
 	 */
-	CornerColors getCornerColors(const mc::BlockPos& pos, const FaceCorners& corners,
-			double intensity = -1);
+     */
+    CornerColors getCornerColors(const mc::BlockPos &pos, const FaceCorners &corners,
 
 	/**
 	 * Applies the smooth lighting to a block by adding lighting to the top, left and

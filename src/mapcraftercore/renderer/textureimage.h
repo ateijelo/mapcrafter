@@ -37,7 +37,7 @@ public:
 	/**
 	 * Tries to load the texture from the given path.
 	 */
-	bool load(const std::string& path, int size, int blur, double water_opacity);
+    bool load(const std::string &path, int size, int blur, double water_opacity);
 
 	/**
 	 * Returns the name of the texture.

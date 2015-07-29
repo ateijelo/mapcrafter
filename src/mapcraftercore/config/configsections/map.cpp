@@ -185,9 +185,7 @@ int MapSection::getJPEGQuality() const { return jpeg_quality.getValue(); }
 
 double MapSection::getLightingIntensity() const { return lighting_intensity.getValue(); }
 
-double MapSection::getLightingWaterIntensity() const {
-	return lighting_water_intensity.getValue();
-}
+double MapSection::getLightingWaterIntensity() const { return lighting_water_intensity.getValue(); }
 
 bool MapSection::renderBiomes() const { return render_biomes.getValue(); }
 

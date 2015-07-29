@@ -103,7 +103,7 @@ class MapSection : public ConfigSection {
     fs::path getBlockDir() const;
     int getTextureSize() const;
 	int getTextureBlur() const;
-	double getWaterOpacity() const;
+    double getWaterOpacity() const;
     int getTileWidth() const;
 
     ImageFormat getImageFormat() const;
@@ -112,7 +112,7 @@ class MapSection : public ConfigSection {
     int getJPEGQuality() const;
 
 	double getLightingIntensity() const;
-	double getLightingWaterIntensity() const;
+    double getLightingWaterIntensity() const;
     bool renderBiomes() const;
     bool useImageModificationTimes() const;
 
@@ -148,7 +148,7 @@ class MapSection : public ConfigSection {
     Field<bool> png_indexed;
     Field<int> jpeg_quality;
 
-	Field<double> lighting_intensity, lighting_water_intensity;
+    Field<double> lighting_intensity, lighting_water_intensity;
 	Field<bool> cave_high_contrast;
     Field<bool> render_biomes, use_image_mtimes;
 

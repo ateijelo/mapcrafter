@@ -17,7 +17,7 @@ public:
 	BlockTextures();
 	~BlockTextures();
 
-	bool load(const std::string& block_dir, int size, int blur, double water_opacity);
+    bool load(const std::string &block_dir, int size, int blur, double water_opacity);
 
 	TextureImage
 		ACACIA_DOOR_BOTTOM,
