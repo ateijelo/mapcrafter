@@ -140,9 +140,7 @@ class MapSection : public ConfigSection {
     Field<int> texture_size, texture_blur, tile_width;
     Field<double> water_opacity;
 
-	Field<double> water_opacity;
-
-	Field<ImageFormat> image_format;
+    Field<ImageFormat> image_format;
     Field<bool> png_indexed;
     Field<int> jpeg_quality;
 
