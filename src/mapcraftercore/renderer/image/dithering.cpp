@@ -58,13 +58,7 @@ void imageDither(RGBAImage &image, Palette &palette, std::vector<int> &data) {
                            rgba_add_clamp(image.getPixel(x, y + 1), error_r * 5 / 16,
                                           error_g * 5 / 16, error_b * 5 / 16, error_a * 5 / 16));
         }
-			image.setPixel(x, y+1, rgba_add_clamp(image.getPixel(x, y+1),
-						error_r * 5/16,
-						error_g * 5/16,
-						error_b * 5/16,
-						error_a * 5/16));
-		}
-	}
+    }
 }
 
 } // namespace renderer
