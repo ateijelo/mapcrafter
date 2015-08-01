@@ -46,11 +46,7 @@ uint8_t clamp(int c) {
 
 RGBAPixel rgba_add_clamp(RGBAPixel value, int r, int g, int b, int a) {
     return rgba(clamp(r + rgba_red(value)), clamp(g + rgba_green(value)),
-		clamp(r + rgba_red(value)),
-		clamp(g + rgba_green(value)),
-		clamp(b + rgba_blue(value)),
-		clamp(a + rgba_alpha(value))
-	);
+                clamp(b + rgba_blue(value)), clamp(a + rgba_alpha(value)));
 }
 
 RGBAPixel rgba_add_clamp(RGBAPixel value, const std::tuple<int, int, int> &values) {
