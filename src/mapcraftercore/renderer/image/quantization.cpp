@@ -160,7 +160,7 @@ Octree* Octree::findOrCreateNode(Octree* octree, RGBAPixel color) {
 	uint8_t alpha = rgba_alpha(color);
 
 	Octree* node = octree;
-	for (int i = 7; i >= 8 - OCTREE_COLOR_BITS; i--) {
+                    nth_bit(alpha, i);
 		int index = (nth_bit(red, i) << 3) | (nth_bit(green, i) << 2) | nth_bit(blue, i) << 1 | nth_bit(alpha, i);
 		node = node->getChildren(index);
 		assert(node != nullptr);
@@ -177,7 +177,7 @@ int Octree::findNearestColor(const Octree* octree, RGBAPixel color) {
 	uint8_t alpha = rgba_alpha(color);
 
 	const Octree* node = octree;
-	for (int i = 7; i >= 8 - OCTREE_COLOR_BITS; i--) {
+        if (node->hasColor())
 		if (node->hasColor())
 			break;
 		int index = (nth_bit(red, i) << 3) | (nth_bit(green, i) << 2) | nth_bit(blue, i) << 1 | nth_bit(alpha, i);
@@ -193,7 +193,7 @@ int Octree::findNearestColor(const Octree* octree, RGBAPixel color) {
 	int min_distance = -1;
 	int best_color = -1;
 	for (auto it = colors.begin(); it != colors.end(); ++it) {
-		int distance = rgba_distance2(color, it->second);
+        int distance = rgba_distance2(color, it->second);
 		if (best_color == -1 || distance < min_distance) {
 			min_distance = distance;
 			best_color = it->first;
@@ -204,59 +204,59 @@ int Octree::findNearestColor(const Octree* octree, RGBAPixel color) {
 	return best_color;
 }
 
-SubPalette::SubPalette(const std::vector<RGBAPixel>& palette_colors)
-	: initialized(false), palette_colors(palette_colors) {
+SubPalette::SubPalette(const std::vector<RGBAPixel> &palette_colors)
+    : initialized(false), palette_colors(palette_colors) {}
+
+int SubPalette::getNearestColor(const RGBAPixel &color) {
+    if (!initialized)
+        initialize(color);
+
+    int min_distance = 256 * 256 * 4;
+    int best_color = -1;
+    for (size_t j = 0; j < colors.size(); j++) {
+        int i = colors[j];
+        int distance = rgba_distance2(palette_colors[i], color);
+        if (distance < min_distance) {
+            min_distance = distance;
+            best_color = i;
+        }
+        if (distance == 0)
+            return i;
+    }
+
+    assert(best_color != -1);
+    return best_color;
 }
 
-int SubPalette::getNearestColor(const RGBAPixel& color) {
-	if (!initialized)
-		initialize(color);
+void SubPalette::initialize(const RGBAPixel &c) {
+    RGBAPixel center =
+        rgba((OctreePalette2::BIN_FOR_COLOR(rgba_red(c)) * 256 + 128) / OctreePalette2::BINS,
+             (OctreePalette2::BIN_FOR_COLOR(rgba_green(c)) * 256 + 128) / OctreePalette2::BINS,
+             (OctreePalette2::BIN_FOR_COLOR(rgba_blue(c)) * 256 + 128) / OctreePalette2::BINS,
+             (OctreePalette2::BIN_FOR_COLOR(rgba_alpha(c)) * 256 + 128) / OctreePalette2::BINS);
 
-	int min_distance = 256 * 256 * 4;
-	int best_color = -1;
-	for (size_t j = 0; j < colors.size(); j++) {
-		int i = colors[j];
-		int distance = rgba_distance2(palette_colors[i], color);
-		if (distance < min_distance) {
-			min_distance = distance;
-			best_color = i;
-		}
-		if (distance == 0)
-			return i;
-	}
+    int nearest = 256 * 256 * 4;
+    for (size_t i = 0; i < palette_colors.size(); i++) {
+        int distance = rgba_distance2(palette_colors[i], center);
+        if (distance < nearest)
+            nearest = distance;
+        if (nearest == 0)
+            break;
+    }
 
-	assert(best_color != -1);
-	return best_color;
+    double tmp = sqrt(nearest) + 2 * sqrt(2) * (128 / OctreePalette2::BINS);
+    int nearest_dist = (tmp * tmp) + 1;
+    for (size_t i = 0; i < palette_colors.size(); i++) {
+        int distance = rgba_distance2(palette_colors[i], center);
+        if (distance <= nearest_dist)
+            colors.push_back(i);
+    }
+
+    initialized = true;
 }
 
-void SubPalette::initialize(const RGBAPixel& c) {
-	RGBAPixel center = rgba(
-		(OctreePalette2::BIN_FOR_COLOR(rgba_red(c)) * 256 + 128) / OctreePalette2::BINS,
-		(OctreePalette2::BIN_FOR_COLOR(rgba_green(c)) * 256 + 128) / OctreePalette2::BINS,
-		(OctreePalette2::BIN_FOR_COLOR(rgba_blue(c)) * 256 + 128) / OctreePalette2::BINS,
-		(OctreePalette2::BIN_FOR_COLOR(rgba_alpha(c)) * 256 + 128) / OctreePalette2::BINS
-	);
-
-	int nearest = 256 * 256 * 4;
-	for (size_t i = 0; i < palette_colors.size(); i++) {
-		int distance = rgba_distance2(palette_colors[i], center);
-		if (distance < nearest)
-			nearest = distance;
-		if (nearest == 0)
-			break;
-	}
-
-	double tmp = sqrt(nearest) + 2 * sqrt(2) * (128 / OctreePalette2::BINS);
-	int nearest_dist = (tmp * tmp) + 1;
-	for (size_t i = 0; i < palette_colors.size(); i++) {
-		int distance = rgba_distance2(palette_colors[i], center);
-		if (distance <= nearest_dist)
-			colors.push_back(i);
-	}
-
-	initialized = true;
-}
-
+OctreePalette::OctreePalette(const std::vector<RGBAPixel> &colors) : colors(colors) {
+    // add each color to the octree, assign a palette index and update parents
 OctreePalette::OctreePalette(const std::vector<RGBAPixel>& colors)
 	: colors(colors) {
 	// add each color to the octree, assign a palette index and update parents
@@ -287,27 +287,25 @@ OctreePalette2::OctreePalette2(const std::vector<RGBAPixel>& colors)
 }
 
 OctreePalette2::~OctreePalette2() {
-	for (size_t i = 0; i < sub_palettes.size(); i++) {
-		if (sub_palettes[i] != nullptr)
-			delete sub_palettes[i];
-	}
+    for (size_t i = 0; i < sub_palettes.size(); i++) {
+        if (sub_palettes[i] != nullptr)
+            delete sub_palettes[i];
+    }
 }
 
-const std::vector<RGBAPixel>& OctreePalette2::getColors() const {
-	return colors;
-}
+const std::vector<RGBAPixel> &OctreePalette2::getColors() const { return colors; }
 
-int OctreePalette2::getNearestColor(const RGBAPixel& color) {
-	// find the belonging sub palette for this color and ask it for the nearest color
-	int bins = OctreePalette2::BINS;
-	size_t index = OctreePalette2::BIN_FOR_COLOR(rgba_red(color));
-	index += bins * OctreePalette2::BIN_FOR_COLOR(rgba_green(color));
-	index += bins * bins * OctreePalette2::BIN_FOR_COLOR(rgba_blue(color));
-	index += bins * bins * bins * OctreePalette2::BIN_FOR_COLOR(rgba_alpha(color));
-	assert(index < sub_palettes.size());
-	if (sub_palettes[index] == nullptr)
-		sub_palettes[index] = new SubPalette(colors);
-	return sub_palettes[index]->getNearestColor(color);
+int OctreePalette2::getNearestColor(const RGBAPixel &color) {
+    // find the belonging sub palette for this color and ask it for the nearest color
+    int bins = OctreePalette2::BINS;
+    size_t index = OctreePalette2::BIN_FOR_COLOR(rgba_red(color));
+    index += bins * OctreePalette2::BIN_FOR_COLOR(rgba_green(color));
+    index += bins * bins * OctreePalette2::BIN_FOR_COLOR(rgba_blue(color));
+    index += bins * bins * bins * OctreePalette2::BIN_FOR_COLOR(rgba_alpha(color));
+    assert(index < sub_palettes.size());
+    if (sub_palettes[index] == nullptr)
+        sub_palettes[index] = new SubPalette(colors);
+    return sub_palettes[index]->getNearestColor(color);
 }
 
 namespace {

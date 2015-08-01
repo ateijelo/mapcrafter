@@ -186,18 +186,18 @@ protected:
  * Also part of agrifs original implementation.
  */
 class SubPalette {
-public:
-	SubPalette(const std::vector<RGBAPixel>& palette_colors);
+  public:
+    SubPalette(const std::vector<RGBAPixel> &palette_colors);
 
-	int getNearestColor(const RGBAPixel& color);
+    int getNearestColor(const RGBAPixel &color);
 
-protected:
-	void initialize(const RGBAPixel& search_color);
+  protected:
+    void initialize(const RGBAPixel &search_color);
 
-	bool initialized;
+    bool initialized;
 
-	const std::vector<RGBAPixel>& palette_colors;
-	std::vector<int> colors;
+    const std::vector<RGBAPixel> &palette_colors;
+    std::vector<int> colors;
 };
 
 /**
@@ -218,7 +218,7 @@ public:
 	virtual ~OctreePalette();
 
 	virtual const std::vector<RGBAPixel>& getColors() const;
-	virtual int getNearestColor(const RGBAPixel& color);
+    virtual int getNearestColor(const RGBAPixel &color);
 
 protected:
 	// available colors
@@ -238,20 +238,20 @@ protected:
  * https://github.com/overviewer/Minecraft-Overviewer/blob/oil/overviewer/oil/oil-dither.c
  */
 class OctreePalette2 : public Palette {
-public:
-	OctreePalette2(const std::vector<RGBAPixel>& colors);
-	virtual ~OctreePalette2();
+  public:
+    OctreePalette2(const std::vector<RGBAPixel> &colors);
+    virtual ~OctreePalette2();
 
-	virtual const std::vector<RGBAPixel>& getColors() const;
-	virtual int getNearestColor(const RGBAPixel& color);
+    virtual const std::vector<RGBAPixel> &getColors() const;
+    virtual int getNearestColor(const RGBAPixel &color);
 
-	static const int SPLITS = 3;
-	static const int BINS = 1 << SPLITS;
-	static const int BINS_ALL = BINS * BINS * BINS * BINS;
-	static int BIN_FOR_COLOR(int c) {
-		return c >> (8 - SPLITS);
-	}
+    static const int SPLITS = 3;
+    static const int BINS = 1 << SPLITS;
+    static const int BINS_ALL = BINS * BINS * BINS * BINS;
+    static int BIN_FOR_COLOR(int c) { return c >> (8 - SPLITS); }
 
+  protected:
+    std::vector<RGBAPixel> colors;
 protected:
 	std::vector<RGBAPixel> colors;
 	std::vector<SubPalette*> sub_palettes;

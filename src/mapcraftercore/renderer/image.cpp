@@ -68,10 +68,10 @@ RGBAPixel rgba_multiply(RGBAPixel value, double r, double g, double b, double a)
 }
 
 int rgba_distance2(RGBAPixel value1, RGBAPixel value2) {
-	return std::pow(rgba_red(value1) - rgba_red(value2), 2)
-		+ std::pow(rgba_green(value1) - rgba_green(value2), 2)
-		+ std::pow(rgba_blue(value1) - rgba_blue(value2), 2)
-		+ std::pow(rgba_alpha(value1) - rgba_alpha(value2), 2);
+    return std::pow(rgba_red(value1) - rgba_red(value2), 2) +
+           std::pow(rgba_green(value1) - rgba_green(value2), 2) +
+           std::pow(rgba_blue(value1) - rgba_blue(value2), 2) +
+           std::pow(rgba_alpha(value1) - rgba_alpha(value2), 2);
 }
 
 # ifndef UINT64_C
@@ -630,13 +630,13 @@ bool RGBAImage::writeIndexedPNG(const std::string& filename, int palette_bits, b
 	png_set_PLTE(png, info, palette, palette_size);
 	png_set_tRNS(png, info, palette_alpha, palette_size, NULL);
 
-	OctreePalette p(colors);
-	//OctreePalette2 p(colors);
-	
+
+    OctreePalette p(colors);
+    // OctreePalette2 p(colors);
 	std::vector<int> data_dithered;
 	if (dithered) {
 		RGBAImage copy = *this;
-		imageDither(copy, p, data_dithered);
+        RGBAImage copy = *this;
 	}
 
 	png_bytep* rows = (png_bytep*) png_malloc(png, height * sizeof(png_bytep));
@@ -648,7 +648,7 @@ bool RGBAImage::writeIndexedPNG(const std::string& filename, int palette_bits, b
 			if (dithered) {
 				setRowPixel(rows[y], palette_bits, x, data_dithered[y * width + x]);
 			} else {
-				setRowPixel(rows[y], palette_bits, x, p.getNearestColor(pixel(x, y)));
+            } else {
 			}
 		}
 	}
