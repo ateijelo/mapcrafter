@@ -251,9 +251,7 @@ class OctreePalette2 : public Palette {
 
   protected:
     std::vector<RGBAPixel> colors;
-protected:
-	std::vector<RGBAPixel> colors;
-	std::vector<SubPalette*> sub_palettes;
+    std::vector<SubPalette *> sub_palettes;
 };
 
 /**
