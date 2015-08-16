@@ -144,23 +144,23 @@ Block WorldCache::getBlock(const mc::BlockPos &pos, const mc::Chunk *chunk, int 
     } else {
         mc::LocalBlockPos local(pos);
         Block block;
-		block.pos = pos;
-		if (get & GET_ID) {
+        block.pos = pos;
+        if (get & GET_ID) {
             block.id = mychunk->getBlockID(local);
-			block.fields_set |= GET_ID;
+            block.fields_set |= GET_ID;
         }
         if (get & GET_BIOME) {
             block.biome = mychunk->getBiomeAt(local);
-			block.fields_set |= GET_BIOME;
+            block.fields_set |= GET_BIOME;
         }
         if (get & GET_BLOCK_LIGHT) {
             block.block_light = mychunk->getBlockLight(local);
-			block.fields_set |= GET_BLOCK_LIGHT;
+            block.fields_set |= GET_BLOCK_LIGHT;
         }
         if (get & GET_SKY_LIGHT) {
             block.sky_light = mychunk->getSkyLight(local);
-			block.fields_set |= GET_SKY_LIGHT;
-		}
+            block.fields_set |= GET_SKY_LIGHT;
+        }
         return block;
     }
 }

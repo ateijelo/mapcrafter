@@ -69,19 +69,19 @@ struct FaceCorners {
 extern const FaceCorners CORNERS_LEFT, CORNERS_RIGHT, CORNERS_TOP, CORNERS_BOTTOM;
 
 class LightingData {
-public:
-	LightingData(uint8_t block_light = 0, uint8_t sky_light = 15);
-	~LightingData();
+  public:
+    LightingData(uint8_t block_light = 0, uint8_t sky_light = 15);
+    ~LightingData();
 
-	uint8_t getBlockLight() const;
-	uint8_t getSkyLight() const;
-	uint8_t getLightLevel(bool day) const;
+    uint8_t getBlockLight() const;
+    uint8_t getSkyLight() const;
+    uint8_t getLightLevel(bool day) const;
 
 	static LightingData estimate(const mc::Block& block, RenderedBlockImages* block_images,
-			mc::WorldCache* world, mc::Chunk* current_chunk);
+                                 mc::WorldCache *world, mc::Chunk *current_chunk);
 
-protected:
-	uint8_t block_light, sky_light;
+  protected:
+    uint8_t block_light, sky_light;
 };
 
 typedef float LightingColor;

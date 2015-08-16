@@ -39,13 +39,13 @@ struct Block {
 	Block();
     Block(const mc::BlockPos &pos, uint16_t id);
 
-	// which block does this data belong to (set by getBlock-method)
-	mc::BlockPos pos;
+    // which block does this data belong to (set by getBlock-method)
+    mc::BlockPos pos;
     uint16_t id;
     uint8_t biome;
     uint8_t block_light, sky_light;
-	// which of the fields above are set? (set by getBlock-method)
-	int fields_set;
+    // which of the fields above are set? (set by getBlock-method)
+    int fields_set;
 };
 
 const int GET_ID = 1;
