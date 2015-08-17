@@ -27,7 +27,7 @@ namespace renderer {
 
 class SpawnOverlay : public OverlayRenderMode {
   public:
-	SpawnOverlay(bool day);
+    SpawnOverlay(bool day);
     virtual ~SpawnOverlay();
 
   protected:
@@ -35,7 +35,7 @@ class SpawnOverlay : public OverlayRenderMode {
 
 	virtual RGBAPixel getBlockColor(const mc::BlockPos& pos, const BlockImage& block_image);
 
-	bool day;
+    bool day;
 };
 
 } // namespace renderer

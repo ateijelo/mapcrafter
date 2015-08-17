@@ -134,8 +134,8 @@ void MultiplexingRenderMode::draw(RGBAImage& image, const BlockImage& block_imag
         return out << "unknown";
     }
 }
-	case OverlayType::SPAWNDAY: return out << "spawnday";
-	case OverlayType::SPAWNNIGHT: return out << "spawnnight";
+
+std::ostream &operator<<(std::ostream &out, OverlayType overlay) {
     switch (overlay) {
     case OverlayType::SLIME:
         return out << "slime";
@@ -182,10 +182,10 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
         // this shouldn't happen
 		mc::World world(world_config.getInputDir().string(), world_config.getDimension());
 		render_mode->addRenderMode(new SlimeOverlay(world.getWorldDir(), rotation));
-	} else if (overlay == OverlayType::SPAWNDAY) {
-		render_mode->addRenderMode(new SpawnOverlay(true));
-	} else if (overlay == OverlayType::SPAWNNIGHT) {
-		render_mode->addRenderMode(new SpawnOverlay(false));
+        return nullptr;
+    }
+
+    // create overlay
     if (overlay == OverlayType::NONE) {
         // nothing
 		delete render_mode;
