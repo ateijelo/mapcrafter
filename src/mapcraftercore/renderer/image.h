@@ -24,8 +24,8 @@
 #include <cmath>
 #include <math.h> // to be sure M_PI is defined
 
-#include <png.h>
 #include <cstdint>
+#include <png.h>
 #include <string>
 #include <tuple>
 #include <vector>
