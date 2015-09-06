@@ -73,11 +73,7 @@ template <> renderer::OverlayType as<renderer::OverlayType>(const std::string &f
 }
 
 } // namespace util
-			"'spawnnight'!");
-}
-
-}
-}
+} // namespace mapcrafter
 
 namespace mapcrafter {
 namespace config {
