@@ -72,7 +72,7 @@ template <> renderer::OverlayType as<renderer::OverlayType>(const std::string &f
                                 "'spawnnight'!");
 }
 
-	throw std::invalid_argument("Must be 'none', 'slime', 'spawnday', or "
+} // namespace util
 			"'spawnnight'!");
 }
 
