@@ -36,7 +36,7 @@ class BlockStateRegistry;
  * A block with id/data/biome/lighting data.
  */
 struct Block {
-	Block();
+    Block();
     Block(const mc::BlockPos &pos, uint16_t id);
 
     // which block does this data belong to (set by getBlock-method)
