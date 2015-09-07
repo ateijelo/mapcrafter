@@ -143,7 +143,7 @@ class WorldCache {
   public:
     WorldCache(mc::BlockStateRegistry &block_registry, const World &world);
 
-	const World& getWorld() const;
+    const World &getWorld() const;
 
     RegionFile *getRegion(const RegionPos &pos);
     Chunk *getChunk(const ChunkPos &pos);
