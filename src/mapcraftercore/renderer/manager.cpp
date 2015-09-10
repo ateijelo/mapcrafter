@@ -352,7 +352,7 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     web_config.setMapMaxZoom(map, context.tile_set->getDepth());
     web_config.setMapTileSize(map, std::make_tuple<>(tile_w, tile_h));
     web_config.writeConfigJS();
-	if (threads == 1 || tile_set->getRequiredRenderTilesCount() == 1)
+
     std::shared_ptr<thread::Dispatcher> dispatcher;
     if (threads == 1 || tile_set->getRequiredRenderTilesCount() == 1)
         dispatcher = std::make_shared<thread::SingleThreadDispatcher>();
