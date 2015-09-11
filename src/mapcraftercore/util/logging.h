@@ -37,10 +37,14 @@
 #define DEFAULT_LOGGER "default"
 #define DEFAULT_LOGKEY "file__" __FILE__ ":" TOSTRING(__LINE__)
 
-#define LOGN(level, logger) mapcrafter::util::Logging::getInstance().getLogger((logger)).log(mapcrafter::util::LogLevel::level, __FILE__, __LINE__)
+#define LOGN(level, logger)                                                                        \
+    mapcrafter::util::Logging::getInstance().getLogger((logger)).log(                              \
+        mapcrafter::util::LogLevel::level, __FILE__, __LINE__)
 #define LOG(level) LOGN(level, DEFAULT_LOGGER)
 
-#define LOGNK_ONCE(level, logger, key) mapcrafter::util::Logging::getInstance().getLogger((logger)).logOnce((key), mapcrafter::util::LogLevel::level, __FILE__, __LINE__)
+#define LOGNK_ONCE(level, logger, key)                                                             \
+    mapcrafter::util::Logging::getInstance().getLogger((logger)).logOnce(                          \
+        (key), mapcrafter::util::LogLevel::level, __FILE__, __LINE__)
 #define LOGN_ONCE(level, logger) LOGNK_ONCE(level, logger, DEFAULT_LOGKEY)
 #define LOGK_ONCE(level, key) LOGNK_ONCE(level, DEFAULT_LOGGER, std::string("key__") + (key))
 #define LOG_ONCE(level) LOGN_ONCE(level, DEFAULT_LOGGER)
@@ -148,7 +152,7 @@ class LogStream {
     LogStream(LogLevel level, const std::string &logger, const std::string &file, int line);
 	~LogStream();
 
-	void setFake(bool fake);
+    void setFake(bool fake);
 
     template <typename T> LogStream &operator<<(const T &t) {
 	LogStream& operator<<(const T& t) {
@@ -156,7 +160,7 @@ class LogStream {
     }
 
   private:
-	bool fake;
+    bool fake;
 	LogMessage message;
 
 	std::shared_ptr<std::stringstream> ss;
@@ -182,11 +186,11 @@ class Logger {
 	 */
     LogStream log(LogLevel level, const std::string &file, int line);
 
-	/**
-	 * Same as log, but returns a fake log stream if there was already something logged
-	 * with the specified key.
-	 */
-	LogStream logOnce(const std::string& key, LogLevel level, const std::string& file, int line);
+    /**
+     * Same as log, but returns a fake log stream if there was already something logged
+     * with the specified key.
+     */
+    LogStream logOnce(const std::string &key, LogLevel level, const std::string &file, int line);
 
   protected:
     Logger(const std::string &name);

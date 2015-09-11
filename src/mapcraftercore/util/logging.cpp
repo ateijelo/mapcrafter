@@ -119,16 +119,16 @@ std::ostream &operator<<(std::ostream &out, LogLevel level) {
 
 LogStream::LogStream(LogLevel level, const std::string &logger, const std::string &file, int line)
     : fake(false), message({level, logger, file, line, ""}), ss(new std::stringstream) {
-	: fake(false), message({level, logger, file, line, ""}), ss(new std::stringstream) {
+    if (message.file.find('/') != std::string::npos)
 	if (message.file.find('/') != std::string::npos)
 		message.file = message.file.substr(message.file.find_last_of('/') + 1);
 }
 
 LogStream::~LogStream() {
-	if (!fake) {
-		message.message = ss->str();
-		Logging::getInstance().handleLogMessage(message);
-	}
+    if (!fake) {
+        message.message = ss->str();
+        Logging::getInstance().handleLogMessage(message);
+    }
 }
 
 void LogStream::setFake(bool fake) {
@@ -145,17 +145,16 @@ LogStream Logger::log(LogLevel level, const std::string &file, int line) {
     return LogStream(level, name, file, line);
 }
 
-
 std::set<std::string> logged = std::set<std::string>();
 
-LogStream Logger::logOnce(const std::string& key, LogLevel level,
-		const std::string& file, int line) {
-	LogStream log_stream(level, name, file, line);
-	if (!logged.count(key))
-		logged.insert(key);
-	else
-		log_stream.setFake(true);
-	return log_stream;
+LogStream Logger::logOnce(const std::string &key, LogLevel level, const std::string &file,
+                          int line) {
+    LogStream log_stream(level, name, file, line);
+    if (!logged.count(key))
+        logged.insert(key);
+    else
+        log_stream.setFake(true);
+    return log_stream;
 }
 
 LogSink::LogSink() {
