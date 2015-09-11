@@ -25,9 +25,18 @@ namespace mapcrafter {
 namespace mc {
 
 Block::Block()
-//	: Block(mc::BlockPos(0, 0, 0), 0, 0) { /* gcc 4.4 being stupid :/ */
+    //	: Block(mc::BlockPos(0, 0, 0), 0, 0) { /* gcc 4.4 being stupid :/ */
 	: pos(mc::BlockPos(0, 0, 0)), id(0), biome(0),
-	  block_light(0), sky_light(15), fields_set(0) {
+
+Block::Block(const mc::BlockPos &pos, uint16_t id)
+    : pos(pos), id(id), biome(0), block_light(0), sky_light(15), fields_set(GET_ID) {}
+
+WorldCache::WorldCache(mc::BlockStateRegistry &block_registry, const World &world)
+    : block_registry(block_registry), world(world) {
+    for (int i = 0; i < RSIZE; i++)
+        regioncache[i].used = false;
+    for (int i = 0; i < CSIZE; i++)
+        chunkcache[i].used = false;
 }
 
 Block::Block(const mc::BlockPos& pos, uint16_t id)
