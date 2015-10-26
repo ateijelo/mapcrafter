@@ -45,7 +45,7 @@ template <typename T> class accumulator_type : public boost::program_options::va
     virtual unsigned min_tokens() const { return 0; }
     virtual unsigned max_tokens() const { return 0; }
 
-	virtual bool adjacent_tokens_only() const { return true; }
+    virtual bool adjacent_tokens_only() const { return true; }
 
     /// Accumulating from different sources is silly.
     virtual bool is_composing() const { return false; }
