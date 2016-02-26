@@ -201,7 +201,7 @@ class WorldCrop {
      * Sets the limits (in block coordinates) of the circular boundaries.
      */
     void setCenter(const BlockPos &pos);
-	void setRadius(long radius);
+    void setRadius(long radius);
 
     /**
 	 * Returns whether a specific region is contained.
@@ -269,7 +269,7 @@ class WorldCrop {
 
     // circular limits
     BlockPos center;
-	long radius;
+    long radius;
 
     // whether to hide unpopulated chunks
     bool crop_unpopulated_chunks;
