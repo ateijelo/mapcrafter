@@ -56,7 +56,7 @@ class WorldSection : public ConfigSection {
     mc::BlockPos getDefaultView() const;
 	int getDefaultZoom() const;
 	int getDefaultRotation() const;
-	int getSeaLevel() const;
+    int getSeaLevel() const;
 
 	bool hasCropUnpopulatedChunks() const;
 	std::string getBlockMask() const;
@@ -79,7 +79,7 @@ class WorldSection : public ConfigSection {
 
     Field<mc::BlockPos> default_view;
 	Field<int> default_zoom, default_rotation;
-	Field<int> sea_level;
+    Field<int> sea_level;
 
     Field<int> min_y, max_y;
     Field<int> min_x, max_x, min_z, max_z;

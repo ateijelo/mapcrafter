@@ -72,7 +72,7 @@ void WorldSection::dump(std::ostream &out) const {
     out << "  default_view = " << default_view << std::endl;
     out << "  default_zoom = " << default_zoom << std::endl;
     out << "  default_rotation = " << default_rotation << std::endl;
-	out << "  sea_level = " << sea_level << std::endl;
+    out << "  sea_level = " << sea_level << std::endl;
     out << "  min_y = " << min_y << std::endl;
     out << "  max_y = " << max_y << std::endl;
     out << "  min_x = " << min_x << std::endl;
@@ -108,9 +108,7 @@ int WorldSection::getDefaultZoom() const { return default_zoom.getValue(); }
 
 int WorldSection::getDefaultRotation() const { return default_rotation.getValue(); }
 
-int WorldSection::getSeaLevel() const {
-	return sea_level.getValue();
-}
+int WorldSection::getSeaLevel() const { return sea_level.getValue(); }
 
 bool WorldSection::hasCropUnpopulatedChunks() const { return crop_unpopulated_chunks.getValue(); }
 
@@ -134,7 +132,7 @@ void WorldSection::preParse(const INIConfigSection &section, ValidationList &val
     default_view.setDefault(mc::BlockPos(0, 0, 0));
 	default_zoom.setDefault(0);
 	default_rotation.setDefault(-1);
-	sea_level.setDefault(64);
+    sea_level.setDefault(64);
 
 	crop_unpopulated_chunks.setDefault(false);
 }
@@ -162,8 +160,8 @@ bool WorldSection::parseField(const std::string key, const std::string value,
 		if (rotation == -1)
             validation.error("Invalid rotation '" + value + "'!");
 		default_rotation.setValue(rotation);
-	} else if (key == "sea_level") {
-		sea_level.load(key,value, validation);
+    } else if (key == "sea_level") {
+        sea_level.load(key, value, validation);
 	}
 
     else if (key == "crop_min_y") {
