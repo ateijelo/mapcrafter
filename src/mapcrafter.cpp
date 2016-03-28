@@ -52,8 +52,8 @@ int main(int argc, char **argv) {
     po::options_description general("General options");
     general.add_options()("help,h", "shows this help message")(
         "version,v", "shows the version of Mapcrafter")("mc-version",
-		("version,v", "shows the version of Mapcrafter")
-		("mc-version", "shows the required Minecraft version");
+                                                        "shows the required Minecraft version");
+
     po::options_description logging("Logging/output options");
     logging.add_options()("logging-config", po::value<fs::path>(&opts.logging_config),
                           "the path to the global logging configuration file to use (automatically "
@@ -121,11 +121,11 @@ int main(int argc, char **argv) {
 
     if (vm.count("mc-version")) {
         std::cout << MINECRAFT_VERSION << std::endl;
-	if (vm.count("mc-version")) {
-		std::cout << MINECRAFT_VERSION << std::endl;
-		return 0;
-	}
+        return 0;
+    }
 
+    if (vm.count("find-resources")) {
+        fs::path mapcrafter_bin = util::findExecutablePath();
 	if (vm.count("find-resources")) {
 		fs::path mapcrafter_bin = util::findExecutablePath();
 		std::cout << "Your home directory: " << util::findHomeDir().string() << std::endl;
