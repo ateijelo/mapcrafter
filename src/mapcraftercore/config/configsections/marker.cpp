@@ -71,10 +71,10 @@ bool MarkerSection::isShownByDefault() const { return show_default.getValue(); }
 bool MarkerSection::matchesSign(const mc::SignEntity &sign) const {
     if (sign.getText().empty() && !match_empty.getValue())
         return false;
-	// make sure that prefix and postfix don't overlap
+    // make sure that prefix and postfix don't overlap
     return util::startswith(sign.getText(), prefix.getValue()) &&
-		&& util::endswith(sign.getText(), postfix.getValue())
-		&& sign.getText().size() >= prefix.getValue().size() + postfix.getValue().size();
+           util::endswith(sign.getText(), postfix.getValue()) &&
+           sign.getText().size() >= prefix.getValue().size() + postfix.getValue().size();
 }
 
 std::string MarkerSection::formatTitle(const mc::SignEntity &sign) const {
