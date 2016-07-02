@@ -180,14 +180,14 @@ std::string escapeJSON(const std::string &str) {
 }
 
 std::string capitalize(const std::string &str) {
-	if (start.size() > str.size())
-		return false;
+    if (str.empty())
+        return "";
     std::string capitalized = str.substr(1);
     capitalized.insert(capitalized.begin(), toupper(str[0]));
     return capitalized;
 }
-	if (end.size() > str.size())
-		return false;
+
+std::string replaceAll(const std::string &str, const std::string &from, const std::string &to) {
     std::string replaced = str;
     size_t start = 0;
     while ((start = replaced.find(from, start)) != std::string::npos) {
