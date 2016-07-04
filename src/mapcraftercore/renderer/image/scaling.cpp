@@ -87,50 +87,7 @@ void imageResizeHalf(const RGBAImage &image, RGBAImage &dest) {
             RGBAPixel p4 = (image.pixel(x + 1, y + 1) >> 2) & 0x3f3f3f3f;
             dest.pixel(x / 2, y / 2) = p1 + p2 + p3 + p4;
         }
-			int sy = y_ratio * y;
-			double x_diff = (x_ratio * x) - sx;
-			double y_diff = (y_ratio * y) - sy;
-			RGBAPixel a = image.getPixel(sx, sy);
-			RGBAPixel b = image.getPixel(sx + 1, sy);
-			RGBAPixel c = image.getPixel(sx, sy + 1);
-			RGBAPixel d = image.getPixel(sx + 1, sy + 1);
-
-			uint8_t red = interpolate(rgba_red(a), rgba_red(b), rgba_red(c), rgba_red(d), x_diff, y_diff);
-			uint8_t green = interpolate(rgba_green(a), rgba_green(b), rgba_green(c), rgba_green(d), x_diff, y_diff);
-			uint8_t blue = interpolate(rgba_blue(a), rgba_blue(b), rgba_blue(c), rgba_blue(d), x_diff, y_diff);
-			uint8_t alpha = interpolate(rgba_alpha(a), rgba_alpha(b), rgba_alpha(c), rgba_alpha(d), x_diff, y_diff);
-
-			// make sure that that no transparency (aka alpha=254) sneaks into images
-			// caused by weird interpolation bugses, otherwise shit hits the fan
-			// when all blocks contain just a bit of transparency
-			
-			// do this by just clamping alpha >= threshold to 255, 245 or 255 won't be
-			// a big visual difference
-			if (alpha >= 245)
-				alpha = 255;
-		
-			dest.setPixel(x, y, rgba(red, green, blue, alpha));
-		}
-	}
-}
-
-void imageResizeHalf(const RGBAImage& image, RGBAImage& dest) {
-	int width = image.getWidth();
-	int height = image.getHeight();
-	dest.setSize(width / 2, height / 2);
-
-	for (int x = 0; x < width - 1; x += 2) {
-		for (int y = 0; y < height - 1; y += 2) {
-			RGBAPixel p1 = (image.pixel(x, y) >> 2) & 0x3f3f3f3f;
-			RGBAPixel p2 = (image.pixel(x + 1, y) >> 2) & 0x3f3f3f3f;
-			RGBAPixel p3 = (image.pixel(x, y + 1) >> 2) & 0x3f3f3f3f;
-			RGBAPixel p4 = (image.pixel(x + 1, y + 1) >> 2) & 0x3f3f3f3f;
-			dest.pixel(x / 2, y / 2) = p1 + p2 + p3 + p4;
-		}
-	}
-}
-
-}
+    }
 }
 
 } // namespace renderer
