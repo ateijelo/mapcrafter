@@ -31,10 +31,9 @@ TopdownTileSet::~TopdownTileSet() {}
 
 void TopdownTileSet::mapChunkToTiles(const mc::ChunkPos &chunk, std::set<TilePos> &tiles) {
     // make sure we render towards -infinity
-	// make sure we render towards -infinity
-	int x = std::floor((float) chunk.x / getTileWidth());
-	int y = std::floor((float) chunk.z / getTileWidth());
-	tiles.insert(TilePos(x, y));
+    int x = std::floor((float)chunk.x / getTileWidth());
+    int y = std::floor((float)chunk.z / getTileWidth());
+    tiles.insert(TilePos(x, y));
 }
 
 } // namespace renderer
