@@ -136,22 +136,22 @@ bool RegionFile::read() {
         if (offset == 0)
             continue;
 
-		// i = x + z * 32
-		int x = i % 32;
-		int z = (i - x) / 32;
+        // i = x + z * 32
+        int x = i % 32;
+        int z = (i - x) / 32;
 
         // get data size and compression type
         uint32_t size = *(reinterpret_cast<uint32_t *>(&regiondata[offset]));
-		if (size == 0) {
-			LOG(ERROR)  << "Corrupt region '" << filename << "': Size of chunk "
-				<< x << ":" << z << " is zero.";
-			return false;
-		}
+        if (size == 0) {
+            LOG(ERROR) << "Corrupt region '" << filename << "': Size of chunk " << x << ":" << z
+                       << " is zero.";
+            return false;
+        }
         size = util::bigEndian32(size) - 1;
         uint8_t compression = regiondata[offset + 4];
         if (filesize < offset + 5 + size) {
             LOG(ERROR) << "Corrupt region '" << filename << "': Invalid size of chunk " << x << ":"
-				<< x << ":" << z << ".";
+                       << z << ".";
             return false;
         }
 
