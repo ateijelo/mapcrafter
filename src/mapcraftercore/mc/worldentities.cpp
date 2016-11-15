@@ -258,7 +258,7 @@ std::vector<SignEntity> WorldEntitiesCache::getSigns(WorldCrop world_crop) const
                  ++entity_it) {
                 const nbt::TagCompound &entity = *entity_it;
 
-				if (entity.findTag<nbt::TagString>("id").payload != "Sign"
+                if (entity.findTag<nbt::TagString>("id").payload != "Sign" &&
 						&& entity.findTag<nbt::TagString>("id").payload != "minecraft:sign")
                     continue;
 
