@@ -23,7 +23,6 @@
 #include "../mc/pos.h"
 #include "blocktextures.h"
 #include "image.h"
-#include "../mc/pos.h"
 
 #include <array>
 #include <string>
