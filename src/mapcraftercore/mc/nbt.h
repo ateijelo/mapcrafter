@@ -65,8 +65,8 @@ enum class TagType : int8_t {
     TAG_STRING = 8,
     TAG_LIST = 9,
     TAG_COMPOUND = 10,
-	TAG_INT_ARRAY = 11,
-	TAG_LONG_ARRAY = 12,
+    TAG_INT_ARRAY = 11,
+    TAG_LONG_ARRAY = 12,
 };
 
 enum class Compression {
