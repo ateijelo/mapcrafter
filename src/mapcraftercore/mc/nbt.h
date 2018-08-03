@@ -84,9 +84,9 @@ template <typename T> void dumpTag(std::ostream &stream, const std::string &inde
 template <typename T, typename P>
 void dumpTag(std::ostream &stream, const std::string &indendation, T tag, P payloadrepr) {
     const char *type = "TAG_Unknown";
-	if (tag.getType() >= 0 && static_cast<uint8_t>(tag.getType()) < sizeof(TAG_NAMES) / sizeof(TAG_NAMES[0])) {
+    if (tag.getType() >= 0 &&
         static_cast<uint8_t>(tag.getType()) < sizeof(TAG_NAMES) / sizeof(TAG_NAMES[0])) {
-	}
+        type = TAG_NAMES[tag.getType()];
     }
     stream << indendation << type;
     if (tag.isNamed())
