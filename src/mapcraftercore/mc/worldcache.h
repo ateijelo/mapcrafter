@@ -126,7 +126,7 @@ struct CacheEntry {
  */
 class WorldCache {
   private:
-	mc::BlockStateRegistry& block_registry;
+    mc::BlockStateRegistry &block_registry;
 	World world;
 
     CacheEntry<RegionPos, RegionFile> regioncache[RSIZE];
@@ -144,7 +144,7 @@ class WorldCache {
 	int getChunkCacheIndex(const ChunkPos& pos) const;
 
   public:
-	WorldCache(mc::BlockStateRegistry& block_registry, const World& world);
+    WorldCache(mc::BlockStateRegistry &block_registry, const World &world);
 
 	const World& getWorld() const;
 

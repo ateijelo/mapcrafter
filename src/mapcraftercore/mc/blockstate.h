@@ -67,7 +67,7 @@ class BlockStateRegistry {
     bool isKnownProperty(std::string block, std::string property) const;
 
   private:
-	std::mutex mutex;
+    std::mutex mutex;
 
     std::map<std::string, std::map<std::string, uint16_t>> block_lookup;
     std::vector<BlockState> block_states;

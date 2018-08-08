@@ -71,8 +71,8 @@ BlockStateRegistry::BlockStateRegistry() : unknown_block("mapcrafter:unknown") {
 uint16_t BlockStateRegistry::getBlockID(const BlockState &block) {
     std::lock_guard<std::mutex> guard(mutex);
 
-	std::lock_guard<std::mutex> guard(mutex);
-
+    // first check if that block name is known
+    auto it = block_lookup.find(block.getName());
     if (it == block_lookup.end()) {
         // block name unknown -> insert block
         uint16_t id = block_states.size();

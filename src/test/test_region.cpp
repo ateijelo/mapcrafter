@@ -30,7 +30,7 @@
 namespace mc = mapcrafter::mc;
 
 BOOST_AUTO_TEST_CASE(region_testReadWrite) {
-	mc::BlockStateRegistry block_registry;
+    mc::BlockStateRegistry block_registry;
 
 	mc::RegionFile in1("data/region/r.-1.0.mca");
 	BOOST_CHECK(in1.read());
@@ -49,8 +49,8 @@ BOOST_AUTO_TEST_CASE(region_testReadWrite) {
 		BOOST_CHECK_EQUAL(*it1, *it2);
 
 		mc::Chunk chunk1, chunk2;
-		BOOST_CHECK(in1.loadChunk(*it1, block_registry, chunk1));
-		BOOST_CHECK(in2.loadChunk(*it2, block_registry, chunk2));
+        BOOST_CHECK(in1.loadChunk(*it1, block_registry, chunk1));
+        BOOST_CHECK(in2.loadChunk(*it2, block_registry, chunk2));
 	}
 
 }

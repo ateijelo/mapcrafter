@@ -341,7 +341,7 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     context.world_config = config.getWorld(map_config.getWorld());
     context.map_config = map_config;
 	context.tile_set = tile_set;
-	context.block_registry = &block_registry;
+    context.block_images = block_images.get();
     context.tile_set = tile_set;
     context.block_registry = &block_registry;
     context.world = worlds[map_config.getWorld()][rotation];

@@ -290,7 +290,7 @@ void RegionFile::setChunkData(const ChunkPos& chunk, const std::vector<uint8_t>&
 /**
  * This method tries to load a chunk from the region data and returns a status.
  */
-int RegionFile::loadChunk(const ChunkPos& pos, BlockStateRegistry& block_registry, Chunk& chunk) {
+int RegionFile::loadChunk(const ChunkPos &pos, BlockStateRegistry &block_registry, Chunk &chunk) {
 	int index = getChunkIndex(pos);
 
 	// check if the chunk exists
@@ -311,7 +311,7 @@ int RegionFile::loadChunk(const ChunkPos& pos, BlockStateRegistry& block_registr
     chunk.setWorldCrop(world_crop);
 	// try to load the chunk
     try {
-		if (!chunk.readNBT(block_registry, reinterpret_cast<char*>(&chunk_data[index][0]), size, comp))
+        if (!chunk.readNBT(block_registry, reinterpret_cast<char *>(&chunk_data[index][0]), size,
 			return CHUNK_DATA_INVALID;
             return CHUNK_DATA_INVALID;
 		LOG(ERROR) << "Unable to read chunk at " << pos << ": " << err.what();

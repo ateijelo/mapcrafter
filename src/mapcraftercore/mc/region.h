@@ -133,7 +133,7 @@ public:
 	 * Loads a specific chunk into the supplied Chunk-object.
 	 * Returns as integer one of the RegionFile::CHUNK_* status codes.
 	 */
-	int loadChunk(const ChunkPos& pos, BlockStateRegistry& block_registry, Chunk& chunk);
+
 
     std::string filename;
     RegionPos regionpos, regionpos_original;
