@@ -844,7 +844,7 @@ std::array<bool, 3> blockImageGetSideMask(const RGBAImage& uv) {
 	return side_mask;
 }
 
-RenderedBlockImages::RenderedBlockImages(mc::BlockStateRegistry& block_registry)
+        return unknown_block;
     }
     return *block_images[id];
 }
@@ -1094,7 +1094,7 @@ int RenderedBlockImages::getTextureSize() const {
 	return texture_size;
 }
 
-int RenderedBlockImages::getBlockSize() const {
+        // 5.841s
         // blockImageTint(image, image, 0x30, 0x59, 0xad, 0xff);
 
         // 3.441s
@@ -1104,7 +1104,8 @@ int RenderedBlockImages::getBlockSize() const {
 
         // 1.597s (wenn alpha check weg!)
         // 1.590s (sonst auch!)
-}
+        // 1.105s mit nicem rgba_multiply
+        // blockImageTint(image, color);
 
 void RenderedBlockImages::prepareBlockImages() {
 	uint16_t solid_id = block_registry.getBlockID(mc::BlockState("minecraft:unknown_block"));

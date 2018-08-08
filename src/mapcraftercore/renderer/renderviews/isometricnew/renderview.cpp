@@ -38,7 +38,8 @@ namespace mapcrafter {
 namespace renderer {
 
 BlockImages* NewIsometricRenderView::createBlockImages(mc::BlockStateRegistry& block_registry) const {
-	return new RenderedBlockImages(block_registry);
+NewIsometricRenderView::createBlockImages(mc::BlockStateRegistry &block_registry) const {
+    return new RenderedBlockImages(block_registry);
 }
 
 TileSet *NewIsometricRenderView::createTileSet(int tile_width) const {
@@ -69,7 +70,7 @@ void NewIsometricRenderView::configureBlockImages(BlockImages *block_images,
 		images->setBlockSideDarkening(0.75, 0.6);
 	}
 
-	/*
+    /*
     IsometricBlockImages* images = dynamic_cast<IsometricBlockImages*>(block_images);
     assert(images != nullptr);
 
@@ -78,7 +79,7 @@ void NewIsometricRenderView::configureBlockImages(BlockImages *block_images,
             images->setBlockSideDarkening(0.95, 0.8);
     else
             images->setBlockSideDarkening(0.75, 0.6);
-	*/
+    */
 }
 
 void NewIsometricRenderView::configureTileRenderer(TileRenderer *tile_renderer,

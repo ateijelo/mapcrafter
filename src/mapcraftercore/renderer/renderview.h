@@ -57,7 +57,7 @@ public:
 	/**
 	 * Creates an instance of the render view specific block image class.
 	 */
-	virtual BlockImages* createBlockImages(mc::BlockStateRegistry& block_registry) const = 0;
+    virtual BlockImages *createBlockImages(mc::BlockStateRegistry &block_registry) const = 0;
 
 	/**
 	 * Creates an instance of the render view specific tile set class.

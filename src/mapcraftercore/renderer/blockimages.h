@@ -38,7 +38,7 @@ namespace mapcrafter {
 namespace mc {
 class BlockState;
 class BlockStateRegistry;
-}
+} // namespace mc
 
 namespace renderer {
 
@@ -142,41 +142,41 @@ struct BlockImage {
 };
 
 class RenderedBlockImages : public BlockImages {
-public:
-	// OLD METHODS
-	virtual void setRotation(int rotation) {}
-	virtual void setRenderSpecialBlocks(bool render_unknown_blocks,
-			bool render_leaves_transparent) {}
-	//virtual RGBAImage exportBlocks() const {}
+  public:
+    // OLD METHODS
+    virtual void setRotation(int rotation) {}
+    virtual void setRenderSpecialBlocks(bool render_unknown_blocks,
+                                        bool render_leaves_transparent) {}
+    // virtual RGBAImage exportBlocks() const {}
 	virtual bool isBlockTransparent(uint16_t id, uint16_t data) const { return false; };
 	virtual bool hasBlock(uint16_t id, uint16_t) const { return true; };
 	virtual const RGBAImage& getBlock(uint16_t id, uint16_t data, uint16_t extra_data = 0) const { return unknown_block.image; };
 	virtual RGBAImage getBiomeBlock(uint16_t id, uint16_t data, const Biome& biome, uint16_t extra_data = 0) const { return unknown_block.image; };
 	virtual int getMaxWaterPreblit() const { return 0; };
-	//virtual int getBlockSize() const {};
-
-	RenderedBlockImages(mc::BlockStateRegistry& block_registry);
+    virtual RGBAImage getBiomeBlock(uint16_t id, uint16_t data, const Biome &biome,
+                                    uint16_t extra_data = 0) const {
+        return unknown_block.image;
 	~RenderedBlockImages();
-
+    virtual int getMaxWaterPreblit() const { return 0; };
 	void setBlockSideDarkening(float darken_left, float darken_right);
 
     RenderedBlockImages(mc::BlockStateRegistry &block_registry);
-	virtual RGBAImage exportBlocks() const;
+    ~RenderedBlockImages();
 
 	const BlockImage& getBlockImage(uint16_t id);
 
-
+    bool loadBlockImages(fs::path block_dir, std::string view, int rotation, int texture_size);
 	virtual int getTextureSize() const;
-	virtual int getBlockSize() const;
+
     const BlockImage &getBlockImage(uint16_t id);
     void prepareBiomeBlockImage(RGBAImage &image, const BlockImage &block, uint32_t color);
 
-private:
+    virtual int getTextureSize() const;
 	void prepareBlockImages();
     virtual int getBlockWidth() const;
 
-	mc::BlockStateRegistry& block_registry;
 
+  private:
 	float darken_left, darken_right;
 
 

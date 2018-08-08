@@ -23,7 +23,8 @@
 #include "tilerenderer.h"
 #include "../../rendermode.h"
 #include "../../rendermodes/overlay.h"
-#include "../../../mc/blockstate.h"
+#include "tilerenderer.h"
+#include "tileset.h"
 
 namespace mapcrafter {
 namespace renderer {

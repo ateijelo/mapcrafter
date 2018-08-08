@@ -301,8 +301,8 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     config::MapSection map_config = config.getMap(map);
     config::WorldSection world_config = config.getWorld(map_config.getWorld());
 
-	// TODO keep block state registry global per map. or are there any reasons to make more global?
-	mc::BlockStateRegistry block_registry;
+    // TODO keep block state registry global per map. or are there any reasons to make more global?
+    mc::BlockStateRegistry block_registry;
     std::shared_ptr<RenderView> render_view(createRenderView(map_config.getRenderView()));
 
     // output a small notice if we render this map incrementally
@@ -338,17 +338,17 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     }
 
 	// create other stuff for the render dispatcher
-	std::shared_ptr<BlockImages> block_images(render_view->createBlockImages(block_registry));
+    std::shared_ptr<BlockImages> block_images(render_view->createBlockImages(block_registry));
     render_view->configureBlockImages(block_images.get(), world_config, map_config);
 
-	RenderedBlockImages* new_block_images = dynamic_cast<RenderedBlockImages*>(block_images.get());
-	if (new_block_images != nullptr) {
+    RenderedBlockImages *new_block_images = dynamic_cast<RenderedBlockImages *>(block_images.get());
+    if (new_block_images != nullptr) {
         if (!new_block_images->loadBlockImages(map_config.getBlockDir().string(),
                                                util::str(map_config.getRenderView()), rotation,
                                                map_config.getTextureSize())) {
             LOG(ERROR) << "Skipping remaining rotations.";
-	}
-
+            return;
+        }
     }
 
     RenderContext context;
