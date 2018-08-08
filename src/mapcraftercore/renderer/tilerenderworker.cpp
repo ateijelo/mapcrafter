@@ -28,9 +28,6 @@
 #include "renderview.h"
 #include "tilerenderer.h"
 #include "tileset.h"
-#include "../mc/worldcache.h"
-#include "../mc/blockstate.h"
-#include "../util.h"
 
 namespace mapcrafter {
 namespace renderer {
