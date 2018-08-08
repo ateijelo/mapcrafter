@@ -27,6 +27,10 @@
 #include "../../../config/configsections/world.h"
 #include "../../../mc/blockstate.h"
 #include "../../../util.h"
+#include "../../blockimages.h"
+#include "../../rendermode.h"
+#include "tilerenderer.h"
+#include "tileset.h"
 
 #include <cassert>
 
@@ -37,8 +41,8 @@ BlockImages* NewIsometricRenderView::createBlockImages(mc::BlockStateRegistry& b
 	return new RenderedBlockImages(block_registry);
 }
 
-TileSet* NewIsometricRenderView::createTileSet(int tile_width) const {
-	return new NewIsometricTileSet(tile_width);
+TileSet *NewIsometricRenderView::createTileSet(int tile_width) const {
+    return new NewIsometricTileSet(tile_width);
 }
 
 TileRenderer* NewIsometricRenderView::createTileRenderer(mc::BlockStateRegistry& block_registry,
@@ -46,11 +50,14 @@ TileRenderer* NewIsometricRenderView::createTileRenderer(mc::BlockStateRegistry&
 	return new NewIsometricTileRenderer(this, block_registry, images, tile_width, world, render_mode);
 }
 
-void NewIsometricRenderView::configureBlockImages(BlockImages* block_images,
-		const config::WorldSection& world_config,
-		const config::MapSection& map_config) const {
-	assert(block_images != nullptr);
-	RenderView::configureBlockImages(block_images, world_config, map_config);
+void NewIsometricRenderView::configureBlockImages(BlockImages *block_images,
+                                                  const config::WorldSection &world_config,
+                                                  const config::MapSection &map_config) const {
+    assert(block_images != nullptr);
+    RenderView::configureBlockImages(block_images, world_config, map_config);
+
+    RenderedBlockImages *images = dynamic_cast<RenderedBlockImages *>(block_images);
+    assert(images != nullptr);
 
 	RenderedBlockImages* images = dynamic_cast<RenderedBlockImages*>(block_images);
 	assert(images != nullptr);
@@ -63,22 +70,22 @@ void NewIsometricRenderView::configureBlockImages(BlockImages* block_images,
 	}
 
 	/*
-	IsometricBlockImages* images = dynamic_cast<IsometricBlockImages*>(block_images);
-	assert(images != nullptr);
+    IsometricBlockImages* images = dynamic_cast<IsometricBlockImages*>(block_images);
+    assert(images != nullptr);
 
-	RenderModeType render_mode = map_config.getRenderMode();
-	if (render_mode == RenderModeType::DAYLIGHT || render_mode == RenderModeType::NIGHTLIGHT)
-		images->setBlockSideDarkening(0.95, 0.8);
-	else
-		images->setBlockSideDarkening(0.75, 0.6);
+    RenderModeType render_mode = map_config.getRenderMode();
+    if (render_mode == RenderModeType::DAYLIGHT || render_mode == RenderModeType::NIGHTLIGHT)
+            images->setBlockSideDarkening(0.95, 0.8);
+    else
+            images->setBlockSideDarkening(0.75, 0.6);
 	*/
 }
 
-void NewIsometricRenderView::configureTileRenderer(TileRenderer* tile_renderer,
-		const config::WorldSection& world_config,
-		const config::MapSection& map_config) const {
-	assert(tile_renderer != nullptr);
-	RenderView::configureTileRenderer(tile_renderer, world_config, map_config);
+void NewIsometricRenderView::configureTileRenderer(TileRenderer *tile_renderer,
+                                                   const config::WorldSection &world_config,
+                                                   const config::MapSection &map_config) const {
+    assert(tile_renderer != nullptr);
+    RenderView::configureTileRenderer(tile_renderer, world_config, map_config);
 
 	tile_renderer->setShadowEdges({2, 1, 2, 1, 2});
 }

@@ -53,8 +53,8 @@ template <> renderer::RenderViewType as<renderer::RenderViewType>(const std::str
     else if (from == "isometricnew")
         return renderer::RenderViewType::ISOMETRICNEW;
     else if (from == "side")
-	else if (from == "isometricnew")
-		return renderer::RenderViewType::ISOMETRICNEW;
+        return renderer::RenderViewType::SIDE;
+    else if (from == "topdown")
 	else if (from == "side")
 		return renderer::RenderViewType::SIDE;
 }

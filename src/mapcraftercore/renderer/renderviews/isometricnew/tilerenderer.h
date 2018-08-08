@@ -41,22 +41,23 @@ namespace old {
  * Iterates over the top blocks of a tile.
  */
 class TileTopBlockIterator {
-private:
-	int block_size;
+  private:
+    int block_size;
 
-	bool is_end;
-	int min_row, max_row;
-	int min_col, max_col;
-	mc::BlockPos top;
-public:
-	TileTopBlockIterator(const TilePos& tile, int block_size, int tile_width);
-	~TileTopBlockIterator();
+    bool is_end;
+    int min_row, max_row;
+    int min_col, max_col;
+    mc::BlockPos top;
 
-	void next();
-	bool end() const;
+  public:
+    TileTopBlockIterator(const TilePos &tile, int block_size, int tile_width);
+    ~TileTopBlockIterator();
 
-	mc::BlockPos current;
-	int draw_x, draw_y;
+    void next();
+    bool end() const;
+
+    mc::BlockPos current;
+    int draw_x, draw_y;
 };
 
 /**
@@ -64,14 +65,14 @@ public:
  * this means every block is (x+1, z-1 and y-1) of the last block
  */
 class BlockRowIterator {
-public:
-	BlockRowIterator(const mc::BlockPos& block);
-	~BlockRowIterator();
+  public:
+    BlockRowIterator(const mc::BlockPos &block);
+    ~BlockRowIterator();
 
-	void next();
-	bool end() const;
+    void next();
+    bool end() const;
 
-	mc::BlockPos current;
+    mc::BlockPos current;
 };
 
 /**
@@ -79,36 +80,37 @@ public:
  */
 struct RenderBlock {
 
-	// drawing position in pixels on the tile
-	int x, y;
-	bool transparent;
-	RGBAImage image;
-	mc::BlockPos pos;
-	uint8_t id, data;
+    // drawing position in pixels on the tile
+    int x, y;
+    bool transparent;
+    RGBAImage image;
+    mc::BlockPos pos;
+    uint8_t id, data;
 
-	bool operator<(const RenderBlock& other) const;
+    bool operator<(const RenderBlock &other) const;
 };
 
-}
+} // namespace old
 
 /**
  * Renders tiles from world data.
  */
 class NewIsometricTileRenderer : public TileRenderer {
-public:
+  public:
 	NewIsometricTileRenderer(const RenderView* render_view, mc::BlockStateRegistry& block_registry,
 			BlockImages* images, int tile_width, mc::WorldCache* world, RenderMode* render_mode);
-	virtual ~NewIsometricTileRenderer();
+                             RenderMode *render_mode);
+    virtual ~NewIsometricTileRenderer();
 
 	//virtual void renderTile(const TilePos& tile_pos, RGBAImage& tile);
 
-	virtual int getTileSize() const;
+    virtual int getTileSize() const;
 
 protected:
 	virtual void renderTopBlocks(const TilePos& tile_pos, std::set<TileImage>& tile_images);
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* ISOMETRICNEW_TILERENDERER_H_ */
