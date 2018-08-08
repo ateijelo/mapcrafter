@@ -19,10 +19,6 @@
 
 #include "renderview.h"
 
-#include "tileset.h"
-#include "tilerenderer.h"
-#include "../../rendermode.h"
-#include "../../blockimages.h"
 #include "../../../config/configsections/map.h"
 #include "../../../config/configsections/world.h"
 #include "../../../mc/blockstate.h"
