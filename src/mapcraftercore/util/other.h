@@ -95,7 +95,7 @@ std::string replaceAll(const std::string& str, const std::string& from, const st
 bool startswith(const std::string& str, const std::string& start);
 bool endswith(const std::string& str, const std::string& end);
 
-std::vector<std::string> split(const std::string& str, char delimiter);
+std::vector<std::string> split(const std::string &str, char delimiter);
 std::map<std::string, std::string> parseProperties(std::string str);
 
 /**

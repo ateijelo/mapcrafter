@@ -328,9 +328,9 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
 	RenderedBlockImages* new_block_images = dynamic_cast<RenderedBlockImages*>(block_images.get());
 	if (new_block_images != nullptr) {
         if (!new_block_images->loadBlockImages(map_config.getBlockDir().string(),
-			LOG(ERROR) << "Skipping remaining rotations.";
-			return;
-		}
+                                               util::str(map_config.getRenderView()), rotation,
+                                               map_config.getTextureSize())) {
+            LOG(ERROR) << "Skipping remaining rotations.";
 	}
 
     }

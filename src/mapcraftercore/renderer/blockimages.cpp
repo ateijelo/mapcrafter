@@ -22,6 +22,8 @@
 #include "biomes.h"
 #include "../util.h"
 #include "../mc/blockstate.h"
+#include "../util.h"
+#include "biomes.h"
 
 #include <chrono>
 #include <map>

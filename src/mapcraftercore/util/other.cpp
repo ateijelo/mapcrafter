@@ -211,15 +211,33 @@ bool endswith(const std::string& str, const std::string& end) {
 	return str.substr(str.size() - end.size(), end.size()) == end;
 }
 
-std::vector<std::string> split(const std::string& str, char delimiter) {
-	std::vector<std::string> splitted;
+        replaced.replace(start, from.length(), to);
+        start += to.length();
+    }
+    return replaced;
+}
 
-	std::istringstream ss(str);
-	for (std::string token; std::getline(ss, token, delimiter);) {
-		splitted.push_back(token);
-	}
+bool startswith(const std::string &str, const std::string &start) {
+    if (start.size() > str.size())
+        return false;
+    return str.substr(0, start.size()) == start;
+}
 
-	return splitted;
+bool endswith(const std::string &str, const std::string &end) {
+    if (end.size() > str.size())
+        return false;
+    return str.substr(str.size() - end.size(), end.size()) == end;
+}
+
+std::vector<std::string> split(const std::string &str, char delimiter) {
+    std::vector<std::string> splitted;
+
+    std::istringstream ss(str);
+    for (std::string token; std::getline(ss, token, delimiter);) {
+        splitted.push_back(token);
+    }
+
+    return splitted;
 }
 
 std::map<std::string, std::string> parseProperties(std::string str) {
