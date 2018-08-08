@@ -19,61 +19,60 @@
 
 #include "../mapcraftercore/mc/blockstate.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <boost/test/unit_test.hpp>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 namespace mc = mapcrafter::mc;
 
 BOOST_AUTO_TEST_CASE(blockstate_test) {
-	mc::BlockState block("mapcrafter:test");
-	
-	// basic initialization checks
-	BOOST_CHECK_EQUAL(block.getName(), "mapcrafter:test");
-	BOOST_CHECK_EQUAL(block.getProperty("foo"), "");
+    mc::BlockState block("mapcrafter:test");
+
+    // basic initialization checks
+    BOOST_CHECK_EQUAL(block.getName(), "mapcrafter:test");
+    BOOST_CHECK_EQUAL(block.getProperty("foo"), "");
 	BOOST_CHECK_EQUAL(block.getVariantDescription(), "");
 
-	// check properties - overwriting / getting with default / property representation
-	block.setProperty("foo", "bar");
-	BOOST_CHECK_EQUAL(block.getProperty("foo"), "bar");
-	BOOST_CHECK_EQUAL(block.getProperty("foo2", "test"), "test");
+    // check properties - overwriting / getting with default / property representation
+    block.setProperty("foo", "bar");
+    BOOST_CHECK_EQUAL(block.getProperty("foo"), "bar");
+    BOOST_CHECK_EQUAL(block.getProperty("foo2", "test"), "test");
 	BOOST_CHECK_EQUAL(block.getVariantDescription(), "foo=bar,");
 
-	block.setProperty("foo", "newvalue");
-	block.setProperty("abc", "test");
-	BOOST_CHECK_EQUAL(block.getProperty("foo", "bar"), "newvalue");
-	BOOST_CHECK_EQUAL(block.getProperty("abc"), "test");
+    block.setProperty("foo", "newvalue");
+    block.setProperty("abc", "test");
+    BOOST_CHECK_EQUAL(block.getProperty("foo", "bar"), "newvalue");
+    BOOST_CHECK_EQUAL(block.getProperty("abc"), "test");
 	BOOST_CHECK_EQUAL(block.getVariantDescription(), "abc=test,foo=newvalue,");
 
-	// make sure different order of setting properties results in same property repr
-	block = mc::BlockState();
-	block.setProperty("foo", "bar");
-	block.setProperty("test", "blah");
+    // make sure different order of setting properties results in same property repr
+    block = mc::BlockState();
+    block.setProperty("foo", "bar");
+    block.setProperty("test", "blah");
 	BOOST_CHECK_EQUAL(block.getVariantDescription(), "foo=bar,test=blah,");
 
-	block = mc::BlockState();
-	block.setProperty("test", "blah");
-	block.setProperty("foo", "bar");
+    block = mc::BlockState();
+    block.setProperty("test", "blah");
+    block.setProperty("foo", "bar");
 	BOOST_CHECK_EQUAL(block.getVariantDescription(), "foo=bar,test=blah,");
 
-	// aaand overwrite something
-	block.setProperty("foo", "baaah");
+    // aaand overwrite something
+    block.setProperty("foo", "baaah");
 	BOOST_CHECK_EQUAL(block.getVariantDescription(), "foo=baaah,test=blah,");
 }
 
 BOOST_AUTO_TEST_CASE(blockstate_testRegistry) {
-	mc::BlockStateRegistry registry;
+    mc::BlockStateRegistry registry;
 
-	mc::BlockState block("mapcrafter:test");
-	block.setProperty("abc", "test");
-	block.setProperty("hello", "world");
+    mc::BlockState block("mapcrafter:test");
+    block.setProperty("abc", "test");
+    block.setProperty("hello", "world");
 
-	uint16_t id = registry.getBlockID(block);
-	BOOST_CHECK_EQUAL(id, 0);
+    uint16_t id = registry.getBlockID(block);
+    BOOST_CHECK_EQUAL(id, 0);
 
-	mc::BlockState block_compare = registry.getBlockState(id);
-	BOOST_CHECK_EQUAL(block_compare.getName(), block.getName());
+    mc::BlockState block_compare = registry.getBlockState(id);
+    BOOST_CHECK_EQUAL(block_compare.getName(), block.getName());
 	BOOST_CHECK_EQUAL(block_compare.getVariantDescription(), block.getVariantDescription());
 }
-

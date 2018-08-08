@@ -28,9 +28,7 @@ namespace mc {
 
 BlockState::BlockState(std::string name) : name(name) { updateVariantDescription(); }
 
-std::string BlockState::getName() const {
-	return name;
-}
+std::string BlockState::getName() const { return name; }
 
 const std::map<std::string, std::string>& BlockState::getProperties() const {
 	return properties;
@@ -41,20 +39,20 @@ bool BlockState::hasProperty(std::string key) const {
 }
 
 std::string BlockState::getProperty(std::string key, std::string default_value) const {
-	if (!properties.count(key)) {
-		return default_value;
-	}
-	return properties.at(key);
+    if (!properties.count(key)) {
+        return default_value;
+    }
+    return properties.at(key);
 }
 
 void BlockState::setProperty(std::string key, std::string value) {
-	properties[key] = value;
+    properties[key] = value;
 	updateVariantDescription();
 }
 
 const std::string BlockState::getVariantDescription() const { return variant_description; }
 
-bool BlockState::operator<(const BlockState& other) const {
+bool BlockState::operator<(const BlockState &other) const {
 	return variant_description < other.variant_description;
 }
 
@@ -67,46 +65,44 @@ BlockState BlockState::parse(std::string name, std::string variant_description) 
 
 void BlockState::updateVariantDescription() {
 	variant_description = "";
-	for (auto it = properties.begin(); it != properties.end(); ++it) {
+    for (auto it = properties.begin(); it != properties.end(); ++it) {
 		variant_description += it->first + "=" + it->second + ",";
-	}
+    }
 }
 
-BlockStateRegistry::BlockStateRegistry()
-	: unknown_block("mapcrafter:unknown") {
-}
+BlockStateRegistry::BlockStateRegistry() : unknown_block("mapcrafter:unknown") {}
 
-uint16_t BlockStateRegistry::getBlockID(const BlockState& block) {
+uint16_t BlockStateRegistry::getBlockID(const BlockState &block) {
+    std::lock_guard<std::mutex> guard(mutex);
+
 	std::lock_guard<std::mutex> guard(mutex);
 
-	// first check if that block name is known
-	auto it = block_lookup.find(block.getName());
-	if (it == block_lookup.end()) {
-		// block name unknown -> insert block
-		uint16_t id = block_states.size();
+    if (it == block_lookup.end()) {
+        // block name unknown -> insert block
+        uint16_t id = block_states.size();
+        block_lookup[block.getName()][block.getVariantDescription()] = id;
+        block_states.push_back(block);
 		block_lookup[block.getName()][block.getVariantDescription()] = id;
-		block_states.push_back(block);
-		return id;
-	}
+    }
 
-	// block name is known -> just search for the variant now
+    // block name is known -> just search for the variant now
+    auto it2 = it->second.find(block.getVariantDescription());
+    if (it2 == it->second.end()) {
 	auto it2 = it->second.find(block.getVariantDescription());
-	if (it2 == it->second.end()) {
-		// variant not found -> insert block
-		uint16_t id = block_states.size();
+        uint16_t id = block_states.size();
+        it->second[block.getVariantDescription()] = id;
+        block_states.push_back(block);
 		it->second[block.getVariantDescription()] = id;
-		block_states.push_back(block);
-		return id;
-	}
-	return it2->second;
+    }
+    return it2->second;
 }
 
-const BlockState& BlockStateRegistry::getBlockState(uint16_t id) const {
-	if (id >= block_states.size()) {
-		assert(false);
-		return unknown_block;
-	}
-	return block_states.at(id);
+const BlockState &BlockStateRegistry::getBlockState(uint16_t id) const {
+    if (id >= block_states.size()) {
+        assert(false);
+        return unknown_block;
+    }
+    return block_states.at(id);
 }
 
 void BlockStateRegistry::addKnownProperty(std::string block, std::string property) {
@@ -124,3 +120,5 @@ bool BlockStateRegistry::isKnownProperty(std::string block, std::string property
 }
 }
 
+} // namespace mc
+} // namespace mapcrafter
