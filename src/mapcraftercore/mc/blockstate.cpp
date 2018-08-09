@@ -26,10 +26,7 @@
 namespace mapcrafter {
 namespace mc {
 
-BlockState::BlockState(std::string name)
-	: name(name) {
-	updateVariantDescription();
-}
+BlockState::BlockState(std::string name) : name(name) { updateVariantDescription(); }
 
 std::string BlockState::getName() const {
 	return name;
@@ -55,9 +52,7 @@ void BlockState::setProperty(std::string key, std::string value) {
 	updateVariantDescription();
 }
 
-const std::string BlockState::getVariantDescription() const {
-	return variant_description;
-}
+const std::string BlockState::getVariantDescription() const { return variant_description; }
 
 bool BlockState::operator<(const BlockState& other) const {
 	return variant_description < other.variant_description;
