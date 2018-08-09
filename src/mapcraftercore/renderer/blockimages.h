@@ -141,7 +141,7 @@ class RenderedBlockImages : public BlockImages {
     virtual void setRenderSpecialBlocks(bool render_unknown_blocks,
                                         bool render_leaves_transparent) {}
     // virtual RGBAImage exportBlocks() const {}
-	virtual bool isBlockTransparent(uint16_t id, uint16_t data) const { return false; };
+    virtual bool isBlockTransparent(uint16_t id, uint16_t data) const { return false; };
     virtual bool hasBlock(uint16_t id, uint16_t) const { return true; };
 	virtual const RGBAImage& getBlock(uint16_t id, uint16_t data, uint16_t extra_data = 0) const { return unknown_block.image; };
 	virtual RGBAImage getBiomeBlock(uint16_t id, uint16_t data, const Biome& biome, uint16_t extra_data = 0) const { return unknown_block.image; };
