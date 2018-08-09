@@ -40,20 +40,20 @@ class BlockState {
     std::string getProperty(std::string key, std::string default_value = "") const;
     void setProperty(std::string key, std::string value);
 
-	const std::string getVariantDescription() const;
+    const std::string getVariantDescription() const;
 
     bool operator<(const BlockState &other) const;
 
 	static BlockState parse(std::string name, std::string variant_description);
 
   private:
-	void updateVariantDescription();
+    void updateVariantDescription();
 
     std::string name;
     // let's use an ordered map to make sure property-represenation is always the same
     std::map<std::string, std::string> properties;
-	// representation of properties that's like: "foo=bar,key1=value,key2=test,"
-	std::string variant_description;
+    // representation of properties that's like: "foo=bar,key1=value,key2=test,"
+    std::string variant_description;
 };
 
 class BlockStateRegistry {

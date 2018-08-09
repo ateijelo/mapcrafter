@@ -43,13 +43,13 @@ std::string BlockState::getProperty(std::string key, std::string default_value) 
 
 void BlockState::setProperty(std::string key, std::string value) {
     properties[key] = value;
-	updateVariantDescription();
+    updateVariantDescription();
 }
 
 const std::string BlockState::getVariantDescription() const { return variant_description; }
 
 bool BlockState::operator<(const BlockState &other) const {
-	return variant_description < other.variant_description;
+    return variant_description < other.variant_description;
 }
 
 BlockState BlockState::parse(std::string name, std::string variant_description) {
@@ -60,9 +60,9 @@ BlockState BlockState::parse(std::string name, std::string variant_description) 
 }
 
 void BlockState::updateVariantDescription() {
-	variant_description = "";
+    variant_description = "";
     for (auto it = properties.begin(); it != properties.end(); ++it) {
-		variant_description += it->first + "=" + it->second + ",";
+        variant_description += it->first + "=" + it->second + ",";
     }
 }
 
@@ -78,17 +78,17 @@ uint16_t BlockStateRegistry::getBlockID(const BlockState &block) {
         uint16_t id = block_states.size();
         block_lookup[block.getName()][block.getVariantDescription()] = id;
         block_states.push_back(block);
-		block_lookup[block.getName()][block.getVariantDescription()] = id;
+        return id;
     }
 
     // block name is known -> just search for the variant now
     auto it2 = it->second.find(block.getVariantDescription());
     if (it2 == it->second.end()) {
-	auto it2 = it->second.find(block.getVariantDescription());
+        // variant not found -> insert block
         uint16_t id = block_states.size();
         it->second[block.getVariantDescription()] = id;
         block_states.push_back(block);
-		it->second[block.getVariantDescription()] = id;
+        return id;
     }
     return it2->second;
 }
