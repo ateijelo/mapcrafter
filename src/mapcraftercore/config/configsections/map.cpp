@@ -138,7 +138,7 @@ void MapSection::dump(std::ostream &out) const {
     out << "  render_mode = " << render_mode << std::endl;
     out << "  overlay = " << overlay << std::endl;
     out << "  rotations = " << rotations << std::endl;
-	out << "  block_dir = " << block_dir << std::endl;
+    out << "  block_dir = " << block_dir << std::endl;
     out << "  texture_size = " << texture_size << std::endl;
     out << "  image_format = " << image_format << std::endl;
 	out << "  png_indexed = " << png_indexed << std::endl;
@@ -169,9 +169,7 @@ renderer::OverlayType MapSection::getOverlay() const { return overlay.getValue()
 
 std::set<int> MapSection::getRotations() const { return rotations_set; }
 
-fs::path MapSection::getBlockDir() const {
-	return block_dir.getValue();
-}
+fs::path MapSection::getBlockDir() const { return block_dir.getValue(); }
 
 int MapSection::getTextureSize() const { return texture_size.getValue(); }
 

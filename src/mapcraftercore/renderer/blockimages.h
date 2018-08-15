@@ -25,7 +25,6 @@
 #include "image.h"
 #include "../mc/pos.h"
 
-#include <boost/filesystem.hpp>
 #include <array>
 #include <string>
 #include <unordered_map>

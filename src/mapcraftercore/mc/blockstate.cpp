@@ -65,8 +65,8 @@ bool BlockState::operator<(const BlockState& other) const {
 
 BlockState BlockState::parse(std::string name, std::string variant_description) {
 	mc::BlockState block(name);
-	block.properties = util::parseProperties(variant_description);
-	block.updateVariantDescription();
+    block.properties = util::parseProperties(variant_description);
+    block.updateVariantDescription();
 	return block;
 }
 

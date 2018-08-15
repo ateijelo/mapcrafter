@@ -100,7 +100,7 @@ class MapSection : public ConfigSection {
     renderer::RenderModeType getRenderMode() const;
     renderer::OverlayType getOverlay() const;
 	std::set<int> getRotations() const;
-	fs::path getBlockDir() const;
+    fs::path getBlockDir() const;
     int getTextureSize() const;
 	int getTextureBlur() const;
 	double getWaterOpacity() const;
@@ -140,7 +140,7 @@ class MapSection : public ConfigSection {
 
     Field<fs::path> block_dir;
 
-	Field<fs::path> block_dir;
+    Field<double> water_opacity;
 	Field<int> texture_size, texture_blur, tile_width;
 	Field<double> water_opacity;
 
