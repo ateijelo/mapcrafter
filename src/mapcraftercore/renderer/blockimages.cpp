@@ -108,57 +108,15 @@ uint32_t ColorMap::getColor(float x, float y) const {
 BlockImages::~BlockImages() {
 }
 
-void blockImageTest(RGBAImage& block, const RGBAImage& uv_mask) {
-	assert(block.getWidth() == uv_mask.getWidth());
-	assert(block.getHeight() == uv_mask.getHeight());
-	
-	for (size_t x = 0; x < block.getWidth(); x++) {
-		for (size_t y = 0; y < block.getHeight(); y++) {
-			uint32_t& pixel = block.pixel(x, y);
-			uint32_t uv_pixel = uv_mask.pixel(x, y);
-			if (rgba_alpha(uv_pixel) == 0) {
-				continue;
-			}
+    for (size_t i = 0; i < 3; i++) {
+        std::string part = parts[i];
+        if (part.size() != 9 || part[0] != '#' || !util::isHexNumber(part.substr(1))) {
+            return false;
+        }
+        colors[i] = util::parseHexNumber(part.substr(1));
+    }
 
-			uint8_t side = rgba_blue(uv_pixel);
-			if (side == FACE_LEFT_INDEX) {
-				pixel = rgba(255, 0, 0);
-			}
-			if (side == FACE_RIGHT_INDEX) {
-				pixel = rgba(0, 255, 0);
-			}
-			if (side == FACE_UP_INDEX) {
-				pixel = rgba(0, 0, 255);;
-			}
-		}
-	}
-}
-
-void blockImageMultiply(RGBAImage& block, const RGBAImage& uv_mask,
-		float factor_left, float factor_right, float factor_up) {
-	assert(block.getWidth() == uv_mask.getWidth());
-	assert(block.getHeight() == uv_mask.getHeight());
-	
-	for (size_t x = 0; x < block.getWidth(); x++) {
-		for (size_t y = 0; y < block.getHeight(); y++) {
-			uint32_t& pixel = block.pixel(x, y);
-			uint32_t uv_pixel = uv_mask.pixel(x, y);
-			if (rgba_alpha(uv_pixel) == 0) {
-				continue;
-			}
-
-			uint8_t side = rgba_blue(uv_pixel);
-			if (side == FACE_LEFT_INDEX) {
-				pixel = rgba_multiply(pixel, factor_left, factor_left, factor_left);
-			}
-			if (side == FACE_RIGHT_INDEX) {
-				pixel = rgba_multiply(pixel, factor_right, factor_right, factor_right);
-			}
-			if (side == FACE_UP_INDEX) {
-				pixel = rgba_multiply(pixel, factor_up, factor_up, factor_up);
-			}
-		}
-	}
+    return true;
 }
 
 void blockImageMultiplyExcept(RGBAImage& block, const RGBAImage& uv_mask,
@@ -528,10 +486,10 @@ RenderedBlockImages::~RenderedBlockImages() {
     }
 }
 
-void blockImageMultiply(RGBAImage& block, const RGBAImage& uv_mask,
-		const CornerValues& factors_left, const CornerValues& factors_right, const CornerValues& factors_up) {
-	assert(block.getWidth() == uv_mask.getWidth());
-	assert(block.getHeight() == uv_mask.getHeight());
+void RenderedBlockImages::setBlockSideDarkening(float darken_left, float darken_right) {
+    this->darken_left = darken_left;
+    this->darken_right = darken_right;
+}
 
 bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int rotation,
                                           int texture_size) {
@@ -540,7 +498,7 @@ bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int r
     if (!fs::is_directory(path)) {
         LOG(ERROR) << "Unable to load block images: " << path << " is not a directory!";
         return false;
-	
+    }
 
     std::string name = view + "_" + util::str(rotation) + "_" + util::str(texture_size);
     fs::path info_file = path / (name + ".txt");
@@ -548,7 +506,7 @@ bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int r
 
     if (!fs::is_regular_file(info_file)) {
         LOG(ERROR) << "Unable to load block images: Block info file " << info_file
-
+                   << " does not exist!";
         return false;
     }
     if (!fs::is_regular_file(block_file)) {
@@ -564,7 +522,7 @@ bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int r
         return false;
     }
 
-
+    std::ifstream in(info_file.string());
     std::string first_line;
 
     std::getline(in, first_line);
@@ -576,7 +534,7 @@ bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int r
             block_width = util::as<int>(parts[0]);
             block_height = util::as<int>(parts[1]);
             columns = util::as<int>(parts[2]);
-		
+        }
     } catch (std::invalid_argument &e) {
         ok = false;
     }
@@ -626,7 +584,83 @@ bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int r
         BlockImage *b = new BlockImage();
         BlockImage &block = *b;
         block.image = image;
-	}
+        block.uv_image = image_uv;
+        block.is_air = block_info.count("is_air");
+
+        block.is_full_water = false;
+        if (block_name == "minecraft:water") {
+            block.is_full_water =
+                block_state.getProperty("level") == "0" || block_state.getProperty("level") == "8";
+        }
+        if (block_name == "minecraft:full_water") {
+            block.is_full_water = true;
+        }
+
+        block.is_ice = block_name == "minecraft:ice" || block_name == "minecraft:blue_ice" ||
+                       block_name == "minecraft:packed_ice";
+
+        block.is_biome = block_info.count("biome_type");
+        if (block.is_biome) {
+            block.is_masked_biome = block_info["biome_type"] == "masked";
+            block.biome_color = util::as<ColorMapType>(block_info["biome_colors"]);
+            if (block_info.count("biome_colormap")) {
+                if (!block.biome_colormap.parse(block_info["biome_colormap"])) {
+                    LOG(WARNING) << "Unable to parse colormap '" << block_info["biome_colormap"]
+                                 << "'.";
+                }
+            }
+        }
+        block.is_waterloggable = block_info.count("is_waterloggable");
+        if (block.is_waterloggable) {
+            block.is_waterlogged = block_state.getProperty("waterlogged", "true") == "true" ||
+                                   block_state.getProperty("was_waterlogged") == "true";
+            block.has_water_top = block_state.getProperty("waterlogged", "true") == "true" &&
+                                  block_state.getProperty("was_waterlogged") != "true";
+            if (block.has_water_top) {
+                block_info["shadow_edges"] = "1";
+            }
+
+            mc::BlockState non_waterlogged = block_state;
+            non_waterlogged.setProperty("waterlogged", "false");
+            // required for tile renderer / render modes to know if a block is actually waterlogged
+            non_waterlogged.setProperty("was_waterlogged", "true");
+            block.non_waterlogged_id = block_registry.getBlockID(non_waterlogged);
+        } else {
+            block.is_waterlogged = false;
+            block.has_water_top = false;
+        }
+        block.is_lily_pad = block_name == "minecraft:lily_pad";
+        if (block_info.count("lighting_type")) {
+            block.lighting_specified = true;
+            block.lighting_type = util::as<LightingType>(block_info["lighting_type"]);
+        }
+        block.has_faulty_lighting = block_info.count("faulty_lighting");
+
+        block.can_partial = block_info.count("partial") ? block_info["partial"] == "true" : false;
+
+        block.shadow_edges = -1;
+        if (block_info.count("shadow_edges")) {
+            block.shadow_edges = util::as<int>(block_info["shadow_edges"]);
+        }
+
+        if (block_images.size() < id + 1) {
+            block_images.resize(id + 1, nullptr);
+        }
+        block_images[id] = b;
+
+        auto properties = block_state.getProperties();
+        for (auto it = properties.begin(); it != properties.end(); ++it) {
+            block_registry.addKnownProperty(block_state.getName(), it->first);
+        }
+
+        // std::cout << block_name << " " << variant << std::endl;
+    }
+    in.close();
+
+    prepareBlockImages();
+    // runBenchmark();
+
+    return true;
 }
 
 RGBAImage RenderedBlockImages::exportBlocks() const {
@@ -802,11 +836,11 @@ void blockImageShadowEdges(RGBAImage& block, const RGBAImage& uv_mask,
 	}
 }
 
-bool blockImageIsTransparent(RGBAImage& block, const RGBAImage& uv_mask) {
-	assert(block.getWidth() == uv_mask.getWidth());
-	assert(block.getHeight() == uv_mask.getHeight());
-	
-	for (size_t x = 0; x < block.getWidth(); x++) {
+        if (!block_state.hasProperty("waterlogged")) {
+            mc::BlockState test =
+                mc::BlockState::parse(block_state.getName(), block_state.getVariantDescription());
+            test.setProperty("waterlogged", "false");
+            return getBlockImage(block_registry.getBlockID(test));
 		for (size_t y = 0; y < block.getHeight(); y++) {
 			uint32_t& pixel = block.pixel(x, y);
 			uint32_t uv_pixel = uv_mask.pixel(x, y);
@@ -852,9 +886,11 @@ std::array<bool, 3> blockImageGetSideMask(const RGBAImage& uv) {
 void RenderedBlockImages::prepareBiomeBlockImage(RGBAImage &image, const BlockImage &block,
                                                  uint32_t color) {
 
-void RenderedBlockImages::setBlockSideDarkening(float darken_left, float darken_right) {
-	this->darken_left = darken_left;
-	this->darken_right = darken_right;
+    if (block.is_masked_biome) {
+        blockImageTint(image, block.biome_mask, color);
+    } else {
+        blockImageTint(image, color);
+    }
 }
 
 bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int rotation, int texture_size) {
@@ -1107,11 +1143,11 @@ int RenderedBlockImages::getTextureSize() const {
         // 1.105s mit nicem rgba_multiply
         // blockImageTint(image, color);
 
-void RenderedBlockImages::prepareBlockImages() {
+        // 9.534s mit rgb_multiply_scalar
 	uint16_t solid_id = block_registry.getBlockID(mc::BlockState("minecraft:unknown_block"));
 	assert(block_images.size() > solid_id && block_images[solid_id] != nullptr);
 	const BlockImage& solid = *block_images[solid_id];
-
+        blockImageMultiply(image, solid.uv_image, left, right, up);
 	for (uint16_t id = 0; id < block_images.size(); ++id) {
 		if (block_images[id] == nullptr) {
 			continue;

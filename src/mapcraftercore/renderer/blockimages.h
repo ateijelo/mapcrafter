@@ -70,17 +70,17 @@ class BlockImages {
 typedef std::array<float, 4> CornerValues;
 
 // TODO rename these maybe
-static const uint8_t FACE_LEFT_INDEX = ((float) 255.0 / 6.0) * 1;
-static const uint8_t FACE_RIGHT_INDEX = ((float) 255.0 / 6.0) * 4;
-static const uint8_t FACE_UP_INDEX = ((float) 255.0 / 6.0) * 2;
+static const uint8_t FACE_LEFT_INDEX = ((float)255.0 / 6.0) * 1;
+static const uint8_t FACE_RIGHT_INDEX = ((float)255.0 / 6.0) * 4;
+static const uint8_t FACE_UP_INDEX = ((float)255.0 / 6.0) * 2;
 
-void blockImageTest(RGBAImage& block, const RGBAImage& uv_mask);
-void blockImageMultiply(RGBAImage& block, const RGBAImage& uv_mask,
-		float factor_left, float factor_right, float factor_up);
+void blockImageTest(RGBAImage &block, const RGBAImage &uv_mask);
+void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask, float factor_left,
+                        float factor_right, float factor_up);
 void blockImageMultiplyExcept(RGBAImage& block, const RGBAImage& uv_mask,
 		uint8_t except_face, float factor);
-void blockImageMultiply(RGBAImage& block, const RGBAImage& uv_mask,
-		const CornerValues& factors_left, const CornerValues& factors_right, const CornerValues& factors_up);
+void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask,
+                        const CornerValues &factors_left, const CornerValues &factors_right,
                         const CornerValues &factors_up);
 void blockImageTint(RGBAImage& block, const RGBAImage& mask,
 void blockImageTint(RGBAImage &block, const RGBAImage &mask, uint32_t color);
@@ -92,7 +92,7 @@ void blockImageBlendTop(RGBAImage& block, const RGBAImage& uv_mask,
 		const RGBAImage& top, const RGBAImage& top_uv_mask);
 void blockImageShadowEdges(RGBAImage& block, const RGBAImage& uv_mask,
 		uint8_t north, uint8_t south, uint8_t east, uint8_t west, uint8_t bottom);
-bool blockImageIsTransparent(RGBAImage& block, const RGBAImage& uv_mask);
+bool blockImageIsTransparent(RGBAImage &block, const RGBAImage &uv_mask);
 std::array<bool, 3> blockImageGetSideMask(const RGBAImage& uv);
 
 enum class LightingType {
@@ -152,7 +152,7 @@ class RenderedBlockImages : public BlockImages {
         return unknown_block.image;
 	~RenderedBlockImages();
     virtual int getMaxWaterPreblit() const { return 0; };
-	void setBlockSideDarkening(float darken_left, float darken_right);
+    // virtual int getBlockSize() const {};
 
     RenderedBlockImages(mc::BlockStateRegistry &block_registry);
     ~RenderedBlockImages();
@@ -166,13 +166,13 @@ class RenderedBlockImages : public BlockImages {
     void prepareBiomeBlockImage(RGBAImage &image, const BlockImage &block, uint32_t color);
 
     virtual int getTextureSize() const;
-	void prepareBlockImages();
+    virtual int getBlockSize() const;
     virtual int getBlockWidth() const;
-
+    virtual int getBlockHeight() const;
 
   private:
-	float darken_left, darken_right;
-
+    void prepareBlockImages();
+    void runBenchmark();
 
     mc::BlockStateRegistry &block_registry;
 	// Mapcrafter-local block ID -> BlockImage (image, uv_image, is_transparent, ...)
