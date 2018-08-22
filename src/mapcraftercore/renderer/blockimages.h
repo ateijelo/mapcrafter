@@ -109,7 +109,7 @@ struct BlockImage {
     BlockImage() : lighting_specified(false) {}
 
     RGBAImage image, uv_image;
-	RGBAImage image, uv_image;
+    std::array<bool, 3> side_mask;
     bool is_transparent, is_air, is_full_water, is_ice;
 
     bool is_biome;
@@ -142,10 +142,10 @@ class RenderedBlockImages : public BlockImages {
                                         bool render_leaves_transparent) {}
     // virtual RGBAImage exportBlocks() const {}
 	virtual bool isBlockTransparent(uint16_t id, uint16_t data) const { return false; };
-	virtual bool hasBlock(uint16_t id, uint16_t) const { return true; };
+    virtual bool hasBlock(uint16_t id, uint16_t) const { return true; };
 	virtual const RGBAImage& getBlock(uint16_t id, uint16_t data, uint16_t extra_data = 0) const { return unknown_block.image; };
 	virtual RGBAImage getBiomeBlock(uint16_t id, uint16_t data, const Biome& biome, uint16_t extra_data = 0) const { return unknown_block.image; };
-	virtual int getMaxWaterPreblit() const { return 0; };
+    };
     virtual RGBAImage getBiomeBlock(uint16_t id, uint16_t data, const Biome &biome,
                                     uint16_t extra_data = 0) const {
         return unknown_block.image;
@@ -174,7 +174,7 @@ class RenderedBlockImages : public BlockImages {
     void runBenchmark();
 
     mc::BlockStateRegistry &block_registry;
-	// Mapcrafter-local block ID -> BlockImage (image, uv_image, is_transparent, ...)
+
 	//std::unordered_map<uint16_t, BlockImage> block_images;
 	std::vector<BlockImage*> block_images;
 	BlockImage unknown_block;

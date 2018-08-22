@@ -1149,7 +1149,7 @@ void RenderedBlockImages::runBenchmark() {
 	}
 }
 
-int RenderedBlockImages::getTextureSize() const {
+    for (size_t i = 0; i < 1000000; i++) {
 	return texture_size;
 }
 
