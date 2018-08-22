@@ -854,8 +854,7 @@ void RenderedBlockImages::runBenchmark() {
     std::chrono::time_point<clock_> begin = clock_::now();
 
     for (size_t i = 0; i < 1000000; i++) {
-	return texture_size;
-}
+        RGBAImage image = solid.image;
 
         // 5.841s
         // blockImageTint(image, image, 0x30, 0x59, 0xad, 0xff);
