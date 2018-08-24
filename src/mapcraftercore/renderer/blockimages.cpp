@@ -740,7 +740,7 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
     std::vector<RGBAImage> blocks;
 
     for (auto it = block_images.begin(); it != block_images.end(); ++it) {
-	assert(block.getWidth() == mask.getWidth());
+            blocks.push_back(it->second.image);
 	assert(block.getHeight() == mask.getHeight());
 
 	size_t n = block.getWidth() * block.getHeight();

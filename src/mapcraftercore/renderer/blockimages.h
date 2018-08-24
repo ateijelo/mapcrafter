@@ -82,7 +82,7 @@ void blockImageMultiplyExcept(RGBAImage &block, const RGBAImage &uv_mask, uint8_
 void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask,
                         const CornerValues &factors_left, const CornerValues &factors_right,
                         const CornerValues &factors_up);
-void blockImageTint(RGBAImage& block, const RGBAImage& mask,
+void blockImageMultiply(RGBAImage &block, uint8_t factor);
 void blockImageTint(RGBAImage &block, const RGBAImage &mask, uint32_t color);
 // TODO maybe this should be named something with multiply too
 void blockImageTint(RGBAImage &block, uint32_t color);
@@ -112,12 +112,12 @@ struct BlockImage {
 	RGBAImage image, uv_image;
     bool is_transparent, is_air, is_full_water, is_ice;
 	bool is_transparent, is_air, is_full_water, is_ice;
-	
+    bool is_biome;
 	bool is_biome;
-	bool is_masked_biome;
+    ColorMapType biome_color;
 	ColorMapType biome_color;
     RGBAImage biome_mask;
-	RGBAImage biome_mask;
+
 
 	bool is_waterloggable;
 	bool is_waterlogged;
@@ -160,7 +160,7 @@ class RenderedBlockImages : public BlockImages {
 	const BlockImage& getBlockImage(uint16_t id);
 
     bool loadBlockImages(fs::path block_dir, std::string view, int rotation, int texture_size);
-	virtual int getTextureSize() const;
+    virtual RGBAImage exportBlocks() const;
 
     const BlockImage &getBlockImage(uint16_t id);
     void prepareBiomeBlockImage(RGBAImage &image, const BlockImage &block, uint32_t color);
