@@ -69,7 +69,7 @@ PathList findTemplateDirs(const fs::path& executable);
 /**
  * Returns all possible Mapcrafter block directories.
  */
-PathList findBlockDirs(const fs::path& executable);
+PathList findBlockDirs(const fs::path &executable);
 
 /**
  * Returns all possible logging configuration files.
