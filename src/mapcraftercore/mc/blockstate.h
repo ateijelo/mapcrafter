@@ -35,7 +35,7 @@ class BlockState {
 
     std::string getName() const;
 
-	const std::map<std::string, std::string>& getProperties() const;
+    const std::map<std::string, std::string> &getProperties() const;
 	bool hasProperty(std::string key) const;
     std::string getProperty(std::string key, std::string default_value = "") const;
     void setProperty(std::string key, std::string value);
@@ -63,8 +63,8 @@ class BlockStateRegistry {
     uint16_t getBlockID(const BlockState &block);
     const BlockState &getBlockState(uint16_t id) const;
 
-	void addKnownProperty(std::string block, std::string property);
-	bool isKnownProperty(std::string block, std::string property) const;
+    void addKnownProperty(std::string block, std::string property);
+    bool isKnownProperty(std::string block, std::string property) const;
 
   private:
 	std::mutex mutex;
@@ -72,7 +72,7 @@ class BlockStateRegistry {
     std::map<std::string, std::map<std::string, uint16_t>> block_lookup;
     std::vector<BlockState> block_states;
 
-	std::map<std::string, std::set<std::string>> known_properties;
+    std::map<std::string, std::set<std::string>> known_properties;
 
     BlockState unknown_block;
 };

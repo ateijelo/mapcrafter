@@ -30,9 +30,7 @@ BlockState::BlockState(std::string name) : name(name) { updateVariantDescription
 
 std::string BlockState::getName() const { return name; }
 
-const std::map<std::string, std::string>& BlockState::getProperties() const {
-	return properties;
-}
+const std::map<std::string, std::string> &BlockState::getProperties() const { return properties; }
 
 bool BlockState::hasProperty(std::string key) const {
 	return properties.count(key);
@@ -106,14 +104,14 @@ const BlockState &BlockStateRegistry::getBlockState(uint16_t id) const {
 }
 
 void BlockStateRegistry::addKnownProperty(std::string block, std::string property) {
-	known_properties[block].insert(property);
+    known_properties[block].insert(property);
 }
 
 bool BlockStateRegistry::isKnownProperty(std::string block, std::string property) const {
-	auto it = known_properties.find(block);
-	if (it == known_properties.end()) {
-		return false;
-	}
+    auto it = known_properties.find(block);
+    if (it == known_properties.end()) {
+        return false;
+    }
 	return it->second.count(property);
 }
 
