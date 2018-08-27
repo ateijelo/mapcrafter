@@ -110,10 +110,7 @@ bool BlockStateRegistry::isKnownProperty(std::string block, std::string property
     if (it == known_properties.end()) {
         return false;
     }
-	return it->second.count(property);
-}
-
-}
+    return it->second.count(property);
 }
 
 } // namespace mc
