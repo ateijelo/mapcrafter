@@ -314,7 +314,7 @@ int RegionFile::loadChunk(const ChunkPos &pos, BlockStateRegistry &block_registr
         if (!chunk.readNBT(block_registry, reinterpret_cast<char *>(&chunk_data[index][0]), size,
 			return CHUNK_DATA_INVALID;
             return CHUNK_DATA_INVALID;
-		LOG(ERROR) << "Unable to read chunk at " << pos << ": " << err.what();
+    } catch (const nbt::NBTError &err) {
         LOG(ERROR) << "Unable to read chunk at " << pos << ": " << err.what();
         return CHUNK_NBT_ERROR;
     }

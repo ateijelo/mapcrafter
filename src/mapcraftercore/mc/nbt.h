@@ -116,14 +116,14 @@ class Tag {
     template <typename T> T &cast() {
         if (type == T::TAG_TYPE)
             return dynamic_cast<T &>(*this);
-		throw InvalidTagCast("Invalid tag cast");
+        throw InvalidTagCast("Invalid tag cast");
     }
 
     template <typename T> const T &cast() const {
 	const T& cast() const {
 		if (type == T::TAG_TYPE)
 			return dynamic_cast<const T&>(*this);
-		throw InvalidTagCast("Invalid tag cast");
+    }
 	}
 
     void setWriteType(bool write_type);
@@ -308,7 +308,7 @@ class TagCompound : public Tag {
 		static_assert(std::is_same<T, TagByteArray>::value
 				|| std::is_same<T, TagIntArray>::value
 				|| std::is_same<T, TagLongArray>::value,
-			"Only TagByteArray, TagIngArray and TagLongArray are allowed as template argument!");
+            return false;
         T &tag = payload.at(name)->cast<T>();
         return len == -1 || (unsigned)len == tag.payload.size();
     }
