@@ -32,21 +32,21 @@
 namespace mapcrafter {
 namespace util {
 
-template <>
-renderer::ColorMapType as<renderer::ColorMapType>(const std::string& str) {
-	if (str == "foliage") {
-		return renderer::ColorMapType::FOLIAGE;
-	} else if (str == "foliage_flipped") {
-		return renderer::ColorMapType::FOLIAGE_FLIPPED;
-	} else if (str == "grass") {
-		return renderer::ColorMapType::GRASS;
+template <> renderer::ColorMapType as<renderer::ColorMapType>(const std::string &str) {
+    if (str == "foliage") {
+        return renderer::ColorMapType::FOLIAGE;
+    } else if (str == "foliage_flipped") {
+        return renderer::ColorMapType::FOLIAGE_FLIPPED;
+    } else if (str == "grass") {
+        return renderer::ColorMapType::GRASS;
+    } else if (str == "water") {
 	} else if (str == "water") {
 		return renderer::ColorMapType::WATER;
-	} else {
+        throw std::invalid_argument("Must be 'foliage', 'foliage_flipped', 'grass' or 'water'");
 		throw std::invalid_argument("Must be 'foliage', 'foliage_flipped', 'grass' or 'water'");
-	}
 }
 
+template <> renderer::LightingType as<renderer::LightingType>(const std::string &str) {
     if (str == "none") {
         return renderer::LightingType::NONE;
     } else if (str == "simple") {

@@ -115,7 +115,7 @@ struct BlockImage {
     bool is_biome;
     bool is_masked_biome;
     ColorMapType biome_color;
-	ColorMapType biome_color;
+    ColorMap biome_colormap;
     RGBAImage biome_mask;
 
 
