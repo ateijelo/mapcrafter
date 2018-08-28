@@ -97,8 +97,8 @@ struct RenderBlock {
  */
 class NewIsometricTileRenderer : public TileRenderer {
   public:
-	NewIsometricTileRenderer(const RenderView* render_view, mc::BlockStateRegistry& block_registry,
-			BlockImages* images, int tile_width, mc::WorldCache* world, RenderMode* render_mode);
+    NewIsometricTileRenderer(const RenderView *render_view, mc::BlockStateRegistry &block_registry,
+                             BlockImages *images, int tile_width, mc::WorldCache *world,
                              RenderMode *render_mode);
     virtual ~NewIsometricTileRenderer();
 
@@ -106,7 +106,7 @@ class NewIsometricTileRenderer : public TileRenderer {
 
     virtual int getTileSize() const;
 
-protected:
+  protected:
     virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images);
 };
 

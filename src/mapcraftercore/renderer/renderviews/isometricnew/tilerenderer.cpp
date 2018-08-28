@@ -346,7 +346,7 @@ if (block_image->is_waterloggable && block_image->is_waterlogged) {
 }
 
 old::RenderBlock node;
-		mc::BlockStateRegistry& block_registry,
+node.x = it.draw_x;
 node.y = it.draw_y;
 node.pos = block.current;
 node.image = block_image->image;
