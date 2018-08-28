@@ -28,10 +28,6 @@
 #include "../../image.h"
 #include "../../rendermode.h"
 #include "../../tileset.h"
-#include "../../../mc/blockstate.h"
-#include "../../../mc/pos.h"
-#include "../../../mc/worldcache.h"
-#include "../../../util.h"
 
 #include <fstream>
 #include <iostream>
