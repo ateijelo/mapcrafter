@@ -118,11 +118,11 @@ struct BlockImage {
     ColorMap biome_colormap;
     RGBAImage biome_mask;
 
-
-	bool is_waterloggable;
-	bool is_waterlogged;
+    bool is_waterloggable;
+    bool is_waterlogged;
+    bool has_water_top;
     uint16_t non_waterlogged_id;
-	uint16_t non_waterlogged_id;
+
     bool can_partial;
 	bool can_partial;
 
