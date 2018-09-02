@@ -349,7 +349,11 @@ old::RenderBlock node;
 		mc::BlockStateRegistry& block_registry,
 node.y = it.draw_y;
 node.pos = block.current;
-	: TileRenderer(render_view, block_registry, images, tile_width, world, render_mode) {
+node.image = block_image->image;
+
+if (block_image->is_biome) {
+        Biome biome = getBiomeOfBlock(block.current, current_chunk);
+        block_images->prepareBiomeBlockImage(node.image, *block_image, biome);
 }
 
 // let the render mode do their magic with the block image
@@ -365,7 +369,7 @@ if (!block_image->is_transparent)
 }
 }
 
-/*
+// now blit all blocks
 for (std::set<old::RenderBlock>::const_iterator it = blocks.begin(); it != blocks.end();
 ++it) {
 tile.alphaBlit(it->image, it->x, it->y);
@@ -608,11 +612,12 @@ int NewIsometricTileRenderer::getTileSize() const {
     return images->getBlockSize() * 16 * tile_width;
 }
 
-void NewIsometricTileRenderer::renderTopBlocks(const TilePos& tile_pos, std::set<TileImage>& tile_images) {
-	int block_size = images->getBlockSize();
-	for (old::TileTopBlockIterator it(tile_pos, block_size, tile_width); !it.end(); it.next()) {
-		renderBlocks(it.draw_x, it.draw_y, it.current, mc::BlockPos(1, -1, -1), tile_images);
-	}
+void NewIsometricTileRenderer::renderTopBlocks(const TilePos &tile_pos,
+                                               std::set<TileImage> &tile_images) {
+    int block_size = images->getBlockSize();
+    for (old::TileTopBlockIterator it(tile_pos, block_size, tile_width); !it.end(); it.next()) {
+        renderBlocks(it.draw_x, it.draw_y, it.current, mc::BlockPos(1, -1, -1), tile_images);
+    }
 }
 
 } // namespace renderer

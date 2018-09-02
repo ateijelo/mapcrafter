@@ -31,14 +31,14 @@ namespace renderer {
 
 class TopdownTileRenderer : public TileRenderer {
 public:
-	TopdownTileRenderer(const RenderView* render_view, mc::BlockStateRegistry& block_registry,
-			BlockImages* images, int tile_width, mc::WorldCache* world, RenderMode* render_mode);
+    TopdownTileRenderer(const RenderView *render_view, mc::BlockStateRegistry &block_registry,
+                        BlockImages *images, int tile_width, mc::WorldCache *world,
 	~TopdownTileRenderer();
 
 	virtual int getTileSize() const;
 
-protected:
-	virtual void renderTopBlocks(const TilePos& tile_pos, std::set<TileImage>& tile_images);
+  protected:
+    virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images);
 };
 
 }

@@ -212,12 +212,12 @@ void MapSection::preParse(const INIConfigSection &section, ValidationList &valid
     rotations.setDefault("top-left");
 
     fs::path block_dir_found = util::findBlockDir();
-		if (render_view.load(key, value, validation)) {
-			if (render_view.getValue() == renderer::RenderViewType::ISOMETRICNEW) {
-				validation.error("Using 'isometricnew' for 'render_view' is not necessary anymore! "
-						"Just use 'isometric' or 'topdown'.");
-			}
-		}
+    if (!block_dir_found.empty()) {
+        block_dir.setDefault(block_dir_found);
+    }
+
+    texture_size.setDefault(12);
+    tile_width.setDefault(1);
 	} else if (key == "render_mode" || key == "rendermode") {
     image_format.setDefault(ImageFormat::PNG);
 		if (key == "rendermode")

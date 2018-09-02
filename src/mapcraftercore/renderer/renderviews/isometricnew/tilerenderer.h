@@ -102,12 +102,12 @@ class NewIsometricTileRenderer : public TileRenderer {
                              RenderMode *render_mode);
     virtual ~NewIsometricTileRenderer();
 
-	//virtual void renderTile(const TilePos& tile_pos, RGBAImage& tile);
+    // virtual void renderTile(const TilePos& tile_pos, RGBAImage& tile);
 
     virtual int getTileSize() const;
 
 protected:
-	virtual void renderTopBlocks(const TilePos& tile_pos, std::set<TileImage>& tile_images);
+    virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images);
 };
 
 } // namespace renderer

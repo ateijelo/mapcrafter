@@ -29,7 +29,7 @@ namespace mapcrafter {
 namespace renderer {
 
 BlockImages* TopdownRenderView::createBlockImages(mc::BlockStateRegistry& block_registry) const {
-	return new RenderedBlockImages(block_registry);
+    return new RenderedBlockImages(block_registry);
 }
 
 TileSet* TopdownRenderView::createTileSet(int tile_width) const {
@@ -38,7 +38,9 @@ TileSet* TopdownRenderView::createTileSet(int tile_width) const {
 
 TileRenderer* TopdownRenderView::createTileRenderer(mc::BlockStateRegistry& block_registry,
 		BlockImages* images, int tile_width, mc::WorldCache* world, RenderMode* render_mode) const {
-	return new TopdownTileRenderer(this, block_registry, images, tile_width, world, render_mode);
+                                                    mc::WorldCache *world,
+                                                    RenderMode *render_mode) const {
+    return new TopdownTileRenderer(this, block_registry, images, tile_width, world, render_mode);
 }
 
 void TopdownRenderView::configureBlockImages(BlockImages* images,
