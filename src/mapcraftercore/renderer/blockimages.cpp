@@ -870,7 +870,7 @@ void RenderedBlockImages::runBenchmark() {
         // blockImageTint(image, color);
 
         // 9.534s mit rgb_multiply_scalar
-	uint16_t solid_id = block_registry.getBlockID(mc::BlockState("minecraft:unknown_block"));
+        // 6.345s mit rgb_multiply_scalar inline
         // 6.377s mit rgba_multiply_scalar ohne f+1
         // 6.126s doch wenn der alpha check drin ist
         blockImageMultiply(image, solid.uv_image, left, right, up);
