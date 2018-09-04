@@ -119,25 +119,97 @@ BlockImages::~BlockImages() {
     return true;
 }
 
-void blockImageMultiplyExcept(RGBAImage& block, const RGBAImage& uv_mask,
-		uint8_t except_face, float factor) {
-	assert(block.getWidth() == uv_mask.getWidth());
-	assert(block.getHeight() == uv_mask.getHeight());
-	
-	for (size_t x = 0; x < block.getWidth(); x++) {
-		for (size_t y = 0; y < block.getHeight(); y++) {
-			uint32_t& pixel = block.pixel(x, y);
-			uint32_t uv_pixel = uv_mask.pixel(x, y);
-			if (rgba_alpha(uv_pixel) == 0) {
-				continue;
-			}
+uint32_t ColorMap::getColor(float x, float y) const {
+    float r = 0, g = 0, b = 0, a = 0;
+    // factors are barycentric coordinates
+    // colors are colors of the colormap triangle points
+    float factors[] = {x - y, 1.0f - x, y};
 
-			uint8_t side = rgba_blue(uv_pixel);
-			if (side != except_face) {
-				pixel = rgba_multiply(pixel, factor, factor, factor);
-			}
-		}
-	}
+    for (size_t i = 0; i < 3; i++) {
+        r += (float)rgba_red(colors[i]) * factors[i];
+        g += (float)rgba_green(colors[i]) * factors[i];
+        b += (float)rgba_blue(colors[i]) * factors[i];
+        a += (float)rgba_alpha(colors[i]) * factors[i];
+    }
+
+    return rgba(r, g, b, a);
+}
+
+BlockImages::~BlockImages() {}
+
+void blockImageTest(RGBAImage &block, const RGBAImage &uv_mask) {
+    assert(block.getWidth() == uv_mask.getWidth());
+    assert(block.getHeight() == uv_mask.getHeight());
+
+    for (size_t x = 0; x < block.getWidth(); x++) {
+        for (size_t y = 0; y < block.getHeight(); y++) {
+            uint32_t &pixel = block.pixel(x, y);
+            uint32_t uv_pixel = uv_mask.pixel(x, y);
+            if (rgba_alpha(uv_pixel) == 0) {
+                continue;
+            }
+
+            uint8_t side = rgba_blue(uv_pixel);
+            if (side == FACE_LEFT_INDEX) {
+                pixel = rgba(255, 0, 0);
+            }
+            if (side == FACE_RIGHT_INDEX) {
+                pixel = rgba(0, 255, 0);
+            }
+            if (side == FACE_UP_INDEX) {
+                pixel = rgba(0, 0, 255);
+                ;
+            }
+        }
+    }
+}
+
+void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask, float factor_left,
+                        float factor_right, float factor_up) {
+    assert(block.getWidth() == uv_mask.getWidth());
+    assert(block.getHeight() == uv_mask.getHeight());
+
+    for (size_t x = 0; x < block.getWidth(); x++) {
+        for (size_t y = 0; y < block.getHeight(); y++) {
+            uint32_t &pixel = block.pixel(x, y);
+            uint32_t uv_pixel = uv_mask.pixel(x, y);
+            if (rgba_alpha(uv_pixel) == 0) {
+                continue;
+            }
+
+            uint8_t side = rgba_blue(uv_pixel);
+            if (side == FACE_LEFT_INDEX) {
+                pixel = rgba_multiply(pixel, factor_left, factor_left, factor_left);
+            }
+            if (side == FACE_RIGHT_INDEX) {
+                pixel = rgba_multiply(pixel, factor_right, factor_right, factor_right);
+            }
+            if (side == FACE_UP_INDEX) {
+                pixel = rgba_multiply(pixel, factor_up, factor_up, factor_up);
+            }
+        }
+    }
+}
+
+void blockImageMultiplyExcept(RGBAImage &block, const RGBAImage &uv_mask, uint8_t except_face,
+                              float factor) {
+    assert(block.getWidth() == uv_mask.getWidth());
+    assert(block.getHeight() == uv_mask.getHeight());
+
+    for (size_t x = 0; x < block.getWidth(); x++) {
+        for (size_t y = 0; y < block.getHeight(); y++) {
+            uint32_t &pixel = block.pixel(x, y);
+            uint32_t uv_pixel = uv_mask.pixel(x, y);
+            if (rgba_alpha(uv_pixel) == 0) {
+                continue;
+            }
+
+            uint8_t side = rgba_blue(uv_pixel);
+            if (side != except_face) {
+                pixel = rgba_multiply(pixel, factor, factor, factor);
+            }
+        }
+    }
 }
 
 namespace {
@@ -857,26 +929,11 @@ void blockImageShadowEdges(RGBAImage& block, const RGBAImage& uv_mask,
 	return false;
 }
 
-std::array<bool, 3> blockImageGetSideMask(const RGBAImage& uv) {
-	std::array<bool, 3> side_mask = {false, false, false};
-	uint8_t mask_indices[3] = {FACE_LEFT_INDEX, FACE_RIGHT_INDEX, FACE_UP_INDEX};
-	for (size_t x = 0; x < uv.getWidth(); x++) {
-		for (size_t y = 0; y < uv.getHeight(); y++) {
-			uint32_t pixel = uv.pixel(x, y);
-			if (rgba_alpha(pixel) == 0) {
-				continue;
-			}
-
-			uint8_t face = rgba_blue(pixel);
-			for (uint8_t i = 0; i < 3; i++) {
-				if (face == mask_indices[i]) {
-					side_mask[i] = true;
-				}
-			}
-		}
-	}
-	return side_mask;
-}
+        if (unknown_block_ids.find(id) == unknown_block_ids.end()) {
+            LOG(INFO) << "Unknown block " << block_state.getName() << " (id: " << id << ") "
+                      << block_state.getVariantDescription();
+            unknown_block_ids.insert(id);
+        }
 
         return unknown_block;
     }

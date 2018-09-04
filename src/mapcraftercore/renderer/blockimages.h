@@ -77,8 +77,8 @@ static const uint8_t FACE_UP_INDEX = ((float)255.0 / 6.0) * 2;
 void blockImageTest(RGBAImage &block, const RGBAImage &uv_mask);
 void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask, float factor_left,
                         float factor_right, float factor_up);
-void blockImageMultiplyExcept(RGBAImage& block, const RGBAImage& uv_mask,
-		uint8_t except_face, float factor);
+void blockImageMultiplyExcept(RGBAImage &block, const RGBAImage &uv_mask, uint8_t except_face,
+                              float factor);
 void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask,
                         const CornerValues &factors_left, const CornerValues &factors_right,
                         const CornerValues &factors_up);
@@ -93,13 +93,13 @@ void blockImageBlendTop(RGBAImage& block, const RGBAImage& uv_mask,
 void blockImageShadowEdges(RGBAImage& block, const RGBAImage& uv_mask,
 		uint8_t north, uint8_t south, uint8_t east, uint8_t west, uint8_t bottom);
 bool blockImageIsTransparent(RGBAImage &block, const RGBAImage &uv_mask);
-std::array<bool, 3> blockImageGetSideMask(const RGBAImage& uv);
+std::array<bool, 3> blockImageGetSideMask(const RGBAImage &uv);
 
 enum class LightingType {
 	NONE,
 	SIMPLE,
-	SMOOTH,
-	SMOOTH_TOP_REMAINING_SIMPLE,
+    SMOOTH,
+    SMOOTH_TOP_REMAINING_SIMPLE,
 	SMOOTH_BOTTOM,
 };
 
@@ -110,7 +110,7 @@ struct BlockImage {
 		: lighting_specified(false) {}
 
 	RGBAImage image, uv_image;
-	std::array<bool, 3> side_mask;
+    bool is_transparent, is_air, is_full_water, is_ice;
 	bool is_transparent, is_air, is_full_water, is_ice;
 	
 	bool is_biome;
@@ -121,7 +121,7 @@ struct BlockImage {
 
 	bool is_waterloggable;
 	bool is_waterlogged;
-	bool has_water_top;
+    uint16_t non_waterlogged_id;
 	uint16_t non_waterlogged_id;
 
 	bool can_partial;
