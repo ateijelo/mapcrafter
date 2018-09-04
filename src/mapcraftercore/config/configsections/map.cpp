@@ -203,32 +203,7 @@ const std::set<TileSetID> &MapSection::getTileSets() const { return tile_sets; }
 
 void MapSection::preParse(const INIConfigSection &section, ValidationList &validation) {
     name_short = getSectionName();
-	name_short = getSectionName();
-	name_long = name_short;
-
-	// set some default configuration values
-	render_view.setDefault(renderer::RenderViewType::ISOMETRIC);
-	render_mode.setDefault(renderer::RenderModeType::DAYLIGHT);
-	overlay.setDefault(renderer::OverlayType::NONE);
-	rotations.setDefault("top-left");
-	
-	fs::path block_dir_found = util::findBlockDir();
-	if (!block_dir_found.empty()) {
-		block_dir.setDefault(block_dir_found);
-	}
-
-	texture_size.setDefault(12);
-	tile_width.setDefault(1);
-
-	image_format.setDefault(ImageFormat::PNG);
-	png_indexed.setDefault(false);
-	jpeg_quality.setDefault(85);
-
-	lighting_intensity.setDefault(1.0);
-	lighting_water_intensity.setDefault(0.85);
-	render_biomes.setDefault(true);
-	use_image_mtimes.setDefault(true);
-}
+    name_long = name_short;
 
     // set some default configuration values
     render_view.setDefault(renderer::RenderViewType::ISOMETRIC);
