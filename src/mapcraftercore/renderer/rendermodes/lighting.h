@@ -77,7 +77,7 @@ class LightingData {
     uint8_t getSkyLight() const;
     uint8_t getLightLevel(bool day) const;
 
-	static LightingData estimate(const mc::Block& block, RenderedBlockImages* block_images,
+    static LightingData estimate(const mc::Block &block, RenderedBlockImages *block_images,
                                  mc::WorldCache *world, mc::Chunk *current_chunk);
 
   protected:
@@ -97,8 +97,8 @@ public:
 	virtual ~LightingRenderMode();
 
 	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data);
-	virtual void draw(RGBAImage& image, const BlockImage& block_image, const mc::BlockPos& pos, uint16_t id);
-
+    virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
+                      uint16_t id);
 private:
 	bool day;
     bool day;
@@ -140,14 +140,16 @@ private:
 	 * Applies the smooth lighting to a block by adding lighting to the top, left and
 	 * right face (if not covered by another, not transparent, block).
 	 */
-	void doSmoothLight(RGBAImage& image, const BlockImage& block_image, const mc::BlockPos& pos,
-			uint16_t id, bool use_bottom_corners);
+     */
+    void doSmoothLight(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
                        uint16_t id, bool use_bottom_corners);
 	/**
 	 * Applies a simple lighting to a block by coloring the whole block with the lighting
 	 * color of the block.
 	 */
-	void doSimpleLight(RGBAImage& image, const BlockImage& block_image, const mc::BlockPos& pos, uint16_t id);
+     */
+    void doSimpleLight(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
+                       uint16_t id);
 };
 
 } // namespace renderer

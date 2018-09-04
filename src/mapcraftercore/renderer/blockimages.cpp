@@ -47,20 +47,20 @@ renderer::ColorMapType as<renderer::ColorMapType>(const std::string& str) {
 	}
 }
 
-template <>
-renderer::LightingType as<renderer::LightingType>(const std::string& str) {
-	if (str == "none") {
-		return renderer::LightingType::NONE;
-	} else if (str == "simple") {
-		return renderer::LightingType::SIMPLE;
-	} else if (str == "smooth") {
-		return renderer::LightingType::SMOOTH;
+    if (str == "none") {
+        return renderer::LightingType::NONE;
+    } else if (str == "simple") {
+        return renderer::LightingType::SIMPLE;
+    } else if (str == "smooth") {
+        return renderer::LightingType::SMOOTH;
+    } else if (str == "smooth_bottom") {
+        return renderer::LightingType::SMOOTH_BOTTOM;
 	} else if (str == "smooth_bottom") {
 		return renderer::LightingType::SMOOTH_BOTTOM;
-	} else {
+    }
 		throw std::invalid_argument("Must be 'none', 'simple', 'smooth', or 'smooth_bottom'");
-	}
-}
+
+} // namespace util
 
 }
 }

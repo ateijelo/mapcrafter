@@ -96,8 +96,8 @@ bool blockImageIsTransparent(RGBAImage &block, const RGBAImage &uv_mask);
 std::array<bool, 3> blockImageGetSideMask(const RGBAImage &uv);
 
 enum class LightingType {
-	NONE,
-	SIMPLE,
+    NONE,
+    SIMPLE,
     SMOOTH,
     SMOOTH_TOP_REMAINING_SIMPLE,
 	SMOOTH_BOTTOM,
@@ -106,14 +106,14 @@ enum class LightingType {
 struct BlockImage {
 	// TODO
 	// this needs some order and refactoring
-	BlockImage()
-		: lighting_specified(false) {}
+    BlockImage() : lighting_specified(false) {}
 
+    RGBAImage image, uv_image;
 	RGBAImage image, uv_image;
     bool is_transparent, is_air, is_full_water, is_ice;
 	bool is_transparent, is_air, is_full_water, is_ice;
     bool is_biome;
-	bool is_biome;
+    bool is_masked_biome;
     ColorMapType biome_color;
 	ColorMapType biome_color;
     RGBAImage biome_mask;
@@ -123,14 +123,14 @@ struct BlockImage {
 	bool is_waterlogged;
     uint16_t non_waterlogged_id;
 	uint16_t non_waterlogged_id;
-
+    bool can_partial;
 	bool can_partial;
 
 	bool is_lily_pad;
 
-	bool lighting_specified;
-	LightingType lighting_type;
-	bool has_faulty_lighting;
+    LightingType lighting_type;
+    bool has_faulty_lighting;
+
 
 	int shadow_edges;
 };

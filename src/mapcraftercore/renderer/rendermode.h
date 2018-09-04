@@ -22,7 +22,6 @@
 
 #include "renderview.h"
 // TODO forward-declare once template is gone!
-#include "../renderer/blockimages.h"
 #include "../mc/worldcache.h"
 
 #include <iostream>
@@ -81,9 +80,8 @@ class RenderMode {
 	 */
 	virtual void draw(RGBAImage& image, const mc::BlockPos& pos, uint16_t id,
 			uint16_t data) = 0;
-
-	virtual void draw(RGBAImage& image, const BlockImage& block_image,
-			const mc::BlockPos& pos, uint16_t id) {}
+    virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
+                      uint16_t id) {}
 };
 
 /**
@@ -117,7 +115,7 @@ protected:
     mc::Block getBlock(const mc::BlockPos &pos, int get = mc::GET_ID);
 
 	BlockImages* images;
-	RenderedBlockImages* block_images;
+    RenderedBlockImages *block_images;
 	mc::WorldCache* world;
 	mc::Chunk** current_chunk;
 };
@@ -154,8 +152,8 @@ public:
 	 */
 	virtual void draw(RGBAImage& image, const mc::BlockPos& pos, uint16_t id, uint16_t data);
 
-	virtual void draw(RGBAImage& image, const BlockImage& block_image, const mc::BlockPos& pos, uint16_t id);
-
+    virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
+                      uint16_t id);
 protected:
 	std::vector<RenderMode*> render_modes;
 };
