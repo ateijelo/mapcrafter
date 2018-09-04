@@ -59,9 +59,7 @@ template <> renderer::LightingType as<renderer::LightingType>(const std::string 
 }
 
 } // namespace util
-
-}
-}
+} // namespace mapcrafter
 
 namespace mapcrafter {
 namespace renderer {
