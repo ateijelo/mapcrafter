@@ -55,8 +55,8 @@ renderer::ColorMapType as<renderer::ColorMapType>(const std::string& str) {
         return renderer::LightingType::SMOOTH;
     } else if (str == "smooth_bottom") {
         return renderer::LightingType::SMOOTH_BOTTOM;
-	} else if (str == "smooth_bottom") {
-		return renderer::LightingType::SMOOTH_BOTTOM;
+    } else {
+        throw std::invalid_argument("Must be 'none', 'simple', 'smooth', or 'smooth_bottom'");
     }
 		throw std::invalid_argument("Must be 'none', 'simple', 'smooth', or 'smooth_bottom'");
 
