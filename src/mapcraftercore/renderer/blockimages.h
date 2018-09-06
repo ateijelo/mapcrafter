@@ -44,12 +44,7 @@ namespace renderer {
 
 class Biome;
 
-enum class ColorMapType {
-	GRASS,
-	FOLIAGE,
-	FOLIAGE_FLIPPED,
-	WATER
-};
+enum class ColorMapType { GRASS, FOLIAGE, FOLIAGE_FLIPPED, WATER };
 
 struct ColorMap {
 	ColorMap()
