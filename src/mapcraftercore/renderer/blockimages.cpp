@@ -38,8 +38,8 @@ template <> renderer::ColorMapType as<renderer::ColorMapType>(const std::string 
     } else if (str == "grass") {
         return renderer::ColorMapType::GRASS;
     } else if (str == "water") {
-	} else if (str == "water") {
-		return renderer::ColorMapType::WATER;
+        return renderer::ColorMapType::WATER;
+    } else {
         throw std::invalid_argument("Must be 'foliage', 'foliage_flipped', 'grass' or 'water'");
 		throw std::invalid_argument("Must be 'foliage', 'foliage_flipped', 'grass' or 'water'");
 }

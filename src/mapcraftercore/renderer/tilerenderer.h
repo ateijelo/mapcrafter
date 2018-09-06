@@ -52,7 +52,7 @@ struct TileImage {
     int x, y;
     RGBAImage image;
     mc::BlockPos pos;
-	int z_index;
+    int z_index;
 
     bool operator<(const TileImage &other) const;
 };
@@ -102,10 +102,10 @@ protected:
     std::set<uint16_t> full_water_ids;
     // IDs of blocks that can be seen as full water blocks for other full water blocks
     // (for example ice: we don't want side faces of water next to ice)
-
+    std::set<uint16_t> full_water_like_ids;
     // full water blocks will be replaced by these water blocks
     std::vector<uint16_t> partial_full_water_ids, partial_ice_ids;
-	uint16_t waterlog_id;
+
     std::vector<uint16_t> lily_pad_ids;
 
     uint16_t waterlog_id;
