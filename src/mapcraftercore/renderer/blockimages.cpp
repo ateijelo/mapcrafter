@@ -186,16 +186,346 @@ namespace {
 
 /*
 inline uint32_t divide255(uint32_t v1, uint32_t v2) {
-	uint32_t t = v1 * v2 + 128;
-	return ((t >> 8) + t) >> 8;
+        uint32_t t = v1 * v2 + 128;
+        return ((t >> 8) + t) >> 8;
 }
 */
 
 inline uint32_t mix(uint32_t x, uint32_t y, uint32_t a) {
 	// >> 8 = / 256, serves as approximation for division by 255
-	return ((x * (255-a)) + (y * a)) >> 8;
+    return ((x * (255 - a)) + (y * a)) >> 8;
 }
 
+} // namespace
+
+void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask,
+                        const CornerValues &factors_left, const CornerValues &factors_right,
+                        const CornerValues &factors_up) {
+    assert(block.getWidth() == uv_mask.getWidth());
+    assert(block.getHeight() == uv_mask.getHeight());
+
+    uint32_t fl[4], fr[4], fu[4];
+    for (int i = 0; i < 4; i++) {
+        fl[i] = factors_left[i] * 255;
+        fr[i] = factors_right[i] * 255;
+        fu[i] = factors_up[i] * 255;
+    }
+
+    size_t n = block.getWidth() * block.getHeight();
+    for (size_t i = 0; i < n; i++) {
+        uint32_t &pixel = block.data[i];
+        uint32_t uv_pixel = uv_mask.data[i];
+        if (rgba_alpha(uv_pixel) == 0) {
+            continue;
+        }
+
+        // const CornerValues* vptr = nullptr;
+        uint32_t *f = nullptr;
+        uint8_t side = rgba_blue(uv_pixel);
+        if (side == FACE_LEFT_INDEX) {
+            // vptr = &factors_left;
+            f = fl;
+        } else if (side == FACE_RIGHT_INDEX) {
+            // vptr = &factors_right;
+            f = fr;
+        } else if (side == FACE_UP_INDEX) {
+            // vptr = &factors_up;
+            f = fu;
+        } else {
+            continue;
+        }
+
+        /*
+        const CornerValues& values = *vptr;
+        float u = (float) rgba_red(uv_pixel) / 255.0;
+        float v = (float) rgba_green(uv_pixel) / 255.0;
+        float ab = (1-u) * values[0] + u * values[1];
+        float cd = (1-u) * values[2] + u * values[3];
+        float x = (1-v) * ab + v * cd;
+        */
+
+        uint32_t u = rgba_red(uv_pixel);
+        uint32_t v = rgba_green(uv_pixel);
+
+        // uint32_t ab = divide255((255-u), f[0]) + divide255(u, f[1]);
+        // uint32_t cd = divide255((255-u), f[2]) + divide255(u, f[3]);
+        // uint32_t x = divide255((255-v), ab) + divide255(v,  cd);
+
+        // jetzt sogar 34.17
+        // und mit noch mehr rgba_multiply sogar 35.28
+        uint32_t ab = mix(f[0], f[1], u); // divide255((255-u) * f[0], u * f[1]);
+        uint32_t cd = mix(f[2], f[3], u); // divide255((255-u) * f[2], u * f[3]);
+        uint32_t x = mix(ab, cd, v);      // divide255((255-v) * ab, v * cd);
+
+        // OHNE BASIS
+        // 45.68
+        // pixel = rgba_multiply(pixel, 0.5);
+
+        // 34.44
+        // float x = 0.5;
+        // pixel = rgba_multiply(pixel, x, x, x);
+
+        // FLOAT ALS BASIS
+        // 25.68
+        // pixel = rgba_multiply(pixel, x, x, x);
+
+        // geht. aber vielleicht auch nicht mega viel schneller
+        // uint8_t factor = x * 255;
+        // pixel = rgba_multiply(pixel, factor, factor, factor);
+
+        // geht, 29.13
+        // int factor = x * 255;
+        // assert(factor >= 0 && factor <= 255);
+        // pixel = rgba_multiply(pixel, factor);
+
+        // INTEGER ALS BASIS
+        // assert(x >= 0 && x <= 255);
+
+        // geht, 28.93
+        // double factor = (double) x / 255;
+        // pixel = rgba_multiply(pixel, factor, factor, factor);
+
+        // geht, 28.00
+        // uint8_t factor = x;
+        // pixel = rgba_multiply(pixel, factor, factor, factor);
+
+        // geht, 29.83
+        // ohne uv-alpha check sogar 32.15
+        // ohne uv-alpha check und uint8_t 32.39
+        // ... div255 32.60
+        // ... anderes div255 32.88
+        // rgba_ inline: 33.64
+        pixel = rgba_multiply_scalar(pixel, x);
+    }
+}
+
+void blockImageMultiply(RGBAImage &block, uint8_t factor) {
+    size_t n = block.getWidth() * block.getHeight();
+    for (size_t i = 0; i < n; i++) {
+        block.data[i] = rgba_multiply_scalar(block.data[i], factor);
+    }
+}
+
+void blockImageTint(RGBAImage &block, const RGBAImage &mask, uint32_t color) {
+    assert(block.getWidth() == mask.getWidth());
+    assert(block.getHeight() == mask.getHeight());
+
+    size_t n = block.getWidth() * block.getHeight();
+    for (size_t i = 0; i < n; i++) {
+        uint32_t mask_pixel = mask.data[i];
+        if (rgba_alpha(mask_pixel)) {
+            uint32_t &pixel = block.data[i];
+            // The mask is not supposed to be transfered directly
+            // but to be blend in with block pixel
+            // This will avoid white pixels on edges of the mask
+            RGBAPixel colored_mask_pixel = rgba_multiply(mask_pixel, color);
+            blend(pixel, colored_mask_pixel);
+        }
+    }
+}
+
+void blockImageTint(RGBAImage &block, uint32_t color) {
+    size_t n = block.getWidth() * block.getHeight();
+    for (size_t i = 0; i < n; i++) {
+        uint32_t pixel = block.data[i];
+        if (rgba_alpha(pixel)) {
+            block.data[i] = rgba_multiply(pixel, color);
+        }
+    }
+}
+
+void blockImageTintHighContrast(RGBAImage &block, uint32_t color) {
+    // get luminance of recolor:
+    // "10*r + 3*g + b" should actually be "3*r + 10*g + b"
+    // it was a typo, but doesn't look bad either
+    int luminance = (10 * rgba_red(color) + 3 * rgba_green(color) + rgba_blue(color)) / 14;
+
+    float alpha_factor = 3; // 3 is similar to alpha=85
+    // something like that would be possible too, but overlays won't look exactly like
+    // overlays with that alpha value, so don't use it for now
+    // alpha_factor = (float) 255.0 / rgba_alpha(color);
+
+    // try to do luminance-neutral additive/subtractive color
+    // instead of alpha blending (for better contrast)
+    // so first subtract luminance from each component
+    int nr = (rgba_red(color) - luminance) / alpha_factor;
+    int ng = (rgba_green(color) - luminance) / alpha_factor;
+    int nb = (rgba_blue(color) - luminance) / alpha_factor;
+
+    size_t n = block.getWidth() * block.getHeight();
+    for (size_t i = 0; i < n; i++) {
+        RGBAPixel &pixel = block.data[i];
+        if ((pixel & 0xff000000) > 0) {
+            pixel = rgba_add_clamp(pixel, nr, ng, nb, 0);
+        }
+    }
+}
+
+void blockImageTintHighContrast(RGBAImage &block, const RGBAImage &mask, int face, uint32_t color) {
+    assert(block.getWidth() == mask.getWidth());
+    assert(block.getHeight() == mask.getHeight());
+
+    // same as above
+    int luminance = (10 * rgba_red(color) + 3 * rgba_green(color) + rgba_blue(color)) / 14;
+    float alpha_factor = 3;
+    int nr = (rgba_red(color) - luminance) / alpha_factor;
+    int ng = (rgba_green(color) - luminance) / alpha_factor;
+    int nb = (rgba_blue(color) - luminance) / alpha_factor;
+
+    size_t n = block.getWidth() * block.getHeight();
+    for (size_t i = 0; i < n; i++) {
+        RGBAPixel &pixel = block.data[i];
+        RGBAPixel mask_pixel = mask.data[i];
+        if (rgba_blue(mask_pixel) == face) {
+            pixel = rgba_add_clamp(pixel, nr, ng, nb, 0);
+        }
+    }
+}
+
+void blockImageBlendTop(RGBAImage &block, const RGBAImage &uv_mask, const RGBAImage &top,
+                        const RGBAImage &top_uv_mask) {
+    assert(block.getWidth() == uv_mask.getWidth());
+    assert(block.getHeight() == uv_mask.getHeight());
+    assert(top.getWidth() == top_uv_mask.getWidth());
+    assert(top.getHeight() == top_uv_mask.getHeight());
+    assert(block.getWidth() == top.getWidth());
+    assert(block.getHeight() == top.getHeight());
+
+    size_t n = block.getWidth() * block.getHeight();
+    for (size_t i = 0; i < n; i++) {
+        RGBAPixel &pixel = block.data[i];
+        const RGBAPixel &uv_pixel = uv_mask.data[i];
+        const RGBAPixel &top_pixel = top.data[i];
+        const RGBAPixel &top_uv_pixel = top_uv_mask.data[i];
+
+        // basically what we want to do is:
+        // compare uv-coords of block vs. waterlog pixels
+        // if the uv-coords are the same and both textures pointing up, don't show water here
+
+        // use the Z value of each pixels to blend or not the top pixel
+        if (rgba_alpha(uv_pixel) < rgba_alpha(top_uv_pixel)) {
+            blend(pixel, top_pixel);
+        } else {
+            // The top pixel is behind the block one, so use the alpha of
+            // the destination pixel to blend the top pixel behind
+            RGBAPixel tmp_pix = pixel;
+            pixel = top_pixel;
+            blend(pixel, tmp_pix);
+        }
+    }
+}
+
+void blockImageShadowEdges(RGBAImage &block, const RGBAImage &uv_mask, uint8_t north, uint8_t south,
+                           uint8_t east, uint8_t west, uint8_t bottom) {
+    assert(block.getWidth() == uv_mask.getWidth());
+    assert(block.getHeight() == uv_mask.getHeight());
+
+    size_t n = block.getWidth() * block.getHeight();
+    for (size_t i = 0; i < n; i++) {
+        RGBAPixel &pixel = block.data[i];
+        const RGBAPixel &uv_pixel = uv_mask.data[i];
+
+        // TODO
+        // not really optimized yet, and quite dirty code
+        float u = (float)rgba_red(uv_pixel) / 255;
+        float v = (float)rgba_green(uv_pixel) / 255;
+        uint8_t face = rgba_blue(uv_pixel);
+
+        uint8_t alpha = 0;
+#define setalpha(x) (alpha = std::max(alpha, (uint8_t)(x)))
+        auto genalpha = [&alpha, &face](int mask_face, int edge, float uv) {
+            // explanation of edge influence:
+            // edge=0: no edge
+            // edge=1: edge with threshold 2px
+            // edge=2: edge with threshold 3px
+            // edge=3: edge with threshold 3px, a bit darker (for stronger visual on leaves etc.)
+            float t = (float)(1 + std::min(2, edge)) / 16.0;
+            float strong = 64;
+            float weak = 32;
+            if (edge > 2) {
+                strong = 128;
+                weak = 64;
+            }
+            if (edge && face == mask_face && uv < t) {
+                if (uv < t / 2.0) {
+                    setalpha(strong);
+                } else {
+                    float a = (uv - t / 2.0) / (t / 2.0);
+                    setalpha((float)(1 - a) * weak + a * 16.0);
+                }
+            }
+        };
+
+        genalpha(FACE_UP_INDEX, north, v);
+        genalpha(FACE_UP_INDEX, south, 1.0 - v);
+        genalpha(FACE_UP_INDEX, east, 1.0 - u);
+        genalpha(FACE_UP_INDEX, west, u);
+
+        genalpha(FACE_LEFT_INDEX, bottom, 1.0 - v);
+        genalpha(FACE_RIGHT_INDEX, bottom, 1.0 - v);
+
+#undef setalpha
+
+        pixel = rgba_multiply_scalar(pixel, 255 - alpha);
+        /*
+        if (alpha != 0) {
+                pixel = rgba_multiply(pixel, rgba(255 - alpha, 0, 0));
+        }
+        */
+    }
+}
+
+bool blockImageIsTransparent(RGBAImage &block, const RGBAImage &uv_mask) {
+    assert(block.getWidth() == uv_mask.getWidth());
+    assert(block.getHeight() == uv_mask.getHeight());
+
+    for (size_t x = 0; x < block.getWidth(); x++) {
+        for (size_t y = 0; y < block.getHeight(); y++) {
+            uint32_t &pixel = block.pixel(x, y);
+            uint32_t uv_pixel = uv_mask.pixel(x, y);
+            if (rgba_alpha(uv_pixel) == 0) {
+                continue;
+            }
+
+            if (rgba_alpha(pixel) != 255) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+std::array<bool, 3> blockImageGetSideMask(const RGBAImage &uv) {
+    std::array<bool, 3> side_mask = {false, false, false};
+    uint8_t mask_indices[3] = {FACE_LEFT_INDEX, FACE_RIGHT_INDEX, FACE_UP_INDEX};
+    for (size_t x = 0; x < uv.getWidth(); x++) {
+        for (size_t y = 0; y < uv.getHeight(); y++) {
+            uint32_t pixel = uv.pixel(x, y);
+            if (rgba_alpha(pixel) == 0) {
+                continue;
+            }
+
+            uint8_t face = rgba_blue(pixel);
+            for (uint8_t i = 0; i < 3; i++) {
+                if (face == mask_indices[i]) {
+                    side_mask[i] = true;
+                }
+            }
+        }
+    }
+    return side_mask;
+}
+
+RenderedBlockImages::RenderedBlockImages(mc::BlockStateRegistry &block_registry)
+    : block_registry(block_registry), darken_left(1.0), darken_right(1.0) {}
+
+RenderedBlockImages::~RenderedBlockImages() {
+    for (auto it = block_images.begin(); it != block_images.end(); ++it) {
+        if (*it != nullptr) {
+            delete *it;
+        }
+    }
 }
 
 void blockImageMultiply(RGBAImage& block, const RGBAImage& uv_mask,
@@ -203,12 +533,12 @@ void blockImageMultiply(RGBAImage& block, const RGBAImage& uv_mask,
 	assert(block.getWidth() == uv_mask.getWidth());
 	assert(block.getHeight() == uv_mask.getHeight());
 
-	uint32_t fl[4], fr[4], fu[4];
-	for (int i = 0; i < 4; i++) {
-		fl[i] = factors_left[i] * 255;
-		fr[i] = factors_right[i] * 255;
-		fu[i] = factors_up[i] * 255;
-	}
+bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int rotation,
+                                          int texture_size) {
+    LOG(INFO) << "I will load block images from " << path << " now";
+
+    if (!fs::is_directory(path)) {
+        LOG(ERROR) << "Unable to load block images: " << path << " is not a directory!";
 
 	
 	size_t n = block.getWidth() * block.getHeight();
@@ -760,7 +1090,9 @@ const BlockImage& RenderedBlockImages::getBlockImage(uint16_t id) {
 	return *block_images[id];
 }
 
-void RenderedBlockImages::prepareBiomeBlockImage(RGBAImage& image, const BlockImage& block, uint32_t color) {
+    CornerValues left = {1.0, 0.8, 0.5, 1.0};
+    CornerValues right = {1.0, 0.6, 0.3, 0.8};
+    CornerValues up = {0.5, 1.0, 0.6, 0.8};
 
 	if (block.is_masked_biome) {
 		blockImageTint(image, block.biome_mask, color);

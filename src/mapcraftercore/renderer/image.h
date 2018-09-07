@@ -36,24 +36,16 @@ namespace renderer {
 typedef uint32_t RGBAPixel;
 
 inline RGBAPixel rgba(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
-	return (a << 24) | (b << 16) | (g << 8) | r;
+    return (a << 24) | (b << 16) | (g << 8) | r;
 }
 
-inline uint8_t rgba_red(RGBAPixel value) {
-	return value & 0xff;
-}
+inline uint8_t rgba_red(RGBAPixel value) { return value & 0xff; }
 
-inline uint8_t rgba_green(RGBAPixel value) {
-	return (value & 0xff00) >> 8;
-}
+inline uint8_t rgba_green(RGBAPixel value) { return (value & 0xff00) >> 8; }
 
-inline uint8_t rgba_blue(RGBAPixel value) {
-	return (value & 0xff0000) >> 16;
-}
+inline uint8_t rgba_blue(RGBAPixel value) { return (value & 0xff0000) >> 16; }
 
-inline uint8_t rgba_alpha(RGBAPixel value) {
-	return (value & 0xff000000) >> 24;
-}
+inline uint8_t rgba_alpha(RGBAPixel value) { return (value & 0xff000000) >> 24; }
 
 // http://hugi.scene.org/online/hugi21/co32bcol.htm
 inline RGBAPixel rgba_multiply(RGBAPixel v1, RGBAPixel v2) {
@@ -93,9 +85,9 @@ public:
 	Pixel getPixel(int x, int y) const;
 	void setPixel(int x, int y, Pixel pixel);
 
-	inline const Pixel& pixel(int x, int y) const;
+    inline const Pixel &pixel(int x, int y) const;
 
-	inline Pixel& pixel(int x, int y);
+    inline Pixel &pixel(int x, int y);
 
 	void setSize(int width, int height);
 
@@ -221,7 +213,7 @@ Pixel Image<Pixel>::getPixel(int x, int y) const {
 }
 
 template <typename Pixel> inline void Image<Pixel>::setPixel(int x, int y, Pixel pixel) {
-inline void Image<Pixel>::setPixel(int x, int y, Pixel pixel) {
+    if (x >= width || x < 0 || y >= height || y < 0)
 	if (x >= width || x < 0 || y >= height || y < 0)
 		return;
 	data[y * width + x] = pixel;

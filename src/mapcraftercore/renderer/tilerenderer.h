@@ -78,7 +78,7 @@ protected:
     void renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockPos &dir,
                       std::set<TileImage> &tile_images);
     virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images) {}
-	uint32_t getBiomeColor(const mc::BlockPos& pos, const BlockImage& block, const mc::Chunk* chunk);
+
 
     uint32_t getBiomeColor(const mc::BlockPos &pos, const BlockImage &block,
                            const mc::Chunk *chunk);
