@@ -209,8 +209,7 @@ template <typename Pixel> inline void Image<Pixel>::setPixel(int x, int y, Pixel
 }
 
 template <typename Pixel> inline const Pixel &Image<Pixel>::pixel(int x, int y) const {
-inline const Pixel& Image<Pixel>::pixel(int x, int y) const {
-	return data[y * width + x];
+    return data[y * width + x];
 }
 
 template <typename Pixel> Pixel &Image<Pixel>::pixel(int x, int y) { return data[y * width + x]; }
