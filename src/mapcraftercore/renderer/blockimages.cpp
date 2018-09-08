@@ -1234,8 +1234,8 @@ void RenderedBlockImages::runBenchmark() {
 
         // 9.534s mit rgb_multiply_scalar
 	uint16_t solid_id = block_registry.getBlockID(mc::BlockState("minecraft:unknown_block"));
-	assert(block_images.size() > solid_id && block_images[solid_id] != nullptr);
-	const BlockImage& solid = *block_images[solid_id];
+        // 6.377s mit rgba_multiply_scalar ohne f+1
+        // 6.126s doch wenn der alpha check drin ist
         blockImageMultiply(image, solid.uv_image, left, right, up);
 	for (uint16_t id = 0; id < block_images.size(); ++id) {
 		if (block_images[id] == nullptr) {

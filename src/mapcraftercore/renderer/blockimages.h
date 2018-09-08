@@ -149,7 +149,7 @@ class RenderedBlockImages : public BlockImages {
     virtual RGBAImage getBiomeBlock(uint16_t id, uint16_t data, const Biome &biome,
                                     uint16_t extra_data = 0) const {
         return unknown_block.image;
-	~RenderedBlockImages();
+    };
     virtual int getMaxWaterPreblit() const { return 0; };
     // virtual int getBlockSize() const {};
 
@@ -175,8 +175,8 @@ class RenderedBlockImages : public BlockImages {
 
     mc::BlockStateRegistry &block_registry;
 
-	//std::unordered_map<uint16_t, BlockImage> block_images;
-	std::vector<BlockImage*> block_images;
+    float darken_left, darken_right;
+
     int texture_size;
 	std::unordered_set<uint16_t> unknown_block_ids;
 };
