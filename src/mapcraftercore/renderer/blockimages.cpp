@@ -762,36 +762,7 @@ void RenderedBlockImages::prepareBiomeBlockImage(RGBAImage &image, const BlockIm
 
 int RenderedBlockImages::getTextureSize() const { return texture_size; }
 
-RGBAImage RenderedBlockImages::exportBlocks() const {
-	/*
-	std::vector<RGBAImage> blocks;
-
-	for (auto it = block_images.begin(); it != block_images.end(); ++it) {
-		blocks.push_back(it->second.image);
-	}
-
-	if (blocks.size() == 0) {
-		return RGBAImage(0, 0);
-	}
-
-	int width = 16;
-	int height = std::ceil((double) blocks.size() / width);
-	int block_size = blocks[0].getWidth();
-	RGBAImage image(width * block_size, height * block_size);
-
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
-			int offset = y * width + x;
-			if ((size_t) offset >= blocks.size())
-				break;
-			image.alphaBlit(blocks.at(offset), x * block_size, y * block_size);
-		}
-	}
-
-	return image;
-	*/
-	return RGBAImage(1, 1);
-}
+int RenderedBlockImages::getBlockSize() const { return block_width; }
 
 const BlockImage& RenderedBlockImages::getBlockImage(uint16_t id) {
 
