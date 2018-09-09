@@ -845,10 +845,7 @@ void RenderedBlockImages::runBenchmark() {
     assert(block_images.size() > id && block_images[id] != nullptr);
     const BlockImage &solid = *block_images[id];
 
-		return unknown_block;
-	}
-	return *block_images[id];
-}
+    // uint32_t color = rgba(0x30, 0x59, 0xad, 0xff);
 
     CornerValues left = {1.0, 0.8, 0.5, 1.0};
     CornerValues right = {1.0, 0.6, 0.3, 0.8};
