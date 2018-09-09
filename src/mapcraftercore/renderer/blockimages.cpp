@@ -851,12 +851,7 @@ void RenderedBlockImages::runBenchmark() {
     CornerValues right = {1.0, 0.6, 0.3, 0.8};
     CornerValues up = {0.5, 1.0, 0.6, 0.8};
 
-	if (block.is_masked_biome) {
-		blockImageTint(image, block.biome_mask, color);
-	} else {
-		blockImageTint(image, color);
-	}
-}
+    std::chrono::time_point<clock_> begin = clock_::now();
 
     for (size_t i = 0; i < 1000000; i++) {
 	return texture_size;
