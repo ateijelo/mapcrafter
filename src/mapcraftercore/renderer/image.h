@@ -49,18 +49,18 @@ inline uint8_t rgba_alpha(RGBAPixel value) { return (value & 0xff000000) >> 24; 
 
 // http://hugi.scene.org/online/hugi21/co32bcol.htm
 inline RGBAPixel rgba_multiply(RGBAPixel v1, RGBAPixel v2) {
-	uint32_t r = (((v1 & 0xff) * (v2 & 0xff)) >> 8) & 0xff;
-	uint32_t g = (((v1 & 0xff00) * (v2 & 0xff00)) >> 16) & 0xff00;
-	uint32_t b = (((uint64_t) (v1 & 0xff0000) * (v2 & 0xff0000)) >> 24) & 0xff0000;
-	return (v1 & 0xff000000) | r | g | b;
+    uint32_t r = (((v1 & 0xff) * (v2 & 0xff)) >> 8) & 0xff;
+    uint32_t g = (((v1 & 0xff00) * (v2 & 0xff00)) >> 16) & 0xff00;
+    uint32_t b = (((uint64_t)(v1 & 0xff0000) * (v2 & 0xff0000)) >> 24) & 0xff0000;
+    return (v1 & 0xff000000) | r | g | b;
 }
 
 // http://hugi.scene.org/online/hugi21/co32bcol.htm
 inline RGBAPixel rgba_multiply_scalar(RGBAPixel value, uint32_t factor) {
-	uint32_t g = (((value & 0xff00) * factor) >> 8) & 0xff00;
-	uint32_t br = (((value & 0xff00ff) * factor) >> 8) & 0xff00ff;
-	uint32_t a = value & 0xff000000;
-	return a | g | br;
+    uint32_t g = (((value & 0xff00) * factor) >> 8) & 0xff00;
+    uint32_t br = (((value & 0xff00ff) * factor) >> 8) & 0xff00ff;
+    uint32_t a = value & 0xff000000;
+    return a | g | br;
 }
 
 RGBAPixel rgba_add_clamp(RGBAPixel value, int r, int g, int b, int a = 0);
@@ -91,7 +91,7 @@ public:
 
 	void setSize(int width, int height);
 
-//protected:
+    // protected:
 	int width;
 	int height;
 

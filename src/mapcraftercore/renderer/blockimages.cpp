@@ -192,7 +192,7 @@ inline uint32_t divide255(uint32_t v1, uint32_t v2) {
 */
 
 inline uint32_t mix(uint32_t x, uint32_t y, uint32_t a) {
-	// >> 8 = / 256, serves as approximation for division by 255
+    // >> 8 = / 256, serves as approximation for division by 255
     return ((x * (255 - a)) + (y * a)) >> 8;
 }
 
@@ -539,104 +539,101 @@ bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int r
 
     if (!fs::is_directory(path)) {
         LOG(ERROR) << "Unable to load block images: " << path << " is not a directory!";
-
+        return false;
 	
-	size_t n = block.getWidth() * block.getHeight();
-	for (size_t i = 0; i < n; i++) {
-		uint32_t& pixel = block.data[i];
-		uint32_t uv_pixel = uv_mask.data[i];
-		if (rgba_alpha(uv_pixel) == 0) {
-			continue;
-		}
 
-		//const CornerValues* vptr = nullptr;
-		uint32_t* f = nullptr;
-		uint8_t side = rgba_blue(uv_pixel);
-		if (side == FACE_LEFT_INDEX) {
-			//vptr = &factors_left;
-			f = fl;
-		} else if (side == FACE_RIGHT_INDEX) {
-			//vptr = &factors_right;
-			f = fr;
-		} else if (side == FACE_UP_INDEX) {
-			//vptr = &factors_up;
-			f = fu;
-		} else {
-			continue;
-		}
+    std::string name = view + "_" + util::str(rotation) + "_" + util::str(texture_size);
+    fs::path info_file = path / (name + ".txt");
+    fs::path block_file = path / (name + ".png");
 
-		/*
-		const CornerValues& values = *vptr;
-		float u = (float) rgba_red(uv_pixel) / 255.0;
-		float v = (float) rgba_green(uv_pixel) / 255.0;
-		float ab = (1-u) * values[0] + u * values[1];
-		float cd = (1-u) * values[2] + u * values[3];
-		float x = (1-v) * ab + v * cd;
-		*/
+    if (!fs::is_regular_file(info_file)) {
+        LOG(ERROR) << "Unable to load block images: Block info file " << info_file
 
-		uint32_t u = rgba_red(uv_pixel);
-		uint32_t v = rgba_green(uv_pixel);
+        return false;
+    }
+    if (!fs::is_regular_file(block_file)) {
+        LOG(ERROR) << "Unable to load block images: Block image file " << block_file
+                   << " does not exist!";
+        return false;
+    }
+
+    RGBAImage blocks;
+    if (!blocks.readPNG(block_file.string())) {
+        LOG(ERROR) << "Unable to load block images: Block image file " << block_file
+                   << " not readable!";
+        return false;
+    }
+
+
+    std::string first_line;
+
+    std::getline(in, first_line);
+    std::vector<std::string> parts = util::split(util::trim(first_line), ' ');
+    bool ok = true;
+    int columns = 0;
+    try {
+        if (parts.size() == 3) {
+            block_width = util::as<int>(parts[0]);
+            block_height = util::as<int>(parts[1]);
+            columns = util::as<int>(parts[2]);
 		
-		//uint32_t ab = divide255((255-u), f[0]) + divide255(u, f[1]);
-		//uint32_t cd = divide255((255-u), f[2]) + divide255(u, f[3]);
-		//uint32_t x = divide255((255-v), ab) + divide255(v,  cd);
-		
-		// jetzt sogar 34.17
-		// und mit noch mehr rgba_multiply sogar 35.28
-		uint32_t ab = mix(f[0], f[1], u); // divide255((255-u) * f[0], u * f[1]);
-		uint32_t cd = mix(f[2], f[3], u); // divide255((255-u) * f[2], u * f[3]);
-		uint32_t x = mix(ab, cd, v); // divide255((255-v) * ab, v * cd);
+    } catch (std::invalid_argument &e) {
+        ok = false;
+    }
+    if (!ok || parts.size() != 3) {
+        LOG(ERROR) << "Invalid first line in block info file " << info_file << "!";
+        LOG(ERROR) << "Line 1: '" << first_line << "'";
+        return false;
+    }
 
-		// OHNE BASIS
-		// 45.68
-		//pixel = rgba_multiply(pixel, 0.5);
-		
-		// 34.44
-		//float x = 0.5;
-		//pixel = rgba_multiply(pixel, x, x, x);
-	
-		// FLOAT ALS BASIS
-		// 25.68
-		//pixel = rgba_multiply(pixel, x, x, x);
-		
-		// geht. aber vielleicht auch nicht mega viel schneller
-		//uint8_t factor = x * 255;
-		//pixel = rgba_multiply(pixel, factor, factor, factor);
+    int lineno = 2;
+    for (std::string line; std::getline(in, line); lineno++) {
+        line = util::trim(line);
+        if (line.size() == 0) {
+            continue;
+        }
 
-		// geht, 29.13
-		//int factor = x * 255;
-		//assert(factor >= 0 && factor <= 255);
-		//pixel = rgba_multiply(pixel, factor);
-		
-		// INTEGER ALS BASIS
-		//assert(x >= 0 && x <= 255);
-		
-		// geht, 28.93
-		//double factor = (double) x / 255;
-		//pixel = rgba_multiply(pixel, factor, factor, factor);
+        std::vector<std::string> parts = util::split(line, ' ');
+        if (parts.size() != 3) {
+            LOG(ERROR) << "Invalid line in block info file '" << info_file << "'!";
+            LOG(ERROR) << "Line " << lineno << ": '" << line << "'";
+            return false;
+        }
 
-		// geht, 28.00
-		//uint8_t factor = x;
-		//pixel = rgba_multiply(pixel, factor, factor, factor);
+        std::string block_name = parts[0];
+        std::string variant = parts[1];
+        std::map<std::string, std::string> block_info = util::parseProperties(parts[2]);
 
-		// geht, 29.83
-		// ohne uv-alpha check sogar 32.15
-		// ohne uv-alpha check und uint8_t 32.39
-		// ... div255 32.60
-		// ... anderes div255 32.88
-		// rgba_ inline: 33.64
-		pixel = rgba_multiply_scalar(pixel, x);
+        int image_index = util::as<int>(block_info["color"]);
+        int image_uv_index = util::as<int>(block_info["uv"]);
+
+        int x, y;
+        x = (image_index % columns) * block_width;
+        y = (image_index / columns) * block_height;
+        RGBAImage image = blocks.clip(x, y, block_width, block_height);
+
+        x = (image_uv_index % columns) * block_width;
+        y = (image_uv_index / columns) * block_height;
+        RGBAImage image_uv = blocks.clip(x, y, block_width, block_height);
+
+        if (image.getWidth() != image_uv.getWidth() || image.getHeight() != image_uv.getHeight()) {
+            LOG(ERROR) << "Size mismatch of block " << block_name;
+            return false;
+        }
+
+        mc::BlockState block_state = mc::BlockState::parse(block_name, variant);
+        uint16_t id = block_registry.getBlockID(block_state);
+        BlockImage *b = new BlockImage();
+        BlockImage &block = *b;
+        block.image = image;
 	}
 }
 
-void blockImageMultiply(RGBAImage& block, uint8_t factor) {
-	size_t n = block.getWidth() * block.getHeight();
-	for (size_t i = 0; i < n; i++) {
-		block.data[i] = rgba_multiply_scalar(block.data[i], factor);
-	}
-}
+RGBAImage RenderedBlockImages::exportBlocks() const {
+    /*
+    std::vector<RGBAImage> blocks;
 
-void blockImageTint(RGBAImage& block, const RGBAImage& mask, uint32_t color) {
+    for (auto it = block_images.begin(); it != block_images.end(); ++it) {
 	assert(block.getWidth() == mask.getWidth());
 	assert(block.getHeight() == mask.getHeight());
 
@@ -654,8 +651,8 @@ void blockImageTint(RGBAImage& block, const RGBAImage& mask, uint32_t color) {
 	}
 }
 
-void blockImageTint(RGBAImage& block, uint32_t color) {
-	size_t n = block.getWidth() * block.getHeight();
+    if (blocks.size() == 0) {
+            return RGBAImage(0, 0);
 	for (size_t i = 0; i < n; i++) {
 		uint32_t pixel = block.data[i];
 		if(rgba_alpha(pixel)) {
@@ -852,13 +849,8 @@ RenderedBlockImages::RenderedBlockImages(mc::BlockStateRegistry& block_registry)
     return *block_images[id];
 }
 
-RenderedBlockImages::~RenderedBlockImages() {
-	for (auto it = block_images.begin(); it != block_images.end(); ++it) {
-		if (*it != nullptr) {
-			delete *it;
-		}
-	}
-}
+void RenderedBlockImages::prepareBiomeBlockImage(RGBAImage &image, const BlockImage &block,
+                                                 uint32_t color) {
 
 void RenderedBlockImages::setBlockSideDarkening(float darken_left, float darken_right) {
 	this->darken_left = darken_left;
@@ -1068,14 +1060,11 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
 }
 
 const BlockImage& RenderedBlockImages::getBlockImage(uint16_t id) {
-	if (block_images.size() < id + 1) {
+
 		const mc::BlockState& block_state = block_registry.getBlockState(id);
 
-		if (!block_state.hasProperty("waterlogged")) {
-			mc::BlockState test = mc::BlockState::parse(block_state.getName(), block_state.getVariantDescription());
-			test.setProperty("waterlogged", "false");
-			return getBlockImage(block_registry.getBlockID(test));
-		}
+void RenderedBlockImages::runBenchmark() {
+    LOG(INFO) << "Running benchmark";
 
 		if (unknown_block_ids.find(id) == unknown_block_ids.end()) {
 			LOG(INFO) 
@@ -1180,8 +1169,8 @@ void RenderedBlockImages::prepareBlockImages() {
 	unknown_block = solid;
 }
 
-void RenderedBlockImages::runBenchmark() {
-	LOG(INFO) << "Running benchmark";
+    double elapsed = std::chrono::duration_cast<second_>(clock_::now() - begin).count();
+    LOG(INFO) << "took " << elapsed << "s";
 
 	typedef std::chrono::high_resolution_clock clock_;
 	typedef std::chrono::duration<double, std::ratio<1> > second_;
