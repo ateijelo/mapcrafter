@@ -32,9 +32,7 @@ std::string BlockState::getName() const { return name; }
 
 const std::map<std::string, std::string> &BlockState::getProperties() const { return properties; }
 
-bool BlockState::hasProperty(std::string key) const {
-	return properties.count(key);
-}
+bool BlockState::hasProperty(std::string key) const { return properties.count(key); }
 
 std::string BlockState::getProperty(std::string key, std::string default_value) const {
     if (!properties.count(key)) {

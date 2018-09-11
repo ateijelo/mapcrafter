@@ -36,7 +36,7 @@ class BlockState {
     std::string getName() const;
 
     const std::map<std::string, std::string> &getProperties() const;
-	bool hasProperty(std::string key) const;
+    bool hasProperty(std::string key) const;
     std::string getProperty(std::string key, std::string default_value = "") const;
     void setProperty(std::string key, std::string value);
 
