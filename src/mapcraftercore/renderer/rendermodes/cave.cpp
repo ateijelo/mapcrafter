@@ -41,9 +41,7 @@ bool CaveRenderMode::isHidden(const mc::BlockPos &pos, const BlockImage &block_i
         if (getBlock(pos + directions[i], mc::GET_SKY_LIGHT).sky_light > 0) {
             return true;
         }
-			return true;
-		}
-	}
+    }
 
     // TODO some ice blocks are still rendered though
     // water, ice and blocks under water are a special case
@@ -55,8 +53,7 @@ bool CaveRenderMode::isHidden(const mc::BlockPos &pos, const BlockImage &block_i
     const BlockImage *top_image = &block_images->getBlockImage(top.id);
     if (block_image.is_full_water || block_image.is_waterlogged || block_image.is_ice ||
         top_image->is_full_water || top_image->is_waterlogged || top_image->is_ice) {
-			|| top_image->is_full_water || top_image->is_waterlogged || top_image->is_ice) {
-		mc::BlockPos p = pos + mc::DIR_TOP;
+        mc::BlockPos p = pos + mc::DIR_TOP;
 
         while (top_image->is_full_water || top_image->is_waterlogged || top_image->is_ice) {
             top = getBlock(p, mc::GET_ID | mc::GET_SKY_LIGHT);
