@@ -33,50 +33,50 @@ CaveRenderMode::~CaveRenderMode() {}
 
 bool CaveRenderMode::isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data) { return false; }
 
-bool CaveRenderMode::isHidden(const mc::BlockPos& pos, const BlockImage& block_image) {
+bool CaveRenderMode::isHidden(const mc::BlockPos &pos, const BlockImage &block_image) {
     mc::BlockPos directions[6] = {mc::DIR_NORTH, mc::DIR_SOUTH, mc::DIR_EAST,
 		mc::DIR_NORTH, mc::DIR_SOUTH, mc::DIR_EAST, mc::DIR_WEST,
 		mc::DIR_TOP, mc::DIR_BOTTOM
     for (int i = 0; i < 6; i++) {
         if (getBlock(pos + directions[i], mc::GET_SKY_LIGHT).sky_light > 0) {
             return true;
-		if (getBlock(pos + directions[i], mc::GET_SKY_LIGHT).sky_light > 0) {
+        }
 			return true;
 		}
 	}
 
-	// TODO some ice blocks are still rendered though
-	// water, ice and blocks under water are a special case
+    // TODO some ice blocks are still rendered though
+    // water, ice and blocks under water are a special case
     // because water is transparent, the renderer thinks this is a visible part of a cave
     // we need to check if there is sunlight on the surface of the water
     // if yes => no cave, hide block
     // if no  => lake in a cave, show it
 	mc::Block top = getBlock(pos + mc::DIR_TOP,
     const BlockImage *top_image = &block_images->getBlockImage(top.id);
-	const BlockImage* top_image = &block_images->getBlockImage(top.id);
-	if (block_image.is_full_water || block_image.is_waterlogged || block_image.is_ice
+    if (block_image.is_full_water || block_image.is_waterlogged || block_image.is_ice ||
+        top_image->is_full_water || top_image->is_waterlogged || top_image->is_ice) {
 			|| top_image->is_full_water || top_image->is_waterlogged || top_image->is_ice) {
 		mc::BlockPos p = pos + mc::DIR_TOP;
 
-		while (top_image->is_full_water || top_image->is_waterlogged || top_image->is_ice) {
+        while (top_image->is_full_water || top_image->is_waterlogged || top_image->is_ice) {
             top = getBlock(p, mc::GET_ID | mc::GET_SKY_LIGHT);
-			top_image = &block_images->getBlockImage(top.id);
+            top_image = &block_images->getBlockImage(top.id);
             p.y++;
         }
 
-		if (top.sky_light > 0) {
+        if (top.sky_light > 0) {
             return true;
-		}
+        }
     }
 
     // so we show all block which aren't touched by sunlight...
     // and also only the ones that have a transparent block (or air)
     // on at least one of specific sides
-	for (auto it = hidden_dirs.begin(); it != hidden_dirs.end(); ++it) {
-		if (block_images->getBlockImage(getBlock(pos + *it).id).is_transparent) {
+    for (auto it = hidden_dirs.begin(); it != hidden_dirs.end(); ++it) {
+        if (block_images->getBlockImage(getBlock(pos + *it).id).is_transparent) {
             return false;
-		}
-	}
+        }
+    }
     return true;
 }
 

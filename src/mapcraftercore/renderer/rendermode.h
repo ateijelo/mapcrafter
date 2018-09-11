@@ -72,7 +72,7 @@ class RenderMode {
      */
     virtual bool isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data) = 0;
 
-	virtual bool isHidden(const mc::BlockPos& pos, const BlockImage& block_image) { return false; }
+    virtual bool isHidden(const mc::BlockPos &pos, const BlockImage &block_image) { return false; }
 
     /**
      * This method is called by the tile renderer so you can modify block images that
@@ -145,7 +145,7 @@ public:
      */
 	virtual bool isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data);
 
-	virtual bool isHidden(const mc::BlockPos& pos, const BlockImage& block_image);
+    virtual bool isHidden(const mc::BlockPos &pos, const BlockImage &block_image);
 
     /**
      * Calls this method of each render mode.
