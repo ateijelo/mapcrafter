@@ -86,8 +86,8 @@ void blockImageMultiply(RGBAImage &block, uint8_t factor);
 void blockImageTint(RGBAImage &block, const RGBAImage &mask, uint32_t color);
 // TODO maybe this should be named something with multiply too
 void blockImageTint(RGBAImage &block, uint32_t color);
-void blockImageTintHighContrast(RGBAImage& block, uint32_t color);
-void blockImageTintHighContrast(RGBAImage& block, const RGBAImage& mask, int face, uint32_t color);
+void blockImageTintHighContrast(RGBAImage &block, uint32_t color);
+void blockImageTintHighContrast(RGBAImage &block, const RGBAImage &mask, int face, uint32_t color);
 void blockImageBlendTop(RGBAImage& block, const RGBAImage& uv_mask,
 		const RGBAImage& top, const RGBAImage& top_uv_mask);
 void blockImageShadowEdges(RGBAImage& block, const RGBAImage& uv_mask,
