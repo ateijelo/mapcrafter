@@ -53,7 +53,7 @@ bool SlimeOverlay::isSlimeChunk(const mc::ChunkPos& chunk, long long world_seed)
 		+ (long long) (chunkz * chunkz) * 0x4307a7LL
 		+ (long long) (chunkz * 0x5f24f)) ^ 0x3ad8025f;
 
-	mc::JavaRandom random;
+    mc::JavaRandom random;
 	random.setSeed(seed);
 	return random.nextInt(10) == 0;
 }
