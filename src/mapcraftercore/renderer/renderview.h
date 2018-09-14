@@ -103,12 +103,7 @@ class RenderView {
                                        const config::MapSection &map_config) const;
 };
 
-enum class RenderViewType {
-	ISOMETRIC,
-	ISOMETRICNEW,
-	TOPDOWN,
-	SIDE
-};
+enum class RenderViewType { ISOMETRIC, ISOMETRICNEW, TOPDOWN, SIDE };
 
 // TODO operator<< here but util::as in the config section file?
 std::ostream &operator<<(std::ostream &out, RenderViewType render_view);
