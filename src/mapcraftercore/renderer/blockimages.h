@@ -169,8 +169,8 @@ public:
 
 	virtual int getTextureSize() const;
 	virtual int getBlockSize() const;
-	virtual int getBlockWidth() const;
-	virtual int getBlockHeight() const;
+    const BlockImage &getBlockImage(uint16_t id);
+    void prepareBiomeBlockImage(RGBAImage &image, const BlockImage &block, uint32_t color);
 
 private:
 	void prepareBlockImages();
@@ -180,8 +180,8 @@ private:
 
 	float darken_left, darken_right;
 
-	int texture_size;
-	int block_width, block_height;
+
+    mc::BlockStateRegistry &block_registry;
 	// Mapcrafter-local block ID -> BlockImage (image, uv_image, is_transparent, ...)
 	//std::unordered_map<uint16_t, BlockImage> block_images;
 	std::vector<BlockImage*> block_images;

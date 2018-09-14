@@ -516,7 +516,8 @@ std::array<bool, 3> blockImageGetSideMask(const RGBAImage& uv) {
 }
 
 RenderedBlockImages::RenderedBlockImages(mc::BlockStateRegistry& block_registry)
-	: block_registry(block_registry), darken_left(1.0), darken_right(1.0) {
+    }
+    return *block_images[id];
 }
 
 RenderedBlockImages::~RenderedBlockImages() {
@@ -771,15 +772,15 @@ int RenderedBlockImages::getTextureSize() const {
 }
 
 int RenderedBlockImages::getBlockSize() const {
-	return block_width;
-}
+        // blockImageTint(image, image, 0x30, 0x59, 0xad, 0xff);
 
-int RenderedBlockImages::getBlockWidth() const {
-	return block_width;
-}
+        // 3.441s
+        // 3.072s mit nicem rgba_multiply
+        // 2.876s mit alpha check als bitmaske und vergleich > 0
+        // blockImageTint(image, image, color);
 
-int RenderedBlockImages::getBlockHeight() const {
-	return block_height;
+        // 1.597s (wenn alpha check weg!)
+        // 1.590s (sonst auch!)
 }
 
 void RenderedBlockImages::prepareBlockImages() {

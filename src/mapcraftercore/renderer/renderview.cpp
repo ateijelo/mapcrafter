@@ -54,7 +54,7 @@ void RenderView::configureTileRenderer(TileRenderer* tile_renderer,
 std::ostream &operator<<(std::ostream &out, RenderViewType render_view) {
     switch (render_view) {
     case RenderViewType::ISOMETRIC:
-	case RenderViewType::SIDE: return out << "side";
+        return out << "isometric";
     case RenderViewType::SIDE:
         return out << "side";
     case RenderViewType::TOPDOWN:
@@ -67,7 +67,7 @@ std::ostream &operator<<(std::ostream &out, RenderViewType render_view) {
 RenderView *createRenderView(RenderViewType render_view) {
     switch (render_view) {
 	case RenderViewType::ISOMETRIC: return new NewIsometricRenderView();
-	case RenderViewType::SIDE: return new SideRenderView();
+        return new NewIsometricRenderView();
     case RenderViewType::SIDE:
 	// thou shalt not return nullptr!
 	default: assert(false); return nullptr;

@@ -55,8 +55,8 @@ template <> renderer::RenderViewType as<renderer::RenderViewType>(const std::str
     else if (from == "side")
         return renderer::RenderViewType::SIDE;
     else if (from == "topdown")
-	else if (from == "side")
-		return renderer::RenderViewType::SIDE;
+        return renderer::RenderViewType::TOPDOWN;
+    throw std::invalid_argument("Must be 'isometric' or 'topdown'!");
 }
 
 template <> renderer::OverlayType as<renderer::OverlayType>(const std::string &from) {

@@ -30,20 +30,21 @@ namespace mapcrafter {
 namespace renderer {
 
 class SideTileRenderer : public TileRenderer {
-public:
-	SideTileRenderer(const RenderView* render_view, mc::BlockStateRegistry& block_registry,
-			BlockImages* images, int tile_width, mc::WorldCache* world, RenderMode* render_mode);
-	~SideTileRenderer();
+  public:
+    SideTileRenderer(const RenderView *render_view, mc::BlockStateRegistry &block_registry,
+                     BlockImages *images, int tile_width, mc::WorldCache *world,
+                     RenderMode *render_mode);
+    ~SideTileRenderer();
 
-	virtual int getTileSize() const;
-	virtual int getTileWidth() const;
-	virtual int getTileHeight() const;
+    virtual int getTileSize() const;
+    virtual int getTileWidth() const;
+    virtual int getTileHeight() const;
 
-protected:
-	virtual void renderTopBlocks(const TilePos& tile_pos, std::set<TileImage>& tile_images);
+  protected:
+    virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images);
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* SIDE_TILERENDERER_H_ */

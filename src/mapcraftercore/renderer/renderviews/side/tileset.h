@@ -26,14 +26,14 @@ namespace mapcrafter {
 namespace renderer {
 
 class SideTileSet : public TileSet {
-public:
-	SideTileSet(int tile_width);
-	virtual ~SideTileSet();
+  public:
+    SideTileSet(int tile_width);
+    virtual ~SideTileSet();
 
-	virtual void mapChunkToTiles(const mc::ChunkPos& chunk, std::set<TilePos>& tiles);
+    virtual void mapChunkToTiles(const mc::ChunkPos &chunk, std::set<TilePos> &tiles);
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* SIDE_TILESET_H_ */
