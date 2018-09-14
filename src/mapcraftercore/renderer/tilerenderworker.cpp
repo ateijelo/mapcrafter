@@ -144,9 +144,9 @@ void TileRenderWorker::renderRecursive(const TilePath& tile, RGBAImage& image) {
 		// and blit it to the properly position
 		//int size = render_context.map_config.getTextureSize() * 32 * TILE_WIDTH;
 		// TODO
-		int w = render_context.tile_renderer->getTileWidth();
-		int h = render_context.tile_renderer->getTileHeight();
-		image.setSize(w, h);
+        image.setSize(w, h);
+
+        RGBAImage other;
 
 		RGBAImage other;
 		RGBAImage resized;
@@ -159,19 +159,19 @@ void TileRenderWorker::renderRecursive(const TilePath& tile, RGBAImage& image) {
 		if (render_context.tile_set->hasTile(tile + 2)) {
 			renderRecursive(tile + 2, other);
 			other.resize(resized, 0, 0, InterpolationType::HALF);
-			image.simpleAlphaBlit(resized, w / 2, 0);
+        }
 			other.clear();
 		}
 		if (render_context.tile_set->hasTile(tile + 3)) {
 			renderRecursive(tile + 3, other);
 			other.resize(resized, 0, 0, InterpolationType::HALF);
-			image.simpleAlphaBlit(resized, 0, h / 2);
+        }
 			other.clear();
 		}
 		if (render_context.tile_set->hasTile(tile + 4)) {
 			renderRecursive(tile + 4, other);
 			other.resize(resized, 0, 0, InterpolationType::HALF);
-			image.simpleAlphaBlit(resized, w / 2, h / 2);
+
 		}
 
 		/*

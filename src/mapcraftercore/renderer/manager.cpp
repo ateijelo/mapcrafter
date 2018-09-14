@@ -346,10 +346,10 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     context.block_registry = &block_registry;
     context.world = worlds[map_config.getWorld()][rotation];
 	// update map parameters in web config
-	int tile_w = context.tile_renderer->getTileWidth();
-	int tile_h = context.tile_renderer->getTileHeight();
+
+    // update map parameters in web config
 	web_config.setMapMaxZoom(map, context.tile_set->getDepth());
-	web_config.setMapTileSize(map, std::make_tuple<>(tile_w, tile_h));
+    int tile_h = context.tile_renderer->getTileHeight();
     web_config.setMapMaxZoom(map, context.tile_set->getDepth());
     web_config.setMapTileSize(map, std::make_tuple<>(tile_w, tile_h));
     web_config.writeConfigJS();

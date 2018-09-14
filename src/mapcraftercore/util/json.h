@@ -40,10 +40,11 @@ T json_get(const picojson::object& object, const std::string& key) {
 }
 
 template <>
-inline picojson::value json_get<picojson::value>(const picojson::object& object, const std::string& key) {
-	if (object.count(key))
-		return object.at(key);
-	throw JSONError("Unable to find/convert '" + key + "' of json object!");
+inline picojson::value json_get<picojson::value>(const picojson::object &object,
+                                                 const std::string &key) {
+    if (object.count(key))
+        return object.at(key);
+    throw JSONError("Unable to find/convert '" + key + "' of json object!");
 }
 
 }

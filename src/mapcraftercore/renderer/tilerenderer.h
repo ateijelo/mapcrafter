@@ -70,8 +70,8 @@ public:
 
 
 	virtual int getTileSize() const = 0;
-	virtual int getTileWidth() const;
-	virtual int getTileHeight() const;
+    virtual int getTileSize() const = 0;
+    virtual int getTileWidth() const;
 
 protected:
   protected:
