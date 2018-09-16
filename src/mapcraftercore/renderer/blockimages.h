@@ -104,8 +104,8 @@ enum class LightingType {
 };
 
 struct BlockImage {
-	// TODO
-	// this needs some order and refactoring
+    // TODO
+    // this needs some order and refactoring
     BlockImage() : lighting_specified(false) {}
 
     RGBAImage image, uv_image;
@@ -131,8 +131,7 @@ struct BlockImage {
     LightingType lighting_type;
     bool has_faulty_lighting;
 
-
-	int shadow_edges;
+    int shadow_edges;
 };
 
 class RenderedBlockImages : public BlockImages {
