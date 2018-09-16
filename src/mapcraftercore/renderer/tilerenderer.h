@@ -65,7 +65,7 @@ class TileRenderer {
     virtual ~TileRenderer();
 	void setRenderBiomes(bool render_biomes);
 	void setUsePreblitWater(bool use_preblit_water);
-	void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
+    void setUsePreblitWater(bool use_preblit_water);
     void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
 
 
@@ -91,9 +91,9 @@ protected:
 
 	bool render_biomes;
 	bool use_preblit_water;
-	// factors for shadow edges:
-	// north, south, east, west, bottom
-	std::array<uint8_t, 5> shadow_edges;
+
+    bool render_biomes;
+    bool use_preblit_water;
     // factors for shadow edges:
     // north, south, east, west, bottom
     std::array<uint8_t, 5> shadow_edges;

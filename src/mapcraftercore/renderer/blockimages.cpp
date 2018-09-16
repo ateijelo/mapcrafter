@@ -814,8 +814,8 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
 	}
 }
 
-void blockImageShadowEdges(RGBAImage& block, const RGBAImage& uv_mask,
-		uint8_t north, uint8_t south, uint8_t east, uint8_t west, uint8_t bottom) {
+const BlockImage &RenderedBlockImages::getBlockImage(uint16_t id) {
+    if (block_images.size() < id + 1) {
 	assert(block.getWidth() == uv_mask.getWidth());
 	assert(block.getHeight() == uv_mask.getHeight());
 
