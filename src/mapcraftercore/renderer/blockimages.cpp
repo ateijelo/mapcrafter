@@ -730,63 +730,7 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
 
 const BlockImage &RenderedBlockImages::getBlockImage(uint16_t id) {
     if (block_images.size() < id + 1) {
-	assert(block.getWidth() == uv_mask.getWidth());
-	assert(block.getHeight() == uv_mask.getHeight());
-
-	size_t n = block.getWidth() * block.getHeight();
-	for (size_t i = 0; i < n; i++) {
-		RGBAPixel& pixel = block.data[i];
-		const RGBAPixel& uv_pixel = uv_mask.data[i];
-
-		// TODO
-		// not really optimized yet, and quite dirty code
-		float u = (float) rgba_red(uv_pixel) / 255;
-		float v = (float) rgba_green(uv_pixel) / 255;
-		uint8_t face = rgba_blue(uv_pixel);
-
-		uint8_t alpha = 0;
-		#define setalpha(x) (alpha = std::max(alpha, (uint8_t) (x)))
-		auto genalpha = [&alpha, &face](int mask_face, int edge, float uv) {
-			// explanation of edge influence:
-			// edge=0: no edge
-			// edge=1: edge with threshold 2px
-			// edge=2: edge with threshold 3px
-			// edge=3: edge with threshold 3px, a bit darker (for stronger visual on leaves etc.)
-			float t = (float) (1 + std::min(2, edge)) / 16.0;
-			float strong = 64;
-			float weak = 32;
-			if (edge > 2) {
-				strong = 128;
-				weak = 64;
-			}
-			if (edge && face == mask_face && uv < t) {
-				if (uv < t / 2.0) {
-					setalpha(strong);
-				} else {
-					float a = (uv-t/2.0) / (t/2.0);
-					setalpha((float) (1-a) * weak + a*16.0);
-				}
-			}
-		};
-
-		genalpha(FACE_UP_INDEX, north, v);
-		genalpha(FACE_UP_INDEX, south, 1.0 - v);
-		genalpha(FACE_UP_INDEX, east, 1.0 - u);
-		genalpha(FACE_UP_INDEX, west, u);
-
-		genalpha(FACE_LEFT_INDEX, bottom, 1.0 - v);
-		genalpha(FACE_RIGHT_INDEX, bottom, 1.0 - v);
-
-		#undef setalpha
-
-		pixel = rgba_multiply_scalar(pixel, 255 - alpha);
-		/*
-		if (alpha != 0) {
-			pixel = rgba_multiply(pixel, rgba(255 - alpha, 0, 0));
-		}
-		*/
-	}
-}
+        const mc::BlockState &block_state = block_registry.getBlockState(id);
 
         if (!block_state.hasProperty("waterlogged")) {
             mc::BlockState test =
