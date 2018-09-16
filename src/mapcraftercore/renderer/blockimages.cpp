@@ -874,63 +874,7 @@ void RenderedBlockImages::runBenchmark() {
         // 6.377s mit rgba_multiply_scalar ohne f+1
         // 6.126s doch wenn der alpha check drin ist
         blockImageMultiply(image, solid.uv_image, left, right, up);
-	for (uint16_t id = 0; id < block_images.size(); ++id) {
-		if (block_images[id] == nullptr) {
-			continue;
-		}
-		BlockImage& block = *block_images[id];
-		const mc::BlockState& block_state = block_registry.getBlockState(id);
-
-		// blockImageTest(image, image_uv);
-
-		// CornerValues values = {0.0, 1.0, 1.0, 0.0};
-		// blockImageMultiply(image, image_uv, values, values, values);
-
-		std::string name = block_state.getName();
-		if (!util::endswith(name, "_biome_mask")) {
-			blockImageMultiply(block.image, block.uv_image, darken_left, darken_right, 1.0);
-		}
-
-		block.side_mask = blockImageGetSideMask(block.uv_image);
-
-		if (blockImageIsTransparent(block.image, solid.uv_image)) {
-			//LOG(INFO) << block_state.getName() << " " << block_state.getVariantDescription() << " is transparent!";
-			block.is_transparent = true;
-		} else {
-			// to visualize transparent blocks
-			//blockImageTest(image, image_uv);
-			//LOG(INFO) << block_state.getName() << " " << block_state.getVariantDescription() << " is not transparent!";
-			block.is_transparent = false;
-		}
-
-		if (block.is_biome && block.is_masked_biome) {
-			std::string mask_name = name + "_biome_mask";
-			uint16_t mask_id = block_registry.getBlockID(mc::BlockState::parse(mask_name, block_state.getVariantDescription()));
-			assert(block_images.size() > mask_id && block_images[mask_id] != nullptr);
-			block.biome_mask = block_images[mask_id]->image;
-		}
-
-		if (!block.lighting_specified) {
-			if (!block.is_transparent) {
-				block.lighting_type = LightingType::SMOOTH;
-			} else {
-				if (block.is_full_water || block.is_ice) {
-					block.lighting_type = LightingType::SMOOTH;
-				} else if (block.is_waterlogged && block.has_water_top) {
-					block.lighting_type = LightingType::SMOOTH_TOP_REMAINING_SIMPLE;
-				} else {
-					block.lighting_type = LightingType::SIMPLE;
-				}
-			}
-		}
-
-		if (block.shadow_edges == -1) {
-			block.shadow_edges = !block.is_transparent;
-		}
-	}
-
-	unknown_block = solid;
-}
+    }
 
     double elapsed = std::chrono::duration_cast<second_>(clock_::now() - begin).count();
     LOG(INFO) << "took " << elapsed << "s";
