@@ -68,10 +68,10 @@ renderer::LightingType as<renderer::LightingType>(const std::string& str) {
 namespace mapcrafter {
 namespace renderer {
 
-bool ColorMap::parse(const std::string& str) {
-	std::vector<std::string> parts = util::split(str, '|');
-	if (parts.size() != 3) {
-		return false;
+bool ColorMap::parse(const std::string &str) {
+    std::vector<std::string> parts = util::split(str, '|');
+    if (parts.size() != 3) {
+        return false;
 	}
 
 	for (size_t i = 0; i < 3; i++) {

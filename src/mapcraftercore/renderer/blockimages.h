@@ -47,14 +47,13 @@ class Biome;
 enum class ColorMapType { GRASS, FOLIAGE, FOLIAGE_FLIPPED, WATER };
 
 struct ColorMap {
-	ColorMap()
-		: colors({0, 0, 0}) {}
+    ColorMap() : colors({0, 0, 0}) {}
 
-	bool parse(const std::string& str);
-	uint32_t getColor(float x, float y) const;
+    bool parse(const std::string &str);
+    uint32_t getColor(float x, float y) const;
 
-	// colors of colormap triangle points
-	std::array<uint32_t, 3> colors;
+    // colors of colormap triangle points
+    std::array<uint32_t, 3> colors;
 };
 
 /**
@@ -117,7 +116,7 @@ struct BlockImage {
 	bool is_biome;
 	bool is_masked_biome;
 	ColorMapType biome_color;
-	ColorMap biome_colormap;
+    RGBAImage biome_mask;
 	RGBAImage biome_mask;
 
 	bool is_waterloggable;
