@@ -251,7 +251,7 @@ bool MapSection::parseField(const std::string key, const std::string value,
         overlay.load(key, value, validation);
     } else if (key == "rotations") {
         rotations.load(key, value, validation);
-		block_dir.require(validation, "You have to specify a block directory ('block_dir')!");
+    } else if (key == "block_dir") {
         if (block_dir.load(key, value, validation)) {
             block_dir.setValue(BOOST_FS_ABSOLUTE(block_dir.getValue(), config_dir));
             if (!fs::is_directory(block_dir.getValue())) {
