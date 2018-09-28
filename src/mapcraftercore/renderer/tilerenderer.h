@@ -103,8 +103,8 @@ protected:
     // IDs of blocks that can be seen as full water blocks for other full water blocks
     // (for example ice: we don't want side faces of water next to ice)
 
-	std::vector<uint16_t> lily_pad_ids;
-
+    // full water blocks will be replaced by these water blocks
+    std::vector<uint16_t> partial_full_water_ids, partial_ice_ids;
 	uint16_t waterlog_id;
     std::vector<uint16_t> lily_pad_ids;
 

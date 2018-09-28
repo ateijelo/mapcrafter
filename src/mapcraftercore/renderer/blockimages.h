@@ -126,8 +126,8 @@ struct BlockImage {
     bool can_partial;
 
     bool is_lily_pad;
-	bool is_lily_pad;
 
+    bool lighting_specified;
     LightingType lighting_type;
     bool has_faulty_lighting;
 
