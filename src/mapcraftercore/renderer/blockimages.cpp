@@ -68,41 +68,7 @@ bool ColorMap::parse(const std::string &str) {
     std::vector<std::string> parts = util::split(str, '|');
     if (parts.size() != 3) {
         return false;
-	}
-
-	for (size_t i = 0; i < 3; i++) {
-		std::string part = parts[i];
-		if (part.size() != 9 || part[0] != '#' || !util::isHexNumber(part.substr(1))) {
-			return false;
-		}
-		colors[i] = util::parseHexNumber(part.substr(1));
-	}
-
-	return true;
-}
-
-uint32_t ColorMap::getColor(float x, float y) const {
-	float r = 0, g = 0, b = 0, a = 0;
-	// factors are barycentric coordinates
-	// colors are colors of the colormap triangle points
-	float factors[] = {
-		x - y,
-		1.0f - x,
-		y
-	};
-
-	for (size_t i = 0; i < 3; i++) {
-		r += (float) rgba_red(colors[i]) * factors[i];
-		g += (float) rgba_green(colors[i]) * factors[i];
-		b += (float) rgba_blue(colors[i]) * factors[i];
-		a += (float) rgba_alpha(colors[i]) * factors[i];
-	}
-
-	return rgba(r, g, b, a);
-}
-
-BlockImages::~BlockImages() {
-}
+    }
 
     for (size_t i = 0; i < 3; i++) {
         std::string part = parts[i];
