@@ -56,9 +56,7 @@ void BaseRenderMode::initialize(const RenderView *render_view, BlockImages *imag
 
 bool BaseRenderMode::isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data) { return false; }
 
-void BaseRenderMode::draw(RGBAImage& image, const mc::BlockPos& pos,
-		uint16_t id, uint16_t data) {
-}
+void BaseRenderMode::draw(RGBAImage &image, const mc::BlockPos &pos, uint16_t id, uint16_t data) {}
 
 mc::Block BaseRenderMode::getBlock(const mc::BlockPos &pos, int get) {
     return world->getBlock(pos, *current_chunk, get);
