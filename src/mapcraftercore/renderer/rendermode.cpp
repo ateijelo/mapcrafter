@@ -48,20 +48,17 @@ namespace mapcrafter {
 namespace renderer {
 
 BaseRenderMode::BaseRenderMode()
-	: images(nullptr), block_images(nullptr), world(nullptr),
-	current_chunk(nullptr) {
-}
+    : images(nullptr), block_images(nullptr), world(nullptr), current_chunk(nullptr) {}
 
-BaseRenderMode::~BaseRenderMode() {
-}
+BaseRenderMode::~BaseRenderMode() {}
 
-void BaseRenderMode::initialize(const RenderView* render_view, 
-		BlockImages* images, mc::WorldCache* world, mc::Chunk** current_chunk) {
-	this->images = images;
-	this->block_images = dynamic_cast<RenderedBlockImages*>(images);
-	assert(this->block_images != nullptr);
-	this->world = world;
-	this->current_chunk = current_chunk;
+void BaseRenderMode::initialize(const RenderView *render_view, BlockImages *images,
+                                mc::WorldCache *world, mc::Chunk **current_chunk) {
+    this->images = images;
+    this->block_images = dynamic_cast<RenderedBlockImages *>(images);
+    assert(this->block_images != nullptr);
+    this->world = world;
+    this->current_chunk = current_chunk;
 }
 
 bool BaseRenderMode::isHidden(const mc::BlockPos& pos, uint16_t id,
@@ -73,8 +70,8 @@ void BaseRenderMode::draw(RGBAImage& image, const mc::BlockPos& pos,
 		uint16_t id, uint16_t data) {
 }
 
-mc::Block BaseRenderMode::getBlock(const mc::BlockPos& pos, int get) {
-	return world->getBlock(pos, *current_chunk, get);
+mc::Block BaseRenderMode::getBlock(const mc::BlockPos &pos, int get) {
+    return world->getBlock(pos, *current_chunk, get);
 }
 
 MultiplexingRenderMode::~MultiplexingRenderMode() {

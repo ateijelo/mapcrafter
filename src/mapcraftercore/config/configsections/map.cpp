@@ -144,7 +144,7 @@ void MapSection::dump(std::ostream &out) const {
     out << "  png_indexed = " << png_indexed << std::endl;
     out << "  jpeg_quality = " << jpeg_quality << std::endl;
     out << "  lighting_intensity = " << lighting_intensity << std::endl;
-	out << "  lighting_water_intensity = " << lighting_water_intensity << std::endl;
+    out << "  lighting_water_intensity = " << lighting_water_intensity << std::endl;
     out << "  render_biomes = " << render_biomes << std::endl;
     out << "  use_image_timestamps = " << use_image_mtimes << std::endl;
 }

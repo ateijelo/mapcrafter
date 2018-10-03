@@ -150,7 +150,7 @@ class MapSection : public ConfigSection {
 
 	Field<double> lighting_intensity, lighting_water_intensity;
 	Field<bool> cave_high_contrast;
-	Field<bool> render_biomes, use_image_mtimes;
+    Field<bool> render_biomes, use_image_mtimes;
 
     std::set<TileSetID> tile_sets;
 };
