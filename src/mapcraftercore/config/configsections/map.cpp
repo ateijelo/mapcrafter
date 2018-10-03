@@ -120,9 +120,7 @@ std::ostream &operator<<(std::ostream &out, ImageFormat image_format) {
     return out;
 }
 
-MapSection::MapSection()
-	: texture_size(12), render_biomes(false) {
-}
+MapSection::MapSection() : texture_size(12), render_biomes(false) {}
 
 MapSection::~MapSection() {}
 
