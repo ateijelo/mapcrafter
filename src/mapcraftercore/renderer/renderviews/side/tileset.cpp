@@ -39,8 +39,7 @@ void SideTileSet::mapChunkToTiles(const mc::ChunkPos &chunk, std::set<TilePos> &
         tiles.insert(TilePos(x, y0));
         tiles.insert(TilePos(x, y1));
         tiles.insert(TilePos(x, y2));
-		tiles.insert(TilePos(x, y2));
-	}
+    }
 }
 
 } // namespace renderer
