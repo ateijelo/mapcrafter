@@ -26,7 +26,7 @@ namespace mc {
 
 Block::Block()
     //	: Block(mc::BlockPos(0, 0, 0), 0, 0) { /* gcc 4.4 being stupid :/ */
-	: pos(mc::BlockPos(0, 0, 0)), id(0), biome(0),
+    : pos(mc::BlockPos(0, 0, 0)), id(0), biome(0), block_light(0), sky_light(15), fields_set(0) {}
 
 Block::Block(const mc::BlockPos &pos, uint16_t id)
     : pos(pos), id(id), biome(0), block_light(0), sky_light(15), fields_set(GET_ID) {}
@@ -163,16 +163,16 @@ Block WorldCache::getBlock(const mc::BlockPos& pos, const mc::Chunk* chunk, int 
 		if (get & GET_ID) {
 			block.id = mychunk->getBlockID(local);
 			block.fields_set |= GET_ID;
-		}
-		if (get & GET_BIOME) {
+        }
+        if (get & GET_BIOME) {
 			block.biome = mychunk->getBiomeAt(local);
 			block.fields_set |= GET_BIOME;
-		}
-		if (get & GET_BLOCK_LIGHT) {
+        }
+        if (get & GET_BLOCK_LIGHT) {
 			block.block_light = mychunk->getBlockLight(local);
 			block.fields_set |= GET_BLOCK_LIGHT;
-		}
-		if (get & GET_SKY_LIGHT) {
+        }
+        if (get & GET_SKY_LIGHT) {
 			block.sky_light = mychunk->getSkyLight(local);
 			block.fields_set |= GET_SKY_LIGHT;
 		}

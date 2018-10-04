@@ -37,11 +37,11 @@ class BlockStateRegistry;
  */
 struct Block {
 	Block();
-	Block(const mc::BlockPos& pos, uint16_t id);
+    Block(const mc::BlockPos &pos, uint16_t id);
 
 	// which block does this data belong to (set by getBlock-method)
 	mc::BlockPos pos;
-	uint16_t id;
+    uint16_t id;
 	uint8_t biome;
 	uint8_t block_light, sky_light;
 	// which of the fields above are set? (set by getBlock-method)
@@ -50,7 +50,7 @@ struct Block {
 
 const int GET_ID = 1;
 // obsolete
-//const int GET_DATA = 2; 
+// const int GET_DATA = 2;
 const int GET_BIOME = 4;
 const int GET_BLOCK_LIGHT = 8;
 const int GET_SKY_LIGHT = 16;
@@ -150,7 +150,7 @@ class WorldCache {
     RegionFile *getRegion(const RegionPos &pos);
     Chunk *getChunk(const ChunkPos &pos);
 
-	Block getBlock(const mc::BlockPos& pos, const mc::Chunk* chunk, int get = GET_ID);
+    Block getBlock(const mc::BlockPos &pos, const mc::Chunk *chunk, int get = GET_ID);
 
     const CacheStats &getRegionCacheStats() const;
     const CacheStats &getChunkCacheStats() const;
