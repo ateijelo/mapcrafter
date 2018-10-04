@@ -37,8 +37,8 @@ void SideTileSet::mapChunkToTiles(const mc::ChunkPos &chunk, std::set<TilePos> &
         int y1 = std::floor((float)(chunk.z + mc::CHUNK_TOP - i - 1 + 0) / getTileWidth());
         int y2 = std::floor((float)(chunk.z + mc::CHUNK_TOP - i - 1 - 1) / getTileWidth());
         tiles.insert(TilePos(x, y0));
-		tiles.insert(TilePos(x, y0));
-		tiles.insert(TilePos(x, y1));
+        tiles.insert(TilePos(x, y1));
+        tiles.insert(TilePos(x, y2));
 		tiles.insert(TilePos(x, y2));
 	}
 }
