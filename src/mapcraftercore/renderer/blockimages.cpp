@@ -781,8 +781,8 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
             }
     }
 
-void blockImageBlendTop(RGBAImage& block, const RGBAImage& uv_mask,
-		const RGBAImage& top, const RGBAImage& top_uv_mask) {
+    return image;
+    */
 	assert(block.getWidth() == uv_mask.getWidth());
 	assert(block.getHeight() == uv_mask.getHeight());
 	assert(top.getWidth() == top_uv_mask.getWidth());

@@ -106,7 +106,10 @@ protected:
 	std::vector<uint16_t> lily_pad_ids;
 
 	uint16_t waterlog_id;
-	const BlockImage* waterlog_block_image;
+    std::vector<uint16_t> lily_pad_ids;
+
+    uint16_t waterlog_id;
+    const BlockImage *waterlog_block_image;
 };
 
 }
