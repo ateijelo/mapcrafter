@@ -737,21 +737,7 @@ const BlockImage &RenderedBlockImages::getBlockImage(uint16_t id) {
                 mc::BlockState::parse(block_state.getName(), block_state.getVariantDescription());
             test.setProperty("waterlogged", "false");
             return getBlockImage(block_registry.getBlockID(test));
-		for (size_t y = 0; y < block.getHeight(); y++) {
-			uint32_t& pixel = block.pixel(x, y);
-			uint32_t uv_pixel = uv_mask.pixel(x, y);
-			if (rgba_alpha(uv_pixel) == 0) {
-				continue;
-			}
-
-			if (rgba_alpha(pixel) != 255) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
+        }
 
         if (unknown_block_ids.find(id) == unknown_block_ids.end()) {
             LOG(INFO) << "Unknown block " << block_state.getName() << " (id: " << id << ") "
