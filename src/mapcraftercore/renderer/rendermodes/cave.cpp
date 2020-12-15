@@ -31,9 +31,7 @@ CaveRenderMode::CaveRenderMode(const std::vector<mc::BlockPos> &hidden_dirs)
 
 CaveRenderMode::~CaveRenderMode() {}
 
-bool CaveRenderMode::isHidden(const mc::BlockPos& pos, uint16_t id, uint16_t data) {
-	return false;
-}
+bool CaveRenderMode::isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t data) { return false; }
 
 bool CaveRenderMode::isHidden(const mc::BlockPos& pos, const BlockImage& block_image) {
     mc::BlockPos directions[6] = {mc::DIR_NORTH, mc::DIR_SOUTH, mc::DIR_EAST,
