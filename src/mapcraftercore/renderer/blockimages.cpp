@@ -878,48 +878,7 @@ void RenderedBlockImages::runBenchmark() {
 
     double elapsed = std::chrono::duration_cast<second_>(clock_::now() - begin).count();
     LOG(INFO) << "took " << elapsed << "s";
-
-	typedef std::chrono::high_resolution_clock clock_;
-	typedef std::chrono::duration<double, std::ratio<1> > second_;
-
-	uint16_t id = block_registry.getBlockID(mc::BlockState::parse("minecraft:full_water", "up=false,south=false,west=false"));
-	assert(block_images.size() > id && block_images[id] != nullptr);
-	const BlockImage& solid = *block_images[id];
-
-	// uint32_t color = rgba(0x30, 0x59, 0xad, 0xff);
-
-	CornerValues left = {1.0, 0.8, 0.5, 1.0};
-	CornerValues right = {1.0, 0.6, 0.3, 0.8};
-	CornerValues up = {0.5, 1.0, 0.6, 0.8};
-
-	std::chrono::time_point<clock_> begin = clock_::now();
-
-	for (size_t i = 0; i < 1000000; i++) {
-		RGBAImage image = solid.image;
-		
-		// 5.841s
-		//blockImageTint(image, image, 0x30, 0x59, 0xad, 0xff);
-		
-		// 3.441s
-		// 3.072s mit nicem rgba_multiply
-		// 2.876s mit alpha check als bitmaske und vergleich > 0
-		//blockImageTint(image, image, color);
-
-		// 1.597s (wenn alpha check weg!)
-		// 1.590s (sonst auch!)
-		// 1.105s mit nicem rgba_multiply
-		//blockImageTint(image, color);
-		
-		// 9.534s mit rgb_multiply_scalar
-		// 6.345s mit rgb_multiply_scalar inline
-		// 6.377s mit rgba_multiply_scalar ohne f+1
-		// 6.126s doch wenn der alpha check drin ist
-		blockImageMultiply(image, solid.uv_image, left, right, up);
-	}
-	
-	double elapsed = std::chrono::duration_cast<second_>(clock_::now() - begin).count();
-	LOG(INFO) << "took " << elapsed << "s";
-	exit(0);
+    exit(0);
 }
 
 } // namespace renderer
