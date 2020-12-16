@@ -725,35 +725,7 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
 
     return image;
     */
-	assert(block.getWidth() == uv_mask.getWidth());
-	assert(block.getHeight() == uv_mask.getHeight());
-	assert(top.getWidth() == top_uv_mask.getWidth());
-	assert(top.getHeight() == top_uv_mask.getHeight());
-	assert(block.getWidth() == top.getWidth());
-	assert(block.getHeight() == top.getHeight());
-
-	size_t n = block.getWidth() * block.getHeight();
-	for (size_t i = 0; i < n; i++) {
-		RGBAPixel& pixel = block.data[i];
-		const RGBAPixel& uv_pixel = uv_mask.data[i];
-		const RGBAPixel& top_pixel = top.data[i];
-		const RGBAPixel& top_uv_pixel = top_uv_mask.data[i];
-
-		// basically what we want to do is:
-		// compare uv-coords of block vs. waterlog pixels
-		// if the uv-coords are the same and both textures pointing up, don't show water here
-		
-		// use the Z value of each pixels to blend or not the top pixel
-		if (rgba_alpha(uv_pixel) < rgba_alpha(top_uv_pixel)) {
-			blend(pixel, top_pixel);
-		} else {
-			// The top pixel is behind the block one, so use the alpha of
-			// the destination pixel to blend the top pixel behind
-			RGBAPixel tmp_pix = pixel;
-			pixel = top_pixel;
-			blend(pixel, tmp_pix);
-		}
-	}
+    return RGBAImage(1, 1);
 }
 
 const BlockImage &RenderedBlockImages::getBlockImage(uint16_t id) {
