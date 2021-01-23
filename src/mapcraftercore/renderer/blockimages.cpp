@@ -1191,13 +1191,13 @@ void RenderedBlockImages::prepareBlockImages() {
 void RenderedBlockImages::runBenchmark() {
     LOG(INFO) << "Running benchmark";
 
-		if (unknown_block_ids.find(id) == unknown_block_ids.end()) {
-			LOG(INFO) 
-				<< "Unknown block " << block_state.getName() 
-				<< " (id: " << id << ") " << block_state.getVariantDescription();
-			unknown_block_ids.insert(id);
+    typedef std::chrono::high_resolution_clock clock_;
+    typedef std::chrono::duration<double, std::ratio<1>> second_;
 
-		}
+    uint16_t id = block_registry.getBlockID(
+        mc::BlockState::parse("minecraft:full_water", "up=false,south=false,west=false"));
+    assert(block_images.size() > id && block_images[id] != nullptr);
+    const BlockImage &solid = *block_images[id];
 
 		return unknown_block;
 	}

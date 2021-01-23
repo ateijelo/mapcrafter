@@ -156,7 +156,7 @@ class RenderedBlockImages : public BlockImages {
     RenderedBlockImages(mc::BlockStateRegistry &block_registry);
     ~RenderedBlockImages();
 
-	const BlockImage& getBlockImage(uint16_t id);
+    void setBlockSideDarkening(float darken_left, float darken_right);
 
     bool loadBlockImages(fs::path block_dir, std::string view, int rotation, int texture_size);
     virtual RGBAImage exportBlocks() const;
@@ -178,7 +178,12 @@ class RenderedBlockImages : public BlockImages {
     float darken_left, darken_right;
 
     int texture_size;
-	std::unordered_set<uint16_t> unknown_block_ids;
+    int block_width, block_height;
+    // Mapcrafter-local block ID -> BlockImage (image, uv_image, is_transparent, ...)
+    // std::unordered_map<uint16_t, BlockImage> block_images;
+    std::vector<BlockImage *> block_images;
+    BlockImage unknown_block;
+    std::unordered_set<uint16_t> unknown_block_ids;
 };
 
 } // namespace renderer
