@@ -90,8 +90,8 @@ if __name__ == "__main__":
 	print("Extracting block images:")
 	found, extracted, skipped = 0, 0, 0
 	for info in jar.infolist():
-		if info.filename.startswith("assets/minecraft/textures/blocks/") and info.filename != "assets/minecraft/textures/blocks/":
-			filename = info.filename.replace("assets/minecraft/textures/", "")
+		if info.filename.startswith("assets/minecraft/textures/block/") and info.filename != "assets/minecraft/textures/block/":
+			filename = info.filename.replace("assets/minecraft/textures/block", "blocks")
 			# unpack only PNGs, no other files (or directory entries)
 			if not filename.endswith(".png"):
 				continue

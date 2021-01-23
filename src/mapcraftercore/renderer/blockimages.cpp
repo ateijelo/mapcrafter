@@ -737,13 +737,20 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
 const BlockImage& RenderedBlockImages::getBlockImage(uint16_t id) const {
 	if (block_images.size() < id + 1) {
 		const mc::BlockState& block_state = block_registry.getBlockState(id);
-		
+
 		if (!block_state.hasProperty("waterlogged")) {
 			mc::BlockState test = mc::BlockState::parse(block_state.getName(), block_state.getVariantDescription());
 			test.setProperty("waterlogged", "false");
 			return getBlockImage(block_registry.getBlockID(test));
 		}
-		LOG(INFO) << "Unknown block " << block_state.getName() << " " << block_state.getVariantDescription();
+
+		if (unknown_block_ids.find(id) == unknown_block_ids.end()) {
+			LOG(INFO) 
+				<< "Unknown block " << block_state.getName() 
+				<< " (id: " << id << ") " << block_state.getVariantDescription();
+			unknown_block_ids.insert(id);
+
+		}
 
 		return unknown_block;
 	}

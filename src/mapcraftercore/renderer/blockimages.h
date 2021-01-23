@@ -163,7 +163,7 @@ public:
 	bool loadBlockImages(fs::path block_dir, std::string view, int rotation, int texture_size);
 	virtual RGBAImage exportBlocks() const;
 
-	const BlockImage& getBlockImage(uint16_t id) const;
+	const BlockImage& getBlockImage(uint16_t id);
 	void prepareBiomeBlockImage(RGBAImage& image, const BlockImage& block, uint32_t color);
 
 	virtual int getTextureSize() const;
@@ -185,6 +185,7 @@ private:
 	//std::unordered_map<uint16_t, BlockImage> block_images;
 	std::vector<BlockImage*> block_images;
 	BlockImage unknown_block;
+	std::unordered_set<uint16_t> unknown_block_ids;
 };
 
 }
