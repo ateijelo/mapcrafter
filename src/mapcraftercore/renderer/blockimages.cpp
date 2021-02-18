@@ -703,21 +703,7 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
 
     for (auto it = block_images.begin(); it != block_images.end(); ++it) {
             blocks.push_back(it->second.image);
-	assert(block.getHeight() == mask.getHeight());
-
-	size_t n = block.getWidth() * block.getHeight();
-	for (size_t i = 0; i < n; i++) {
-		uint32_t mask_pixel = mask.data[i];
-		if (rgba_alpha(mask_pixel)) {
-			uint32_t& pixel = block.data[i];
-			// The mask is not supposed to be transfered directly
-			// but to be blend in with block pixel
-			// This will avoid white pixels on edges of the mask
-			RGBAPixel colored_mask_pixel = rgba_multiply(mask_pixel, color);
-			blend(pixel, colored_mask_pixel);
-		}
-	}
-}
+    }
 
     if (blocks.size() == 0) {
             return RGBAImage(0, 0);
