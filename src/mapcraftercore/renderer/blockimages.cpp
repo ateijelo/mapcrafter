@@ -707,13 +707,7 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
 
     if (blocks.size() == 0) {
             return RGBAImage(0, 0);
-	for (size_t i = 0; i < n; i++) {
-		uint32_t pixel = block.data[i];
-		if(rgba_alpha(pixel)) {
-			block.data[i] = rgba_multiply(pixel, color);
-		}
-	}
-}
+    }
 
     int width = 16;
     int height = std::ceil((double) blocks.size() / width);
