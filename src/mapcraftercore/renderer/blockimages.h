@@ -124,8 +124,8 @@ struct BlockImage {
     uint16_t non_waterlogged_id;
 
     bool can_partial;
-	bool can_partial;
 
+    bool is_lily_pad;
 	bool is_lily_pad;
 
     LightingType lighting_type;
