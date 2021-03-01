@@ -58,7 +58,9 @@ void TopdownTileRenderer::renderTopBlocks(const TilePos &tile_pos,
     int block_size = images->getBlockSize();
     for (int cx = 0; cx < tile_width; cx++) {
         for (int cz = 0; cz < tile_width; cz++) {
-			mc::BlockPos blockpos(chunkpos.x * 16, chunkpos.z * 16, mc::CHUNK_TOP*16 - 1);
+            mc::ChunkPos chunkpos(tile_pos.getX() * tile_width + cx,
+                                  tile_pos.getY() * tile_width + cz);
+            mc::BlockPos blockpos(chunkpos.x * 16, chunkpos.z * 16, mc::CHUNK_TOP * 16 - 1);
 
             int dx = block_size * cx * 16;
             int dz = block_size * cz * 16;

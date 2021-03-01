@@ -66,7 +66,7 @@ void NewIsometricTileSet::mapChunkToTiles(const mc::ChunkPos &chunk, std::set<Ti
 
     // plus one on the bottom side because with chunk section is here
     // only the top of a chunk section meant
-	for (int i = 0; i <= (mc::CHUNK_TOP-mc::CHUNK_LOW); i++)
+    for (int i = 0; i <= (mc::CHUNK_TOP - mc::CHUNK_LOW); i++)
         addRowColTiles(row + 2 * i, col, getTileWidth(), tiles);
 }
 

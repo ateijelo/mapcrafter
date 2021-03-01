@@ -130,7 +130,7 @@ Chunk *WorldCache::getChunk(const ChunkPos &pos) {
 
 Block WorldCache::getBlock(const mc::BlockPos &pos, const mc::Chunk *chunk, int get) {
     // this can happen when we check for the bottom block shadow edges
-	if (pos.y < CHUNK_LOW*16)
+    if (pos.y < CHUNK_LOW * 16)
         return Block();
 
     mc::ChunkPos chunk_pos(pos);

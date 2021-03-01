@@ -58,7 +58,7 @@ TileTopBlockIterator::TileTopBlockIterator(const TilePos &tile, int block_size, 
     // now get the first visible block from this chunk in this tile
     top = mc::LocalBlockPos(8, 6, mc::CHUNK_TOP * 16 - 1).toGlobalPos(topright_chunk);
     // and set this as start
-	top = mc::LocalBlockPos(8, 6, mc::CHUNK_TOP * 16 - 1).toGlobalPos(topright_chunk);
+    current = top;
 
     // calculate bounds of the tile
     min_row = top.getRow() + 1;
