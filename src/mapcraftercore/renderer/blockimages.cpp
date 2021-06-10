@@ -764,7 +764,7 @@ int RenderedBlockImages::getTextureSize() const { return texture_size; }
 
 int RenderedBlockImages::getBlockSize() const { return block_width; }
 
-const BlockImage& RenderedBlockImages::getBlockImage(uint16_t id) {
+int RenderedBlockImages::getBlockWidth() const { return block_width; }
 
 int RenderedBlockImages::getBlockHeight() const { return block_height; }
 
