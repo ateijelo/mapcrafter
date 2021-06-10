@@ -734,7 +734,7 @@ RGBAImage RenderedBlockImages::exportBlocks() const {
 	return RGBAImage(1, 1);
 }
 
-const BlockImage& RenderedBlockImages::getBlockImage(uint16_t id) const {
+const BlockImage& RenderedBlockImages::getBlockImage(uint16_t id) {
 	if (block_images.size() < id + 1) {
 		const mc::BlockState& block_state = block_registry.getBlockState(id);
 
