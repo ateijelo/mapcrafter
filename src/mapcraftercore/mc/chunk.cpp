@@ -208,6 +208,9 @@ bool Chunk::readNBT(mc::BlockStateRegistry& block_registry, const char* data, si
 	} else if (level.hasArray<nbt::TagIntArray>("Biomes", BIOMES_ARRAY_SIZE)) {
 		const nbt::TagIntArray& biomes_tag = level.findTag<nbt::TagIntArray>("Biomes");
 		std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
+	} else if (level.hasArray<nbt::TagIntArray>("Biomes", 1024)) {
+		const nbt::TagIntArray& biomes_tag = level.findTag<nbt::TagIntArray>("Biomes");
+		std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
 	} else if (level.hasArray<nbt::TagByteArray>("Biomes", 0)
 			|| level.hasArray<nbt::TagLongArray>("Biomes", 0)) {
 		std::fill(biomes, biomes + BIOMES_ARRAY_SIZE, 0);
