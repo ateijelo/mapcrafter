@@ -607,7 +607,8 @@ uint8_t Chunk::getBiomeAt(const LocalBlockPos &pos) const {
     if (rotation)
         rotateBlockPos(x, z, rotation);
 
-    return biomes[(y * 16 + (z * 4 + x))];
+    // return biomes[(y * 16 + (z * 4 + x))];
+    return 1;
 }
 
 const ChunkPos &Chunk::getPos() const { return chunkpos; }
