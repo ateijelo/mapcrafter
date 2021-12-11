@@ -160,6 +160,16 @@ private:
 	int positionToKey(int x, int z, int y) const;
 	void insertExtraData(const LocalBlockPos& pos, uint16_t extra_data);
 	uint16_t getExtraData(const LocalBlockPos& pos, uint16_t default_value = 0) const;
+
+	bool readNBT117(
+		BlockStateRegistry& block_registry,
+		const nbt::NBTFile& nbt
+	);
+
+	bool readNBT118(
+		BlockStateRegistry& block_registry,
+		const nbt::NBTFile& nbt
+	);
 };
 
 }

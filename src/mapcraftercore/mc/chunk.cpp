@@ -155,20 +155,10 @@ int Chunk::positionToKey(int x, int z, int y) const {
 	return y + 256 * (x + 16 * z);
 }
 
-bool Chunk::readNBT(mc::BlockStateRegistry& block_registry, const char* data, size_t len,
-		nbt::Compression compression) {
-	clear();
-
-	air_id = block_registry.getBlockID(mc::BlockState("minecraft:air"));
-
-	nbt::NBTFile nbt;
-	nbt.readNBT(data, len, compression);
-
-	// Make sure we know which data format this chunk is built of
-	if (!nbt.hasTag<nbt::TagInt>("DataVersion")) {
-		LOG(ERROR) << "Corrupt chunk: No version tag found!";
-		return false;
-	}
+bool Chunk::readNBT117(
+    mc::BlockStateRegistry& block_registry,
+    const nbt::NBTFile& nbt
+) {
 	int data_version = nbt.findTag<nbt::TagInt>("DataVersion").payload;
 
 	// find "level" tag
@@ -320,6 +310,191 @@ bool Chunk::readNBT(mc::BlockStateRegistry& block_registry, const char* data, si
 	}
 
 	return true;
+}
+
+bool Chunk::readNBT118(
+    mc::BlockStateRegistry& block_registry,
+    const nbt::NBTFile& nbt
+) {
+    int data_version = nbt.findTag<nbt::TagInt>("DataVersion").payload;
+    if (data_version < 2865) {
+        throw new std::logic_error("readNBT118 needs data version >= 2865");
+    }
+
+    // then find x/z pos of the chunk
+    if (!nbt.hasTag<nbt::TagInt>("xPos") || !nbt.hasTag<nbt::TagInt>("zPos")) {
+        LOG(ERROR) << "Corrupt chunk: No x/z position found!";
+        return false;
+    }
+    chunkpos_original = ChunkPos(nbt.findTag<nbt::TagInt>("xPos").payload,
+                                 nbt.findTag<nbt::TagInt>("zPos").payload);
+    chunkpos = chunkpos_original;
+    if (rotation)
+        chunkpos.rotate(rotation);
+
+    // now we have the original chunk position:
+    // check whether this chunk is completely contained within the cropped world
+    chunk_completely_contained = world_crop.isChunkCompletelyContained(chunkpos_original);
+
+    if (nbt.hasTag<nbt::TagString>("status")) {
+        const nbt::TagString& tag = nbt.findTag<nbt::TagString>("status");
+        // completely generated chunks in fresh 1.13 worlds usually have status 'fullchunk' or 'postprocessed'
+        // however, chunks of converted <1.13 worlds don't use these, but the state 'mobs_spawned'
+        if (!(
+            tag.payload == "fullchunk" ||
+            tag.payload == "full" ||
+            tag.payload == "postprocessed" ||
+            tag.payload == "mobs_spawned" ||
+            tag.payload == "features")) {
+            return true;
+        }
+    }
+
+    // if (nbt.hasArray<nbt::TagByteArray>("Biomes", BIOMES_ARRAY_SIZE)) {
+    //     const nbt::TagByteArray& biomes_tag = levelRef.get().findTag<nbt::TagByteArray>("Biomes");
+    //     std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
+    // } else if (levelRef.get().hasArray<nbt::TagIntArray>("Biomes", BIOMES_ARRAY_SIZE)) {
+    //     const nbt::TagIntArray& biomes_tag = levelRef.get().findTag<nbt::TagIntArray>("Biomes");
+    //     std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
+    // } else if (levelRef.get().hasArray<nbt::TagIntArray>("Biomes", 1024)) {
+    //     const nbt::TagIntArray& biomes_tag = levelRef.get().findTag<nbt::TagIntArray>("Biomes");
+    //     std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
+    // } else if (levelRef.get().hasArray<nbt::TagByteArray>("Biomes", 0)
+    //         || levelRef.get().hasArray<nbt::TagLongArray>("Biomes", 0)) {
+    //     std::fill(biomes, biomes + BIOMES_ARRAY_SIZE, 0);
+    // } else if (levelRef.get().hasArray<nbt::TagByteArray>("Biomes", 256) || levelRef.get().hasArray<nbt::TagIntArray>("Biomes", 256)) {
+    //     LOG(WARNING) << "Out dated chunk " << chunkpos << ": Old biome data found!";
+    // }
+    // else {
+    //    LOG(WARNING) << "Corrupt chunk " << chunkpos << ": No biome data found!";
+    //    //levelRef.get().dump(std::cout);
+    //    //exit(1);
+    //}
+
+    // find sections list
+    // ignore it if section list does not exist, can happen sometimes with the empty
+    // chunks of the end
+    if (!nbt.hasList<nbt::TagCompound>("sections"))
+        return true;
+
+    const nbt::TagList& sections_tag = nbt.findTag<nbt::TagList>("sections");
+    if (sections_tag.tag_type != nbt::TagCompound::TAG_TYPE)
+        return true;
+
+    // go through all sections
+    for (auto it = sections_tag.payload.begin(); it != sections_tag.payload.end(); ++it) {
+        const nbt::TagCompound& section_tag = (*it)->cast<nbt::TagCompound>();
+
+        // make sure section is valid
+        if (!section_tag.hasTag<nbt::TagByte>("Y"))
+			continue;
+
+		if (!section_tag.hasTag<nbt::TagCompound>("block_states"))
+			continue;
+
+        const nbt::TagByte& y = section_tag.findTag<nbt::TagByte>("Y");
+        if (y.payload < CHUNK_LOW || y.payload >= CHUNK_TOP )
+            continue;
+
+		const auto& block_states = section_tag.findTag<nbt::TagCompound>("block_states");
+		if (!block_states.hasArray<nbt::TagLongArray>("data"))
+			continue;
+
+        const nbt::TagLongArray& block_states_data = block_states.findTag<nbt::TagLongArray>("data");
+
+        const nbt::TagList& palette = block_states.findTag<nbt::TagList>("palette");
+        std::vector<mc::BlockState> palette_blockstates(palette.payload.size());
+        std::vector<uint16_t> palette_lookup(palette.payload.size());
+
+        size_t i = 0;
+        for (auto it2 = palette.payload.begin(); it2 != palette.payload.end(); ++it2, ++i) {
+            const nbt::TagCompound& entry = (*it2)->cast<nbt::TagCompound>();
+            const nbt::TagString& name = entry.findTag<nbt::TagString>("Name");
+
+            mc::BlockState block(name.payload);
+            if (entry.hasTag<nbt::TagCompound>("Properties")) {
+                const nbt::TagCompound& properties = entry.findTag<nbt::TagCompound>("Properties");
+                for (auto it3 = properties.payload.begin(); it3 != properties.payload.end(); ++it3) {
+                    std::string key = it3->first;
+                    std::string value = it3->second->cast<nbt::TagString>().payload;
+                    if (block_registry.isKnownProperty(block.getName(), key)) {
+                        block.setProperty(key, value);
+                    }
+                }
+            }
+            palette_blockstates[i] = block;
+            palette_lookup[i] = block_registry.getBlockID(block);
+        }
+
+        // create a ChunkSection-object
+        ChunkSection section;
+        section.y = y.payload;
+
+        readPackedShorts_v116(block_states_data.payload, section.block_ids);
+
+        int bits_per_entry = block_states_data.payload.size() * 64 / (16*16*16);
+        bool ok = true;
+        for (size_t i = 0; i < 16*16*16; i++) {
+            if (section.block_ids[i] >= palette_blockstates.size()) {
+                LOG(ERROR) << "Incorrectly parsed palette ID " << section.block_ids[i]
+                    << " at index " << i << " (max is " << palette_blockstates.size()-1
+                    << " with " << bits_per_entry << " bits per entry)";
+                ok = false;
+                break;
+            }
+            section.block_ids[i] = palette_lookup[section.block_ids[i]];
+        }
+        if (!ok) {
+            continue;
+        }
+
+        if (section_tag.hasArray<nbt::TagByteArray>("BlockLight", 2048)) {
+            const nbt::TagByteArray& block_light = section_tag.findTag<nbt::TagByteArray>("BlockLight");
+            std::copy(block_light.payload.begin(), block_light.payload.end(), section.block_light);
+        } else {
+            std::fill(&section.block_light[0], &section.block_light[2048], 0);
+        }
+        if (section_tag.hasArray<nbt::TagByteArray>("SkyLight", 2048)) {
+            const nbt::TagByteArray& sky_light = section_tag.findTag<nbt::TagByteArray>("SkyLight");
+            std::copy(sky_light.payload.begin(), sky_light.payload.end(), section.sky_light);
+        } else {
+            std::fill(&section.sky_light[0], &section.sky_light[2048], 0);
+        }
+
+        // add this section to the section list
+        section_offsets[section.y-CHUNK_LOW] = sections.size();
+        sections.push_back(section);
+    }
+
+    return true;
+}
+
+bool Chunk::readNBT(
+    mc::BlockStateRegistry& block_registry,
+    const char* data,
+    size_t len,
+    nbt::Compression compression
+) {
+    clear();
+
+    air_id = block_registry.getBlockID(mc::BlockState("minecraft:air"));
+
+    nbt::NBTFile nbt;
+    nbt.readNBT(data, len, compression);
+
+    // Make sure we know which data format this chunk is built of
+    if (!nbt.hasTag<nbt::TagInt>("DataVersion")) {
+        LOG(ERROR) << "Corrupt chunk: No version tag found!";
+        return false;
+    }
+    int data_version = nbt.findTag<nbt::TagInt>("DataVersion").payload;
+
+     // 1.18 chunk format
+    if (data_version >= 2865)
+        return readNBT118(block_registry, nbt);
+    // the previous code
+    return readNBT117(block_registry, nbt);
+
 }
 
 void Chunk::clear() {
