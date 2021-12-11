@@ -2,12 +2,6 @@
 .project
 .settings
 
-CMakeFiles
-CMakeCache.txt
-cmake_install.cmake
-install_manifest.txt
-Makefile
-
 !doc/Makefile
 
 *.o
@@ -20,4 +14,10 @@ docs/_build/
 
 /_wd_
 /.vscode
-/build
+/world
+/out
+/.cmake
+/data
+tmp
+/src/data/textures
+/release
