@@ -305,6 +305,8 @@ bool Chunk::readNBT117(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
     return true;
 }
 
+bool Chunk::simulateSunLight() const { return (this->chunk_status != "full"); }
+
 bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFile &nbt) {
     int data_version = nbt.findTag<nbt::TagInt>("DataVersion").payload;
     if (data_version < 2865) {
@@ -326,40 +328,11 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
     // check whether this chunk is completely contained within the cropped world
     chunk_completely_contained = world_crop.isChunkCompletelyContained(chunkpos_original);
 
-    if (nbt.hasTag<nbt::TagString>("status")) {
-        const nbt::TagString &tag = nbt.findTag<nbt::TagString>("status");
-        // completely generated chunks in fresh 1.13 worlds usually have status 'fullchunk' or
-        // 'postprocessed' however, chunks of converted <1.13 worlds don't use these, but the state
-        // 'mobs_spawned'
-        if (!(tag.payload == "fullchunk" || tag.payload == "full" ||
-              tag.payload == "postprocessed" || tag.payload == "mobs_spawned" ||
-              tag.payload == "features")) {
-            return true;
-        }
+    if (!nbt.hasTag<nbt::TagString>("Status")) {
+        return true;
     }
 
-    // if (nbt.hasArray<nbt::TagByteArray>("Biomes", BIOMES_ARRAY_SIZE)) {
-    //     const nbt::TagByteArray& biomes_tag =
-    //     levelRef.get().findTag<nbt::TagByteArray>("Biomes");
-    //     std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
-    // } else if (levelRef.get().hasArray<nbt::TagIntArray>("Biomes", BIOMES_ARRAY_SIZE)) {
-    //     const nbt::TagIntArray& biomes_tag = levelRef.get().findTag<nbt::TagIntArray>("Biomes");
-    //     std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
-    // } else if (levelRef.get().hasArray<nbt::TagIntArray>("Biomes", 1024)) {
-    //     const nbt::TagIntArray& biomes_tag = levelRef.get().findTag<nbt::TagIntArray>("Biomes");
-    //     std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
-    // } else if (levelRef.get().hasArray<nbt::TagByteArray>("Biomes", 0)
-    //         || levelRef.get().hasArray<nbt::TagLongArray>("Biomes", 0)) {
-    //     std::fill(biomes, biomes + BIOMES_ARRAY_SIZE, 0);
-    // } else if (levelRef.get().hasArray<nbt::TagByteArray>("Biomes", 256) ||
-    // levelRef.get().hasArray<nbt::TagIntArray>("Biomes", 256)) {
-    //     LOG(WARNING) << "Out dated chunk " << chunkpos << ": Old biome data found!";
-    // }
-    // else {
-    //    LOG(WARNING) << "Corrupt chunk " << chunkpos << ": No biome data found!";
-    //    //levelRef.get().dump(std::cout);
-    //    //exit(1);
-    //}
+    chunk_status = nbt.findTag<nbt::TagString>("Status").payload;
 
     // find sections list
     // ignore it if section list does not exist, can happen sometimes with the empty
@@ -371,7 +344,6 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
     if (sections_tag.tag_type != nbt::TagCompound::TAG_TYPE)
         return true;
 
-    // go through all sections
     for (auto it = sections_tag.payload.begin(); it != sections_tag.payload.end(); ++it) {
         const nbt::TagCompound &section_tag = (*it)->cast<nbt::TagCompound>();
 
@@ -379,11 +351,11 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
         if (!section_tag.hasTag<nbt::TagByte>("Y"))
             continue;
 
-        if (!section_tag.hasTag<nbt::TagCompound>("block_states"))
-            continue;
-
         const nbt::TagByte &y = section_tag.findTag<nbt::TagByte>("Y");
         if (y.payload < CHUNK_LOW || y.payload >= CHUNK_TOP)
+            continue;
+
+        if (!section_tag.hasTag<nbt::TagCompound>("block_states"))
             continue;
 
         const auto &block_states = section_tag.findTag<nbt::TagCompound>("block_states");
@@ -487,7 +459,7 @@ bool Chunk::readNBT(mc::BlockStateRegistry &block_registry, const char *data, si
 
 void Chunk::clear() {
     sections.clear();
-    for (int i = 0; i < sizeof(section_offsets) / sizeof(section_offsets[0]); i++)
+    for (size_t i = 0; i < sizeof(section_offsets) / sizeof(section_offsets[0]); i++)
         section_offsets[i] = -1;
     std::fill(biomes, biomes + 256, 21 /* DEFAULT_BIOME */);
 }
