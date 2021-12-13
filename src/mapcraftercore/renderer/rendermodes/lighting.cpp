@@ -255,14 +255,17 @@ LightingData LightingRenderMode::getBlockLight(const mc::BlockPos &pos) {
     // The End has no sun light set -> lighting looks ugly
     // just emulate the sun light for transparent blocks
     if (simulate_sun_light || (*current_chunk)->simulateSunLight()) {
-        uint8_t sky = 15;
-        /*
-        if (block.id != 0 && !images->isBlockTransparent(block.id, block.data))
-                sky = 0;
-        */
+        uint8_t sky = 0;
         const BlockImage &block_image = block_images->getBlockImage(block.id);
-        if (!block_image.is_air && !block_image.is_transparent) {
-            sky = 0;
+
+        if (block_image.is_air) {
+            sky = 15;
+        } else if (block_image.is_full_water) {
+            sky = pos.y - 48;
+            sky = std::min<uint8_t>(15, sky);
+            sky = std::max<uint8_t>(0, sky);
+        } else if (block_image.is_transparent) {
+            sky = 15;
         }
         return LightingData(light.getBlockLight(), sky);
     }
