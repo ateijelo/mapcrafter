@@ -1,4 +1,11 @@
-#!/bin/sh
+#!/bin/sh -x
 
-python tools/gen_texture_code.py --header data/textures/blocks > mapcraftercore/renderer/blocktextures.h
-python tools/gen_texture_code.py --source data/textures/blocks > mapcraftercore/renderer/blocktextures.cpp
+SRCDIR=$(realpath "$(dirname "$0")/../")
+
+python "$SRCDIR/tools/gen_texture_code.py" \
+   --header "$SRCDIR/data/textures/blocks" \
+   > "$SRCDIR/mapcraftercore/renderer/blocktextures.h"
+
+python "$SRCDIR/tools/gen_texture_code.py" \
+   --source "$SRCDIR/data/textures/blocks" \
+   > "$SRCDIR/mapcraftercore/renderer/blocktextures.cpp"
