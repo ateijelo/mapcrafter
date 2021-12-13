@@ -260,10 +260,11 @@ LightingData LightingRenderMode::getBlockLight(const mc::BlockPos &pos) {
 
         if (block_image.is_air) {
             sky = 15;
-        } else if (block_image.is_full_water) {
-            sky = pos.y - 48;
-            sky = std::min<uint8_t>(15, sky);
-            sky = std::max<uint8_t>(0, sky);
+        } else if (block_image.is_full_water || block_image.is_waterlogged) {
+            int d = pos.y - 48;
+            d = std::min<uint8_t>(15, d);
+            d = std::max<uint8_t>(0, d);
+            sky = d % 0xf;
         } else if (block_image.is_transparent) {
             sky = 15;
         }
