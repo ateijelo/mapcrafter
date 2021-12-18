@@ -27,6 +27,70 @@
 namespace mapcrafter {
 namespace mc {
 
+static const std::unordered_map<std::string, uint16_t> biome_resource_ids = {
+    {"minecraft:ocean", 0},
+    {"minecraft:plains", 1},
+    {"minecraft:desert", 2},
+    {"minecraft:windswept_hills", 3},
+    {"minecraft:forest", 4},
+    {"minecraft:taiga", 5},
+    {"minecraft:swamp", 6},
+    {"minecraft:river", 7},
+    {"minecraft:nether_wastes", 8},
+    {"minecraft:the_end", 9},
+    {"minecraft:frozen_ocean", 10},
+    {"minecraft:frozen_river", 11},
+    {"minecraft:snowy_plains", 12},
+    {"minecraft:mushroom_fields", 14},
+    {"minecraft:beach", 16},
+    {"minecraft:jungle", 21},
+    {"minecraft:sparse_jungle", 23},
+    {"minecraft:deep_ocean", 24},
+    {"minecraft:stony_shore", 25},
+    {"minecraft:snowy_beach", 26},
+    {"minecraft:birch_forest", 27},
+    {"minecraft:dark_forest", 29},
+    {"minecraft:snowy_taiga", 30},
+    {"minecraft:old_growth_pine_taiga", 32},
+    {"minecraft:windswept_forest", 34},
+    {"minecraft:savanna", 35},
+    {"minecraft:savanna_plateau", 36},
+    {"minecraft:badlands", 37},
+    {"minecraft:wooded_badlands", 38},
+    {"minecraft:small_end_islands", 40},
+    {"minecraft:end_midlands", 41},
+    {"minecraft:end_highlands", 42},
+    {"minecraft:end_barrens", 43},
+    {"minecraft:warm_ocean", 44},
+    {"minecraft:lukewarm_ocean", 45},
+    {"minecraft:cold_ocean", 46},
+    {"minecraft:deep_lukewarm_ocean", 48},
+    {"minecraft:deep_cold_ocean", 49},
+    {"minecraft:deep_frozen_ocean", 50},
+    {"minecraft:the_void", 127},
+    {"minecraft:sunflower_plains", 129},
+    {"minecraft:windswept_gravelly_hills", 131},
+    {"minecraft:flower_forest", 132},
+    {"minecraft:ice_spikes", 140},
+    {"minecraft:old_growth_birch_forest", 155},
+    {"minecraft:old_growth_spruce_taiga", 160},
+    {"minecraft:windswept_savanna", 163},
+    {"minecraft:eroded_badlands", 165},
+    {"minecraft:bamboo_jungle", 168},
+    {"minecraft:soul_sand_valley", 170},
+    {"minecraft:crimson_forest", 171},
+    {"minecraft:warped_forest", 172},
+    {"minecraft:basalt_deltas", 173},
+    {"minecraft:dripstone_caves", 174},
+    {"minecraft:lush_caves", 175},
+    {"minecraft:meadow", 177},
+    {"minecraft:grove", 178},
+    {"minecraft:snowy_slopes", 179},
+    {"minecraft:frozen_peaks", 180},
+    {"minecraft:jagged_peaks", 181},
+    {"minecraft:stony_peaks", 182},
+};
+
 namespace {
 
 void readPackedShorts(const std::vector<int64_t> &data, std::array<uint16_t, 4096> &palette) {
@@ -116,15 +180,17 @@ void readPackedShorts(const std::vector<int64_t> &data, std::array<uint16_t, 409
     assert(j == 16 * 16 * 16);
 }
 
-void readPackedShorts_v116(const std::vector<int64_t> &data, std::array<uint16_t, 4096> &palette) {
-    uint32_t shorts_per_long = (4096 + data.size() - 1) / data.size();
+template <std::size_t PALETTE_SIZE = 4096>
+void readPackedShorts_v116(const std::vector<int64_t> &data,
+                           std::array<uint16_t, PALETTE_SIZE> &palette) {
+    uint32_t shorts_per_long = (PALETTE_SIZE + data.size() - 1) / data.size();
     uint32_t bits_per_value = 64 / shorts_per_long;
     palette.fill(0);
     uint16_t mask = (1 << bits_per_value) - 1;
 
     for (uint32_t i = 0; i < shorts_per_long; i++) {
         uint32_t j = 0;
-        for (uint32_t k = i; k < 4096; k += shorts_per_long) {
+        for (uint32_t k = i; k < PALETTE_SIZE; k += shorts_per_long) {
             assert(j < data.size());
             palette[k] = (uint16_t)(data[j] >> (bits_per_value * i)) & mask;
             j++;
@@ -332,7 +398,7 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
         return true;
     }
 
-    nbt.dump(std::cout);
+    // nbt.dump(std::cout);
 
     chunk_status = nbt.findTag<nbt::TagString>("Status").payload;
 
@@ -361,7 +427,51 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
             continue;
 
         if (section_tag.hasTag<nbt::TagCompound>("biomes")) {
-            // read 1.18 biome data
+            const auto &biomes_tag = section_tag.findTag<nbt::TagCompound>("biomes");
+            const nbt::TagList &palette = biomes_tag.findTag<nbt::TagList>("palette");
+            const int biomes_per_section = 64; // 4 * 4 * 4
+            int biomes_base_index = (y.payload - CHUNK_LOW) * biomes_per_section;
+
+            if (biomes_tag.hasTag<nbt::TagLongArray>("data")) {
+                const auto &biomes_data = biomes_tag.findTag<nbt::TagLongArray>("data");
+                // std::cout << "biomes data for section x=" << chunkpos.x << " z=" << chunkpos.z
+                //           << " y=" << (int)y.payload << ":\n";
+                // for (const auto &value : biomes_data.payload) {
+                //     std::cout << "    " << value << "\n";
+                // }
+                std::array<uint16_t, biomes_per_section> biome_palette;
+                readPackedShorts_v116(biomes_data.payload, biome_palette);
+                // for (auto v : section_biomes) {
+                //     std::cout << "  decoded value: " << v << "\n";
+                // }
+                for (int i = 0; i < biomes_per_section; i++) {
+                    uint16_t palette_index = biome_palette.at(i);
+                    if (palette_index >= palette.payload.size()) {
+                        // still no clue how this happens, let's ignore for now
+                        // std::cout << "x=" << chunkpos.x << " z=" << chunkpos.z
+                        //           << " y=" << (int)y.payload << "\n";
+                        continue;
+                    }
+                    // std::cout << "palette_index: " << palette_index << " "
+                    //           << "palette_size: " << palette.payload.size() << "\n";
+
+                    std::string biome_name =
+                        palette.payload.at(palette_index)->cast<nbt::TagString>().payload;
+                    auto it = biome_resource_ids.find(biome_name);
+                    uint32_t biome_id = 1; // minecraft:plains
+                    if (it != biome_resource_ids.end())
+                        biome_id = it->second;
+                    biomes[biomes_base_index + i] = biome_id;
+                }
+            } else {
+                std::string biome_name = palette.payload.at(0)->cast<nbt::TagString>().payload;
+                uint32_t biome_id = 1; // minecraft:plains
+                auto it = biome_resource_ids.find(biome_name);
+                if (it != biome_resource_ids.end())
+                    biome_id = it->second;
+                std::fill(biomes + biomes_base_index,
+                          biomes + biomes_base_index + biomes_per_section, biome_id);
+            }
         }
 
         const auto &block_states = section_tag.findTag<nbt::TagCompound>("block_states");
@@ -588,8 +698,7 @@ uint8_t Chunk::getBiomeAt(const LocalBlockPos &pos) const {
     if (rotation)
         rotateBlockPos(x, z, rotation);
 
-    // return biomes[(y * 16 + (z * 4 + x))];
-    return 1;
+    return biomes[(y * 16 + (z * 4 + x))];
 }
 
 const ChunkPos &Chunk::getPos() const { return chunkpos; }
