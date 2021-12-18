@@ -375,8 +375,8 @@ bool Chunk::simulateSunLight() const { return (this->chunk_status != "full"); }
 
 bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFile &nbt) {
     int data_version = nbt.findTag<nbt::TagInt>("DataVersion").payload;
-    if (data_version < 2865) {
-        throw new std::logic_error("readNBT118 needs data version >= 2865");
+    if (data_version < 2860) {
+        throw new std::logic_error("readNBT118 needs data version >= 2860");
     }
 
     // then find x/z pos of the chunk
@@ -397,8 +397,6 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
     if (!nbt.hasTag<nbt::TagString>("Status")) {
         return true;
     }
-
-    // nbt.dump(std::cout);
 
     chunk_status = nbt.findTag<nbt::TagString>("Status").payload;
 
@@ -570,7 +568,7 @@ bool Chunk::readNBT(mc::BlockStateRegistry &block_registry, const char *data, si
     int data_version = nbt.findTag<nbt::TagInt>("DataVersion").payload;
 
     // 1.18 chunk format
-    if (data_version >= 2865)
+    if (data_version >= 2860)
         return readNBT118(block_registry, nbt);
     // the previous code
     return readNBT117(block_registry, nbt);
