@@ -29,7 +29,7 @@ namespace mc {
 
 namespace {
 
-void readPackedShorts(const std::vector<int64_t> &data, uint16_t *palette) {
+void readPackedShorts(const std::vector<int64_t> &data, std::array<uint16_t, 4096> &palette) {
     // this is basically taken from Minecraft Overviewer
     // https://github.com/gmcnew/Minecraft-Overviewer/blob/minecraft113/overviewer_core/world.py#L809
     // maybe we can keep this, or maybe we could do something with unions for speed-up?
@@ -116,10 +116,10 @@ void readPackedShorts(const std::vector<int64_t> &data, uint16_t *palette) {
     assert(j == 16 * 16 * 16);
 }
 
-void readPackedShorts_v116(const std::vector<int64_t> &data, uint16_t *palette) {
+void readPackedShorts_v116(const std::vector<int64_t> &data, std::array<uint16_t, 4096> &palette) {
     uint32_t shorts_per_long = (4096 + data.size() - 1) / data.size();
     uint32_t bits_per_value = 64 / shorts_per_long;
-    std::fill(palette, &palette[4096], 0);
+    palette.fill(0);
     uint16_t mask = (1 << bits_per_value) - 1;
 
     for (uint32_t i = 0; i < shorts_per_long; i++) {
@@ -332,6 +332,8 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
         return true;
     }
 
+    nbt.dump(std::cout);
+
     chunk_status = nbt.findTag<nbt::TagString>("Status").payload;
 
     // find sections list
@@ -358,12 +360,11 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
         if (!section_tag.hasTag<nbt::TagCompound>("block_states"))
             continue;
 
-        const auto &block_states = section_tag.findTag<nbt::TagCompound>("block_states");
-        if (!block_states.hasArray<nbt::TagLongArray>("data"))
-            continue;
+        if (section_tag.hasTag<nbt::TagCompound>("biomes")) {
+            // read 1.18 biome data
+        }
 
-        const nbt::TagLongArray &block_states_data =
-            block_states.findTag<nbt::TagLongArray>("data");
+        const auto &block_states = section_tag.findTag<nbt::TagCompound>("block_states");
 
         const nbt::TagList &palette = block_states.findTag<nbt::TagList>("palette");
         std::vector<mc::BlockState> palette_blockstates(palette.payload.size());
@@ -393,23 +394,31 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
         // create a ChunkSection-object
         ChunkSection section;
         section.y = y.payload;
+        if (block_states.hasArray<nbt::TagLongArray>("data")) {
+            const nbt::TagLongArray &block_states_data =
+                block_states.findTag<nbt::TagLongArray>("data");
 
-        readPackedShorts_v116(block_states_data.payload, section.block_ids);
+            readPackedShorts_v116(block_states_data.payload, section.block_ids);
 
-        int bits_per_entry = block_states_data.payload.size() * 64 / (16 * 16 * 16);
-        bool ok = true;
-        for (size_t i = 0; i < 16 * 16 * 16; i++) {
-            if (section.block_ids[i] >= palette_blockstates.size()) {
-                LOG(ERROR) << "Incorrectly parsed palette ID " << section.block_ids[i]
-                           << " at index " << i << " (max is " << palette_blockstates.size() - 1
-                           << " with " << bits_per_entry << " bits per entry)";
-                ok = false;
-                break;
+            int bits_per_entry = block_states_data.payload.size() * 64 / (16 * 16 * 16);
+            bool ok = true;
+            for (size_t i = 0; i < 16 * 16 * 16; i++) {
+                if (section.block_ids[i] >= palette_blockstates.size()) {
+                    LOG(ERROR) << "Incorrectly parsed palette ID " << section.block_ids[i]
+                               << " at index " << i << " (max is " << palette_blockstates.size() - 1
+                               << " with " << bits_per_entry << " bits per entry)";
+                    ok = false;
+                    break;
+                }
+                section.block_ids[i] = palette_lookup[section.block_ids[i]];
             }
-            section.block_ids[i] = palette_lookup[section.block_ids[i]];
-        }
-        if (!ok) {
-            continue;
+            if (!ok) {
+                continue;
+            }
+        } else {
+            if (palette_lookup[0] == air_id)
+                continue;
+            section.block_ids.fill(palette_lookup[0]);
         }
 
         if (section_tag.hasArray<nbt::TagByteArray>("BlockLight", 2048)) {

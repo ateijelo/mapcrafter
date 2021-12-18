@@ -44,7 +44,7 @@ struct ChunkSection {
     int8_t y;
     uint8_t block_light[16 * 16 * 8];
     uint8_t sky_light[16 * 16 * 8];
-    uint16_t block_ids[16 * 16 * 16];
+    std::array<uint16_t, 4096> block_ids;
 
     inline const uint8_t *getArray(int index) const {
         if (index == 0) {
