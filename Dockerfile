@@ -2,7 +2,7 @@
 # Build Image
 #
 
-FROM alpine:3.8 as builder
+FROM alpine:latest as builder
 
 # Add the git repo
 ADD . /git/mapcrafter
@@ -32,7 +32,7 @@ RUN cd /git/mapcrafter && \
 # Final Image
 #
 
-FROM alpine:3.8
+FROM alpine:latest
 
 # Mapcrafter, built in previous stage
 COPY --from=builder /tmp/mapcrafter/ /
