@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/entrypoint.sh -b -j 16 -c /config/render.conf
