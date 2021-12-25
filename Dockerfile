@@ -62,4 +62,5 @@ RUN apk add \
 
 # Entrypoint
 ADD entrypoint.sh /
+ADD marker_entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
