@@ -3,8 +3,10 @@ services:
   mapcrafter-cron:
     image: mapcrafter-cron:118
     container_name: mapcrafter_hc_fabric118
+    environment:
+      - threads=16
     volumes:
-      - ./cron:/etc/periodic
+      - ./crontab:/etc/crontabs/root
       - /var/www:/output
       - /etc/mapcrafter/config:/config
       - /home/minecraft/1.18.0:/world
