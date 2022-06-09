@@ -27,7 +27,7 @@
 namespace mapcrafter {
 namespace mc {
 
-static const std::unordered_map<std::string, uint16_t> biome_resource_ids = {
+static const std::unordered_map<std::string, uint32_t> biome_resource_ids = {
     {"minecraft:ocean", 0},
     {"minecraft:plains", 1},
     {"minecraft:desert", 2},
@@ -466,7 +466,7 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
                 uint32_t biome_id = 1; // minecraft:plains
                 auto it = biome_resource_ids.find(biome_name);
                 if (it != biome_resource_ids.end())
-                    biome_id = it->second;
+                    auto [_, biome_id] = *it;
                 std::fill(biomes + biomes_base_index,
                           biomes + biomes_base_index + biomes_per_section, biome_id);
             }
@@ -566,6 +566,8 @@ bool Chunk::readNBT(mc::BlockStateRegistry &block_registry, const char *data, si
         return false;
     }
     int data_version = nbt.findTag<nbt::TagInt>("DataVersion").payload;
+
+    // nbt.dump(std::cout);
 
     // 1.18 chunk format
     if (data_version >= 2860)
