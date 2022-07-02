@@ -11261,7 +11261,7 @@ minecraft:mangrove_fence_gate facing=west,in_wall=false,open=false color=9470,uv
 minecraft:mangrove_fence_gate facing=west,in_wall=false,open=true color=9472,uv=9473
 minecraft:mangrove_fence_gate facing=west,in_wall=true,open=false color=9474,uv=9475
 minecraft:mangrove_fence_gate facing=west,in_wall=true,open=true color=9476,uv=9477
-minecraft:mangrove_leaves - color=9478,shadow_edges=5,uv=9479
+minecraft:mangrove_leaves - biome_colormap=#ff2aa4ad|#ff7ba160|#ff01bf1d,biome_colors=foliage,biome_type=simple,color=9478,shadow_edges=5,uv=9479
 minecraft:mangrove_log axis=x color=9480,uv=9481
 minecraft:mangrove_log axis=y color=9482,uv=9483
 minecraft:mangrove_log axis=z color=9484,uv=9485
