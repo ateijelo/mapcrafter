@@ -12,16 +12,19 @@ using Leaflet.js.
 
 <!-- TOC -->
 
-- [Features](#features)
-- [Requirements](#requirements)
-- [Example maps](#example-maps)
-- [Help](#help)
-  - [Documentation](#documentation)
-  - [Reporting bugs and feature requests](#reporting-bugs-and-feature-requests)
-  - [Community help](#community-help)
-- [Acknowledgements](#acknowledgements)
-- [License](#license)
-- [Version history](#version-history)
+- [Mapcrafter ![Build Status](https://travis-ci.org/mapcrafter/mapcrafter)](#mapcrafter-)
+  - [Supported Minecraft versions](#supported-minecraft-versions)
+  - [Features](#features)
+  - [Requirements](#requirements)
+  - [Example maps](#example-maps)
+  - [Help](#help)
+    - [Documentation](#documentation)
+    - [Reporting bugs and feature requests](#reporting-bugs-and-feature-requests)
+    - [Community help](#community-help)
+  - [Acknowledgements](#acknowledgements)
+  - [License](#license)
+  - [Version history](#version-history)
+  - [Building](#building)
 
 <!-- /TOC -->
 
@@ -104,3 +107,52 @@ http://github.com/mapcrafter/mapcrafter
 ## Version history
 
 See the [CHANGELOG](./CHANGELOG.md) for details.
+
+## Building
+
+(disorganized notes, might clean up at some point)
+
+Start with blockcrafter.
+
+Until I figure out how to let Docker use my GPU, using the docker container with --osmesa is not an option. It would take ages.
+
+Refresh your python3.8 installation, just in case:
+
+```
+pyenv install 3.8.6
+```
+
+I don't like pyenv's manipulations, so I explicitly add the Python I want to my path:
+
+export PATH="$HOME/.pyenv/versions/3.8.6/bin/:$PATH"
+
+Create a venv, activate it and install it.
+
+```sh
+python -m venv env
+. env/bin/active
+python setup.py install
+```
+
+Now this should work:
+
+echo -n -e "" "-r"{0,1,2,3}" -v"{isometric,side,topdown}" -t"{12,16}"\n"| xargs -IOPTS -P16 sh -c 'blockcrafter-export -a blockcrafter/custom_assets/ -a minecraft-1.16.5-client/ -a minecraft-1.16.5-client/assets/ -a minecraft-1.17.1-client/ -a minecraft-1.17.1-client/assets/ -a minecraft-1.18.1-client/ -a minecraft-1.18.1-client/assets/ -a minecraft-1.19-client/ -a minecraft-1.19-client/assets/ OPTS -o blocks/'
+
+
+Bring the generated images and txt files to Mapcrafter's src/data/blocks directory.
+
+Generate texture files:
+
+```
+./src/tools/mapcrafter_textures.py -f ~/.local/share/multimc/libraries/com/mojang/minecraft/1.19/minecraft-1.19-client.jar ./src/data/textures/
+```
+
+and then texture code:
+
+```
+./src/tools/gen_texture_code.sh
+```
+
+Recompile after that with `make -j8`
+
+Mangrove biome coloring is wrong, we need that from Minecraft's source code.

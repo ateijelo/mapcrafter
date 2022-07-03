@@ -41,7 +41,7 @@ renderer::ColorMapType as<renderer::ColorMapType>(const std::string& str) {
 	} else if (str == "water") {
 		return renderer::ColorMapType::WATER;
 	} else {
-		throw std::invalid_argument("Must be 'foliage', 'foliage_flipped', 'grass' or 'water'!");
+		throw std::invalid_argument("Must be 'foliage', 'foliage_flipped', 'grass' or 'water'");
 	}
 }
 
@@ -56,7 +56,7 @@ renderer::LightingType as<renderer::LightingType>(const std::string& str) {
 	} else if (str == "smooth_bottom") {
 		return renderer::LightingType::SMOOTH_BOTTOM;
 	} else {
-		throw std::invalid_argument("Must be 'none', 'simple' or 'smooth'!");
+		throw std::invalid_argument("Must be 'none', 'simple', 'smooth', or 'smooth_bottom'");
 	}
 }
 

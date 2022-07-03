@@ -60,6 +60,16 @@ uint32_t Biome::getColor(const mc::BlockPos &pos, const ColorMapType &color_type
             return rgba(0x9e, 0x81, 0x4d, 0xff);
         }
     }
+
+    // mangrove grass & leave colors
+    if (id == 183) {
+        if (color_type == ColorMapType::GRASS) {
+            return rgba(0x90, 0x91, 0x4d, 0xff);
+        } else if (color_type == ColorMapType::FOLIAGE) {
+            return rgba(0x8d, 0xb1, 0x27, 0xff);
+        }
+    }
+
     // swamp grass colors
     if ((id == 6 || id == 134) && color_type == ColorMapType::GRASS) {
         double v = SWAMP_GRASS_NOISE.getValue(pos.x * 0.0225, pos.z * 0.0225);

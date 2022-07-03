@@ -89,6 +89,7 @@ static const std::unordered_map<std::string, uint32_t> biome_resource_ids = {
     {"minecraft:frozen_peaks", 180},
     {"minecraft:jagged_peaks", 181},
     {"minecraft:stony_peaks", 182},
+    {"minecraft:mangrove_swamp", 183},
 };
 
 namespace {
@@ -466,7 +467,7 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
                 uint32_t biome_id = 1; // minecraft:plains
                 auto it = biome_resource_ids.find(biome_name);
                 if (it != biome_resource_ids.end())
-                    auto [_, biome_id] = *it;
+                    biome_id = it->second;
                 std::fill(biomes + biomes_base_index,
                           biomes + biomes_base_index + biomes_per_section, biome_id);
             }

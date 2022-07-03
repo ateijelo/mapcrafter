@@ -177,6 +177,8 @@ static const Biome BIOMES[] = {
     {180, 0.8, 0.4, one, default_water}, // minecraft:frozen_peaks
     {181, 0.8, 0.4, one, default_water}, // minecraft:jagged_peaks
     {182, 0.8, 0.4, one, default_water}, // minecraft:stony_peaks
+    {183, 0.8, 0.9, rgba(0xff, 0xff, 0xff, 0xff),
+     rgba(0x3a, 0x7a, 0x6a, 0xff)}, // minecraft:mangrove_swamp
 
     {210, 0.0, 0.0, unknown_tint, unknown_tint}, // "Unknown" biome
 };
