@@ -41,7 +41,7 @@ template <> renderer::ColorMapType as<renderer::ColorMapType>(const std::string 
         return renderer::ColorMapType::WATER;
     } else {
         throw std::invalid_argument("Must be 'foliage', 'foliage_flipped', 'grass' or 'water'");
-		throw std::invalid_argument("Must be 'foliage', 'foliage_flipped', 'grass' or 'water'");
+    }
 }
 
 template <> renderer::LightingType as<renderer::LightingType>(const std::string &str) {
@@ -56,7 +56,7 @@ template <> renderer::LightingType as<renderer::LightingType>(const std::string 
     } else {
         throw std::invalid_argument("Must be 'none', 'simple', 'smooth', or 'smooth_bottom'");
     }
-		throw std::invalid_argument("Must be 'none', 'simple', 'smooth', or 'smooth_bottom'");
+}
 
 } // namespace util
 
