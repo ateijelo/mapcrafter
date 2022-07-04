@@ -225,11 +225,11 @@ void WorldEntitiesCache::update(util::IProgressHandler *progress) {
             nbt.readNBT(reinterpret_cast<const char *>(&data[0]), data.size(),
                         mc::nbt::Compression::ZLIB);
 
-			//nbt::TagCompound& level = nbt.findTag<nbt::TagCompound>("Level");
+            // nbt::TagCompound& level = nbt.findTag<nbt::TagCompound>("Level");
 			if (!nbt.hasTag<nbt::TagList>("block_entities")) {
 				continue;
 			}
-			nbt::TagList& entities = nbt.findTag<nbt::TagList>("block_entities");
+            nbt::TagList &entities = nbt.findTag<nbt::TagList>("block_entities");
             for (auto entity_it = entities.payload.begin(); entity_it != entities.payload.end();
                  ++entity_it) {
                 nbt::TagCompound entity = (*entity_it)->cast<nbt::TagCompound>();
