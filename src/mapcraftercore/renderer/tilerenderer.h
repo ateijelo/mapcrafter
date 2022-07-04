@@ -20,13 +20,13 @@
 #ifndef TILERENDERER_H_
 #define TILERENDERER_H_
 
+#include "../mc/worldcache.h" // mc::DIR_*
 #include "biomes.h"
 #include "image.h"
-#include "../mc/worldcache.h" // mc::DIR_*
 
 #include <array>
-#include <vector>
 #include <boost/filesystem.hpp>
+#include <vector>
 
 namespace fs = boost::filesystem;
 
@@ -37,7 +37,7 @@ namespace mc {
 class BlockPos;
 class BlockStateRegistry;
 class Chunk;
-}
+} // namespace mc
 
 namespace renderer {
 
@@ -49,67 +49,70 @@ class RenderMode;
 class RenderView;
 
 struct TileImage {
-	int x, y;
-	RGBAImage image;
-	mc::BlockPos pos;
-	int z_index;
+    int x, y;
+    RGBAImage image;
+    mc::BlockPos pos;
+    int z_index;
 
-	bool operator<(const TileImage& other) const;
+    bool operator<(const TileImage &other) const;
 };
 
 class TileRenderer {
-public:
-	TileRenderer(const RenderView* render_view, mc::BlockStateRegistry& block_registry,
-			BlockImages* images, int tile_width, mc::WorldCache* world, RenderMode* render_mode);
-	virtual ~TileRenderer();
+  public:
+    TileRenderer(const RenderView *render_view, mc::BlockStateRegistry &block_registry,
+                 BlockImages *images, int tile_width, mc::WorldCache *world,
+                 RenderMode *render_mode);
+    virtual ~TileRenderer();
 
-	void setRenderBiomes(bool render_biomes);
-	void setUsePreblitWater(bool use_preblit_water);
-	void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
+    void setRenderBiomes(bool render_biomes);
+    void setUsePreblitWater(bool use_preblit_water);
+    void setShadowEdges(std::array<uint8_t, 5> shadow_edges);
 
-	virtual void renderTile(const TilePos& tile_pos, RGBAImage& tile);
+    virtual void renderTile(const TilePos &tile_pos, RGBAImage &tile);
 
-	virtual int getTileSize() const = 0;
-	virtual int getTileWidth() const;
-	virtual int getTileHeight() const;
+    virtual int getTileSize() const = 0;
+    virtual int getTileWidth() const;
+    virtual int getTileHeight() const;
 
-protected:
-	void renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockPos& dir, std::set<TileImage>& tile_images);
-	virtual void renderTopBlocks(const TilePos& tile_pos, std::set<TileImage>& tile_images) {}
+  protected:
+    void renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockPos &dir,
+                      std::set<TileImage> &tile_images);
+    virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images) {}
 
-	mc::Block getBlock(const mc::BlockPos& pos, int get = mc::GET_ID);
-	uint32_t getBiomeColor(const mc::BlockPos& pos, const BlockImage& block, const mc::Chunk* chunk);
+    mc::Block getBlock(const mc::BlockPos &pos, int get = mc::GET_ID);
+    uint32_t getBiomeColor(const mc::BlockPos &pos, const BlockImage &block,
+                           const mc::Chunk *chunk);
 
-	mc::BlockStateRegistry& block_registry;
+    mc::BlockStateRegistry &block_registry;
 
-	BlockImages* images;
-	RenderedBlockImages* block_images;
-	int tile_width;
-	mc::WorldCache* world;
-	mc::Chunk* current_chunk;
-	RenderMode* render_mode;
+    BlockImages *images;
+    RenderedBlockImages *block_images;
+    int tile_width;
+    mc::WorldCache *world;
+    mc::Chunk *current_chunk;
+    RenderMode *render_mode;
 
-	bool render_biomes;
-	bool use_preblit_water;
-	// factors for shadow edges:
-	// north, south, east, west, bottom
-	std::array<uint8_t, 5> shadow_edges;
+    bool render_biomes;
+    bool use_preblit_water;
+    // factors for shadow edges:
+    // north, south, east, west, bottom
+    std::array<uint8_t, 5> shadow_edges;
 
-	// IDs of full water blocks appearing in minecraft worlds
-	std::set<uint16_t> full_water_ids;
-	// IDs of blocks that can be seen as full water blocks for other full water blocks
-	// (for example ice: we don't want side faces of water next to ice)
-	std::set<uint16_t> full_water_like_ids;
-	// full water blocks will be replaced by these water blocks
-	std::vector<uint16_t> partial_full_water_ids, partial_ice_ids;
+    // IDs of full water blocks appearing in minecraft worlds
+    std::set<uint16_t> full_water_ids;
+    // IDs of blocks that can be seen as full water blocks for other full water blocks
+    // (for example ice: we don't want side faces of water next to ice)
+    std::set<uint16_t> full_water_like_ids;
+    // full water blocks will be replaced by these water blocks
+    std::vector<uint16_t> partial_full_water_ids, partial_ice_ids;
 
-	std::vector<uint16_t> lily_pad_ids;
+    std::vector<uint16_t> lily_pad_ids;
 
-	uint16_t waterlog_id;
-	const BlockImage* waterlog_block_image;
+    uint16_t waterlog_id;
+    const BlockImage *waterlog_block_image;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* TILERENDERER_H_ */

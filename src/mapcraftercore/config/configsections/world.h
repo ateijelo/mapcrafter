@@ -22,13 +22,13 @@
 
 #include "../configsection.h"
 
-#include "../validation.h"
 #include "../../mc/pos.h"
 #include "../../mc/world.h"
 #include "../../mc/worldcrop.h"
+#include "../validation.h"
 
-#include <string>
 #include <boost/filesystem.hpp>
+#include <string>
 
 namespace fs = boost::filesystem;
 
@@ -38,59 +38,57 @@ namespace config {
 class INIConfigSection;
 
 class WorldSection : public ConfigSection {
-public:
-	WorldSection();
-	~WorldSection();
+  public:
+    WorldSection();
+    ~WorldSection();
 
-	virtual std::string getPrettyName() const;
-	virtual void dump(std::ostream& out) const;
+    virtual std::string getPrettyName() const;
+    virtual void dump(std::ostream &out) const;
 
-	void setConfigDir(const fs::path& config_dir);
+    void setConfigDir(const fs::path &config_dir);
 
-	std::string getShortName();
+    std::string getShortName();
 
-	fs::path getInputDir() const;
-	mc::Dimension getDimension() const;
-	std::string getWorldName() const;
+    fs::path getInputDir() const;
+    mc::Dimension getDimension() const;
+    std::string getWorldName() const;
 
-	mc::BlockPos getDefaultView() const;
-	int getDefaultZoom() const;
-	int getDefaultRotation() const;
-	int getSeaLevel() const;
+    mc::BlockPos getDefaultView() const;
+    int getDefaultZoom() const;
+    int getDefaultRotation() const;
+    int getSeaLevel() const;
 
-	bool hasCropUnpopulatedChunks() const;
-	std::string getBlockMask() const;
+    bool hasCropUnpopulatedChunks() const;
+    std::string getBlockMask() const;
 
-	const mc::WorldCrop getWorldCrop() const;
-	bool needsWorldCentering() const;
+    const mc::WorldCrop getWorldCrop() const;
+    bool needsWorldCentering() const;
 
-protected:
-	virtual void preParse(const INIConfigSection& section,
-			ValidationList& validation);
-	virtual bool parseField(const std::string key, const std::string value,
-			ValidationList& validation);
-	virtual void postParse(const INIConfigSection& section,
-			ValidationList& validation);
+  protected:
+    virtual void preParse(const INIConfigSection &section, ValidationList &validation);
+    virtual bool parseField(const std::string key, const std::string value,
+                            ValidationList &validation);
+    virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
-private:
-	fs::path config_dir;
+  private:
+    fs::path config_dir;
 
-	Field<fs::path> input_dir;
-	Field<mc::Dimension> dimension;
-	Field<std::string> world_name;
+    Field<fs::path> input_dir;
+    Field<mc::Dimension> dimension;
+    Field<std::string> world_name;
 
-	Field<mc::BlockPos> default_view;
-	Field<int> default_zoom, default_rotation;
-	Field<int> sea_level;
+    Field<mc::BlockPos> default_view;
+    Field<int> default_zoom, default_rotation;
+    Field<int> sea_level;
 
-	Field<int> min_y, max_y;
-	Field<int> min_x, max_x, min_z, max_z;
-	Field<int> center_x, center_z, radius;
+    Field<int> min_y, max_y;
+    Field<int> min_x, max_x, min_z, max_z;
+    Field<int> center_x, center_z, radius;
 
-	Field<bool> crop_unpopulated_chunks;
-	Field<std::string> block_mask;
+    Field<bool> crop_unpopulated_chunks;
+    Field<std::string> block_mask;
 
-	mc::WorldCrop world_crop;
+    mc::WorldCrop world_crop;
 };
 
 } /* namespace config */

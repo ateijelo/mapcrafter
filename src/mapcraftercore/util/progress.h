@@ -32,33 +32,33 @@ std::string format_eta(int eta);
  * A basic interface for a progress handler.
  */
 class IProgressHandler {
-public:
-	virtual ~IProgressHandler() {};
+  public:
+    virtual ~IProgressHandler(){};
 
-	virtual int getMax() const = 0;
-	virtual void setMax(int max) = 0;
+    virtual int getMax() const = 0;
+    virtual void setMax(int max) = 0;
 
-	virtual int getValue() const = 0;
-	virtual void setValue(int value) = 0;
+    virtual int getValue() const = 0;
+    virtual void setValue(int value) = 0;
 };
 
 class MultiplexingProgressHandler : public IProgressHandler {
-public:
-	MultiplexingProgressHandler();
-	virtual ~MultiplexingProgressHandler();
+  public:
+    MultiplexingProgressHandler();
+    virtual ~MultiplexingProgressHandler();
 
-	void addHandler(IProgressHandler* handler);
+    void addHandler(IProgressHandler *handler);
 
-	virtual int getMax() const;
-	virtual void setMax(int max);
+    virtual int getMax() const;
+    virtual void setMax(int max);
 
-	virtual int getValue() const;
-	virtual void setValue(int value);
+    virtual int getValue() const;
+    virtual void setValue(int value);
 
-protected:
-	int max, value;
+  protected:
+    int max, value;
 
-	std::vector<IProgressHandler*> handlers;
+    std::vector<IProgressHandler *> handlers;
 };
 
 /**
@@ -66,70 +66,71 @@ protected:
  * and getting the progress values.
  */
 class DummyProgressHandler : public IProgressHandler {
-public:
-	DummyProgressHandler();
-	virtual ~DummyProgressHandler();
+  public:
+    DummyProgressHandler();
+    virtual ~DummyProgressHandler();
 
-	virtual int getMax() const;
-	virtual void setMax(int max);
+    virtual int getMax() const;
+    virtual void setMax(int max);
 
-	virtual int getValue() const;
-	virtual void setValue(int value);
+    virtual int getValue() const;
+    virtual void setValue(int value);
 
-protected:
-	// the maximum and current value of the progress
-	int max, value;
+  protected:
+    // the maximum and current value of the progress
+    int max, value;
 };
 
 class AbstractOutputProgressHandler : public DummyProgressHandler {
-public:
-	AbstractOutputProgressHandler();
-	virtual ~AbstractOutputProgressHandler();
+  public:
+    AbstractOutputProgressHandler();
+    virtual ~AbstractOutputProgressHandler();
 
-	virtual void setValue(int value);
+    virtual void setValue(int value);
 
-	virtual void update(double percentage, double average_speed, int eta);
+    virtual void update(double percentage, double average_speed, int eta);
 
-protected:
-	// the time of the start of progress
-	int start;
-	// time of last update
-	int last_update;
-	// value of last update
-	int last_value;
-	// percentage of last update
-	int last_percentage;
+  protected:
+    // the time of the start of progress
+    int start;
+    // time of last update
+    int last_update;
+    // value of last update
+    int last_value;
+    // percentage of last update
+    int last_percentage;
 };
 
 class LogOutputProgressHandler : public AbstractOutputProgressHandler {
-public:
-	LogOutputProgressHandler();
-	virtual ~LogOutputProgressHandler();
+  public:
+    LogOutputProgressHandler();
+    virtual ~LogOutputProgressHandler();
 
-	virtual void update(double percentage, double average_speed, int eta);
+    virtual void update(double percentage, double average_speed, int eta);
 
-private:
-	int last_step;
+  private:
+    int last_step;
 };
 
 /**
  * Shows a nice command line progress bar.
  */
 class ProgressBar : public AbstractOutputProgressHandler {
-public:
-	ProgressBar();
-	virtual ~ProgressBar();
+  public:
+    ProgressBar();
+    virtual ~ProgressBar();
 
-	virtual void update(double percentage, double average_speed, int eta);
+    virtual void update(double percentage, double average_speed, int eta);
 
-	void finish();
-private:
-	// length of last output needed to clear the line
-	int last_output_len;
+    void finish();
 
-	std::string createProgressBar(int width, double percentage) const;
-	std::string createProgressStats(double percentage, int value, int max,
-			double speed_average, int eta = -1) const;
+  private:
+    // length of last output needed to clear the line
+    int last_output_len;
+
+    std::string createProgressBar(int width, double percentage) const;
+    std::string createProgressStats(double percentage, int value, int max, double speed_average,
+                                    int eta = -1) const;
 };
 
 } /* namespace util */

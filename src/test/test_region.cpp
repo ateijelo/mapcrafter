@@ -22,35 +22,34 @@
 #include "../mapcraftercore/mc/region.h"
 #include "../mapcraftercore/util.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <boost/test/unit_test.hpp>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 namespace mc = mapcrafter::mc;
 
 BOOST_AUTO_TEST_CASE(region_testReadWrite) {
-	mc::BlockStateRegistry block_registry;
+    mc::BlockStateRegistry block_registry;
 
-	mc::RegionFile in1("data/region/r.-1.0.mca");
-	BOOST_CHECK(in1.read());
-	BOOST_CHECK_EQUAL(in1.getContainingChunksCount(), 120);
-	BOOST_CHECK(in1.write("data/r.-1.0.mca"));
+    mc::RegionFile in1("data/region/r.-1.0.mca");
+    BOOST_CHECK(in1.read());
+    BOOST_CHECK_EQUAL(in1.getContainingChunksCount(), 120);
+    BOOST_CHECK(in1.write("data/r.-1.0.mca"));
 
-	mc::RegionFile in2("data/r.-1.0.mca");
-	BOOST_CHECK(in2.read());
-	BOOST_CHECK_EQUAL(in2.getContainingChunksCount(), 120);
+    mc::RegionFile in2("data/r.-1.0.mca");
+    BOOST_CHECK(in2.read());
+    BOOST_CHECK_EQUAL(in2.getContainingChunksCount(), 120);
 
-	auto chunks1 = in1.getContainingChunks();
-	auto chunks2 = in2.getContainingChunks();
-	auto it1 = chunks1.begin();
-	auto it2 = chunks2.begin();
-	for ( ; it1 != chunks1.end() && it2 != chunks2.end(); ++it1, ++it2) {
-		BOOST_CHECK_EQUAL(*it1, *it2);
+    auto chunks1 = in1.getContainingChunks();
+    auto chunks2 = in2.getContainingChunks();
+    auto it1 = chunks1.begin();
+    auto it2 = chunks2.begin();
+    for (; it1 != chunks1.end() && it2 != chunks2.end(); ++it1, ++it2) {
+        BOOST_CHECK_EQUAL(*it1, *it2);
 
-		mc::Chunk chunk1, chunk2;
-		BOOST_CHECK(in1.loadChunk(*it1, block_registry, chunk1));
-		BOOST_CHECK(in2.loadChunk(*it2, block_registry, chunk2));
-	}
-
+        mc::Chunk chunk1, chunk2;
+        BOOST_CHECK(in1.loadChunk(*it1, block_registry, chunk1));
+        BOOST_CHECK(in2.loadChunk(*it2, block_registry, chunk2));
+    }
 }

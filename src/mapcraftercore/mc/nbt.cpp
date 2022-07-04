@@ -19,478 +19,418 @@
 
 #include "nbt.h"
 
-#include <fstream>
 #include <boost/iostreams/copy.hpp>
-#include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <fstream>
 
 namespace mapcrafter {
 namespace mc {
 namespace nbt {
 
 namespace nbtstream {
-template <typename T>
-T read(std::istream& stream) {
-}
-
-template <>
-int8_t read<int8_t>(std::istream& stream) {
-	int8_t value;
-	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-	return value;
-}
-
-template <>
-int16_t read<int16_t>(std::istream& stream) {
-	int16_t value;
-	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-	return util::bigEndian16(value);
-}
-
-template <>
-int32_t read<int32_t>(std::istream& stream) {
-	int32_t value;
-	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-	return util::bigEndian32(value);
-}
-
-template <>
-int64_t read<int64_t>(std::istream& stream) {
-	int64_t value;
-	stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-	return util::bigEndian64(value);
-}
-
-template <>
-float read<float>(std::istream& stream) {
-	union {
-		int32_t tmp;
-		float myfloat;
-	};
-	stream.read(reinterpret_cast<char*>(&tmp), sizeof(int32_t));
-	tmp = util::bigEndian32(tmp);
-	return myfloat;
-}
+template <typename T> T read(std::istream &stream) {}
 
-template <>
-double read<double>(std::istream& stream) {
-	union {
-		int64_t tmp;
-		double mydouble;
-	};
-	stream.read(reinterpret_cast<char*>(&tmp), sizeof(int64_t));
-	tmp = util::bigEndian64(tmp);
-	return mydouble;
+template <> int8_t read<int8_t>(std::istream &stream) {
+    int8_t value;
+    stream.read(reinterpret_cast<char *>(&value), sizeof(value));
+    return value;
 }
 
-template <>
-std::string read<std::string>(std::istream& stream) {
-	std::string value;
-	int16_t length = read<int16_t>(stream);
-	value.resize(length);
-	stream.read(&value[0], length);
-	return value;
+template <> int16_t read<int16_t>(std::istream &stream) {
+    int16_t value;
+    stream.read(reinterpret_cast<char *>(&value), sizeof(value));
+    return util::bigEndian16(value);
 }
 
-template <typename T>
-void write(std::ostream& stream, T value) {
+template <> int32_t read<int32_t>(std::istream &stream) {
+    int32_t value;
+    stream.read(reinterpret_cast<char *>(&value), sizeof(value));
+    return util::bigEndian32(value);
 }
 
-template <>
-void write<int8_t>(std::ostream& stream, int8_t value) {
-	stream.write(reinterpret_cast<char*>(&value), sizeof(value));
+template <> int64_t read<int64_t>(std::istream &stream) {
+    int64_t value;
+    stream.read(reinterpret_cast<char *>(&value), sizeof(value));
+    return util::bigEndian64(value);
 }
 
-template <>
-void write<int16_t>(std::ostream& stream, int16_t value) {
-	int16_t tmp = util::bigEndian16(value);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
+template <> float read<float>(std::istream &stream) {
+    union {
+        int32_t tmp;
+        float myfloat;
+    };
+    stream.read(reinterpret_cast<char *>(&tmp), sizeof(int32_t));
+    tmp = util::bigEndian32(tmp);
+    return myfloat;
 }
 
-template <>
-void write<int32_t>(std::ostream& stream, int32_t value) {
-	int32_t tmp = util::bigEndian32(value);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
+template <> double read<double>(std::istream &stream) {
+    union {
+        int64_t tmp;
+        double mydouble;
+    };
+    stream.read(reinterpret_cast<char *>(&tmp), sizeof(int64_t));
+    tmp = util::bigEndian64(tmp);
+    return mydouble;
 }
 
-template <>
-void write<int64_t>(std::ostream& stream, int64_t value) {
-	int64_t tmp = util::bigEndian64(value);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(value));
+template <> std::string read<std::string>(std::istream &stream) {
+    std::string value;
+    int16_t length = read<int16_t>(stream);
+    value.resize(length);
+    stream.read(&value[0], length);
+    return value;
 }
 
-template <>
-void write<float>(std::ostream& stream, float value) {
-	union {
-		int32_t tmp;
-		float myfloat;
-	};
-	myfloat = value;
-	tmp = util::bigEndian32(tmp);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(int32_t));
-}
+template <typename T> void write(std::ostream &stream, T value) {}
 
-template <>
-void write<double>(std::ostream& stream, double value) {
-	union {
-		int64_t tmp;
-		double myfloat;
-	};
-	myfloat = value;
-	tmp = util::bigEndian64(tmp);
-	stream.write(reinterpret_cast<char*>(&tmp), sizeof(int64_t));
+template <> void write<int8_t>(std::ostream &stream, int8_t value) {
+    stream.write(reinterpret_cast<char *>(&value), sizeof(value));
 }
 
-template <>
-void write<std::string>(std::ostream& stream, std::string value) {
-	write<int16_t>(stream, value.size());
-	stream.write(value.c_str(), value.size());
-}
+template <> void write<int16_t>(std::ostream &stream, int16_t value) {
+    int16_t tmp = util::bigEndian16(value);
+    stream.write(reinterpret_cast<char *>(&tmp), sizeof(value));
 }
 
-Tag::Tag(int8_t type)
-	: type(type), named(false), write_type(true) {
+template <> void write<int32_t>(std::ostream &stream, int32_t value) {
+    int32_t tmp = util::bigEndian32(value);
+    stream.write(reinterpret_cast<char *>(&tmp), sizeof(value));
 }
 
-Tag::~Tag() {
+template <> void write<int64_t>(std::ostream &stream, int64_t value) {
+    int64_t tmp = util::bigEndian64(value);
+    stream.write(reinterpret_cast<char *>(&tmp), sizeof(value));
 }
 
-int8_t Tag::getType() const {
-	return type;
+template <> void write<float>(std::ostream &stream, float value) {
+    union {
+        int32_t tmp;
+        float myfloat;
+    };
+    myfloat = value;
+    tmp = util::bigEndian32(tmp);
+    stream.write(reinterpret_cast<char *>(&tmp), sizeof(int32_t));
 }
 
-bool Tag::isWriteType() const {
-	return write_type;
+template <> void write<double>(std::ostream &stream, double value) {
+    union {
+        int64_t tmp;
+        double myfloat;
+    };
+    myfloat = value;
+    tmp = util::bigEndian64(tmp);
+    stream.write(reinterpret_cast<char *>(&tmp), sizeof(int64_t));
 }
 
-void Tag::setWriteType(bool write_type) {
-	this->write_type = write_type;
+template <> void write<std::string>(std::ostream &stream, std::string value) {
+    write<int16_t>(stream, value.size());
+    stream.write(value.c_str(), value.size());
 }
+} // namespace nbtstream
 
-bool Tag::isNamed() const {
-	return named;
-}
+Tag::Tag(int8_t type) : type(type), named(false), write_type(true) {}
 
-void Tag::setNamed(bool named) {
-	this->named = named;
-}
+Tag::~Tag() {}
 
-const std::string& Tag::getName() const {
-	return name;
-}
+int8_t Tag::getType() const { return type; }
 
-void Tag::setName(const std::string& name, bool set_named) {
-	if (set_named)
-		this->named = true;
-	this->name = name;
-}
+bool Tag::isWriteType() const { return write_type; }
 
-Tag& Tag::read(std::istream& stream) {
-	return *this;
-}
+void Tag::setWriteType(bool write_type) { this->write_type = write_type; }
 
-void Tag::write(std::ostream& stream) const {
-	if (write_type)
-		nbtstream::write<int8_t>(stream, type);
-	if (named)
-		nbtstream::write<std::string>(stream, name);
-}
+bool Tag::isNamed() const { return named; }
 
-void Tag::dump(std::ostream& stream, const std::string& indendation) const {
-}
+void Tag::setNamed(bool named) { this->named = named; }
 
-Tag* Tag::clone() const {
-	return new Tag(*this);
-}
+const std::string &Tag::getName() const { return name; }
 
-Tag& TagString::read(std::istream& stream) {
-	payload = nbtstream::read<std::string>(stream);
-	return *this;
+void Tag::setName(const std::string &name, bool set_named) {
+    if (set_named)
+        this->named = true;
+    this->name = name;
 }
 
-void TagString::write(std::ostream& stream) const {
-	Tag::write(stream);
-	nbtstream::write<std::string>(stream, payload);
-}
+Tag &Tag::read(std::istream &stream) { return *this; }
 
-void TagString::dump(std::ostream& stream, const std::string& indendation) const {
-	dumpTag(stream, indendation, *this);
+void Tag::write(std::ostream &stream) const {
+    if (write_type)
+        nbtstream::write<int8_t>(stream, type);
+    if (named)
+        nbtstream::write<std::string>(stream, name);
 }
 
-Tag* TagString::clone() const {
-	return new TagString(*this);
-}
+void Tag::dump(std::ostream &stream, const std::string &indendation) const {}
 
-TagList::TagList(int8_t tag_type)
-	: Tag(TAG_TYPE), tag_type(tag_type) {
-}
+Tag *Tag::clone() const { return new Tag(*this); }
 
-TagList::TagList(const TagList& other)
-	: Tag(TAG_TYPE) {
-	*this = other;
+Tag &TagString::read(std::istream &stream) {
+    payload = nbtstream::read<std::string>(stream);
+    return *this;
 }
 
-TagList::~TagList() {
+void TagString::write(std::ostream &stream) const {
+    Tag::write(stream);
+    nbtstream::write<std::string>(stream, payload);
 }
 
-void TagList::operator=(const TagList& other) {
-	name = other.name;
-	named = other.named;
-
-	tag_type = other.tag_type;
-
-	payload.clear();
-	for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
-		payload.push_back(TagPtr((*it)->clone()));
+void TagString::dump(std::ostream &stream, const std::string &indendation) const {
+    dumpTag(stream, indendation, *this);
 }
 
-Tag& TagList::read(std::istream& stream) {
-	tag_type = nbtstream::read<int8_t>(stream);
-	int32_t length = nbtstream::read<int32_t>(stream);
-	for (int32_t i = 0; i < length; i++) {
-		Tag* tag = createTag(tag_type);
-		if (tag == nullptr)
-			throw NBTError(std::string("Unknown tag type with id ") + util::str(static_cast<int>(tag_type))
-						   + ". NBT data stream may be corrupted.");
-		tag->read(stream);
-		tag->setWriteType(false);
-		tag->setNamed(false);
-		payload.push_back(TagPtrType<Tag>(tag));
-	}
-	return *this;
-}
+Tag *TagString::clone() const { return new TagString(*this); }
 
-void TagList::write(std::ostream& stream) const {
-	Tag::write(stream);
-	nbtstream::write<int8_t>(stream, tag_type);
-	nbtstream::write<int32_t>(stream, payload.size());
-	for (auto it = payload.begin(); it != payload.end(); ++it) {
-		(*it)->setWriteType(false);
-		(*it)->setNamed(false);
-		(*it)->write(stream);
-	}
-}
+TagList::TagList(int8_t tag_type) : Tag(TAG_TYPE), tag_type(tag_type) {}
 
-void TagList::dump(std::ostream& stream, const std::string& indendation) const {
-	stream << indendation << "TAG_List";
-	if (named)
-		stream << "(\"" << name << "\")";
-	stream << ": " << payload.size() << " entries of type " << static_cast<int>(tag_type) << std::endl;
-	stream << indendation << "{" << std::endl;
-	for (auto it = payload.begin(); it != payload.end(); ++it)
-		(*it)->dump(stream, indendation + "   ");
-	stream << indendation << "}" << std::endl;
-}
+TagList::TagList(const TagList &other) : Tag(TAG_TYPE) { *this = other; }
 
-Tag* TagList::clone() const {
-	return new TagList(*this);
-}
+TagList::~TagList() {}
 
-TagCompound::TagCompound(const std::string& name)
-	: Tag(TAG_TYPE) {
-	setName(name);
-}
+void TagList::operator=(const TagList &other) {
+    name = other.name;
+    named = other.named;
 
-TagCompound::TagCompound(const TagCompound& other)
-	: Tag(TAG_TYPE) {
-	*this = other;
-}
+    tag_type = other.tag_type;
 
-TagCompound::~TagCompound() {
+    payload.clear();
+    for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
+        payload.push_back(TagPtr((*it)->clone()));
 }
-
-void TagCompound::operator=(const TagCompound& other) {
-	name = other.name;
-	named = other.named;
 
-	payload.clear();
-	for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
-		payload[it->first] = TagPtr(it->second->clone());
+Tag &TagList::read(std::istream &stream) {
+    tag_type = nbtstream::read<int8_t>(stream);
+    int32_t length = nbtstream::read<int32_t>(stream);
+    for (int32_t i = 0; i < length; i++) {
+        Tag *tag = createTag(tag_type);
+        if (tag == nullptr)
+            throw NBTError(std::string("Unknown tag type with id ") +
+                           util::str(static_cast<int>(tag_type)) +
+                           ". NBT data stream may be corrupted.");
+        tag->read(stream);
+        tag->setWriteType(false);
+        tag->setNamed(false);
+        payload.push_back(TagPtrType<Tag>(tag));
+    }
+    return *this;
 }
 
-Tag& TagCompound::read(std::istream& stream) {
-	while (1) {
-		int8_t tag_type = nbtstream::read<int8_t>(stream);
-		if (tag_type == TagEnd::TAG_TYPE)
-			break;
-		std::string name = nbtstream::read<std::string>(stream);
-		Tag* tag = createTag(tag_type);
-		if (tag == nullptr)
-			throw NBTError(std::string("Unknown tag type with id ") + util::str(static_cast<int>(tag_type))
-						   + ". NBT data stream may be corrupted.");
-		tag->read(stream);
-		tag->setName(name);
-		tag->setWriteType(true);
-		payload[name] = TagPtr(tag);
-	}
-	return *this;
+void TagList::write(std::ostream &stream) const {
+    Tag::write(stream);
+    nbtstream::write<int8_t>(stream, tag_type);
+    nbtstream::write<int32_t>(stream, payload.size());
+    for (auto it = payload.begin(); it != payload.end(); ++it) {
+        (*it)->setWriteType(false);
+        (*it)->setNamed(false);
+        (*it)->write(stream);
+    }
 }
 
-void TagCompound::write(std::ostream& stream) const {
-	Tag::write(stream);
-	for (auto it = payload.begin(); it != payload.end(); ++it) {
-		it->second->setWriteType(true);
-		it->second->setNamed(true);
-		it->second->write(stream);
-	}
-	nbtstream::write<int8_t>(stream, TagEnd::TAG_TYPE);
+void TagList::dump(std::ostream &stream, const std::string &indendation) const {
+    stream << indendation << "TAG_List";
+    if (named)
+        stream << "(\"" << name << "\")";
+    stream << ": " << payload.size() << " entries of type " << static_cast<int>(tag_type)
+           << std::endl;
+    stream << indendation << "{" << std::endl;
+    for (auto it = payload.begin(); it != payload.end(); ++it)
+        (*it)->dump(stream, indendation + "   ");
+    stream << indendation << "}" << std::endl;
 }
 
-void TagCompound::dump(std::ostream& stream, const std::string& indendation) const {
-	stream << indendation << "TAG_Compound";
-	if (named)
-		stream << "(\"" << name << "\")";
-	stream << ": " << payload.size() << " entries" << std::endl;
-	stream << indendation << "{" << std::endl;
-	for (auto it = payload.begin(); it != payload.end(); ++it)
-		it->second->dump(stream, indendation + "   ");
-	stream << indendation << "}" << std::endl;
-}
+Tag *TagList::clone() const { return new TagList(*this); }
 
-Tag* TagCompound::clone() const {
-	return new TagCompound(*this);
-}
+TagCompound::TagCompound(const std::string &name) : Tag(TAG_TYPE) { setName(name); }
 
-bool TagCompound::hasTag(const std::string& name) const {
-	return payload.count(name);
-}
+TagCompound::TagCompound(const TagCompound &other) : Tag(TAG_TYPE) { *this = other; }
 
-Tag& TagCompound::findTag(const std::string& name) {
-	if (!hasTag(name))
-		throw TagNotFound(std::string("Unable to find tag '") + name + "'");
-	return *payload[name];
-}
+TagCompound::~TagCompound() {}
 
-const Tag& TagCompound::findTag(const std::string& name) const {
-	if (!hasTag(name))
-		throw TagNotFound(std::string("Unable to find (const) tag '") + name + "'");
-	return *payload.at(name);
-}
+void TagCompound::operator=(const TagCompound &other) {
+    name = other.name;
+    named = other.named;
 
-void TagCompound::addTag(const std::string& name, const Tag& tag) {
-	Tag* tag_ptr = tag.clone();
-	tag_ptr->setName(name);
-	tag_ptr->setWriteType(true);
-	payload[name] = TagPtr(tag_ptr);
+    payload.clear();
+    for (auto it = other.payload.begin(); it != other.payload.end(); ++it)
+        payload[it->first] = TagPtr(it->second->clone());
 }
 
-NBTFile::NBTFile() {
+Tag &TagCompound::read(std::istream &stream) {
+    while (1) {
+        int8_t tag_type = nbtstream::read<int8_t>(stream);
+        if (tag_type == TagEnd::TAG_TYPE)
+            break;
+        std::string name = nbtstream::read<std::string>(stream);
+        Tag *tag = createTag(tag_type);
+        if (tag == nullptr)
+            throw NBTError(std::string("Unknown tag type with id ") +
+                           util::str(static_cast<int>(tag_type)) +
+                           ". NBT data stream may be corrupted.");
+        tag->read(stream);
+        tag->setName(name);
+        tag->setWriteType(true);
+        payload[name] = TagPtr(tag);
+    }
+    return *this;
 }
 
-NBTFile::~NBTFile() {
+void TagCompound::write(std::ostream &stream) const {
+    Tag::write(stream);
+    for (auto it = payload.begin(); it != payload.end(); ++it) {
+        it->second->setWriteType(true);
+        it->second->setNamed(true);
+        it->second->write(stream);
+    }
+    nbtstream::write<int8_t>(stream, TagEnd::TAG_TYPE);
 }
 
-void NBTFile::decompressStream(std::istream& stream, std::stringstream& decompressed,
-        Compression compression) {
-	if (compression == Compression::NO_COMPRESSION) {
-		decompressed << stream.rdbuf();
-		return;
-	}
-	boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
-	if (compression == Compression::GZIP) {
-		in.push(boost::iostreams::gzip_decompressor());
-	} else if (compression == Compression::ZLIB) {
-		in.push(boost::iostreams::zlib_decompressor());
-	}
-	try {
-		in.push(stream);
-		boost::iostreams::copy(in, decompressed);
-	} catch (boost::iostreams::gzip_error &e) {
-		throw NBTError(
-		        "Error while decompressing gzip data: " + std::string(e.what()) + " ("
-		                + util::str(e.error()) + ")");
-	} catch (boost::iostreams::zlib_error &e) {
-		throw NBTError(
-		        "Error while decompressing zlib data: " + std::string(e.what()) + " ("
-		                + util::str(e.error()) + ")");
-	}
+void TagCompound::dump(std::ostream &stream, const std::string &indendation) const {
+    stream << indendation << "TAG_Compound";
+    if (named)
+        stream << "(\"" << name << "\")";
+    stream << ": " << payload.size() << " entries" << std::endl;
+    stream << indendation << "{" << std::endl;
+    for (auto it = payload.begin(); it != payload.end(); ++it)
+        it->second->dump(stream, indendation + "   ");
+    stream << indendation << "}" << std::endl;
 }
 
-void NBTFile::readCompressed(std::istream& stream, Compression compression) {
-	std::stringstream decompressed(std::ios::in | std::ios::out | std::ios::binary);
-	decompressStream(stream, decompressed, compression);
-	int8_t type = ((TagByte&) TagByte().read(decompressed)).payload;
-	if (type != TagCompound::TAG_TYPE)
-		throw NBTError("First tag is not a tag compound!");
-	std::string name = ((TagString&) TagString().read(decompressed)).payload;
-	TagCompound::read(decompressed);
-	setName(name);
-}
+Tag *TagCompound::clone() const { return new TagCompound(*this); }
 
-void NBTFile::readNBT(std::istream& stream, Compression compression) {
-	readCompressed(stream, compression);
-}
+bool TagCompound::hasTag(const std::string &name) const { return payload.count(name); }
 
-void NBTFile::readNBT(const char* filename, Compression compression) {
-	std::ifstream file(filename, std::ios::binary);
-	if (!file)
-		throw NBTError(std::string("Unable to open file '") + filename + "'!");
-	readCompressed(file, compression);
-	file.close();
+Tag &TagCompound::findTag(const std::string &name) {
+    if (!hasTag(name))
+        throw TagNotFound(std::string("Unable to find tag '") + name + "'");
+    return *payload[name];
 }
 
-void NBTFile::readNBT(const char* buffer, size_t len, Compression compression) {
-	std::stringstream stream(std::ios::in | std::ios::out | std::ios::binary);
-	stream.write(buffer, len);
-	readCompressed(stream, compression);
+const Tag &TagCompound::findTag(const std::string &name) const {
+    if (!hasTag(name))
+        throw TagNotFound(std::string("Unable to find (const) tag '") + name + "'");
+    return *payload.at(name);
 }
 
-void NBTFile::writeNBT(std::ostream& stream, Compression compression) {
-	std::stringstream in(std::ios::in | std::ios::out | std::ios::binary);
-	boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
-	if (compression == Compression::GZIP) {
-		out.push(boost::iostreams::gzip_compressor());
-	} else if (compression == Compression::ZLIB) {
-		out.push(boost::iostreams::zlib_compressor());
-	} else {
-		write(stream);
-		return;
-	}
-	out.push(in);
-	write(in);
-	boost::iostreams::copy(out, stream);
+void TagCompound::addTag(const std::string &name, const Tag &tag) {
+    Tag *tag_ptr = tag.clone();
+    tag_ptr->setName(name);
+    tag_ptr->setWriteType(true);
+    payload[name] = TagPtr(tag_ptr);
 }
 
-void NBTFile::writeNBT(const char* filename, Compression compression) {
-	std::ofstream file(filename, std::ios::binary);
-	if (!file)
-		throw NBTError(std::string("Unable to open file '") + filename + "'!");
-	writeNBT(file, compression);
-	file.close();
-}
+NBTFile::NBTFile() {}
 
-Tag* createTag(int8_t type) {
-	switch (type) {
-	case TagByte::TAG_TYPE:
-		return new TagByte;
-	case TagShort::TAG_TYPE:
-		return new TagShort;
-	case TagInt::TAG_TYPE:
-		return new TagInt;
-	case TagLong::TAG_TYPE:
-		return new TagLong;
-	case TagFloat::TAG_TYPE:
-		return new TagFloat;
-	case TagDouble::TAG_TYPE:
-		return new TagDouble;
-	case TagByteArray::TAG_TYPE:
-		return new TagByteArray;
-	case TagString::TAG_TYPE:
-		return new TagString;
-	case TagList::TAG_TYPE:
-		return new TagList;
-	case TagCompound::TAG_TYPE:
-		return new TagCompound;
-	case TagIntArray::TAG_TYPE:
-		return new TagIntArray;
-	case TagLongArray::TAG_TYPE:
-		return new TagLongArray;
-	default:
-		return nullptr;
-	}
-}
+NBTFile::~NBTFile() {}
 
-}
-}
-}
+void NBTFile::decompressStream(std::istream &stream, std::stringstream &decompressed,
+                               Compression compression) {
+    if (compression == Compression::NO_COMPRESSION) {
+        decompressed << stream.rdbuf();
+        return;
+    }
+    boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
+    if (compression == Compression::GZIP) {
+        in.push(boost::iostreams::gzip_decompressor());
+    } else if (compression == Compression::ZLIB) {
+        in.push(boost::iostreams::zlib_decompressor());
+    }
+    try {
+        in.push(stream);
+        boost::iostreams::copy(in, decompressed);
+    } catch (boost::iostreams::gzip_error &e) {
+        throw NBTError("Error while decompressing gzip data: " + std::string(e.what()) + " (" +
+                       util::str(e.error()) + ")");
+    } catch (boost::iostreams::zlib_error &e) {
+        throw NBTError("Error while decompressing zlib data: " + std::string(e.what()) + " (" +
+                       util::str(e.error()) + ")");
+    }
+}
+
+void NBTFile::readCompressed(std::istream &stream, Compression compression) {
+    std::stringstream decompressed(std::ios::in | std::ios::out | std::ios::binary);
+    decompressStream(stream, decompressed, compression);
+    int8_t type = ((TagByte &)TagByte().read(decompressed)).payload;
+    if (type != TagCompound::TAG_TYPE)
+        throw NBTError("First tag is not a tag compound!");
+    std::string name = ((TagString &)TagString().read(decompressed)).payload;
+    TagCompound::read(decompressed);
+    setName(name);
+}
+
+void NBTFile::readNBT(std::istream &stream, Compression compression) {
+    readCompressed(stream, compression);
+}
+
+void NBTFile::readNBT(const char *filename, Compression compression) {
+    std::ifstream file(filename, std::ios::binary);
+    if (!file)
+        throw NBTError(std::string("Unable to open file '") + filename + "'!");
+    readCompressed(file, compression);
+    file.close();
+}
+
+void NBTFile::readNBT(const char *buffer, size_t len, Compression compression) {
+    std::stringstream stream(std::ios::in | std::ios::out | std::ios::binary);
+    stream.write(buffer, len);
+    readCompressed(stream, compression);
+}
+
+void NBTFile::writeNBT(std::ostream &stream, Compression compression) {
+    std::stringstream in(std::ios::in | std::ios::out | std::ios::binary);
+    boost::iostreams::filtering_streambuf<boost::iostreams::input> out;
+    if (compression == Compression::GZIP) {
+        out.push(boost::iostreams::gzip_compressor());
+    } else if (compression == Compression::ZLIB) {
+        out.push(boost::iostreams::zlib_compressor());
+    } else {
+        write(stream);
+        return;
+    }
+    out.push(in);
+    write(in);
+    boost::iostreams::copy(out, stream);
+}
+
+void NBTFile::writeNBT(const char *filename, Compression compression) {
+    std::ofstream file(filename, std::ios::binary);
+    if (!file)
+        throw NBTError(std::string("Unable to open file '") + filename + "'!");
+    writeNBT(file, compression);
+    file.close();
+}
+
+Tag *createTag(int8_t type) {
+    switch (type) {
+    case TagByte::TAG_TYPE:
+        return new TagByte;
+    case TagShort::TAG_TYPE:
+        return new TagShort;
+    case TagInt::TAG_TYPE:
+        return new TagInt;
+    case TagLong::TAG_TYPE:
+        return new TagLong;
+    case TagFloat::TAG_TYPE:
+        return new TagFloat;
+    case TagDouble::TAG_TYPE:
+        return new TagDouble;
+    case TagByteArray::TAG_TYPE:
+        return new TagByteArray;
+    case TagString::TAG_TYPE:
+        return new TagString;
+    case TagList::TAG_TYPE:
+        return new TagList;
+    case TagCompound::TAG_TYPE:
+        return new TagCompound;
+    case TagIntArray::TAG_TYPE:
+        return new TagIntArray;
+    case TagLongArray::TAG_TYPE:
+        return new TagLongArray;
+    default:
+        return nullptr;
+    }
+}
+
+} // namespace nbt
+} // namespace mc
+} // namespace mapcrafter

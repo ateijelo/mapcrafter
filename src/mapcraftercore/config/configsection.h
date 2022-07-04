@@ -30,110 +30,102 @@ namespace config {
 /**
  * Customized section factory that passes the config directory to the section objects.
  */
-template <typename T>
-class ConfigDirSectionFactory {
-public:
-	ConfigDirSectionFactory(fs::path config_dir = "");
-	~ConfigDirSectionFactory();
+template <typename T> class ConfigDirSectionFactory {
+  public:
+    ConfigDirSectionFactory(fs::path config_dir = "");
+    ~ConfigDirSectionFactory();
 
-	T operator()() const;
+    T operator()() const;
 
-private:
-	fs::path config_dir;
+  private:
+    fs::path config_dir;
 };
 
 class INIConfigSection;
 
 class ConfigSection {
-public:
-	ConfigSection();
-	virtual ~ConfigSection();
+  public:
+    ConfigSection();
+    virtual ~ConfigSection();
 
-	/**
-	 * Gets/sets whether this is a global section.
-	 */
-	bool isGlobal() const;
-	void setGlobal(bool global);
+    /**
+     * Gets/sets whether this is a global section.
+     */
+    bool isGlobal() const;
+    void setGlobal(bool global);
 
-	/**
-	 * Returns the name of the section.
-	 */
-	std::string getSectionName() const;
+    /**
+     * Returns the name of the section.
+     */
+    std::string getSectionName() const;
 
-	/**
-	 * Parses the given configurations section and returns false if there was a critical
-	 * parsing/validation error.
-	 */
-	ValidationList parse(const INIConfigSection& section);
+    /**
+     * Parses the given configurations section and returns false if there was a critical
+     * parsing/validation error.
+     */
+    ValidationList parse(const INIConfigSection &section);
 
-	/**
-	 * Returns the pretty name of the section.
-	 * For example "Map section my_map" or "Global world section".
-	 */
-	virtual std::string getPrettyName() const;
+    /**
+     * Returns the pretty name of the section.
+     * For example "Map section my_map" or "Global world section".
+     */
+    virtual std::string getPrettyName() const;
 
-	/**
-	 * Prints information about the parsed section to a
-	 */
-	virtual void dump(std::ostream& out) const;
+    /**
+     * Prints information about the parsed section to a
+     */
+    virtual void dump(std::ostream &out) const;
 
-protected:
-	/**
-	 * This method is called before parsing the section entries. The method can output
-	 * infos/warnings/errors via the validation list object.
-	 *
-	 * Used to set default configuration options for example.
-	 */
-	virtual void preParse(const INIConfigSection& section,
-			ValidationList& validation);
+  protected:
+    /**
+     * This method is called before parsing the section entries. The method can output
+     * infos/warnings/errors via the validation list object.
+     *
+     * Used to set default configuration options for example.
+     */
+    virtual void preParse(const INIConfigSection &section, ValidationList &validation);
 
-	/**
-	 * This method is called to parse one configuration entry.
-	 *
-	 * Should return false if the configuration key is unknown.
-	 */
-	virtual bool parseField(const std::string key, const std::string value,
-			ValidationList& validation);
+    /**
+     * This method is called to parse one configuration entry.
+     *
+     * Should return false if the configuration key is unknown.
+     */
+    virtual bool parseField(const std::string key, const std::string value,
+                            ValidationList &validation);
 
-	/**
-	 * This method is called after parsing the section entries. The method can output
-	 * infos/warnings/errors via the validation list object.
-	 *
-	 * Used for further validation things for example.
-	 */
-	virtual void postParse(const INIConfigSection& section,
-			ValidationList& validation);
+    /**
+     * This method is called after parsing the section entries. The method can output
+     * infos/warnings/errors via the validation list object.
+     *
+     * Used for further validation things for example.
+     */
+    virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
-private:
-	// whether this is a global section ([global:sections])
-	// might change with future versions, [section:my_glob_*] seems to be a good idea, too
-	bool global;
+  private:
+    // whether this is a global section ([global:sections])
+    // might change with future versions, [section:my_glob_*] seems to be a good idea, too
+    bool global;
 
-	// name of this section
-	std::string section_name;
+    // name of this section
+    std::string section_name;
 
-	ValidationList validation;
+    ValidationList validation;
 };
 
-std::ostream& operator<<(std::ostream& out, const ConfigSection& section);
+std::ostream &operator<<(std::ostream &out, const ConfigSection &section);
 
 template <typename T>
-ConfigDirSectionFactory<T>::ConfigDirSectionFactory(fs::path config_dir)
-	: config_dir(config_dir) {
+ConfigDirSectionFactory<T>::ConfigDirSectionFactory(fs::path config_dir) : config_dir(config_dir) {}
+
+template <typename T> ConfigDirSectionFactory<T>::~ConfigDirSectionFactory() {}
+
+template <typename T> T ConfigDirSectionFactory<T>::operator()() const {
+    T section;
+    section.setConfigDir(config_dir);
+    return section;
 }
 
-template <typename T>
-ConfigDirSectionFactory<T>::~ConfigDirSectionFactory() {
-}
-
-template <typename T>
-T ConfigDirSectionFactory<T>::operator()() const {
-	T section;
-	section.setConfigDir(config_dir);
-	return section;
-}
-
-}
-}
+} // namespace config
+} // namespace mapcrafter
 
 #endif /* CONFIGSECTION_H_ */

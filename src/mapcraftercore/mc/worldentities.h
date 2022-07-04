@@ -26,9 +26,9 @@
 #include "worldcrop.h"
 
 #include <array>
+#include <boost/filesystem.hpp>
 #include <map>
 #include <vector>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -36,62 +36,63 @@ namespace mapcrafter {
 namespace mc {
 
 class SignEntity {
-public:
-	typedef std::array<std::string, 4> Lines;
+  public:
+    typedef std::array<std::string, 4> Lines;
 
-	SignEntity();
-	SignEntity(const mc::BlockPos& pos, const Lines& lines);
-	~SignEntity();
+    SignEntity();
+    SignEntity(const mc::BlockPos &pos, const Lines &lines);
+    ~SignEntity();
 
-	/**
-	 * Returns the position of the sign.
-	 */
-	const mc::BlockPos& getPos() const;
+    /**
+     * Returns the position of the sign.
+     */
+    const mc::BlockPos &getPos() const;
 
-	/**
-	 * Returns the four lines of the sign.
-	 */
-	const SignEntity::Lines& getLines() const;
+    /**
+     * Returns the four lines of the sign.
+     */
+    const SignEntity::Lines &getLines() const;
 
-	/**
-	 * Returns the text of the sign -- the not-empty lines joined with a separative space.
-	 */
-	const std::string& getText() const;
+    /**
+     * Returns the text of the sign -- the not-empty lines joined with a separative space.
+     */
+    const std::string &getText() const;
 
-private:
-	mc::BlockPos pos;
+  private:
+    mc::BlockPos pos;
 
-	Lines lines;
-	std::string text;
+    Lines lines;
+    std::string text;
 };
 
 class WorldEntitiesCache {
-public:
-	WorldEntitiesCache(const World& world);
-	~WorldEntitiesCache();
+  public:
+    WorldEntitiesCache(const World &world);
+    ~WorldEntitiesCache();
 
-	/**
-	 * Updates the entity cache.
-	 */
-	void update(util::IProgressHandler* progress = nullptr);
+    /**
+     * Updates the entity cache.
+     */
+    void update(util::IProgressHandler *progress = nullptr);
 
-	std::vector<SignEntity> getSigns(WorldCrop crop = WorldCrop()) const;
-private:
-	World world;
-	fs::path cache_file;
+    std::vector<SignEntity> getSigns(WorldCrop crop = WorldCrop()) const;
 
-	std::map<RegionPos, std::map<ChunkPos, std::vector<nbt::TagCompound> > > entities;
+  private:
+    World world;
+    fs::path cache_file;
 
-	/**
-	 * Reads the file with the cached entities and returns a timestamp when this cache
-	 * was updated the last time.
-	 */
-	unsigned int readCacheFile();
+    std::map<RegionPos, std::map<ChunkPos, std::vector<nbt::TagCompound>>> entities;
 
-	/**
-	 * Writes the file with the cached entities.
-	 */
-	void writeCacheFile() const;
+    /**
+     * Reads the file with the cached entities and returns a timestamp when this cache
+     * was updated the last time.
+     */
+    unsigned int readCacheFile();
+
+    /**
+     * Writes the file with the cached entities.
+     */
+    void writeCacheFile() const;
 };
 
 } /* namespace mc */

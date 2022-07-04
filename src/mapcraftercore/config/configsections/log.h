@@ -20,9 +20,9 @@
 #ifndef LOG_H_
 #define LOG_H_
 
+#include "../../util.h"
 #include "../configsection.h"
 #include "../validation.h"
-#include "../../util.h"
 
 #include <iostream>
 #include <string>
@@ -30,62 +30,56 @@
 namespace mapcrafter {
 namespace config {
 
-enum class LogSinkType {
-	OUTPUT,
-	FILE,
-	SYSLOG
-};
+enum class LogSinkType { OUTPUT, FILE, SYSLOG };
 
-std::ostream& operator<<(std::ostream& out, LogSinkType sink_type);
+std::ostream &operator<<(std::ostream &out, LogSinkType sink_type);
 
 class LogSection : public ConfigSection {
-public:
-	LogSection();
-	~LogSection();
+  public:
+    LogSection();
+    ~LogSection();
 
-	virtual std::string getPrettyName() const;
-	virtual void dump(std::ostream& out) const;
+    virtual std::string getPrettyName() const;
+    virtual void dump(std::ostream &out) const;
 
-	void setConfigDir(const fs::path& config_dir);
-	void configureLogging() const;
+    void setConfigDir(const fs::path &config_dir);
+    void configureLogging() const;
 
-	LogSinkType getType() const;
-	util::LogLevel getVerbosity() const;
-	bool getLogProgress() const;
+    LogSinkType getType() const;
+    util::LogLevel getVerbosity() const;
+    bool getLogProgress() const;
 
-	// only for output, file log
-	std::string getFormat() const;
-	std::string getDateFormat() const;
+    // only for output, file log
+    std::string getFormat() const;
+    std::string getDateFormat() const;
 
-	// only for file log
-	fs::path getFile() const;
+    // only for file log
+    fs::path getFile() const;
 
-	// only for syslog
-	bool isEnabled() const;
+    // only for syslog
+    bool isEnabled() const;
 
-protected:
-	virtual void preParse(const INIConfigSection& section,
-			ValidationList& validation);
-	virtual bool parseField(const std::string key, const std::string value,
-			ValidationList& validation);
-	virtual void postParse(const INIConfigSection& section,
-			ValidationList& validation);
+  protected:
+    virtual void preParse(const INIConfigSection &section, ValidationList &validation);
+    virtual bool parseField(const std::string key, const std::string value,
+                            ValidationList &validation);
+    virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
-private:
-	fs::path config_dir;
+  private:
+    fs::path config_dir;
 
-	Field<LogSinkType> type;
-	Field<util::LogLevel> verbosity;
-	Field<bool> log_progress;
+    Field<LogSinkType> type;
+    Field<util::LogLevel> verbosity;
+    Field<bool> log_progress;
 
-	// only for output, file log
-	Field<std::string> format, date_format;
+    // only for output, file log
+    Field<std::string> format, date_format;
 
-	// only for file log
-	Field<fs::path> file;
+    // only for file log
+    Field<fs::path> file;
 };
 
-}
-}
+} // namespace config
+} // namespace mapcrafter
 
 #endif /* LOG_H_ */

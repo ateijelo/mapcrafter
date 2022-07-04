@@ -20,20 +20,20 @@
 #ifndef RENDERMODES_HEIGHTOVERLAY_H_
 #define RENDERMODES_HEIGHTOVERLAY_H_
 
-#include "overlay.h"
 #include "../rendermode.h"
+#include "overlay.h"
 
 namespace mapcrafter {
 namespace renderer {
 
 class HeightOverlay : public OverlayRenderMode {
-public:
-	HeightOverlay();
+  public:
+    HeightOverlay();
 
-protected:
-	virtual RGBAPixel getBlockColor(const mc::BlockPos& pos, uint16_t id, uint16_t data);
+  protected:
+    virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
-	virtual RGBAPixel getBlockColor(const mc::BlockPos& pos, const BlockImage& block_image);
+    virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, const BlockImage &block_image);
 };
 
 } /* namespace renderer */

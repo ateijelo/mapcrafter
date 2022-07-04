@@ -20,11 +20,11 @@
 #ifndef MULTITHREADING_H_
 #define MULTITHREADING_H_
 
-#include "concurrentqueue.h"
-#include "../dispatcher.h"
-#include "../workermanager.h"
 #include "../../compat/thread.h"
 #include "../../renderer/tilerenderworker.h"
+#include "../dispatcher.h"
+#include "../workermanager.h"
+#include "concurrentqueue.h"
 
 #include <set>
 #include <thread>
@@ -34,55 +34,58 @@ namespace mapcrafter {
 namespace thread {
 
 class ThreadManager : public WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> {
-public:
-	ThreadManager();
-	virtual ~ThreadManager();
+  public:
+    ThreadManager();
+    virtual ~ThreadManager();
 
-	void addWork(const renderer::RenderWork& work);
-	void addExtraWork(const renderer::RenderWork& work);
-	void setFinished();
+    void addWork(const renderer::RenderWork &work);
+    void addExtraWork(const renderer::RenderWork &work);
+    void setFinished();
 
-	virtual bool getWork(renderer::RenderWork& work);
-	virtual void workFinished(const renderer::RenderWork& work, const renderer::RenderWorkResult& result);
+    virtual bool getWork(renderer::RenderWork &work);
+    virtual void workFinished(const renderer::RenderWork &work,
+                              const renderer::RenderWorkResult &result);
 
-	bool getResult(renderer::RenderWorkResult& result);
-private:
-	ConcurrentQueue<renderer::RenderWork> work_queue, work_extra_queue;
-	ConcurrentQueue<renderer::RenderWorkResult> result_queue;
+    bool getResult(renderer::RenderWorkResult &result);
 
-	bool finished;
-	thread_ns::mutex mutex;
-	thread_ns::condition_variable condition_wait_jobs, condition_wait_results;
+  private:
+    ConcurrentQueue<renderer::RenderWork> work_queue, work_extra_queue;
+    ConcurrentQueue<renderer::RenderWorkResult> result_queue;
+
+    bool finished;
+    thread_ns::mutex mutex;
+    thread_ns::condition_variable condition_wait_jobs, condition_wait_results;
 };
 
 class ThreadWorker {
-public:
-	ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult>& manager,
-			const renderer::RenderContext& context);
-	~ThreadWorker();
+  public:
+    ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
+                 const renderer::RenderContext &context);
+    ~ThreadWorker();
 
-	void operator()();
-private:
-	WorkerManager<renderer::RenderWork, renderer::RenderWorkResult>& manager;
+    void operator()();
 
-	renderer::RenderContext render_context;
-	renderer::TileRenderWorker render_worker;
+  private:
+    WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager;
+
+    renderer::RenderContext render_context;
+    renderer::TileRenderWorker render_worker;
 };
 
 class MultiThreadingDispatcher : public Dispatcher {
-public:
-	MultiThreadingDispatcher(int threads);
-	virtual ~MultiThreadingDispatcher();
+  public:
+    MultiThreadingDispatcher(int threads);
+    virtual ~MultiThreadingDispatcher();
 
-	virtual void dispatch(const renderer::RenderContext& context,
-			util::IProgressHandler* progress);
-private:
-	int thread_count;
+    virtual void dispatch(const renderer::RenderContext &context, util::IProgressHandler *progress);
 
-	ThreadManager manager;
-	std::vector<thread_ns::thread> threads;
+  private:
+    int thread_count;
 
-	std::set<renderer::TilePath> rendered_tiles;
+    ThreadManager manager;
+    std::vector<thread_ns::thread> threads;
+
+    std::set<renderer::TilePath> rendered_tiles;
 };
 
 } /* namespace thread */

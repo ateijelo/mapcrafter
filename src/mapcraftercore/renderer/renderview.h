@@ -30,12 +30,12 @@ namespace mapcrafter {
 namespace mc {
 class BlockStateRegistry;
 class WorldCache;
-}
+} // namespace mc
 
 namespace config {
 class MapSection;
 class WorldSection;
-}
+} // namespace config
 
 namespace renderer {
 
@@ -51,71 +51,67 @@ class TileSet;
 class TileRenderer;
 
 class RenderView {
-public:
-	virtual ~RenderView();
+  public:
+    virtual ~RenderView();
 
-	/**
-	 * Creates an instance of the render view specific block image class.
-	 */
-	virtual BlockImages* createBlockImages(mc::BlockStateRegistry& block_registry) const = 0;
+    /**
+     * Creates an instance of the render view specific block image class.
+     */
+    virtual BlockImages *createBlockImages(mc::BlockStateRegistry &block_registry) const = 0;
 
-	/**
-	 * Creates an instance of the render view specific tile set class.
-	 */
-	virtual TileSet* createTileSet(int tile_width) const = 0;
+    /**
+     * Creates an instance of the render view specific tile set class.
+     */
+    virtual TileSet *createTileSet(int tile_width) const = 0;
 
-	/**
-	 * Creates an instance of the render view specific tile renderer class.
-	 */
-	virtual TileRenderer* createTileRenderer(mc::BlockStateRegistry& block_registry,
-			BlockImages* images, int tile_width, mc::WorldCache* world,
-			RenderMode* render_mode) const = 0;
+    /**
+     * Creates an instance of the render view specific tile renderer class.
+     */
+    virtual TileRenderer *createTileRenderer(mc::BlockStateRegistry &block_registry,
+                                             BlockImages *images, int tile_width,
+                                             mc::WorldCache *world,
+                                             RenderMode *render_mode) const = 0;
 
-	/**
-	 * Configures a block images object by calling some (eventually per render view
-	 * specific) methods of the block images and passing information from the world- and
-	 * map configuration. It is possible to call these methods manually (for example
-	 * needed in the testtextures program where we don't want to initialize a whole
-	 * configuration object just for the block images).
-	 *
-	 * If you overwrite this method, you should also call the parent method since it
-	 * sets generic block images options (for example whether to render leaves transparent).
-	 *
-	 * It is also very important that you pass only BlockImages*'s to this method which
-	 * were created by this render view (because the render view might rely on using
-	 * the BlockImages* as an IsometricBlockImages* like it was created for example).
-	 */
-	virtual void configureBlockImages(BlockImages* block_images,
-			const config::WorldSection& world_config,
-			const config::MapSection& map_config) const;
+    /**
+     * Configures a block images object by calling some (eventually per render view
+     * specific) methods of the block images and passing information from the world- and
+     * map configuration. It is possible to call these methods manually (for example
+     * needed in the testtextures program where we don't want to initialize a whole
+     * configuration object just for the block images).
+     *
+     * If you overwrite this method, you should also call the parent method since it
+     * sets generic block images options (for example whether to render leaves transparent).
+     *
+     * It is also very important that you pass only BlockImages*'s to this method which
+     * were created by this render view (because the render view might rely on using
+     * the BlockImages* as an IsometricBlockImages* like it was created for example).
+     */
+    virtual void configureBlockImages(BlockImages *block_images,
+                                      const config::WorldSection &world_config,
+                                      const config::MapSection &map_config) const;
 
-	/**
-	 * Configures a tile renderer object just like the configureBlockImages() method.
-	 * Make sure when overwriting this method that you should also call the parent
-	 * method since it sets generic tile renderer options.
-	 *
-	 * It is also very important that you pass only TileRenderer*'s to this method which
-	 * were created by this render view.
-	 */
-	virtual void configureTileRenderer(TileRenderer* tile_renderer,
-			const config::WorldSection& world_config,
-			const config::MapSection& map_config) const;
+    /**
+     * Configures a tile renderer object just like the configureBlockImages() method.
+     * Make sure when overwriting this method that you should also call the parent
+     * method since it sets generic tile renderer options.
+     *
+     * It is also very important that you pass only TileRenderer*'s to this method which
+     * were created by this render view.
+     */
+    virtual void configureTileRenderer(TileRenderer *tile_renderer,
+                                       const config::WorldSection &world_config,
+                                       const config::MapSection &map_config) const;
 };
 
-enum class RenderViewType {
-	ISOMETRIC,
-	ISOMETRICNEW,
-	TOPDOWN,
-	SIDE
-};
+enum class RenderViewType { ISOMETRIC, ISOMETRICNEW, TOPDOWN, SIDE };
 
 // TODO operator<< here but util::as in the config section file?
-std::ostream& operator<<(std::ostream& out, RenderViewType render_view);
+std::ostream &operator<<(std::ostream &out, RenderViewType render_view);
 
 /**
  * Creates a render view of the specified type. Won't return a nullptr.
  */
-RenderView* createRenderView(RenderViewType render_view);
+RenderView *createRenderView(RenderViewType render_view);
 
 } /* namespace renderer */
 } /* namespace mapcrafter */

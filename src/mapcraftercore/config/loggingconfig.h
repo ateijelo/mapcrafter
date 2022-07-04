@@ -20,11 +20,11 @@
 #ifndef LOGGINGCONFIG_H_
 #define LOGGINGCONFIG_H_
 
+#include "configsections/log.h"
 #include "validation.h"
+#include <boost/filesystem.hpp>
 #include <string>
 #include <vector>
-#include <boost/filesystem.hpp>
-#include "configsections/log.h"
 
 namespace fs = boost::filesystem;
 
@@ -35,22 +35,22 @@ namespace config {
  * Class to parse the global logging configuration file.
  */
 class LoggingConfig {
-public:
-	LoggingConfig();
-	~LoggingConfig();
+  public:
+    LoggingConfig();
+    ~LoggingConfig();
 
-	ValidationMap parse(const std::string& filename);
+    ValidationMap parse(const std::string &filename);
 
-	const std::vector<LogSection>& getLogSections();
+    const std::vector<LogSection> &getLogSections();
 
-	/**
-	 * Parses/validates a global logging configuration file and configures the log sinks.
-	 * Use the util::findLoggingConfigFile() to automatically find the config file.
-	 */
-	static void configureLogging(const fs::path& logging_config);
+    /**
+     * Parses/validates a global logging configuration file and configures the log sinks.
+     * Use the util::findLoggingConfigFile() to automatically find the config file.
+     */
+    static void configureLogging(const fs::path &logging_config);
 
-private:
-	std::vector<LogSection> log_sections;
+  private:
+    std::vector<LogSection> log_sections;
 };
 
 } /* namespace config */

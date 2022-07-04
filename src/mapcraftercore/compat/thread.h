@@ -23,11 +23,11 @@
 #include "../config.h"
 
 #ifdef OPT_USE_BOOST_THREAD
-#  include <boost/thread.hpp>
+#include <boost/thread.hpp>
 namespace thread_ns = boost;
 #else
-#  include <condition_variable>
-#  include <mutex>
+#include <condition_variable>
+#include <mutex>
 namespace thread_ns = std;
 #endif
 

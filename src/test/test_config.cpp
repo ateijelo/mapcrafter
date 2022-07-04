@@ -20,79 +20,79 @@
 #include "../mapcraftercore/config/iniconfig.h"
 #include "../mapcraftercore/config/mapcrafterconfig.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <boost/test/unit_test.hpp>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 namespace config = mapcrafter::config;
 
 BOOST_AUTO_TEST_CASE(config_test) {
-	/*
-	config::ConfigSection section("world", "myworld");
-	section.set("foo", "bar");
-	section.set("foo2", "test");
-	section.remove("foo2");
-	section.set("test", "73");
-	section.set("test", "42");
-	*/
+    /*
+    config::ConfigSection section("world", "myworld");
+    section.set("foo", "bar");
+    section.set("foo2", "test");
+    section.remove("foo2");
+    section.set("test", "73");
+    section.set("test", "42");
+    */
 
-	/*
-	config::ConfigSection section("test", "");
-	section.set("foo", "42");
+    /*
+    config::ConfigSection section("test", "");
+    section.set("foo", "42");
 
-	config::ConfigFile c;
+    config::ConfigFile c;
 
-	config::ValidationMessage msg;
-	if (!c.loadFile("test.conf", msg))
-		std::cout << msg << std::endl;
-	else {
-		c.getRootSection().set("hello", "world");
-		c.addSection(section);
-		c.write(std::cout);
-	}
-	*/
+    config::ValidationMessage msg;
+    if (!c.loadFile("test.conf", msg))
+            std::cout << msg << std::endl;
+    else {
+            c.getRootSection().set("hello", "world");
+            c.addSection(section);
+            c.write(std::cout);
+    }
+    */
 }
 
 BOOST_AUTO_TEST_CASE(config_testReadWrite) {
-	config::INIConfig c;
-	c.loadFile("data/config/test.conf");
-	std::ifstream in("data/config/test.conf");
-	std::string in_data((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+    config::INIConfig c;
+    c.loadFile("data/config/test.conf");
+    std::ifstream in("data/config/test.conf");
+    std::string in_data((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
 
-	std::ostringstream out;
-	c.write(out);
-	std::string out_data = out.rdbuf()->str();
+    std::ostringstream out;
+    c.write(out);
+    std::string out_data = out.rdbuf()->str();
 
-	BOOST_CHECK_EQUAL(in_data, out_data);
+    BOOST_CHECK_EQUAL(in_data, out_data);
 }
 
 BOOST_AUTO_TEST_CASE(config_testFieldValidation) {
-	config::ValidationList validation;
+    config::ValidationList validation;
 
-	// test the behavior of loading config entries from different sections
-	// into the field objects
-	config::INIConfigSection section1, section2, section3, section4;
-	section2.set("test", "foobar");
-	section4.set("test", "42");
+    // test the behavior of loading config entries from different sections
+    // into the field objects
+    config::INIConfigSection section1, section2, section3, section4;
+    section2.set("test", "foobar");
+    section4.set("test", "42");
 
-	config::Field<std::string> field, field2;
-	BOOST_CHECK(!field.isLoaded());
-	BOOST_CHECK(!field.require(validation, "error"));
+    config::Field<std::string> field, field2;
+    BOOST_CHECK(!field.isLoaded());
+    BOOST_CHECK(!field.require(validation, "error"));
 
-	field.load("test", section2.get("test"), validation);
-	BOOST_CHECK(field.isLoaded());
-	BOOST_CHECK_EQUAL(field.getValue(), "foobar");
+    field.load("test", section2.get("test"), validation);
+    BOOST_CHECK(field.isLoaded());
+    BOOST_CHECK_EQUAL(field.getValue(), "foobar");
 
-	field.load("test", section4.get("test"), validation);
-	BOOST_CHECK(field.isLoaded());
-	BOOST_CHECK_EQUAL(field.getValue(), "42");
+    field.load("test", section4.get("test"), validation);
+    BOOST_CHECK(field.isLoaded());
+    BOOST_CHECK_EQUAL(field.getValue(), "42");
 
-	field2.setDefault("default");
-	BOOST_CHECK(field2.isLoaded());
-	BOOST_CHECK_EQUAL(field2.getValue(), "default");
+    field2.setDefault("default");
+    BOOST_CHECK(field2.isLoaded());
+    BOOST_CHECK_EQUAL(field2.getValue(), "default");
 
-	field2.load("test", section2.get("test"), validation);
-	BOOST_CHECK(field2.isLoaded());
-	BOOST_CHECK_EQUAL(field2.getValue(), "foobar");
+    field2.load("test", section2.get("test"), validation);
+    BOOST_CHECK(field2.isLoaded());
+    BOOST_CHECK_EQUAL(field2.getValue(), "foobar");
 }

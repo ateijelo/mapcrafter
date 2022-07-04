@@ -28,11 +28,11 @@ namespace mapcrafter {
 namespace renderer {
 
 class Palette {
-public:
-	virtual ~Palette();
+  public:
+    virtual ~Palette();
 
-	virtual const std::vector<RGBAPixel>& getColors() const = 0;
-	virtual int getNearestColor(const RGBAPixel& color) = 0;
+    virtual const std::vector<RGBAPixel> &getColors() const = 0;
+    virtual int getNearestColor(const RGBAPixel &color) = 0;
 };
 
 /**
@@ -41,19 +41,19 @@ public:
  * Very bad O(n^2) color lookup performance! Just used in the test cases.
  */
 class SimplePalette : public Palette {
-public:
-	SimplePalette();
-	SimplePalette(const std::vector<RGBAPixel>& colors);
-	virtual ~SimplePalette();
+  public:
+    SimplePalette();
+    SimplePalette(const std::vector<RGBAPixel> &colors);
+    virtual ~SimplePalette();
 
-	virtual const std::vector<RGBAPixel>& getColors() const;
-	virtual int getNearestColor(const RGBAPixel& color);
+    virtual const std::vector<RGBAPixel> &getColors() const;
+    virtual int getNearestColor(const RGBAPixel &color);
 
-protected:
-	std::vector<RGBAPixel> colors;
+  protected:
+    std::vector<RGBAPixel> colors;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* IMAGE_PALETTE_H_ */

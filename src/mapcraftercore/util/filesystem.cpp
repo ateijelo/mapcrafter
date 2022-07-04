@@ -21,200 +21,196 @@
 
 #include "../util.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 #if defined(__APPLE__)
-  #include <mach-o/dyld.h>
+#include <mach-o/dyld.h>
 #elif defined(__FreeBSD__)
-  #include <sys/sysctl.h>
+#include <sys/sysctl.h>
 #elif defined(OS_WINDOWS)
-  #include <windows.h>
+#include <windows.h>
 #endif
 
 namespace mapcrafter {
 namespace util {
 
-bool copyFile(const fs::path& from, const fs::path& to) {
-	std::ifstream in(from.string().c_str(), std::ios::binary);
-	if (!in)
-		return false;
-	std::ofstream out(to.string().c_str(), std::ios::binary);
-	if (!out)
-		return false;
+bool copyFile(const fs::path &from, const fs::path &to) {
+    std::ifstream in(from.string().c_str(), std::ios::binary);
+    if (!in)
+        return false;
+    std::ofstream out(to.string().c_str(), std::ios::binary);
+    if (!out)
+        return false;
 
-	out << in.rdbuf();
-	if (out.bad())
-		return false;
-	in.close();
-	out.close();
-	return true;
+    out << in.rdbuf();
+    if (out.bad())
+        return false;
+    in.close();
+    out.close();
+    return true;
 }
 
-bool copyDirectory(const fs::path& from, const fs::path& to) {
-	if (!fs::exists(from) || !fs::is_directory(from))
-		return false;
-	if (!fs::exists(to) && !fs::create_directories(to))
-		return false;
-	fs::directory_iterator end;
-	for (fs::directory_iterator it(from); it != end; ++it) {
-		if (fs::is_regular_file(*it)) {
-			if (!copyFile(*it, to / it->path().filename()))
-				return false;
-		} else if (fs::is_directory(*it)) {
-			if (!copyDirectory(*it, to / it->path().filename()))
-				return false;
-		}
-	}
-	return true;
+bool copyDirectory(const fs::path &from, const fs::path &to) {
+    if (!fs::exists(from) || !fs::is_directory(from))
+        return false;
+    if (!fs::exists(to) && !fs::create_directories(to))
+        return false;
+    fs::directory_iterator end;
+    for (fs::directory_iterator it(from); it != end; ++it) {
+        if (fs::is_regular_file(*it)) {
+            if (!copyFile(*it, to / it->path().filename()))
+                return false;
+        } else if (fs::is_directory(*it)) {
+            if (!copyDirectory(*it, to / it->path().filename()))
+                return false;
+        }
+    }
+    return true;
 }
 
-bool moveFile(const fs::path& from, const fs::path& to) {
-	if (!fs::exists(from) || (fs::exists(to) && !fs::remove(to)))
-		return false;
-	fs::rename(from, to);
-	return true;
+bool moveFile(const fs::path &from, const fs::path &to) {
+    if (!fs::exists(from) || (fs::exists(to) && !fs::remove(to)))
+        return false;
+    fs::rename(from, to);
+    return true;
 }
 
 fs::path findHomeDir() {
-	char* path;
+    char *path;
 #if defined(OS_WINDOWS)
-	path = getenv("APPDATA");
+    path = getenv("APPDATA");
 #else
-	path = getenv("HOME");
+    path = getenv("HOME");
 #endif
-	if (path != nullptr)
-		return fs::path(path);
-	return fs::path("");
+    if (path != nullptr)
+        return fs::path(path);
+    return fs::path("");
 }
 
 // see also http://stackoverflow.com/questions/12468104/multi-os-get-executable-path
 fs::path findExecutablePath() {
-	char buf[1024];
+    char buf[1024];
 #if defined(__APPLE__)
-	uint32_t size = sizeof(buf);
-	if (_NSGetExecutablePath(buf, &size) == 0) {
-		char real_path[1024];
-		if (realpath(buf, real_path)) {
-			size_t len = strlen(real_path);
-			return fs::path(std::string(real_path, len));
-		}
-	}
+    uint32_t size = sizeof(buf);
+    if (_NSGetExecutablePath(buf, &size) == 0) {
+        char real_path[1024];
+        if (realpath(buf, real_path)) {
+            size_t len = strlen(real_path);
+            return fs::path(std::string(real_path, len));
+        }
+    }
 #elif defined(__FreeBSD__)
-	int mib[4];
-	mib[0] = CTL_KERN;
-	mib[1] = KERN_PROC;
-	mib[2] = KERN_PROC_PATHNAME;
-	mib[3] = -1;
-	size_t size = sizeof(buf);
-	sysctl(mib, 4, buf, &size, NULL, 0);
-	return fs::path(std::string(buf));
+    int mib[4];
+    mib[0] = CTL_KERN;
+    mib[1] = KERN_PROC;
+    mib[2] = KERN_PROC_PATHNAME;
+    mib[3] = -1;
+    size_t size = sizeof(buf);
+    sysctl(mib, 4, buf, &size, NULL, 0);
+    return fs::path(std::string(buf));
 #elif defined(unix) || defined(__unix) || defined(__unix__) || defined(__linux__)
-	int len;
-	if ((len = readlink("/proc/self/exe", buf, sizeof(buf))) != -1)
-		return fs::path(std::string(buf, len));
+    int len;
+    if ((len = readlink("/proc/self/exe", buf, sizeof(buf))) != -1)
+        return fs::path(std::string(buf, len));
 #elif defined(OS_WINDOWS)
-	GetModuleFileName(NULL, buf, 1024);
-	return fs::path(std::string(buf));
+    GetModuleFileName(NULL, buf, 1024);
+    return fs::path(std::string(buf));
 #else
-	static_assert(0, "Unable to find the executable's path!");
+    static_assert(0, "Unable to find the executable's path!");
 #endif
-	return fs::path("");
+    return fs::path("");
 }
 
 fs::path findExecutableMapcrafterDir(fs::path executable) {
-	std::string filename = BOOST_FS_FILENAME(executable);
-	// TODO make it independent of name of the tool
-	if ((filename == "testconfig"
-			|| filename == "mapcrafter_markers"
-			|| filename == "test") &&
-			BOOST_FS_FILENAME(executable.parent_path()) == "tools")
-		return executable.parent_path().parent_path();
-	return executable.parent_path();
+    std::string filename = BOOST_FS_FILENAME(executable);
+    // TODO make it independent of name of the tool
+    if ((filename == "testconfig" || filename == "mapcrafter_markers" || filename == "test") &&
+        BOOST_FS_FILENAME(executable.parent_path()) == "tools")
+        return executable.parent_path().parent_path();
+    return executable.parent_path();
 }
 
-PathList findResourceDirs(const fs::path& executable) {
-	fs::path mapcrafter_dir = findExecutableMapcrafterDir(executable);
-	PathList resources = {
-		mapcrafter_dir.parent_path() / "share" / "mapcrafter",
-		mapcrafter_dir / "data",
-	};
-	fs::path home = findHomeDir();
-	if (!home.empty())
-		resources.insert(resources.begin(), home / ".mapcrafter");
+PathList findResourceDirs(const fs::path &executable) {
+    fs::path mapcrafter_dir = findExecutableMapcrafterDir(executable);
+    PathList resources = {
+        mapcrafter_dir.parent_path() / "share" / "mapcrafter",
+        mapcrafter_dir / "data",
+    };
+    fs::path home = findHomeDir();
+    if (!home.empty())
+        resources.insert(resources.begin(), home / ".mapcrafter");
 
-	for (PathList::iterator it = resources.begin(); it != resources.end(); ) {
-		if (!fs::is_directory(*it))
-			resources.erase(it);
-		else
-			++it;
-	}
-	return resources;
+    for (PathList::iterator it = resources.begin(); it != resources.end();) {
+        if (!fs::is_directory(*it))
+            resources.erase(it);
+        else
+            ++it;
+    }
+    return resources;
 }
 
-PathList findTemplateDirs(const fs::path& executable) {
-	PathList templates, resources = findResourceDirs(executable);
-	for (PathList::iterator it = resources.begin(); it != resources.end(); ++it)
-		if (fs::is_directory(*it / "template"))
-			templates.push_back(*it / "template");
-	return templates;
+PathList findTemplateDirs(const fs::path &executable) {
+    PathList templates, resources = findResourceDirs(executable);
+    for (PathList::iterator it = resources.begin(); it != resources.end(); ++it)
+        if (fs::is_directory(*it / "template"))
+            templates.push_back(*it / "template");
+    return templates;
 }
 
-PathList findDirs(const fs::path& executable, std::string dir_name) {
-	PathList resources = findResourceDirs(executable);
-	PathList dirs;
-	for (PathList::iterator it = resources.begin(); it != resources.end(); ++it) {
-		if (fs::is_directory(*it / dir_name)) {
-			dirs.push_back(*it / dir_name);
-		}
-	}
-	return dirs;
+PathList findDirs(const fs::path &executable, std::string dir_name) {
+    PathList resources = findResourceDirs(executable);
+    PathList dirs;
+    for (PathList::iterator it = resources.begin(); it != resources.end(); ++it) {
+        if (fs::is_directory(*it / dir_name)) {
+            dirs.push_back(*it / dir_name);
+        }
+    }
+    return dirs;
 }
 
-PathList findBlockDirs(const fs::path& executable) {
-	return findDirs(executable, "blocks");
-}
+PathList findBlockDirs(const fs::path &executable) { return findDirs(executable, "blocks"); }
 
-PathList findLoggingConfigFiles(const fs::path& executable) {
-	fs::path mapcrafter_dir = findExecutableMapcrafterDir(findExecutablePath());
-	PathList configs = {
-		mapcrafter_dir.parent_path().parent_path() / "etc" / "mapcrafter" / "logging.conf",
-		mapcrafter_dir / "logging.conf",
-	};
+PathList findLoggingConfigFiles(const fs::path &executable) {
+    fs::path mapcrafter_dir = findExecutableMapcrafterDir(findExecutablePath());
+    PathList configs = {
+        mapcrafter_dir.parent_path().parent_path() / "etc" / "mapcrafter" / "logging.conf",
+        mapcrafter_dir / "logging.conf",
+    };
 
-	fs::path home = findHomeDir();
-	if (!home.empty())
-		configs.insert(configs.begin(), home / ".mapcrafter" / "logging.conf");
+    fs::path home = findHomeDir();
+    if (!home.empty())
+        configs.insert(configs.begin(), home / ".mapcrafter" / "logging.conf");
 
-	for (PathList::iterator it = configs.begin(); it != configs.end(); ) {
-		if (!fs::is_regular_file(*it))
-			configs.erase(it);
-		else
-			++it;
-	}
-	return configs;
+    for (PathList::iterator it = configs.begin(); it != configs.end();) {
+        if (!fs::is_regular_file(*it))
+            configs.erase(it);
+        else
+            ++it;
+    }
+    return configs;
 }
 
 fs::path findTemplateDir() {
-	PathList templates = findTemplateDirs(findExecutablePath());
-	if (templates.size())
-		return *templates.begin();
-	return fs::path();
+    PathList templates = findTemplateDirs(findExecutablePath());
+    if (templates.size())
+        return *templates.begin();
+    return fs::path();
 }
 
 fs::path findBlockDir() {
-	PathList dirs = findBlockDirs(findExecutablePath());
-	if (dirs.size()) {
-		return *dirs.begin();
-	}
-	return fs::path();
+    PathList dirs = findBlockDirs(findExecutablePath());
+    if (dirs.size()) {
+        return *dirs.begin();
+    }
+    return fs::path();
 }
 
 fs::path findLoggingConfigFile() {
-	PathList configs = findLoggingConfigFiles(findExecutablePath());
-	if (configs.size())
-		return *configs.begin();
-	return fs::path();
+    PathList configs = findLoggingConfigFiles(findExecutablePath());
+    if (configs.size())
+        return *configs.begin();
+    return fs::path();
 }
 
 } /* namespace util */

@@ -26,12 +26,11 @@ namespace mapcrafter {
 namespace thread {
 
 class SingleThreadDispatcher : public Dispatcher {
-public:
-	SingleThreadDispatcher();
-	virtual ~SingleThreadDispatcher();
+  public:
+    SingleThreadDispatcher();
+    virtual ~SingleThreadDispatcher();
 
-	virtual void dispatch(const renderer::RenderContext& context,
-			util::IProgressHandler* progress);
+    virtual void dispatch(const renderer::RenderContext &context, util::IProgressHandler *progress);
 };
 
 } /* namespace thread */

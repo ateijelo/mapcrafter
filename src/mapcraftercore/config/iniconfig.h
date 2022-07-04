@@ -23,95 +23,90 @@
 #include "../util.h"
 
 #include <iostream>
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
 
 namespace mapcrafter {
 namespace config {
 
 class INIConfigError : public std::runtime_error {
-public:
-	INIConfigError(const std::string& what)
-		: std::runtime_error(what) {}
+  public:
+    INIConfigError(const std::string &what) : std::runtime_error(what) {}
 };
 
 typedef std::pair<std::string, std::string> INIConfigEntry;
 
 class INIConfigSection {
-public:
-	INIConfigSection(const std::string& type = "", const std::string& name = "");
-	~INIConfigSection();
-	
-	const std::string& getType() const;
-	const std::string& getName() const;
-	std::string getNameType() const;
+  public:
+    INIConfigSection(const std::string &type = "", const std::string &name = "");
+    ~INIConfigSection();
 
-	bool isNamed() const;
-	bool isEmpty() const;
+    const std::string &getType() const;
+    const std::string &getName() const;
+    std::string getNameType() const;
 
-	bool has(const std::string& key) const;
-	
-	std::string get(const std::string& key,
-			const std::string& default_value = "") const;
+    bool isNamed() const;
+    bool isEmpty() const;
 
-	template <typename T>
-	T get(const std::string& key, T default_value = T()) const;
-	
-	const std::vector<INIConfigEntry>& getEntries() const;
+    bool has(const std::string &key) const;
 
-	void set(const std::string& key, const std::string& value);
-	void remove(const std::string& key);
+    std::string get(const std::string &key, const std::string &default_value = "") const;
 
-private:
-	std::string type, name;
+    template <typename T> T get(const std::string &key, T default_value = T()) const;
 
-	std::vector<INIConfigEntry> entries;
+    const std::vector<INIConfigEntry> &getEntries() const;
 
-	int getEntryIndex(const std::string& key) const;
+    void set(const std::string &key, const std::string &value);
+    void remove(const std::string &key);
+
+  private:
+    std::string type, name;
+
+    std::vector<INIConfigEntry> entries;
+
+    int getEntryIndex(const std::string &key) const;
 };
 
-std::ostream& operator<<(std::ostream& out, const INIConfigSection& section);
+std::ostream &operator<<(std::ostream &out, const INIConfigSection &section);
 
 class INIConfig {
-public:
-	INIConfig();
-	~INIConfig();
+  public:
+    INIConfig();
+    ~INIConfig();
 
-	void load(std::istream& in);
-	void loadFile(const std::string& filename);
-	void loadString(const std::string& str);
+    void load(std::istream &in);
+    void loadFile(const std::string &filename);
+    void loadString(const std::string &str);
 
-	void write(std::ostream& out) const;
-	void writeFile(const std::string& filename) const;
+    void write(std::ostream &out) const;
+    void writeFile(const std::string &filename) const;
 
-	bool hasSection(const std::string& type, const std::string& name) const;
+    bool hasSection(const std::string &type, const std::string &name) const;
 
-	const INIConfigSection& getRootSection() const;
-	INIConfigSection& getRootSection();
+    const INIConfigSection &getRootSection() const;
+    INIConfigSection &getRootSection();
 
-	const INIConfigSection& getSection(const std::string& type,
-			const std::string& name) const;
-	INIConfigSection& getSection(const std::string& type, const std::string& name);
+    const INIConfigSection &getSection(const std::string &type, const std::string &name) const;
+    INIConfigSection &getSection(const std::string &type, const std::string &name);
 
-	const std::vector<INIConfigSection>& getSections() const;
+    const std::vector<INIConfigSection> &getSections() const;
 
-	void removeSection(const std::string& type, const std::string& name);
+    void removeSection(const std::string &type, const std::string &name);
 
-private:
-	INIConfigSection root;
-	std::vector<INIConfigSection> sections;
+  private:
+    INIConfigSection root;
+    std::vector<INIConfigSection> sections;
 
-	INIConfigSection empty_section;
+    INIConfigSection empty_section;
 
-	int getSectionIndex(const std::string& type, const std::string& name) const;
+    int getSectionIndex(const std::string &type, const std::string &name) const;
 };
 
-template <typename T>
-T INIConfigSection::get(const std::string& key, T default_value) const {
-	if (has(key))
-		return util::as<T>(get(key));
-	return default_value;
+template <typename T> T INIConfigSection::get(const std::string &key, T default_value) const {
+    if (has(key))
+        return util::as<T>(get(key));
+    return default_value;
 }
 
 } /* namespace config */

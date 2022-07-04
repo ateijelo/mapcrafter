@@ -20,14 +20,14 @@
 #ifndef TILERENDERWORKER_H_
 #define TILERENDERWORKER_H_
 
-#include "../config/mapcrafterconfig.h"
 #include "../config/configsections/map.h"
 #include "../config/configsections/world.h"
+#include "../config/mapcrafterconfig.h"
 #include "../mc/world.h"
 
+#include <boost/filesystem.hpp>
 #include <memory>
 #include <set>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -36,7 +36,7 @@ namespace mapcrafter {
 namespace mc {
 class BlockStateRegistry;
 class WorldCache;
-}
+} // namespace mc
 
 namespace renderer {
 
@@ -49,69 +49,69 @@ class TileRenderer;
 class TileSet;
 
 struct RenderContext {
-	fs::path output_dir;
-	config::Color background_color;
-	config::WorldSection world_config;
-	config::MapSection map_config;
+    fs::path output_dir;
+    config::Color background_color;
+    config::WorldSection world_config;
+    config::MapSection map_config;
 
-	RenderView* render_view;
-	BlockImages* block_images;
-	TileSet* tile_set;
-	mc::BlockStateRegistry* block_registry;
-	mc::World world;
+    RenderView *render_view;
+    BlockImages *block_images;
+    TileSet *tile_set;
+    mc::BlockStateRegistry *block_registry;
+    mc::World world;
 
-	std::shared_ptr<mc::WorldCache> world_cache;
-	std::shared_ptr<RenderMode> render_mode;
-	std::shared_ptr<TileRenderer> tile_renderer;
+    std::shared_ptr<mc::WorldCache> world_cache;
+    std::shared_ptr<RenderMode> render_mode;
+    std::shared_ptr<TileRenderer> tile_renderer;
 
-	/**
-	 * Creates/initializes the world cache and tile renderer with the render view and
-	 * other supplied objects (block images, tile set, world).
-	 *
-	 * This is method is already called in the render management code, but you can copy
-	 * the render context and call this method again if you need multiple tile renderers
-	 * (for multithreading for example).
-	 */
-	void initializeTileRenderer();
+    /**
+     * Creates/initializes the world cache and tile renderer with the render view and
+     * other supplied objects (block images, tile set, world).
+     *
+     * This is method is already called in the render management code, but you can copy
+     * the render context and call this method again if you need multiple tile renderers
+     * (for multithreading for example).
+     */
+    void initializeTileRenderer();
 };
 
 struct RenderWork {
-	std::set<renderer::TilePath> tiles, tiles_skip;
+    std::set<renderer::TilePath> tiles, tiles_skip;
 };
 
 struct RenderWorkResult {
-	RenderWorkResult() : tiles_rendered(0) {}
+    RenderWorkResult() : tiles_rendered(0) {}
 
-	RenderWork render_work;
+    RenderWork render_work;
 
-	int tiles_rendered;
+    int tiles_rendered;
 };
 
 class TileRenderWorker {
-public:
-	TileRenderWorker();
-	~TileRenderWorker();
+  public:
+    TileRenderWorker();
+    ~TileRenderWorker();
 
-	void setRenderContext(const RenderContext& context);
-	void setRenderWork(const RenderWork& work);
-	const RenderWorkResult& getRenderWorkResult() const;
+    void setRenderContext(const RenderContext &context);
+    void setRenderWork(const RenderWork &work);
+    const RenderWorkResult &getRenderWorkResult() const;
 
-	void setProgressHandler(util::IProgressHandler* progress);
+    void setProgressHandler(util::IProgressHandler *progress);
 
-	void saveTile(const TilePath& tile, const RGBAImage& image);
-	void renderRecursive(const TilePath& path, RGBAImage& image);
+    void saveTile(const TilePath &tile, const RGBAImage &image);
+    void renderRecursive(const TilePath &path, RGBAImage &image);
 
-	void operator()();
+    void operator()();
 
-private:
-	RenderContext render_context;
-	RenderWork render_work;
-	RenderWorkResult render_work_result;
+  private:
+    RenderContext render_context;
+    RenderWork render_work;
+    RenderWorkResult render_work_result;
 
-	// progress handler
-	util::IProgressHandler* progress;
+    // progress handler
+    util::IProgressHandler *progress;
 };
 
-} /* namespace render */
+} // namespace renderer
 } /* namespace mapcrafter */
 #endif /* TILERENDERWORKER_H_ */

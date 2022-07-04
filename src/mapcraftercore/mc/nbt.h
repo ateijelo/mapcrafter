@@ -37,163 +37,142 @@ namespace mc {
 namespace nbt {
 
 class NBTError : public std::runtime_error {
-public:
-	NBTError(const std::string& message = "")
-		: std::runtime_error(message) {}
+  public:
+    NBTError(const std::string &message = "") : std::runtime_error(message) {}
 };
 
 class InvalidTagCast : public NBTError {
-public:
-	InvalidTagCast(const std::string& message = "")
-		: NBTError(message) {}
+  public:
+    InvalidTagCast(const std::string &message = "") : NBTError(message) {}
 };
 
 class TagNotFound : public NBTError {
-public:
-	TagNotFound(const std::string& message = "")
-		: NBTError(message) {}
+  public:
+    TagNotFound(const std::string &message = "") : NBTError(message) {}
 };
 
 // only for reference
 // use the TagXXX::TAG_TYPE constants instead
 enum class TagType : int8_t {
-	TAG_END = 0,
-	TAG_BYTE = 1,
-	TAG_SHORT = 2,
-	TAG_INT = 3,
-	TAG_LONG = 4,
-	TAG_FLOAT = 5,
-	TAG_DOUBLE = 6,
-	TAG_BYTE_ARRAY = 7,
-	TAG_STRING = 8,
-	TAG_LIST = 9,
-	TAG_COMPOUND = 10,
-	TAG_INT_ARRAY = 11,
-	TAG_LONG_ARRAY = 12,
+    TAG_END = 0,
+    TAG_BYTE = 1,
+    TAG_SHORT = 2,
+    TAG_INT = 3,
+    TAG_LONG = 4,
+    TAG_FLOAT = 5,
+    TAG_DOUBLE = 6,
+    TAG_BYTE_ARRAY = 7,
+    TAG_STRING = 8,
+    TAG_LIST = 9,
+    TAG_COMPOUND = 10,
+    TAG_INT_ARRAY = 11,
+    TAG_LONG_ARRAY = 12,
 };
 
-enum class Compression {
-	NO_COMPRESSION = 0, GZIP = 1, ZLIB = 2
+enum class Compression { NO_COMPRESSION = 0, GZIP = 1, ZLIB = 2 };
+
+static const char *TAG_NAMES[] = {
+    "TAG_End",      "TAG_Byte",      "TAG_Short",      "TAG_Int",    "TAG_Long",
+    "TAG_Float",    "TAG_Double",    "TAG_Byte_Array", "TAG_String", "TAG_List",
+    "TAG_Compound", "TAG_Int_Array", "TAG_Long_Array",
 };
 
-static const char* TAG_NAMES[] = {
-	"TAG_End",
-	"TAG_Byte",
-	"TAG_Short",
-	"TAG_Int",
-	"TAG_Long",
-	"TAG_Float",
-	"TAG_Double",
-	"TAG_Byte_Array",
-	"TAG_String",
-	"TAG_List",
-	"TAG_Compound",
-	"TAG_Int_Array",
-	"TAG_Long_Array",
-};
-
-template <typename T>
-void dumpTag(std::ostream& stream, const std::string& indendation, T tag) {
-	dumpTag(stream, indendation, tag, tag.payload);
+template <typename T> void dumpTag(std::ostream &stream, const std::string &indendation, T tag) {
+    dumpTag(stream, indendation, tag, tag.payload);
 }
 
 template <typename T, typename P>
-void dumpTag(std::ostream& stream, const std::string& indendation, T tag, P payloadrepr) {
-	const char* type = "TAG_Unknown";
-	if (tag.getType() >= 0 && static_cast<uint8_t>(tag.getType()) < sizeof(TAG_NAMES) / sizeof(TAG_NAMES[0])) {
-		type = TAG_NAMES[tag.getType()];
-	}
-	stream << indendation << type;
-	if (tag.isNamed())
-		stream << "(\"" << tag.getName() << "\")";
-	stream << ": " << payloadrepr << std::endl;
+void dumpTag(std::ostream &stream, const std::string &indendation, T tag, P payloadrepr) {
+    const char *type = "TAG_Unknown";
+    if (tag.getType() >= 0 &&
+        static_cast<uint8_t>(tag.getType()) < sizeof(TAG_NAMES) / sizeof(TAG_NAMES[0])) {
+        type = TAG_NAMES[tag.getType()];
+    }
+    stream << indendation << type;
+    if (tag.isNamed())
+        stream << "(\"" << tag.getName() << "\")";
+    stream << ": " << payloadrepr << std::endl;
 }
 
 namespace nbtstream {
-template <typename T>
-T read(std::istream& stream);
+template <typename T> T read(std::istream &stream);
 
-template <typename T>
-void write(std::ostream& stream, T t);
-}
+template <typename T> void write(std::ostream &stream, T t);
+} // namespace nbtstream
 
 class Tag {
-protected:
-	int8_t type;
-	bool named;
-	bool write_type;
-	std::string name;
-public:
-	Tag(int8_t type = -1);
-	virtual ~Tag();
+  protected:
+    int8_t type;
+    bool named;
+    bool write_type;
+    std::string name;
 
-	int8_t getType() const;
-	
-	template <typename T>
-	T& cast() {
-		if (type == T::TAG_TYPE)
-			return dynamic_cast<T&>(*this);
-		throw InvalidTagCast("Invalid tag cast");
-	}
+  public:
+    Tag(int8_t type = -1);
+    virtual ~Tag();
 
-	template <typename T>
-	const T& cast() const {
-		if (type == T::TAG_TYPE)
-			return dynamic_cast<const T&>(*this);
-		throw InvalidTagCast("Invalid tag cast");
-	}
+    int8_t getType() const;
 
-	bool isWriteType() const;
-	void setWriteType(bool write_type);
-	
-	bool isNamed() const;
-	void setNamed(bool named);
+    template <typename T> T &cast() {
+        if (type == T::TAG_TYPE)
+            return dynamic_cast<T &>(*this);
+        throw InvalidTagCast("Invalid tag cast");
+    }
 
-	const std::string& getName() const;
-	void setName(const std::string& name, bool set_named = true);
+    template <typename T> const T &cast() const {
+        if (type == T::TAG_TYPE)
+            return dynamic_cast<const T &>(*this);
+        throw InvalidTagCast("Invalid tag cast");
+    }
 
-	virtual Tag& read(std::istream& stream);
-	virtual void write(std::ostream& stream) const;
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const;
-	virtual Tag* clone() const;
+    bool isWriteType() const;
+    void setWriteType(bool write_type);
+
+    bool isNamed() const;
+    void setNamed(bool named);
+
+    const std::string &getName() const;
+    void setName(const std::string &name, bool set_named = true);
+
+    virtual Tag &read(std::istream &stream);
+    virtual void write(std::ostream &stream) const;
+    virtual void dump(std::ostream &stream, const std::string &indendation = "") const;
+    virtual Tag *clone() const;
 };
 
-class TagEnd: public Tag {
-public:
-	TagEnd() : Tag(TAG_TYPE) {}
-	
-	static const int8_t TAG_TYPE = (int8_t) TagType::TAG_END;
+class TagEnd : public Tag {
+  public:
+    TagEnd() : Tag(TAG_TYPE) {}
+
+    static const int8_t TAG_TYPE = (int8_t)TagType::TAG_END;
 };
 
-template <typename T, TagType tag_type>
-class ScalarTag: public Tag {
-public:
-	ScalarTag(T payload = 0) : Tag(TAG_TYPE), payload(payload) {}
+template <typename T, TagType tag_type> class ScalarTag : public Tag {
+  public:
+    ScalarTag(T payload = 0) : Tag(TAG_TYPE), payload(payload) {}
 
-	virtual Tag& read(std::istream& stream) {
-		payload = nbtstream::read<T>(stream);
-		return *this;
-	}
+    virtual Tag &read(std::istream &stream) {
+        payload = nbtstream::read<T>(stream);
+        return *this;
+    }
 
-	virtual void write(std::ostream& stream) const {
-		Tag::write(stream);
-		nbtstream::write<T>(stream, payload);
-	}
+    virtual void write(std::ostream &stream) const {
+        Tag::write(stream);
+        nbtstream::write<T>(stream, payload);
+    }
 
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const {
-		if (std::is_same<T, int8_t>::value)
-			dumpTag(stream, indendation, *this, static_cast<int>(payload));
-		else
-			dumpTag(stream, indendation, *this);
-	}
+    virtual void dump(std::ostream &stream, const std::string &indendation = "") const {
+        if (std::is_same<T, int8_t>::value)
+            dumpTag(stream, indendation, *this, static_cast<int>(payload));
+        else
+            dumpTag(stream, indendation, *this);
+    }
 
-	virtual Tag* clone() const {
-		return new ScalarTag<T, tag_type>(*this);
-	}
+    virtual Tag *clone() const { return new ScalarTag<T, tag_type>(*this); }
 
-	T payload;
-	
-	static const int8_t TAG_TYPE = (int8_t) tag_type;
+    T payload;
+
+    static const int8_t TAG_TYPE = (int8_t)tag_type;
 };
 
 typedef ScalarTag<int8_t, TagType::TAG_BYTE> TagByte;
@@ -203,180 +182,171 @@ typedef ScalarTag<int64_t, TagType::TAG_LONG> TagLong;
 typedef ScalarTag<float, TagType::TAG_FLOAT> TagFloat;
 typedef ScalarTag<double, TagType::TAG_DOUBLE> TagDouble;
 
-template <typename T, TagType tag_type>
-class TagArray: public Tag {
-public:
-	TagArray() : Tag(TAG_TYPE) {}
-	TagArray(const std::vector<T>& payload) : Tag(TAG_TYPE), payload(payload) {}
+template <typename T, TagType tag_type> class TagArray : public Tag {
+  public:
+    TagArray() : Tag(TAG_TYPE) {}
+    TagArray(const std::vector<T> &payload) : Tag(TAG_TYPE), payload(payload) {}
 
-	virtual Tag& read(std::istream& stream) {
-		int32_t length = nbtstream::read<int32_t>(stream);
-		payload.resize(length);
-		if (std::is_same<T, int8_t>::value)
-			stream.read(reinterpret_cast<char*>(&payload[0]), length * sizeof(T));
-		else {
-			for (int32_t i = 0; i < length; i++)
-				payload[i] = nbtstream::read<T>(stream);
-		}
-		return *this;
-	}
-	
-	virtual void write(std::ostream& stream) const {
-		Tag::write(stream);
-		nbtstream::write<int32_t>(stream, payload.size());
-		if (std::is_same<T, int8_t>::value)
-			stream.write(reinterpret_cast<const char*>(&payload[0]), payload.size() * sizeof(T));
-		else {
-			for (size_t i = 0; i < payload.size(); i++)
-				nbtstream::write<T>(stream, payload[i]);
-		}
-	}
-	
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const {
-		dumpTag(stream, indendation, *this, util::str(payload.size()) + " entries");
-	}
+    virtual Tag &read(std::istream &stream) {
+        int32_t length = nbtstream::read<int32_t>(stream);
+        payload.resize(length);
+        if (std::is_same<T, int8_t>::value)
+            stream.read(reinterpret_cast<char *>(&payload[0]), length * sizeof(T));
+        else {
+            for (int32_t i = 0; i < length; i++)
+                payload[i] = nbtstream::read<T>(stream);
+        }
+        return *this;
+    }
 
-	virtual Tag* clone() const {
-		return new TagArray<T, tag_type>(*this);
-	}
+    virtual void write(std::ostream &stream) const {
+        Tag::write(stream);
+        nbtstream::write<int32_t>(stream, payload.size());
+        if (std::is_same<T, int8_t>::value)
+            stream.write(reinterpret_cast<const char *>(&payload[0]), payload.size() * sizeof(T));
+        else {
+            for (size_t i = 0; i < payload.size(); i++)
+                nbtstream::write<T>(stream, payload[i]);
+        }
+    }
 
-	std::vector<T> payload;
-	
-	static const int8_t TAG_TYPE = (int8_t) tag_type;
+    virtual void dump(std::ostream &stream, const std::string &indendation = "") const {
+        dumpTag(stream, indendation, *this, util::str(payload.size()) + " entries");
+    }
+
+    virtual Tag *clone() const { return new TagArray<T, tag_type>(*this); }
+
+    std::vector<T> payload;
+
+    static const int8_t TAG_TYPE = (int8_t)tag_type;
 };
 
 typedef TagArray<int8_t, TagType::TAG_BYTE_ARRAY> TagByteArray;
 typedef TagArray<int32_t, TagType::TAG_INT_ARRAY> TagIntArray;
 typedef TagArray<int64_t, TagType::TAG_LONG_ARRAY> TagLongArray;
 
-class TagString: public Tag {
-public:
-	TagString() : Tag(TAG_TYPE) {}
-	TagString(const std::string& payload) : Tag(TAG_TYPE), payload(payload) {}
+class TagString : public Tag {
+  public:
+    TagString() : Tag(TAG_TYPE) {}
+    TagString(const std::string &payload) : Tag(TAG_TYPE), payload(payload) {}
 
-	virtual Tag& read(std::istream& stream);
-	virtual void write(std::ostream& stream) const;
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const;
-	virtual Tag* clone() const;
+    virtual Tag &read(std::istream &stream);
+    virtual void write(std::ostream &stream) const;
+    virtual void dump(std::ostream &stream, const std::string &indendation = "") const;
+    virtual Tag *clone() const;
 
-	std::string payload;
-	
-	static const int8_t TAG_TYPE = (int8_t) TagType::TAG_STRING;
+    std::string payload;
+
+    static const int8_t TAG_TYPE = (int8_t)TagType::TAG_STRING;
 };
 
 // use shared_ptr in gcc <= 4.5.* instead of unique_ptr,
 // because there are problems with smart pointers in containers
 #if __GNUC__ == 4 && __GNUC_MINOR__ <= 5
-# define TagPtrType std::shared_ptr
+#define TagPtrType std::shared_ptr
 #else
-# define TagPtrType std::unique_ptr
+#define TagPtrType std::unique_ptr
 #endif
 
 typedef TagPtrType<Tag> TagPtr;
 
-class TagList: public Tag {
-public:
-	TagList(int8_t tag_type = -1);
-	TagList(const TagList& other);
-	~TagList();
+class TagList : public Tag {
+  public:
+    TagList(int8_t tag_type = -1);
+    TagList(const TagList &other);
+    ~TagList();
 
-	void operator=(const TagList& other);
+    void operator=(const TagList &other);
 
-	virtual Tag& read(std::istream& stream);
-	virtual void write(std::ostream& stream) const;
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const;
-	virtual Tag* clone() const;
+    virtual Tag &read(std::istream &stream);
+    virtual void write(std::ostream &stream) const;
+    virtual void dump(std::ostream &stream, const std::string &indendation = "") const;
+    virtual Tag *clone() const;
 
-	int8_t tag_type;
-	std::vector<TagPtr> payload;
-	
-	static const int8_t TAG_TYPE = (int8_t) TagType::TAG_LIST;
+    int8_t tag_type;
+    std::vector<TagPtr> payload;
+
+    static const int8_t TAG_TYPE = (int8_t)TagType::TAG_LIST;
 };
 
-class TagCompound: public Tag {
-public:
-	TagCompound(const std::string& name = "");
-	TagCompound(const TagCompound& other);
-	~TagCompound();
+class TagCompound : public Tag {
+  public:
+    TagCompound(const std::string &name = "");
+    TagCompound(const TagCompound &other);
+    ~TagCompound();
 
-	void operator=(const TagCompound& other);
+    void operator=(const TagCompound &other);
 
-	virtual Tag& read(std::istream& stream);
-	virtual void write(std::ostream& stream) const;
-	virtual void dump(std::ostream& stream, const std::string& indendation = "") const;
-	virtual Tag* clone() const;
+    virtual Tag &read(std::istream &stream);
+    virtual void write(std::ostream &stream) const;
+    virtual void dump(std::ostream &stream, const std::string &indendation = "") const;
+    virtual Tag *clone() const;
 
-	bool hasTag(const std::string& name) const;
-	
-	template <typename T>
-	bool hasTag(const std::string& name) const {
-		if (!hasTag(name))
-			return false;
-		return payload.at(name)->getType() == T::TAG_TYPE;
-	}
-	
-	template <typename T>
-	bool hasArray(const std::string& name, int32_t len = -1) const {
-		static_assert(std::is_same<T, TagByteArray>::value
-				|| std::is_same<T, TagIntArray>::value
-				|| std::is_same<T, TagLongArray>::value,
-			"Only TagByteArray, TagIngArray and TagLongArray are allowed as template argument!");
-		if (!hasTag<T>(name))
-			return false;
-		T& tag = payload.at(name)->cast<T>();
-		return len == -1 || (unsigned) len == tag.payload.size();
-	}
-	
-	template <typename T>
-	bool hasList(const std::string& name, int32_t len = -1) const {
-		if (!hasTag<TagList>(name))
-			return false;
-		TagList& tag = payload.at(name)->cast<TagList>();
-		return tag.tag_type == T::TAG_TYPE && (len == -1 || (unsigned) len == tag.payload.size());
-	}
+    bool hasTag(const std::string &name) const;
 
-	Tag& findTag(const std::string& name);
-	const Tag& findTag(const std::string& name) const;
-	
-	template <typename T>
-	T& findTag(const std::string& name) {
-		return findTag(name).cast<T>();
-	}
+    template <typename T> bool hasTag(const std::string &name) const {
+        if (!hasTag(name))
+            return false;
+        return payload.at(name)->getType() == T::TAG_TYPE;
+    }
 
-	template <typename T>
-	const T& findTag(const std::string& name) const {
-		return findTag(name).cast<T>();
-	}
+    template <typename T> bool hasArray(const std::string &name, int32_t len = -1) const {
+        static_assert(
+            std::is_same<T, TagByteArray>::value || std::is_same<T, TagIntArray>::value ||
+                std::is_same<T, TagLongArray>::value,
+            "Only TagByteArray, TagIngArray and TagLongArray are allowed as template argument!");
+        if (!hasTag<T>(name))
+            return false;
+        T &tag = payload.at(name)->cast<T>();
+        return len == -1 || (unsigned)len == tag.payload.size();
+    }
 
-	void addTag(const std::string& name, const Tag& tag);
+    template <typename T> bool hasList(const std::string &name, int32_t len = -1) const {
+        if (!hasTag<TagList>(name))
+            return false;
+        TagList &tag = payload.at(name)->cast<TagList>();
+        return tag.tag_type == T::TAG_TYPE && (len == -1 || (unsigned)len == tag.payload.size());
+    }
 
-	std::map<std::string, TagPtr> payload;
-	
-	static const int8_t TAG_TYPE = (int8_t) TagType::TAG_COMPOUND;
+    Tag &findTag(const std::string &name);
+    const Tag &findTag(const std::string &name) const;
+
+    template <typename T> T &findTag(const std::string &name) { return findTag(name).cast<T>(); }
+
+    template <typename T> const T &findTag(const std::string &name) const {
+        return findTag(name).cast<T>();
+    }
+
+    void addTag(const std::string &name, const Tag &tag);
+
+    std::map<std::string, TagPtr> payload;
+
+    static const int8_t TAG_TYPE = (int8_t)TagType::TAG_COMPOUND;
 };
 
-class NBTFile: public TagCompound {
-private:
-	void decompressStream(std::istream& stream, std::stringstream& decompressed,
-	        Compression compression);
-public:
-	NBTFile();
-	NBTFile(const std::string name) : TagCompound(name) {}
-	~NBTFile();
+class NBTFile : public TagCompound {
+  private:
+    void decompressStream(std::istream &stream, std::stringstream &decompressed,
+                          Compression compression);
 
-	void readCompressed(std::istream& stream, Compression compression = Compression::GZIP);
-	void readNBT(std::istream& stream, Compression compression = Compression::GZIP);
-	void readNBT(const char* filename, Compression compression = Compression::GZIP);
-	void readNBT(const char* buffer, size_t len, Compression compression = Compression::GZIP);
+  public:
+    NBTFile();
+    NBTFile(const std::string name) : TagCompound(name) {}
+    ~NBTFile();
 
-	void writeNBT(std::ostream& stream, Compression compression = Compression::GZIP);
-	void writeNBT(const char* filename, Compression compression = Compression::GZIP);
+    void readCompressed(std::istream &stream, Compression compression = Compression::GZIP);
+    void readNBT(std::istream &stream, Compression compression = Compression::GZIP);
+    void readNBT(const char *filename, Compression compression = Compression::GZIP);
+    void readNBT(const char *buffer, size_t len, Compression compression = Compression::GZIP);
+
+    void writeNBT(std::ostream &stream, Compression compression = Compression::GZIP);
+    void writeNBT(const char *filename, Compression compression = Compression::GZIP);
 };
 
-Tag* createTag(int8_t type);
+Tag *createTag(int8_t type);
 
-}
-}
-}
+} // namespace nbt
+} // namespace mc
+} // namespace mapcrafter
 
 #endif /* NBT_H_ */

@@ -17,7 +17,6 @@
  * along with Mapcrafter.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef RENDERMODES_SLIMEOVERLAY_H_
 #define RENDERMODES_SLIMEOVERLAY_H_
 
@@ -31,23 +30,23 @@ namespace mapcrafter {
 namespace renderer {
 
 class SlimeOverlay : public OverlayRenderMode {
-public:
-	SlimeOverlay(fs::path world_dir, int rotation);
-	virtual ~SlimeOverlay();
+  public:
+    SlimeOverlay(fs::path world_dir, int rotation);
+    virtual ~SlimeOverlay();
 
-	static bool isSlimeChunk(const mc::ChunkPos& chunk, long long world_seed);
+    static bool isSlimeChunk(const mc::ChunkPos &chunk, long long world_seed);
 
-protected:
-	virtual RGBAPixel getBlockColor(const mc::BlockPos& pos, uint16_t id, uint16_t data);
+  protected:
+    virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, uint16_t id, uint16_t data);
 
-	virtual RGBAPixel getBlockColor(const mc::BlockPos& pos, const BlockImage& block_image);
+    virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, const BlockImage &block_image);
 
-	fs::path world_dir;
-	int rotation;
-	long long world_seed;
+    fs::path world_dir;
+    int rotation;
+    long long world_seed;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* RENDERMODES_SLIMEOVERLAY_H_ */

@@ -19,40 +19,38 @@
 
 #include "heightoverlay.h"
 
-#include "../image.h"
 #include "../../mc/pos.h"
+#include "../image.h"
 
 namespace mapcrafter {
 namespace renderer {
 
-HeightOverlay::HeightOverlay()
-	: OverlayRenderMode(OverlayMode::PER_BLOCK) {
+HeightOverlay::HeightOverlay() : OverlayRenderMode(OverlayMode::PER_BLOCK) {}
+
+RGBAPixel HeightOverlay::getBlockColor(const mc::BlockPos &pos, uint16_t id, uint16_t data) {
+    // TODO make the gradient configurable
+    double h1 = (double)(64 - pos.y) / 64;
+    if (pos.y > 64)
+        h1 = 0;
+
+    double h2 = 0;
+    if (pos.y >= 64 && pos.y < 96)
+        h2 = (double)(96 - pos.y) / 32;
+    else if (pos.y > 16 && pos.y < 64)
+        h2 = (double)(pos.y - 16) / 48;
+
+    double h3 = 0;
+    if (pos.y > 64)
+        h3 = (double)(pos.y - 64) / 64;
+
+    int r = h1 * 128.0 + 128.0;
+    int g = h2 * 255.0;
+    int b = h3 * 255.0;
+    return rgba(r, g, b, 85);
 }
 
-RGBAPixel HeightOverlay::getBlockColor(const mc::BlockPos& pos, uint16_t id, uint16_t data) {
-	// TODO make the gradient configurable
-	double h1 = (double) (64 - pos.y) / 64;
-	if (pos.y > 64)
-		h1 = 0;
-
-	double h2 = 0;
-	if (pos.y >= 64 && pos.y < 96)
-		h2 = (double) (96 - pos.y) / 32;
-	else if (pos.y > 16 && pos.y < 64)
-		h2 = (double) (pos.y - 16) / 48;
-
-	double h3 = 0;
-	if (pos.y > 64)
-		h3 = (double) (pos.y - 64) / 64;
-
-	int r = h1 * 128.0 + 128.0;
-	int g = h2 * 255.0;
-	int b = h3 * 255.0;
-	return rgba(r, g, b, 85);
-}
-
-RGBAPixel HeightOverlay::getBlockColor(const mc::BlockPos& pos, const BlockImage& block_image) {
-	return getBlockColor(pos, 0, 0);
+RGBAPixel HeightOverlay::getBlockColor(const mc::BlockPos &pos, const BlockImage &block_image) {
+    return getBlockColor(pos, 0, 0);
 }
 
 } /* namespace renderer */

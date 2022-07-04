@@ -33,16 +33,16 @@ namespace mc {
  * (for slime chunk detection), everything else yields different results than Java random.
  */
 class JavaRandom {
-public:
-	JavaRandom();
-	~JavaRandom();
+  public:
+    JavaRandom();
+    ~JavaRandom();
 
-	void setSeed(long long seed);
-	int next(int bits);
-	int nextInt(int max);
+    void setSeed(long long seed);
+    int next(int bits);
+    int nextInt(int max);
 
-protected:
-	long long seed;
+  protected:
+    long long seed;
 };
 
 /**
@@ -51,20 +51,19 @@ protected:
  * Thanks!
  */
 class JavaSimplexGenerator {
-public:
-	double getValue(double x, double y) const;
+  public:
+    double getValue(double x, double y) const;
 
-protected:
-	static const int GRADIENTS[12][3];
-	static const int PERMUTATIONS[512];
-	
-	static constexpr double sqrt3 = 1.7320508075688772;
-	static constexpr double F2 = 0.5 * (sqrt3 - 1.0);
-	static constexpr double G2 = 3.0 - sqrt3 / 6.0;
+  protected:
+    static const int GRADIENTS[12][3];
+    static const int PERMUTATIONS[512];
+
+    static constexpr double sqrt3 = 1.7320508075688772;
+    static constexpr double F2 = 0.5 * (sqrt3 - 1.0);
+    static constexpr double G2 = 3.0 - sqrt3 / 6.0;
 };
 
-}
-}
+} // namespace mc
+} // namespace mapcrafter
 
 #endif
-

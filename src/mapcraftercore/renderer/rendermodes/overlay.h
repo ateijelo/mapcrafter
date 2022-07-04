@@ -17,7 +17,6 @@
  * along with Mapcrafter.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef RENDERMODES_OVERLAY_H_
 #define RENDERMODES_OVERLAY_H_
 
@@ -33,8 +32,8 @@ namespace renderer {
 class RGBAImage;
 
 enum class OverlayMode {
-	PER_BLOCK,
-	PER_FACE,
+    PER_BLOCK,
+    PER_FACE,
 };
 
 /**
@@ -43,21 +42,23 @@ enum class OverlayMode {
  * if there should be no color.
  */
 class OverlayRenderMode : public BaseRenderMode {
-public:
-	OverlayRenderMode(OverlayMode overlay_mode);
-	virtual ~OverlayRenderMode();
+  public:
+    OverlayRenderMode(OverlayMode overlay_mode);
+    virtual ~OverlayRenderMode();
 
-	virtual void draw(RGBAImage& image, const BlockImage& block_image, const mc::BlockPos& pos, uint16_t id);
+    virtual void draw(RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos,
+                      uint16_t id);
 
-protected:
-	virtual RGBAPixel getBlockColor(const mc::BlockPos& pos, const BlockImage& block_image) { return 0; }
+  protected:
+    virtual RGBAPixel getBlockColor(const mc::BlockPos &pos, const BlockImage &block_image) {
+        return 0;
+    }
 
-private:
-	OverlayMode overlay_mode;
+  private:
+    OverlayMode overlay_mode;
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* RENDERMODES_OVERLAY_H_ */
-

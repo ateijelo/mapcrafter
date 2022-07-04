@@ -24,69 +24,52 @@
 namespace mapcrafter {
 namespace config {
 
-ConfigSection::ConfigSection()
-	: global(false) {
+ConfigSection::ConfigSection() : global(false) {}
+
+ConfigSection::~ConfigSection() {}
+
+bool ConfigSection::isGlobal() const { return global; }
+
+void ConfigSection::setGlobal(bool global) { this->global = global; }
+
+std::string ConfigSection::getSectionName() const { return section_name; }
+
+std::string ConfigSection::getPrettyName() const { return "unknown section"; }
+
+void ConfigSection::dump(std::ostream &out) const { out << getPrettyName() << std::endl; }
+
+ValidationList ConfigSection::parse(const INIConfigSection &section) {
+    section_name = section.getName();
+
+    preParse(section, validation);
+
+    auto entries = section.getEntries();
+    for (auto entry_it = entries.begin(); entry_it != entries.end(); ++entry_it) {
+        std::string key = entry_it->first;
+        std::string value = entry_it->second;
+
+        if (!parseField(key, value, validation))
+            validation.warning("Unknown configuration option '" + key + "'!");
+    }
+
+    postParse(section, validation);
+
+    return validation;
 }
 
-ConfigSection::~ConfigSection() {
-}
-
-bool ConfigSection::isGlobal() const {
-	return global;
-}
-
-void ConfigSection::setGlobal(bool global) {
-	this->global = global;
-}
-
-std::string ConfigSection::getSectionName() const {
-	return section_name;
-}
-
-std::string ConfigSection::getPrettyName() const {
-	return "unknown section";
-}
-
-void ConfigSection::dump(std::ostream& out) const {
-	out << getPrettyName() << std::endl;
-}
-
-ValidationList ConfigSection::parse(const INIConfigSection& section) {
-	section_name = section.getName();
-
-	preParse(section, validation);
-
-	auto entries = section.getEntries();
-	for (auto entry_it = entries.begin(); entry_it != entries.end(); ++entry_it) {
-		std::string key = entry_it->first;
-		std::string value = entry_it->second;
-
-		if (!parseField(key, value, validation))
-			validation.warning("Unknown configuration option '" + key + "'!");
-	}
-
-	postParse(section, validation);
-
-	return validation;
-}
-
-void ConfigSection::preParse(const INIConfigSection& section,
-		ValidationList& validation) {
-}
+void ConfigSection::preParse(const INIConfigSection &section, ValidationList &validation) {}
 
 bool ConfigSection::parseField(const std::string key, const std::string value,
-		ValidationList& validation) {
-	return false;
+                               ValidationList &validation) {
+    return false;
 }
 
-void ConfigSection::postParse(const INIConfigSection& section,
-		ValidationList& validation) {
+void ConfigSection::postParse(const INIConfigSection &section, ValidationList &validation) {}
+
+std::ostream &operator<<(std::ostream &out, const ConfigSection &section) {
+    section.dump(out);
+    return out;
 }
 
-std::ostream& operator<<(std::ostream& out, const ConfigSection& section) {
-	section.dump(out);
-	return out;
-}
-
-}
-}
+} // namespace config
+} // namespace mapcrafter

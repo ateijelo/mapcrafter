@@ -37,93 +37,93 @@ namespace mapcrafter {
 namespace mc {
 
 class RegionPos {
-public:
-	int x, z;
+  public:
+    int x, z;
 
-	RegionPos();
-	RegionPos(int x, int z);
+    RegionPos();
+    RegionPos(int x, int z);
 
-	bool operator==(const RegionPos& other) const;
-	bool operator!=(const RegionPos& other) const;
-	bool operator<(const RegionPos& other) const;
+    bool operator==(const RegionPos &other) const;
+    bool operator!=(const RegionPos &other) const;
+    bool operator<(const RegionPos &other) const;
 
-	static RegionPos byFilename(const std::string& filename);
+    static RegionPos byFilename(const std::string &filename);
 
-	void rotate(int count);
+    void rotate(int count);
 };
 
 class BlockPos;
 
 class ChunkPos {
-public:
-	int x, z;
+  public:
+    int x, z;
 
-	ChunkPos();
-	ChunkPos(int x, int z);
-	ChunkPos(const BlockPos& block);
+    ChunkPos();
+    ChunkPos(int x, int z);
+    ChunkPos(const BlockPos &block);
 
-	int getLocalX() const;
-	int getLocalZ() const;
+    int getLocalX() const;
+    int getLocalZ() const;
 
-	RegionPos getRegion() const;
+    RegionPos getRegion() const;
 
-	bool operator==(const ChunkPos& other) const;
-	bool operator!=(const ChunkPos& other) const;
-	bool operator<(const ChunkPos& other) const;
+    bool operator==(const ChunkPos &other) const;
+    bool operator!=(const ChunkPos &other) const;
+    bool operator<(const ChunkPos &other) const;
 
-	int getRow() const;
-	int getCol() const;
-	static ChunkPos byRowCol(int row, int col);
+    int getRow() const;
+    int getCol() const;
+    static ChunkPos byRowCol(int row, int col);
 
-	void rotate(int count);
+    void rotate(int count);
 };
 
 class LocalBlockPos;
 
 class BlockPos {
-public:
-	int x, z, y;
+  public:
+    int x, z, y;
 
-	BlockPos();
-	BlockPos(int x, int z, int y);
+    BlockPos();
+    BlockPos(int x, int z, int y);
 
-	int getRow() const;
-	int getCol() const;
+    int getRow() const;
+    int getCol() const;
 
-	bool operator==(const BlockPos& other) const;
-	bool operator!=(const BlockPos& other) const;
-	bool operator<(const BlockPos& other) const;
+    bool operator==(const BlockPos &other) const;
+    bool operator!=(const BlockPos &other) const;
+    bool operator<(const BlockPos &other) const;
 
-	BlockPos& operator+=(const BlockPos& p);
-	BlockPos& operator-=(const BlockPos& p);
-	BlockPos operator+(const BlockPos& p2) const;
-	BlockPos operator-(const BlockPos& p2) const;
+    BlockPos &operator+=(const BlockPos &p);
+    BlockPos &operator-=(const BlockPos &p);
+    BlockPos operator+(const BlockPos &p2) const;
+    BlockPos operator-(const BlockPos &p2) const;
 };
 
 extern const mc::BlockPos DIR_NORTH, DIR_SOUTH, DIR_EAST, DIR_WEST, DIR_TOP, DIR_BOTTOM;
 
 class LocalBlockPos {
-public:
-	int x, z, y;
+  public:
+    int x, z, y;
 
-	LocalBlockPos();
-	LocalBlockPos(int x, int z, int y);
-	LocalBlockPos(const BlockPos& pos);
+    LocalBlockPos();
+    LocalBlockPos(int x, int z, int y);
+    LocalBlockPos(const BlockPos &pos);
 
-	int getRow() const;
-	int getCol() const;
+    int getRow() const;
+    int getCol() const;
 
-	BlockPos toGlobalPos(const ChunkPos& chunk) const;
+    BlockPos toGlobalPos(const ChunkPos &chunk) const;
 
-	bool operator<(const LocalBlockPos& other) const;
+    bool operator<(const LocalBlockPos &other) const;
 };
 
-std::ostream& operator<<(std::ostream& stream, const RegionPos& region);
-std::ostream& operator<<(std::ostream& stream, const ChunkPos& chunk);
-std::ostream& operator<<(std::ostream& stream, const BlockPos& block);
-std::ostream& operator<<(std::ostream& stream, const LocalBlockPos& block);
+std::ostream &operator<<(std::ostream &stream, const RegionPos &region);
+std::ostream &operator<<(std::ostream &stream, const ChunkPos &chunk);
+std::ostream &operator<<(std::ostream &stream, const BlockPos &block);
+std::ostream &operator<<(std::ostream &stream, const LocalBlockPos &block);
 
-}
-}
+} // namespace mc
+} // namespace mapcrafter
 
 #endif

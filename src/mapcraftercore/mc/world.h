@@ -25,11 +25,11 @@
 #include "region.h"
 #include "worldcrop.h"
 
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -41,12 +41,12 @@ namespace mc {
  * The Nether, normal Overworld or The End.
  */
 enum class Dimension {
-	NETHER,
-	OVERWORLD,
-	END,
+    NETHER,
+    OVERWORLD,
+    END,
 };
 
-std::ostream& operator<<(std::ostream& out, Dimension dimension);
+std::ostream &operator<<(std::ostream &out, Dimension dimension);
 
 /**
  * Simple hash function to use regions in unordered_set/map.
@@ -55,9 +55,9 @@ std::ostream& operator<<(std::ostream& out, Dimension dimension);
  */
 // TODO maybe a better, not so trivial hash function?
 struct hash_function {
-	long operator()(const RegionPos& region) const {
-		return (region.x+4096) * 2048 + region.z + 4096;
-	}
+    long operator()(const RegionPos &region) const {
+        return (region.x + 4096) * 2048 + region.z + 4096;
+    }
 };
 
 /**
@@ -67,118 +67,118 @@ struct hash_function {
  * files possible. If you want full reading access to the world, use the WorldCache class.
  */
 class World {
-public:
-	typedef std::unordered_set<RegionPos, hash_function> RegionSet;
-	typedef std::unordered_map<RegionPos, std::string, hash_function> RegionMap;
+  public:
+    typedef std::unordered_set<RegionPos, hash_function> RegionSet;
+    typedef std::unordered_map<RegionPos, std::string, hash_function> RegionMap;
 
-	/**
-	 * Constructor. You should specify a world directory and you can specify a dimension
-	 * of the world (Nether, Overworld per default, End). Mapcrafter will automagically
-	 * try to find the right region directory.
-	 */
-	World(std::string world_dir = "", Dimension dimension = Dimension::OVERWORLD);
-	~World();
+    /**
+     * Constructor. You should specify a world directory and you can specify a dimension
+     * of the world (Nether, Overworld per default, End). Mapcrafter will automagically
+     * try to find the right region directory.
+     */
+    World(std::string world_dir = "", Dimension dimension = Dimension::OVERWORLD);
+    ~World();
 
-	/**
-	 * Returns the directory of the world.
-	 */
-	fs::path getWorldDir() const;
+    /**
+     * Returns the directory of the world.
+     */
+    fs::path getWorldDir() const;
 
-	/**
-	 * Returns the region directory of the world.
-	 */
-	fs::path getRegionDir() const;
+    /**
+     * Returns the region directory of the world.
+     */
+    fs::path getRegionDir() const;
 
-	/**
-	 * Returns the used dimension of the world.
-	 */
-	Dimension getDimension() const;
+    /**
+     * Returns the used dimension of the world.
+     */
+    Dimension getDimension() const;
 
-	/**
-	 * Returns/Sets the rotation of the world. You set this before loading the world.
-	 */
-	int getRotation() const;
-	void setRotation(int rotation);
+    /**
+     * Returns/Sets the rotation of the world. You set this before loading the world.
+     */
+    int getRotation() const;
+    void setRotation(int rotation);
 
-	/**
-	 * Returns/Sets the boundaries of the world. You also have to set this before
-	 * loading the world.
-	 */
-	WorldCrop getWorldCrop() const;
-	void setWorldCrop(const WorldCrop& world_crop);
+    /**
+     * Returns/Sets the boundaries of the world. You also have to set this before
+     * loading the world.
+     */
+    WorldCrop getWorldCrop() const;
+    void setWorldCrop(const WorldCrop &world_crop);
 
-	/**
-	 * Loads a world from the specified directory. Returns false if the world- or region
-	 * directory does not exist.
-	 */
-	bool load();
+    /**
+     * Loads a world from the specified directory. Returns false if the world- or region
+     * directory does not exist.
+     */
+    bool load();
 
-	/**
-	 * Returns the count of available region files.
-	 */
-	int getAvailableRegionCount() const;
+    /**
+     * Returns the count of available region files.
+     */
+    int getAvailableRegionCount() const;
 
-	/**
-	 * Returns the positions of all available regions.
-	 */
-	const World::RegionSet& getAvailableRegions() const;
+    /**
+     * Returns the positions of all available regions.
+     */
+    const World::RegionSet &getAvailableRegions() const;
 
-	/**
-	 * Returns whether a specific region exists.
-	 */
-	bool hasRegion(const RegionPos& pos) const;
+    /**
+     * Returns whether a specific region exists.
+     */
+    bool hasRegion(const RegionPos &pos) const;
 
-	/**
-	 * Returns the path of a region file. Returns an empty path if the region does
-	 * not exist.
-	 */
-	fs::path getRegionPath(const RegionPos& pos) const;
+    /**
+     * Returns the path of a region file. Returns an empty path if the region does
+     * not exist.
+     */
+    fs::path getRegionPath(const RegionPos &pos) const;
 
-	/**
-	 * Creates the Region-object for a specific region and assigns the supplied reference
-	 * 'region' to it. Returns false if the region does not exist.
-	 */
-	bool getRegion(const RegionPos& pos, RegionFile& region) const;
+    /**
+     * Creates the Region-object for a specific region and assigns the supplied reference
+     * 'region' to it. Returns false if the region does not exist.
+     */
+    bool getRegion(const RegionPos &pos, RegionFile &region) const;
 
-	/**
-	 * Returns the Minecraft version ID the world is running with. Returns -1 if no
-	 * level.dat or the specific tag can be found.
-	 *
-	 * The ID is the value of tag "Id" in tag "Version" of the level.dat,
-	 * like example below:
-	 *
-	 * TAG_Compound("Version"): 3 entries
-	 * {
-	 *   TAG_Int("Id"): 1628 <--- This number
-	 *   TAG_String("Name"): 1.13.1
-	 *   TAG_Byte("Snapshot"): 0
-	 * }
-	 */
-	int getMinecraftVersion() const;
+    /**
+     * Returns the Minecraft version ID the world is running with. Returns -1 if no
+     * level.dat or the specific tag can be found.
+     *
+     * The ID is the value of tag "Id" in tag "Version" of the level.dat,
+     * like example below:
+     *
+     * TAG_Compound("Version"): 3 entries
+     * {
+     *   TAG_Int("Id"): 1628 <--- This number
+     *   TAG_String("Name"): 1.13.1
+     *   TAG_Byte("Snapshot"): 0
+     * }
+     */
+    int getMinecraftVersion() const;
 
-private:
-	// world directory, region directory
-	fs::path world_dir, region_dir;
-	// used dimension of the world
-	Dimension dimension;
+  private:
+    // world directory, region directory
+    fs::path world_dir, region_dir;
+    // used dimension of the world
+    Dimension dimension;
 
-	// rotation and possible boundaries of the world
-	int rotation;
-	WorldCrop world_crop;
+    // rotation and possible boundaries of the world
+    int rotation;
+    WorldCrop world_crop;
 
-	// (hash-) set containing positions of available region files
-	RegionSet available_regions;
-	// (hash-) map containing positions of available region files and their file paths
-	RegionMap region_files;
+    // (hash-) set containing positions of available region files
+    RegionSet available_regions;
+    // (hash-) map containing positions of available region files and their file paths
+    RegionMap region_files;
 
-	/**
-	 * Scans a directory for Anvil *.mca region files and adds them to the available
-	 * region files. Returns false if the directory does not exist.
-	 */
-	bool readRegions(const fs::path& region_dir);
+    /**
+     * Scans a directory for Anvil *.mca region files and adds them to the available
+     * region files. Returns false if the directory does not exist.
+     */
+    bool readRegions(const fs::path &region_dir);
 };
 
-}
-}
+} // namespace mc
+} // namespace mapcrafter
 
 #endif /* WORLD_H_ */

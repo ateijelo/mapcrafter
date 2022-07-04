@@ -26,13 +26,12 @@ namespace thread {
 /**
  * This is an interface for a class managing the work of render workers.
  */
-template <typename Work, typename WorkResult>
-class WorkerManager {
-public:
-	virtual ~WorkerManager() {};
+template <typename Work, typename WorkResult> class WorkerManager {
+  public:
+    virtual ~WorkerManager(){};
 
-	virtual bool getWork(Work& work) = 0;
-	virtual void workFinished(const Work& work, const WorkResult& result) = 0;
+    virtual bool getWork(Work &work) = 0;
+    virtual void workFinished(const Work &work, const WorkResult &result) = 0;
 };
 
 } /* namespace thread */

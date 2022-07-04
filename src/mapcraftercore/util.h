@@ -24,7 +24,7 @@
 
 // shortcut to detect Windows
 #if defined(__WIN32__) || defined(__WIN64__) || defined(_WIN32) || defined(_WIN64)
-#  define OS_WINDOWS
+#define OS_WINDOWS
 #endif
 
 // include compat/*.h here if all files need it
@@ -34,9 +34,9 @@
 #include "util/filesystem.h"
 #include "util/json.h"
 #include "util/logging.h"
-#include "util/progress.h"
 #include "util/math.h"
 #include "util/other.h"
+#include "util/progress.h"
 #include "util/terminal.h"
 
 #endif /* UTIL_H_ */

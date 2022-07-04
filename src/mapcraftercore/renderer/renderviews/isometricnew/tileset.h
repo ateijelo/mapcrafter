@@ -26,13 +26,13 @@ namespace mapcrafter {
 namespace renderer {
 
 class NewIsometricTileSet : public TileSet {
-public:
-	NewIsometricTileSet(int tile_width);
+  public:
+    NewIsometricTileSet(int tile_width);
 
-	virtual void mapChunkToTiles(const mc::ChunkPos& chunk, std::set<TilePos>& tiles);
+    virtual void mapChunkToTiles(const mc::ChunkPos &chunk, std::set<TilePos> &tiles);
 };
 
-}
-}
+} // namespace renderer
+} // namespace mapcrafter
 
 #endif /* ISOMETRICNEW_TILESET_H_ */

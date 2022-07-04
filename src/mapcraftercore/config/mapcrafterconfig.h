@@ -20,17 +20,17 @@
 #ifndef MAPCRAFTERCONFIG_H_
 #define MAPCRAFTERCONFIG_H_
 
-#include "validation.h"
 #include "configsections/log.h"
 #include "configsections/map.h"
 #include "configsections/marker.h"
 #include "configsections/world.h"
+#include "validation.h"
 
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
-#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -41,85 +41,83 @@ class INIConfig;
 class INIConfigSection;
 
 struct Color {
-	std::string hex;
-	uint8_t red, green, blue;
+    std::string hex;
+    uint8_t red, green, blue;
 };
 
-std::ostream& operator<<(std::ostream& out, const Color& color);
+std::ostream &operator<<(std::ostream &out, const Color &color);
 
 class MapcrafterConfigRootSection : public ConfigSection {
-public:
-	MapcrafterConfigRootSection();
-	~MapcrafterConfigRootSection();
+  public:
+    MapcrafterConfigRootSection();
+    ~MapcrafterConfigRootSection();
 
-	virtual std::string getPrettyName() const;
-	virtual void dump(std::ostream& out) const;
+    virtual std::string getPrettyName() const;
+    virtual void dump(std::ostream &out) const;
 
-	void setConfigDir(const fs::path& config_dir);
+    void setConfigDir(const fs::path &config_dir);
 
-	fs::path getOutputDir() const;
-	fs::path getTemplateDir() const;
-	Color getBackgroundColor() const;
+    fs::path getOutputDir() const;
+    fs::path getTemplateDir() const;
+    Color getBackgroundColor() const;
 
-protected:
-	virtual void preParse(const INIConfigSection& section,
-			ValidationList& validation);
-	virtual bool parseField(const std::string key, const std::string value,
-			ValidationList& validation);
-	virtual void postParse(const INIConfigSection& section,
-			ValidationList& validation);
+  protected:
+    virtual void preParse(const INIConfigSection &section, ValidationList &validation);
+    virtual bool parseField(const std::string key, const std::string value,
+                            ValidationList &validation);
+    virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
-private:
-	fs::path config_dir;
+  private:
+    fs::path config_dir;
 
-	Field<fs::path> output_dir, template_dir;
-	Field<Color> background_color;
+    Field<fs::path> output_dir, template_dir;
+    Field<Color> background_color;
 };
 
 class MapcrafterConfig {
-public:
-	MapcrafterConfig();
-	~MapcrafterConfig();
+  public:
+    MapcrafterConfig();
+    ~MapcrafterConfig();
 
-	ValidationMap parseFile(const std::string& filename);
-	ValidationMap parseString(const std::string& string, fs::path config_dir = "");
-	void dump(std::ostream& out) const;
+    ValidationMap parseFile(const std::string &filename);
+    ValidationMap parseString(const std::string &string, fs::path config_dir = "");
+    void dump(std::ostream &out) const;
 
-	void configureLogging() const;
+    void configureLogging() const;
 
-	fs::path getOutputDir() const;
-	fs::path getTemplateDir() const;
-	fs::path getOutputPath(const std::string& path) const;
-	fs::path getTemplatePath(const std::string& path) const;
+    fs::path getOutputDir() const;
+    fs::path getTemplateDir() const;
+    fs::path getOutputPath(const std::string &path) const;
+    fs::path getTemplatePath(const std::string &path) const;
 
-	Color getBackgroundColor() const;
+    Color getBackgroundColor() const;
 
-	bool hasWorld(const std::string& world) const;
-	const std::map<std::string, WorldSection>& getWorlds() const;
-	const WorldSection& getWorld(const std::string& world) const;
+    bool hasWorld(const std::string &world) const;
+    const std::map<std::string, WorldSection> &getWorlds() const;
+    const WorldSection &getWorld(const std::string &world) const;
 
-	bool hasMap(const std::string& map) const;
-	const std::vector<MapSection>& getMaps() const;
-	const MapSection& getMap(const std::string& map) const;
+    bool hasMap(const std::string &map) const;
+    const std::vector<MapSection> &getMaps() const;
+    const MapSection &getMap(const std::string &map) const;
 
-	bool hasMarker(const std::string marker) const;
-	const std::vector<MarkerSection>& getMarkers() const;
-	const MarkerSection& getMarker(const std::string& marker) const;
+    bool hasMarker(const std::string marker) const;
+    const std::vector<MarkerSection> &getMarkers() const;
+    const MarkerSection &getMarker(const std::string &marker) const;
 
-	const std::vector<LogSection>& getLogSections() const;
+    const std::vector<LogSection> &getLogSections() const;
 
-private:
-	ValidationMap parse(const INIConfig& config, const fs::path& config_dir);
+  private:
+    ValidationMap parse(const INIConfig &config, const fs::path &config_dir);
 
-	WorldSection world_global;
-	MapSection map_global;
-	MarkerSection marker_global;
+    WorldSection world_global;
+    MapSection map_global;
+    MarkerSection marker_global;
 
-	MapcrafterConfigRootSection root_section;
-	std::map<std::string, WorldSection> worlds;
-	std::vector<MapSection> maps;
-	std::vector<MarkerSection> markers;
-	std::vector<LogSection> log_sections;
+    MapcrafterConfigRootSection root_section;
+    std::map<std::string, WorldSection> worlds;
+    std::vector<MapSection> maps;
+    std::vector<MarkerSection> markers;
+    std::vector<LogSection> log_sections;
 };
 
 } /* namespace config */

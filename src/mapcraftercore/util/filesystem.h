@@ -20,17 +20,17 @@
 #ifndef FILESYSTEM_H_
 #define FILESYSTEM_H_
 
-#include <vector>
 #include <boost/filesystem.hpp>
+#include <vector>
 
 namespace fs = boost::filesystem;
 
 namespace mapcrafter {
 namespace util {
 
-bool copyFile(const fs::path& from, const fs::path& to);
-bool copyDirectory(const fs::path& from, const fs::path& to);
-bool moveFile(const fs::path& from, const fs::path& to);
+bool copyFile(const fs::path &from, const fs::path &to);
+bool copyDirectory(const fs::path &from, const fs::path &to);
+bool moveFile(const fs::path &from, const fs::path &to);
 
 /**
  * Returns the home directory of the current user.
@@ -59,22 +59,22 @@ typedef std::vector<fs::path> PathList;
 /**
  * Returns all possible Mapcrafter resource directories.
  */
-PathList findResourceDirs(const fs::path& executable);
+PathList findResourceDirs(const fs::path &executable);
 
 /**
  * Returns all possible Mapcrafter template directories.
  */
-PathList findTemplateDirs(const fs::path& executable);
+PathList findTemplateDirs(const fs::path &executable);
 
 /**
  * Returns all possible Mapcrafter block directories.
  */
-PathList findBlockDirs(const fs::path& executable);
+PathList findBlockDirs(const fs::path &executable);
 
 /**
  * Returns all possible logging configuration files.
  */
-PathList findLoggingConfigFiles(const fs::path& executable);
+PathList findLoggingConfigFiles(const fs::path &executable);
 
 /**
  * Returns the first existing template directory.

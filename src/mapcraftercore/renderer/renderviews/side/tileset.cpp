@@ -25,26 +25,22 @@
 namespace mapcrafter {
 namespace renderer {
 
-SideTileSet::SideTileSet(int tile_width)
-	: TileSet(tile_width) {
+SideTileSet::SideTileSet(int tile_width) : TileSet(tile_width) {}
+
+SideTileSet::~SideTileSet() {}
+
+void SideTileSet::mapChunkToTiles(const mc::ChunkPos &chunk, std::set<TilePos> &tiles) {
+    for (int i = mc::CHUNK_LOW; i < mc::CHUNK_TOP; i++) {
+        // make sure we render towards -infinity
+        int x = std::floor((float)chunk.x / getTileWidth());
+        int y0 = std::floor((float)(chunk.z + mc::CHUNK_TOP - i - 1 + 1) / getTileWidth());
+        int y1 = std::floor((float)(chunk.z + mc::CHUNK_TOP - i - 1 + 0) / getTileWidth());
+        int y2 = std::floor((float)(chunk.z + mc::CHUNK_TOP - i - 1 - 1) / getTileWidth());
+        tiles.insert(TilePos(x, y0));
+        tiles.insert(TilePos(x, y1));
+        tiles.insert(TilePos(x, y2));
+    }
 }
 
-SideTileSet::~SideTileSet() {
-}
-
-void SideTileSet::mapChunkToTiles(const mc::ChunkPos& chunk,
-		std::set<TilePos>& tiles) {
-	for (int i = mc::CHUNK_LOW; i < mc::CHUNK_TOP; i++) {
-		// make sure we render towards -infinity
-		int x = std::floor((float) chunk.x / getTileWidth());
-		int y0 = std::floor((float) (chunk.z + mc::CHUNK_TOP-i-1 + 1) / getTileWidth());
-		int y1 = std::floor((float) (chunk.z + mc::CHUNK_TOP-i-1 + 0) / getTileWidth());
-		int y2 = std::floor((float) (chunk.z + mc::CHUNK_TOP-i-1 - 1) / getTileWidth());
-		tiles.insert(TilePos(x, y0));
-		tiles.insert(TilePos(x, y1));
-		tiles.insert(TilePos(x, y2));
-	}
-}
-
-}
-}
+} // namespace renderer
+} // namespace mapcrafter

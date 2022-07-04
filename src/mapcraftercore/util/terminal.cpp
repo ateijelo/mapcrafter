@@ -24,11 +24,11 @@
 #include <cstdio>
 
 #if defined(OS_WINDOWS)
-#  include <io.h>
-#  include <windows.h>
+#include <io.h>
+#include <windows.h>
 #endif
 #ifdef HAVE_UNISTD_H
-#  include <unistd.h>
+#include <unistd.h>
 #endif
 
 namespace mapcrafter {
@@ -36,87 +36,83 @@ namespace util {
 
 bool isOutTTY() {
 #ifdef OS_WIN
-	return _isatty(_fileno(stdout));
+    return _isatty(_fileno(stdout));
 #else
-	return isatty(fileno(stdout));
+    return isatty(fileno(stdout));
 #endif
 }
 
-setcolor::setcolor(int type, int color)
-	: type(type), color(color) {
-}
+setcolor::setcolor(int type, int color) : type(type), color(color) {}
 
-std::ostream& setcolor::operator()(std::ostream& out) const {
-	if (!isEnabled())
-		return out;
-	if (color == 0) {
-		reset(out);
-		return out;
-	}
+std::ostream &setcolor::operator()(std::ostream &out) const {
+    if (!isEnabled())
+        return out;
+    if (color == 0) {
+        reset(out);
+        return out;
+    }
 #ifdef OS_WINDOWS
-	int color_flags = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-	switch (color) {
-	case black:
-		color_flags = 0;
-		break;
-	case white:
-		color_flags = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-		break;
-	case red:
-		color_flags = FOREGROUND_RED;
-		break;
-	case green:
-		color_flags = FOREGROUND_GREEN;
-		break;
-	case blue:
-		color_flags = FOREGROUND_BLUE;
-		break;
-	case yellow:
-		color_flags = FOREGROUND_RED | FOREGROUND_GREEN;
-		break;
-	}
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdout, color_flags);
-	return out;
+    int color_flags = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+    switch (color) {
+    case black:
+        color_flags = 0;
+        break;
+    case white:
+        color_flags = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+        break;
+    case red:
+        color_flags = FOREGROUND_RED;
+        break;
+    case green:
+        color_flags = FOREGROUND_GREEN;
+        break;
+    case blue:
+        color_flags = FOREGROUND_BLUE;
+        break;
+    case yellow:
+        color_flags = FOREGROUND_RED | FOREGROUND_GREEN;
+        break;
+    }
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hStdout, color_flags);
+    return out;
 #else
-	return out << "\033[1;" << type + color << "m";
+    return out << "\033[1;" << type + color << "m";
 #endif
 }
 
-std::ostream& setcolor::reset(std::ostream& out) {
-	if (!isEnabled())
-		return out;
+std::ostream &setcolor::reset(std::ostream &out) {
+    if (!isEnabled())
+        return out;
 #ifdef OS_WINDOWS
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	return out;
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+    return out;
 #else
-	return out << "\033[1;0m";
+    return out << "\033[1;0m";
 #endif
 }
 
 void setcolor::setEnabled(TerminalColorStates state) {
-	if (state == TerminalColorStates::ENABLED)
-		enabled = true;
-	else if (state == TerminalColorStates::DISABLED)
-		enabled = false;
-	else if (state == TerminalColorStates::AUTO)
-		enabled = isOutTTY();
-	enabled_initialized = true;
+    if (state == TerminalColorStates::ENABLED)
+        enabled = true;
+    else if (state == TerminalColorStates::DISABLED)
+        enabled = false;
+    else if (state == TerminalColorStates::AUTO)
+        enabled = isOutTTY();
+    enabled_initialized = true;
 }
 
 bool setcolor::isEnabled() {
-	if (!enabled_initialized)
-		setEnabled(TerminalColorStates::AUTO);
-	return enabled;
+    if (!enabled_initialized)
+        setEnabled(TerminalColorStates::AUTO);
+    return enabled;
 }
 
 bool setcolor::enabled_initialized = false;
 bool setcolor::enabled = false;
 
-std::ostream& operator<<(std::ostream& out, const setcolor& color) {
-	return color(out);
-}
+std::ostream &operator<<(std::ostream &out, const setcolor &color) { return color(out); }
 
 } /* namespace util */
 } /* namespace mapcrafter */

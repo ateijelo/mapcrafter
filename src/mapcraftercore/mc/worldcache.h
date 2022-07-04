@@ -36,21 +36,21 @@ class BlockStateRegistry;
  * A block with id/data/biome/lighting data.
  */
 struct Block {
-	Block();
-	Block(const mc::BlockPos& pos, uint16_t id);
+    Block();
+    Block(const mc::BlockPos &pos, uint16_t id);
 
-	// which block does this data belong to (set by getBlock-method)
-	mc::BlockPos pos;
-	uint16_t id;
-	uint8_t biome;
-	uint8_t block_light, sky_light;
-	// which of the fields above are set? (set by getBlock-method)
-	int fields_set;
+    // which block does this data belong to (set by getBlock-method)
+    mc::BlockPos pos;
+    uint16_t id;
+    uint8_t biome;
+    uint8_t block_light, sky_light;
+    // which of the fields above are set? (set by getBlock-method)
+    int fields_set;
 };
 
 const int GET_ID = 1;
 // obsolete
-//const int GET_DATA = 2; 
+// const int GET_DATA = 2;
 const int GET_BIOME = 4;
 const int GET_BLOCK_LIGHT = 8;
 const int GET_SKY_LIGHT = 16;
@@ -62,46 +62,43 @@ const int GET_LIGHT = GET_BLOCK_LIGHT | GET_SKY_LIGHT;
  * Maybe add a set of corrupt chunks/regions to dump them at the end of the rendering.
  */
 struct CacheStats {
-	CacheStats()
-			: hits(0), misses(0), region_not_found(0), not_found(0), invalid(0) {
-	}
+    CacheStats() : hits(0), misses(0), region_not_found(0), not_found(0), invalid(0) {}
 
-	void print(const std::string& name) const {
-		std::cout << name << ":" << std::endl;
-		std::cout << "  hits: " << hits << std::endl
-				  << "  misses: " << misses << std::endl
-				  << "  region_not_found: " << region_not_found << std::endl
-				  << "  not_found: " << not_found << std::endl
-				  << "  invalid: " << invalid << std::endl;
-	}
+    void print(const std::string &name) const {
+        std::cout << name << ":" << std::endl;
+        std::cout << "  hits: " << hits << std::endl
+                  << "  misses: " << misses << std::endl
+                  << "  region_not_found: " << region_not_found << std::endl
+                  << "  not_found: " << not_found << std::endl
+                  << "  invalid: " << invalid << std::endl;
+    }
 
-	int hits;
-	int misses;
+    int hits;
+    int misses;
 
-	int region_not_found;
-	int not_found;
-	int invalid;
+    int region_not_found;
+    int not_found;
+    int invalid;
 };
 
 /**
  * An entry in the cache with a Key and a Value type. Used with regions and chunks.
  */
-template <typename Key, typename Value>
-struct CacheEntry {
-	Key key;
-	Value value;
-	bool used;
+template <typename Key, typename Value> struct CacheEntry {
+    Key key;
+    Value value;
+    bool used;
 };
 
 #define RBITS 2
 #define RWIDTH (1 << RBITS)
-#define RSIZE (RWIDTH*RWIDTH)
-#define RMASK (RSIZE-1)
+#define RSIZE (RWIDTH * RWIDTH)
+#define RMASK (RSIZE - 1)
 
 #define CBITS 5
 #define CWIDTH (1 << CBITS)
-#define CSIZE (CWIDTH*CWIDTH)
-#define CMASK (CSIZE-1)
+#define CSIZE (CWIDTH * CWIDTH)
+#define CMASK (CSIZE - 1)
 
 /**
  * This is a world cache with regions and chunks.
@@ -125,39 +122,39 @@ struct CacheEntry {
  * (overwrites an already loaded region/chunk at this cache position).
  */
 class WorldCache {
-private:
-	mc::BlockStateRegistry& block_registry;
-	World world;
+  private:
+    mc::BlockStateRegistry &block_registry;
+    World world;
 
-	CacheEntry<RegionPos, RegionFile> regioncache[RSIZE];
-	CacheEntry<ChunkPos, Chunk> chunkcache[CSIZE];
+    CacheEntry<RegionPos, RegionFile> regioncache[RSIZE];
+    CacheEntry<ChunkPos, Chunk> chunkcache[CSIZE];
 
-	// provisional set to keep track of broken regions/chunks
-	// we do not want to try to load them again and again
-	std::set<RegionPos> regions_broken;
-	std::set<ChunkPos> chunks_broken;
+    // provisional set to keep track of broken regions/chunks
+    // we do not want to try to load them again and again
+    std::set<RegionPos> regions_broken;
+    std::set<ChunkPos> chunks_broken;
 
-	CacheStats regionstats;
-	CacheStats chunkstats;
+    CacheStats regionstats;
+    CacheStats chunkstats;
 
-	int getRegionCacheIndex(const RegionPos& pos) const;
-	int getChunkCacheIndex(const ChunkPos& pos) const;
+    int getRegionCacheIndex(const RegionPos &pos) const;
+    int getChunkCacheIndex(const ChunkPos &pos) const;
 
-public:
-	WorldCache(mc::BlockStateRegistry& block_registry, const World& world);
+  public:
+    WorldCache(mc::BlockStateRegistry &block_registry, const World &world);
 
-	const World& getWorld() const;
+    const World &getWorld() const;
 
-	RegionFile* getRegion(const RegionPos& pos);
-	Chunk* getChunk(const ChunkPos& pos);
+    RegionFile *getRegion(const RegionPos &pos);
+    Chunk *getChunk(const ChunkPos &pos);
 
-	Block getBlock(const mc::BlockPos& pos, const mc::Chunk* chunk, int get = GET_ID);
+    Block getBlock(const mc::BlockPos &pos, const mc::Chunk *chunk, int get = GET_ID);
 
-	const CacheStats& getRegionCacheStats() const;
-	const CacheStats& getChunkCacheStats() const;
+    const CacheStats &getRegionCacheStats() const;
+    const CacheStats &getChunkCacheStats() const;
 };
 
-}
-}
+} // namespace mc
+} // namespace mapcrafter
 
 #endif /* WORLDCACHE_H_ */
