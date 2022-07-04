@@ -237,9 +237,9 @@ void WorldEntitiesCache::update(util::IProgressHandler* progress) {
 					mc::nbt::Compression::ZLIB);
 
 			//nbt::TagCompound& level = nbt.findTag<nbt::TagCompound>("Level");
-			//if (!level.hasTag<nbt::TagList>("TileEntities")) {
-			//	continue;
-			//}
+			if (!nbt.hasTag<nbt::TagList>("block_entities")) {
+				continue;
+			}
 			nbt::TagList& entities = nbt.findTag<nbt::TagList>("block_entities");
 			for (auto entity_it = entities.payload.begin();
 					entity_it != entities.payload.end(); ++entity_it) {
