@@ -1,11 +1,15 @@
 #
 # Build Image
 #
+ARG ALPINE_VERSION=3.15.0
 
-FROM alpine:latest as builder
+FROM alpine:${ALPINE_VERSION} AS alpine
 
-# Add the git repo
-ADD . /git/mapcrafter
+#
+# Build environment
+#
+
+FROM alpine as buildenv
 
 # Dependencies needed for building Mapcrafter
 # (not sure how many of these are actually needed)
@@ -19,6 +23,15 @@ RUN apk add \
         libjpeg-turbo-dev \
         boost-dev
 
+#
+# Build Mapcrafter from source
+#
+
+FROM buildenv as builder
+
+# Add the git repo
+ADD . /git/mapcrafter
+
 # Build mapcrafter from source
 RUN cd /git/mapcrafter && \
     mkdir build && cd build && \
@@ -27,12 +40,11 @@ RUN cd /git/mapcrafter && \
     mkdir /tmp/mapcrafter && \
     make DESTDIR=/tmp/mapcrafter install
 
-
 #
 # Final Image
 #
 
-FROM alpine:latest
+FROM alpine
 
 # Mapcrafter, built in previous stage
 COPY --from=builder /tmp/mapcrafter/ /
@@ -50,4 +62,5 @@ RUN apk add \
 
 # Entrypoint
 ADD entrypoint.sh /
+ADD marker_entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
