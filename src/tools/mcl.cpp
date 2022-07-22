@@ -129,52 +129,117 @@ void readPackedShorts_v116(const std::vector<int64_t> &data,
     }
 }
 
-void dumpBlockStates(const RegionFile &region_file) {
-    for (auto chunkPos : region_file.getContainingChunks()) {
-        const std::vector<uint8_t> &data = region_file.getChunkData(chunkPos);
+void dumpBlockStates(const RegionFile &region_file, const ChunkPos &chunkPos,
+                     const nbt::NBTFile &chunk, const Limits &limits) {
+    const nbt::TagList &sections = chunk.findTag<nbt::TagList>("sections");
+    for (auto it = sections.payload.begin(); it != sections.payload.end(); ++it) {
+        const nbt::TagCompound &section = (*it)->cast<nbt::TagCompound>();
+        const nbt::TagByte &y_tag = section.findTag<nbt::TagByte>("Y");
+        int section_y = int(y_tag.payload);
 
-        nbt::NBTFile nbt;
+        if (limits.min_y.has_value() && (section_y * 16 + 15) < limits.min_y)
+            continue;
+        if (limits.max_y.has_value() && (section_y * 16) > limits.max_y)
+            continue;
 
-        nbt.readNBT(reinterpret_cast<const char *>(&data[0]), data.size(), nbt::Compression::ZLIB);
-        // cout << "chunk " << chunkPos.x << " " << chunkPos.z << "\n";
+        if (!section.hasTag<nbt::TagCompound>("block_states"))
+            continue;
 
-        const nbt::TagList &sections = nbt.findTag<nbt::TagList>("sections");
-        for (auto it = sections.payload.begin(); it != sections.payload.end(); ++it) {
-            const nbt::TagCompound &section = (*it)->cast<nbt::TagCompound>();
-            const nbt::TagByte &section_y = section.findTag<nbt::TagByte>("Y");
+        const nbt::TagCompound &block_states = section.findTag<nbt::TagCompound>("block_states");
 
-            if (!section.hasTag<nbt::TagCompound>("block_states"))
-                continue;
-            const nbt::TagCompound &block_states =
-                section.findTag<nbt::TagCompound>("block_states");
+        const nbt::TagList &palette = block_states.findTag<nbt::TagList>("palette");
 
-            const nbt::TagList &palette = block_states.findTag<nbt::TagList>("palette");
+        cout << "palette at " << chunkPos.x << " " << section_y << " " << chunkPos.z << ":\n";
+        for (size_t i = 0; i < palette.payload.size(); i++) {
+            const auto entry = palette.payload.at(i)->cast<nbt::TagCompound>();
+            const auto name = entry.findTag<nbt::TagString>("Name").payload;
+            cout << i << " " << name << "\n";
+        }
 
-            cout << "palette at " << chunkPos.x << " " << chunkPos.z << " "
-                 << int(section_y.payload) << ":\n";
-            for (size_t i = 0; i < palette.payload.size(); i++) {
-                const auto entry = palette.payload.at(i)->cast<nbt::TagCompound>();
-                const auto name = entry.findTag<nbt::TagString>("Name").payload;
-                cout << i << " " << name << "\n";
+        if (block_states.hasTag<nbt::TagLongArray>("data")) {
+            const nbt::TagLongArray &block_states_data =
+                block_states.findTag<nbt::TagLongArray>("data");
+            std::array<uint16_t, 4096L> blocks;
+            readPackedShorts_v116(block_states_data.payload, blocks);
+            cout << "block data at " << chunkPos.x << " " << section_y << " " << chunkPos.z << ":";
+            for (int i = 0; i < 4096; i++) {
+                cout << " " << blocks.at(i);
             }
-
-            if (block_states.hasTag<nbt::TagLongArray>("data")) {
-                const nbt::TagLongArray &block_states_data =
-                    block_states.findTag<nbt::TagLongArray>("data");
-                std::array<uint16_t, 4096L> blocks;
-                readPackedShorts_v116(block_states_data.payload, blocks);
-                cout << "block data at " << chunkPos.x << " " << chunkPos.z << " "
-                     << int(section_y.payload) << ":";
-                for (int i = 0; i < 4096; i++) {
-                    cout << " " << blocks.at(i);
-                }
-                cout << endl;
-            }
+            cout << endl;
         }
     }
 }
 
-void scanRegion(const RegionFile &region_file, const Limits &limits) {
+void dumpContainers(const RegionFile &region_file, const ChunkPos &chunkPos,
+                    const nbt::NBTFile &chunk, const Limits &limits) {
+    if (!chunk.hasTag<nbt::TagList>("block_entities")) {
+        return;
+    }
+
+    const nbt::TagList &entities = chunk.findTag<nbt::TagList>("block_entities");
+
+    for (auto it = entities.payload.begin(); it != entities.payload.end(); ++it) {
+        const nbt::TagCompound &entity = (*it)->cast<nbt::TagCompound>();
+        if (!entity.hasTag<nbt::TagList>("Items"))
+            continue;
+
+        string entity_id = entity.findTag<nbt::TagString>("id").payload;
+        int x = entity.findTag<nbt::TagInt>("x").payload;
+        int y = entity.findTag<nbt::TagInt>("y").payload;
+        int z = entity.findTag<nbt::TagInt>("z").payload;
+
+        if (limits.min_x.has_value() && x < limits.min_x)
+            continue;
+        if (limits.max_x.has_value() && x > limits.max_x)
+            continue;
+        if (limits.min_y.has_value() && y < limits.min_y)
+            continue;
+        if (limits.max_y.has_value() && y > limits.max_y)
+            continue;
+        if (limits.min_z.has_value() && z < limits.min_z)
+            continue;
+        if (limits.max_z.has_value() && z > limits.max_z)
+            continue;
+
+        // entity.dump(cout);
+
+        const nbt::TagList &items = entity.findTag<nbt::TagList>("Items");
+        for (auto it = items.payload.begin(); it != items.payload.end(); ++it) {
+            const nbt::TagCompound &item = (*it)->cast<nbt::TagCompound>();
+
+            string item_id = item.findTag<nbt::TagString>("id").payload;
+            int slot = item.findTag<nbt::TagByte>("Slot").payload;
+            int count = item.findTag<nbt::TagByte>("Count").payload;
+
+            if (item.hasTag("tag")) {
+                auto item_tag = item.findTag<nbt::TagCompound>("tag");
+                if (item_tag.hasTag("BlockEntityTag")) {
+                    auto block_entity = item_tag.findTag<nbt::TagCompound>("BlockEntityTag");
+                    if (block_entity.hasTag("Items")) {
+                        auto subitems = block_entity.findTag<nbt::TagList>("Items");
+
+                        for (auto &ptr : subitems.payload) {
+                            auto subitem = ptr->cast<nbt::TagCompound>();
+                            string subitem_id = subitem.findTag<nbt::TagString>("id").payload;
+                            int subitem_slot = subitem.findTag<nbt::TagByte>("Slot").payload;
+                            int subitem_count = subitem.findTag<nbt::TagByte>("Count").payload;
+                            cout << entity_id << " " << x << "," << y << "," << z << " ";
+                            cout << "item=" << subitem_id << " ";
+                            cout << "slot=" << slot << "(" << subitem_slot << ") "
+                                 << "count=" << subitem_count << endl;
+                        }
+                    }
+                }
+            }
+
+            cout << entity_id << " " << x << "," << y << "," << z << " ";
+            cout << "item=" << item_id << " ";
+            cout << "slot=" << slot << " count=" << count << endl;
+        }
+    }
+}
+
+void scanRegion(const RegionFile &region_file, const Limits &limits, const string &action) {
     const auto regionPos = region_file.getPos();
     int region_max_x = (regionPos.x + 1) * 32 * 16 - 1;
     int region_min_x = (regionPos.x) * 32 * 16;
@@ -191,7 +256,6 @@ void scanRegion(const RegionFile &region_file, const Limits &limits) {
         return;
 
     for (auto chunkPos : region_file.getContainingChunks()) {
-
         int chunk_max_x = (chunkPos.x + 1) * 16 - 1;
         int chunk_min_x = (chunkPos.x) * 16;
         int chunk_max_z = (chunkPos.z + 1) * 16 - 1;
@@ -206,75 +270,16 @@ void scanRegion(const RegionFile &region_file, const Limits &limits) {
         if (limits.min_z.has_value() && chunk_max_z < limits.min_z)
             continue;
 
-        BlockStateRegistry bsr;
-        Chunk chunk;
         const std::vector<uint8_t> &data = region_file.getChunkData(chunkPos);
 
-        nbt::NBTFile nbt;
-        nbt.readNBT(reinterpret_cast<const char *>(&data[0]), data.size(), nbt::Compression::ZLIB);
-        if (!nbt.hasTag<nbt::TagList>("block_entities")) {
-            continue;
-        }
-        const nbt::TagList &entities = nbt.findTag<nbt::TagList>("block_entities");
+        nbt::NBTFile chunk;
+        chunk.readNBT(reinterpret_cast<const char *>(&data[0]), data.size(),
+                      nbt::Compression::ZLIB);
 
-        for (auto it = entities.payload.begin(); it != entities.payload.end(); ++it) {
-            const nbt::TagCompound &entity = (*it)->cast<nbt::TagCompound>();
-            if (!entity.hasTag<nbt::TagList>("Items"))
-                continue;
-
-            string entity_id = entity.findTag<nbt::TagString>("id").payload;
-            int x = entity.findTag<nbt::TagInt>("x").payload;
-            int y = entity.findTag<nbt::TagInt>("y").payload;
-            int z = entity.findTag<nbt::TagInt>("z").payload;
-
-            if (limits.min_x.has_value() && x < limits.min_x)
-                continue;
-            if (limits.max_x.has_value() && x > limits.max_x)
-                continue;
-            if (limits.min_y.has_value() && y < limits.min_y)
-                continue;
-            if (limits.max_y.has_value() && y > limits.max_y)
-                continue;
-            if (limits.min_z.has_value() && z < limits.min_z)
-                continue;
-            if (limits.max_z.has_value() && z > limits.max_z)
-                continue;
-
-            // entity.dump(cout);
-
-            const nbt::TagList &items = entity.findTag<nbt::TagList>("Items");
-            for (auto it = items.payload.begin(); it != items.payload.end(); ++it) {
-                const nbt::TagCompound &item = (*it)->cast<nbt::TagCompound>();
-
-                string item_id = item.findTag<nbt::TagString>("id").payload;
-                int slot = item.findTag<nbt::TagByte>("Slot").payload;
-                int count = item.findTag<nbt::TagByte>("Count").payload;
-
-                if (item.hasTag("tag")) {
-                    auto item_tag = item.findTag<nbt::TagCompound>("tag");
-                    if (item_tag.hasTag("BlockEntityTag")) {
-                        auto block_entity = item_tag.findTag<nbt::TagCompound>("BlockEntityTag");
-                        if (block_entity.hasTag("Items")) {
-                            auto subitems = block_entity.findTag<nbt::TagList>("Items");
-
-                            for (auto &ptr : subitems.payload) {
-                                auto subitem = ptr->cast<nbt::TagCompound>();
-                                string subitem_id = subitem.findTag<nbt::TagString>("id").payload;
-                                int subitem_slot = subitem.findTag<nbt::TagByte>("Slot").payload;
-                                int subitem_count = subitem.findTag<nbt::TagByte>("Count").payload;
-                                cout << entity_id << " " << x << "," << y << "," << z << " ";
-                                cout << "item=" << subitem_id << " ";
-                                cout << "slot=" << slot << "(" << subitem_slot << ") "
-                                     << "count=" << subitem_count << endl;
-                            }
-                        }
-                    }
-                }
-
-                cout << entity_id << " " << x << "," << y << "," << z << " ";
-                cout << "item=" << item_id << " ";
-                cout << "slot=" << slot << " count=" << count << endl;
-            }
+        if (action == "containers") {
+            dumpContainers(region_file, chunkPos, chunk, limits);
+        } else if (action == "block_states") {
+            dumpBlockStates(region_file, chunkPos, chunk, limits);
         }
     }
 
@@ -291,7 +296,8 @@ void scanRegion(const RegionFile &region_file, const Limits &limits) {
     // }
 }
 
-void scanWorld(const string &world_dir, const Limits &limits, const string &dimension) {
+void scanWorld(const string &world_dir, const Limits &limits, const string &dimension,
+               const string &action) {
     Dimension d = Dimension::OVERWORLD;
     if (dimension == "nether")
         d = Dimension::NETHER;
@@ -307,7 +313,7 @@ void scanWorld(const string &world_dir, const Limits &limits, const string &dime
         world.getRegion(regionPos, region_file);
         region_file.read();
 
-        scanRegion(region_file, limits);
+        scanRegion(region_file, limits, action);
     }
 }
 
@@ -319,6 +325,8 @@ int main(int argc, char **argv) {
     po::options_description generic("Generic options");
     auto opts = generic.add_options();
 
+    bool block_states = false;
+
     opts = opts("version,v", "print version string");
     opts = opts("help", "produce help message");
     opts = opts("dimension,d", po::value<string>()->default_value("overworld"), "dimension");
@@ -327,7 +335,8 @@ int main(int argc, char **argv) {
     opts = opts("region,r", po::value<string>(), "search block entities in region");
     opts = opts("dump", po::value<string>(), "dump region nbt in human readable format");
     opts = opts("sections", po::value<string>(), "write region sections data in raw nbt format");
-    opts = opts("block-states", po::value<string>(), "write region block data in raw nbt format");
+    opts = opts("block-states", po::bool_switch(&block_states),
+                "write region block data in raw nbt format");
     opts =
         opts("height-maps", po::value<string>(), "write region height-map data in raw nbt format");
 
@@ -383,11 +392,9 @@ int main(int argc, char **argv) {
         RegionFile region_file(filename);
         region_file.read();
         dumpRegion(region_file);
-    } else if (vm.count("block-states")) {
-        auto filename = vm["block-states"].as<string>();
-        RegionFile region_file(filename);
-        region_file.read();
-        dumpBlockStates(region_file);
+    } else if (block_states) {
+        scanWorld(vm["world_dir"].as<string>(), limits, vm["dimension"].as<string>(),
+                  "block_states");
     } else if (vm.count("height-maps")) {
         auto filename = vm["height-maps"].as<string>();
         RegionFile region_file(filename);
@@ -398,7 +405,7 @@ int main(int argc, char **argv) {
         RegionFile region_file(filename);
         region_file.read();
 
-        scanRegion(region_file, limits);
+        scanRegion(region_file, limits, "containers");
     } else {
 
         if (!vm.count("world_dir")) {
@@ -406,6 +413,6 @@ int main(int argc, char **argv) {
             return 1;
         }
 
-        scanWorld(vm["world_dir"].as<string>(), limits, vm["dimension"].as<string>());
+        scanWorld(vm["world_dir"].as<string>(), limits, vm["dimension"].as<string>(), "containers");
     }
 }
