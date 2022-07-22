@@ -149,24 +149,28 @@ void dumpBlockStates(const RegionFile &region_file, const ChunkPos &chunkPos,
 
         const nbt::TagList &palette = block_states.findTag<nbt::TagList>("palette");
 
-        cout << "palette at " << chunkPos.x << " " << section_y << " " << chunkPos.z << ":\n";
+        cout << "{\"section\": [" << chunkPos.x << ", " << section_y << ", " << chunkPos.z << "], ";
+        cout << "\"palette\": [";
         for (size_t i = 0; i < palette.payload.size(); i++) {
             const auto entry = palette.payload.at(i)->cast<nbt::TagCompound>();
             const auto name = entry.findTag<nbt::TagString>("Name").payload;
-            cout << i << " " << name << "\n";
+            cout << "\"" << name << "\"";
+            if (i < palette.payload.size() - 1) cout << ", ";
         }
+        cout << "], ";
 
+        cout << "\"block_states\": [";
         if (block_states.hasTag<nbt::TagLongArray>("data")) {
             const nbt::TagLongArray &block_states_data =
                 block_states.findTag<nbt::TagLongArray>("data");
             std::array<uint16_t, 4096L> blocks;
             readPackedShorts_v116(block_states_data.payload, blocks);
-            cout << "block data at " << chunkPos.x << " " << section_y << " " << chunkPos.z << ":";
             for (int i = 0; i < 4096; i++) {
-                cout << " " << blocks.at(i);
+                cout << blocks.at(i);
+                if (i < 4095) cout << ",";
             }
-            cout << endl;
         }
+        cout << "]}\n";
     }
 }
 
