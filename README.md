@@ -112,7 +112,11 @@ See the [CHANGELOG](./CHANGELOG.md) for details.
 
 (disorganized notes, might clean up at some point)
 
-Start with blockcrafter.
+### Generating textures with Blockcrafter
+
+Blockcrafter is a separate from Mapcrafter, it uses the jar files from minecraft, or other asset directories to generate the textures
+for all blocks so Mapcrafter can render the map. This step is necessary when new Minecraft versions come out, but if you're compiling
+a version of Mapcrafter that already includes those, skip this step and go to (next section)[###building-mapcrafter]
 
 Until I figure out how to let Docker use my GPU, using the docker container with --osmesa is not an option. It would take ages.
 
@@ -136,15 +140,30 @@ python setup.py install
 
 Now this should work:
 
-echo -n -e "" "-r"{0,1,2,3}" -v"{isometric,side,topdown}" -t"{12,16}"\n"| xargs -IOPTS -P16 sh -c 'blockcrafter-export -a blockcrafter/custom_assets/ -a minecraft-1.16.5-client/ -a minecraft-1.16.5-client/assets/ -a minecraft-1.17.1-client/ -a minecraft-1.17.1-client/assets/ -a minecraft-1.18.1-client/ -a minecraft-1.18.1-client/assets/ -a minecraft-1.19-client/ -a minecraft-1.19-client/assets/ OPTS -o blocks/'
+```bash
+echo -n -e "" "-r"{0,1,2,3}" -v"{isometric,side,topdown}" -t"{12,16}"\n" |\
+    xargs -IOPTS -P16 sh -c 'blockcrafter-export \
+    -a blockcrafter/custom_assets/ \
+    -a minecraft-1.16.5-client/ \
+    -a minecraft-1.16.5-client/assets/ \
+    -a minecraft-1.17.1-client/ \
+    -a minecraft-1.17.1-client/assets/ \
+    -a minecraft-1.18.1-client/ \
+    -a minecraft-1.18.1-client/assets/ \
+    -a minecraft-1.19-client/ \
+    -a minecraft-1.19-client/assets/ OPTS -o blocks/'
+```
 
+Change -P16 to how many tasks you want to run in parallel. The more the better, but more than your CPU's actual concurrency won't make a difference.
 
 Bring the generated images and txt files to Mapcrafter's src/data/blocks directory.
 
 Generate texture files:
 
 ```
-./src/tools/mapcrafter_textures.py -f ~/.local/share/multimc/libraries/com/mojang/minecraft/1.19/minecraft-1.19-client.jar ./src/data/textures/
+./src/tools/mapcrafter_textures.py \
+    -f ~/.local/share/multimc/libraries/com/mojang/minecraft/1.19/minecraft-1.19-client.jar \
+    ./src/data/textures/
 ```
 
 and then texture code:
@@ -153,6 +172,18 @@ and then texture code:
 ./src/tools/gen_texture_code.sh
 ```
 
-Recompile after that with `make -j8`
+### Building Mapcrafter
 
-Mangrove biome coloring is wrong, we need that from Minecraft's source code.
+Run this once:
+
+```bash
+cmake -S . -B build
+```
+
+And this every time you want to recompile:
+
+```bash
+cmake --build build -j16
+```
+
+Again, change -j16 to match how many threads to use.
