@@ -92,8 +92,8 @@ void dumpHeightMaps(const RegionFile &region_file) {
         // cout << "chunk " << chunkPos.x << " " << chunkPos.z << "\n";
 
         const auto &heightMaps = nbt.findTag<nbt::TagCompound>("Heightmaps");
-        if (heightMaps.hasTag<nbt::TagLongArray>("MOTION_BLOCKING_NO_LEAVES")) {
-            const auto &tag = heightMaps.findTag<nbt::TagLongArray>("MOTION_BLOCKING_NO_LEAVES");
+        if (heightMaps.hasTag<nbt::TagLongArray>("OCEAN_FLOOR")) {
+            const auto &tag = heightMaps.findTag<nbt::TagLongArray>("OCEAN_FLOOR");
             cout << chunkPos.x << " " << chunkPos.z << " ";
             bool first = true;
             for (int i = 0; i < 37; i++) {
