@@ -3,6 +3,10 @@
 .settings
 
 !doc/Makefile
+Makefile
+
+CMakeFiles
+cmake_install.cmake
 
 *.o
 *.a
