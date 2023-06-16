@@ -305,8 +305,8 @@ class TileSet {
      * So we can find out which composite tiles are available and which composite tiles
      * need to get rendered.
      */
-    void findRequiredCompositeTiles(const std::set<TilePos> &render_tiles,
-                                    std::set<TilePath> &tiles);
+    void
+    findRequiredCompositeTiles(const std::set<TilePos> &render_tiles, std::set<TilePath> &tiles);
 
     /**
      * Updates the containing_render_tiles map.

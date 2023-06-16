@@ -97,8 +97,11 @@ std::map<std::string, std::string> parseProperties(std::string str);
  */
 template <typename T> class Nullable {
   public:
-    Nullable() : null(true) {}
-    Nullable(const T &value) : null(false), value(value) {}
+    Nullable()
+        : null(true) {}
+    Nullable(const T &value)
+        : null(false),
+          value(value) {}
     ~Nullable() {}
 
     T get() const { return value; }

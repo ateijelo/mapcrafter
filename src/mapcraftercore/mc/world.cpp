@@ -38,7 +38,9 @@ std::ostream &operator<<(std::ostream &out, Dimension dimension) {
 }
 
 World::World(std::string world_dir, Dimension dimension)
-    : world_dir(world_dir), dimension(dimension), rotation(0) {
+    : world_dir(world_dir),
+      dimension(dimension),
+      rotation(0) {
     std::string world_name = BOOST_FS_FILENAME(this->world_dir);
 
     // try to find the region directory
@@ -149,8 +151,8 @@ int World::getMinecraftVersion() const {
         nbt.readNBT(level_dat.string().c_str());
         const nbt::TagCompound &data_tag = nbt.findTag<nbt::TagCompound>("Data");
         if (!data_tag.hasTag<nbt::TagCompound>("Version")) {
-            LOG(WARNING)
-                << "World seems to be very old, no Minecraft version can be found in level.dat.";
+            LOG(WARNING
+            ) << "World seems to be very old, no Minecraft version can be found in level.dat.";
             return 0;
         }
         const nbt::TagCompound &version_tag = data_tag.findTag<nbt::TagCompound>("Version");

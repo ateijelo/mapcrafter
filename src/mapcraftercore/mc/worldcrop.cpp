@@ -105,14 +105,16 @@ void BlockMask::loadFromStringDefinition(const std::string &definition) {
                 uint16_t data;
                 data = util::as<uint16_t>(data_part);
                 if (data >= 16)
-                    throw std::invalid_argument("Invalid data value '" + data_part +
-                                                "', data value is limited to four bits");
+                    throw std::invalid_argument(
+                        "Invalid data value '" + data_part + "', data value is limited to four bits"
+                    );
 
                 uint16_t bitmask;
                 bitmask = util::as<uint16_t>(bitmask_part);
                 if (bitmask >= 16)
-                    throw std::invalid_argument("Invalid bitmask '" + bitmask_part +
-                                                "', bitmask is limited to four bits");
+                    throw std::invalid_argument(
+                        "Invalid bitmask '" + bitmask_part + "', bitmask is limited to four bits"
+                    );
 
                 set(id, data, bitmask, shown);
             } else {
@@ -122,8 +124,9 @@ void BlockMask::loadFromStringDefinition(const std::string &definition) {
                     set(util::as<uint16_t>(group), shown);
             }
         } catch (std::invalid_argument &exception) {
-            throw std::invalid_argument("Invalid block group '" + group + "' (" + exception.what() +
-                                        ")");
+            throw std::invalid_argument(
+                "Invalid block group '" + group + "' (" + exception.what() + ")"
+            );
         }
     }
 }
@@ -152,7 +155,10 @@ void BlockMask::updateBlockState(uint16_t id) {
         block_states[id] = BlockState::PARTIALLY_HIDDEN_SHOWN;
 }
 
-WorldCrop::WorldCrop() : type(RECTANGULAR), radius(0), crop_unpopulated_chunks(true) {}
+WorldCrop::WorldCrop()
+    : type(RECTANGULAR),
+      radius(0),
+      crop_unpopulated_chunks(true) {}
 
 WorldCrop::~WorldCrop() {}
 

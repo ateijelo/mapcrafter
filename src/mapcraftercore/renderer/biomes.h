@@ -60,16 +60,18 @@ class Biome {
     static const mc::JavaSimplexGenerator SWAMP_GRASS_NOISE;
 
   public:
-    Biome(uint16_t id = 0,
-          double temperature = 0,
-          double rainfall = 0,
-          uint32_t green_tint = one,
-          uint32_t water_tint = default_water);
+    Biome(
+        uint16_t id = 0,
+        double temperature = 0,
+        double rainfall = 0,
+        uint32_t green_tint = one,
+        uint32_t water_tint = default_water
+    );
 
     uint16_t getID() const;
-    uint32_t getColor(const mc::BlockPos &pos,
-                      const ColorMapType &color_type,
-                      const ColorMap &color_map) const;
+    uint32_t getColor(
+        const mc::BlockPos &pos, const ColorMapType &color_type, const ColorMap &color_map
+    ) const;
 };
 
 // different Minecraft Biomes

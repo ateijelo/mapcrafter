@@ -131,7 +131,10 @@ template <> void write<std::string>(std::ostream &stream, std::string value) {
 }
 } // namespace nbtstream
 
-Tag::Tag(int8_t type) : type(type), named(false), write_type(true) {}
+Tag::Tag(int8_t type)
+    : type(type),
+      named(false),
+      write_type(true) {}
 
 Tag::~Tag() {}
 
@@ -182,9 +185,14 @@ void TagString::dump(std::ostream &stream, const std::string &indendation) const
 
 Tag *TagString::clone() const { return new TagString(*this); }
 
-TagList::TagList(int8_t tag_type) : Tag(TAG_TYPE), tag_type(tag_type) {}
+TagList::TagList(int8_t tag_type)
+    : Tag(TAG_TYPE),
+      tag_type(tag_type) {}
 
-TagList::TagList(const TagList &other) : Tag(TAG_TYPE) { *this = other; }
+TagList::TagList(const TagList &other)
+    : Tag(TAG_TYPE) {
+    *this = other;
+}
 
 TagList::~TagList() {}
 
@@ -205,9 +213,10 @@ Tag &TagList::read(std::istream &stream) {
     for (int32_t i = 0; i < length; i++) {
         Tag *tag = createTag(tag_type);
         if (tag == nullptr)
-            throw NBTError(std::string("Unknown tag type with id ") +
-                           util::str(static_cast<int>(tag_type)) +
-                           ". NBT data stream may be corrupted.");
+            throw NBTError(
+                std::string("Unknown tag type with id ") + util::str(static_cast<int>(tag_type)) +
+                ". NBT data stream may be corrupted."
+            );
         tag->read(stream);
         tag->setWriteType(false);
         tag->setNamed(false);
@@ -241,9 +250,15 @@ void TagList::dump(std::ostream &stream, const std::string &indendation) const {
 
 Tag *TagList::clone() const { return new TagList(*this); }
 
-TagCompound::TagCompound(const std::string &name) : Tag(TAG_TYPE) { setName(name); }
+TagCompound::TagCompound(const std::string &name)
+    : Tag(TAG_TYPE) {
+    setName(name);
+}
 
-TagCompound::TagCompound(const TagCompound &other) : Tag(TAG_TYPE) { *this = other; }
+TagCompound::TagCompound(const TagCompound &other)
+    : Tag(TAG_TYPE) {
+    *this = other;
+}
 
 TagCompound::~TagCompound() {}
 
@@ -264,9 +279,10 @@ Tag &TagCompound::read(std::istream &stream) {
         std::string name = nbtstream::read<std::string>(stream);
         Tag *tag = createTag(tag_type);
         if (tag == nullptr)
-            throw NBTError(std::string("Unknown tag type with id ") +
-                           util::str(static_cast<int>(tag_type)) +
-                           ". NBT data stream may be corrupted.");
+            throw NBTError(
+                std::string("Unknown tag type with id ") + util::str(static_cast<int>(tag_type)) +
+                ". NBT data stream may be corrupted."
+            );
         tag->read(stream);
         tag->setName(name);
         tag->setWriteType(true);
@@ -323,9 +339,9 @@ NBTFile::NBTFile() {}
 
 NBTFile::~NBTFile() {}
 
-void NBTFile::decompressStream(std::istream &stream,
-                               std::stringstream &decompressed,
-                               Compression compression) {
+void NBTFile::decompressStream(
+    std::istream &stream, std::stringstream &decompressed, Compression compression
+) {
     if (compression == Compression::NO_COMPRESSION) {
         decompressed << stream.rdbuf();
         return;
@@ -340,11 +356,15 @@ void NBTFile::decompressStream(std::istream &stream,
         in.push(stream);
         boost::iostreams::copy(in, decompressed);
     } catch (boost::iostreams::gzip_error &e) {
-        throw NBTError("Error while decompressing gzip data: " + std::string(e.what()) + " (" +
-                       util::str(e.error()) + ")");
+        throw NBTError(
+            "Error while decompressing gzip data: " + std::string(e.what()) + " (" +
+            util::str(e.error()) + ")"
+        );
     } catch (boost::iostreams::zlib_error &e) {
-        throw NBTError("Error while decompressing zlib data: " + std::string(e.what()) + " (" +
-                       util::str(e.error()) + ")");
+        throw NBTError(
+            "Error while decompressing zlib data: " + std::string(e.what()) + " (" +
+            util::str(e.error()) + ")"
+        );
     }
 }
 

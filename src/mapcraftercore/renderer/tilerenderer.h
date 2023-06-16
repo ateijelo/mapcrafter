@@ -59,12 +59,14 @@ struct TileImage {
 
 class TileRenderer {
   public:
-    TileRenderer(const RenderView *render_view,
-                 mc::BlockStateRegistry &block_registry,
-                 BlockImages *images,
-                 int tile_width,
-                 mc::WorldCache *world,
-                 RenderMode *render_mode);
+    TileRenderer(
+        const RenderView *render_view,
+        mc::BlockStateRegistry &block_registry,
+        BlockImages *images,
+        int tile_width,
+        mc::WorldCache *world,
+        RenderMode *render_mode
+    );
     virtual ~TileRenderer();
 
     void setRenderBiomes(bool render_biomes);
@@ -79,7 +81,8 @@ class TileRenderer {
 
   protected:
     void renderBlocks(
-        int x, int y, mc::BlockPos top, const mc::BlockPos &dir, std::set<TileImage> &tile_images);
+        int x, int y, mc::BlockPos top, const mc::BlockPos &dir, std::set<TileImage> &tile_images
+    );
     virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images) {}
 
     mc::Block getBlock(const mc::BlockPos &pos, int get = mc::GET_ID);

@@ -23,7 +23,8 @@ namespace mapcrafter {
 namespace config {
 
 ValidationMessage::ValidationMessage(int type, const std::string &message)
-    : type(type), message(message) {}
+    : type(type),
+      message(message) {}
 
 ValidationMessage::~ValidationMessage() {}
 

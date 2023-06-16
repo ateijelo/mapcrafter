@@ -47,7 +47,8 @@ class Biome;
 enum class ColorMapType { GRASS, FOLIAGE, FOLIAGE_FLIPPED, WATER };
 
 struct ColorMap {
-    ColorMap() : colors({0, 0, 0}) {}
+    ColorMap()
+        : colors({0, 0, 0}) {}
 
     bool parse(const std::string &str);
     uint32_t getColor(float x, float y) const;
@@ -75,37 +76,41 @@ static const uint8_t FACE_RIGHT_INDEX = ((float)255.0 / 6.0) * 4;
 static const uint8_t FACE_UP_INDEX = ((float)255.0 / 6.0) * 2;
 
 void blockImageTest(RGBAImage &block, const RGBAImage &uv_mask);
-void blockImageMultiply(RGBAImage &block,
-                        const RGBAImage &uv_mask,
-                        float factor_left,
-                        float factor_right,
-                        float factor_up);
-void blockImageMultiplyExcept(RGBAImage &block,
-                              const RGBAImage &uv_mask,
-                              uint8_t except_face,
-                              float factor);
-void blockImageMultiply(RGBAImage &block,
-                        const RGBAImage &uv_mask,
-                        const CornerValues &factors_left,
-                        const CornerValues &factors_right,
-                        const CornerValues &factors_up);
+void blockImageMultiply(
+    RGBAImage &block,
+    const RGBAImage &uv_mask,
+    float factor_left,
+    float factor_right,
+    float factor_up
+);
+void blockImageMultiplyExcept(
+    RGBAImage &block, const RGBAImage &uv_mask, uint8_t except_face, float factor
+);
+void blockImageMultiply(
+    RGBAImage &block,
+    const RGBAImage &uv_mask,
+    const CornerValues &factors_left,
+    const CornerValues &factors_right,
+    const CornerValues &factors_up
+);
 void blockImageMultiply(RGBAImage &block, uint8_t factor);
 void blockImageTint(RGBAImage &block, const RGBAImage &mask, uint32_t color);
 // TODO maybe this should be named something with multiply too
 void blockImageTint(RGBAImage &block, uint32_t color);
 void blockImageTintHighContrast(RGBAImage &block, uint32_t color);
 void blockImageTintHighContrast(RGBAImage &block, const RGBAImage &mask, int face, uint32_t color);
-void blockImageBlendTop(RGBAImage &block,
-                        const RGBAImage &uv_mask,
-                        const RGBAImage &top,
-                        const RGBAImage &top_uv_mask);
-void blockImageShadowEdges(RGBAImage &block,
-                           const RGBAImage &uv_mask,
-                           uint8_t north,
-                           uint8_t south,
-                           uint8_t east,
-                           uint8_t west,
-                           uint8_t bottom);
+void blockImageBlendTop(
+    RGBAImage &block, const RGBAImage &uv_mask, const RGBAImage &top, const RGBAImage &top_uv_mask
+);
+void blockImageShadowEdges(
+    RGBAImage &block,
+    const RGBAImage &uv_mask,
+    uint8_t north,
+    uint8_t south,
+    uint8_t east,
+    uint8_t west,
+    uint8_t bottom
+);
 bool blockImageIsTransparent(RGBAImage &block, const RGBAImage &uv_mask);
 std::array<bool, 3> blockImageGetSideMask(const RGBAImage &uv);
 
@@ -120,7 +125,8 @@ enum class LightingType {
 struct BlockImage {
     // TODO
     // this needs some order and refactoring
-    BlockImage() : lighting_specified(false) {}
+    BlockImage()
+        : lighting_specified(false) {}
 
     RGBAImage image, uv_image;
     std::array<bool, 3> side_mask;
@@ -152,8 +158,8 @@ class RenderedBlockImages : public BlockImages {
   public:
     // OLD METHODS
     virtual void setRotation(int rotation) {}
-    virtual void setRenderSpecialBlocks(bool render_unknown_blocks,
-                                        bool render_leaves_transparent) {}
+    virtual void
+    setRenderSpecialBlocks(bool render_unknown_blocks, bool render_leaves_transparent) {}
     // virtual RGBAImage exportBlocks() const {}
     virtual bool isBlockTransparent(uint16_t id, uint16_t data) const { return false; };
     virtual bool hasBlock(uint16_t id, uint16_t) const { return true; };

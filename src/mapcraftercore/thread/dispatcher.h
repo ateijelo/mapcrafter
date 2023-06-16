@@ -38,8 +38,8 @@ class Dispatcher {
   public:
     virtual ~Dispatcher(){};
 
-    virtual void dispatch(const renderer::RenderContext &context,
-                          util::IProgressHandler *progress) = 0;
+    virtual void
+    dispatch(const renderer::RenderContext &context, util::IProgressHandler *progress) = 0;
 };
 
 } /* namespace thread */

@@ -35,15 +35,18 @@ namespace renderer {
 void RenderContext::initializeTileRenderer() {
     world_cache.reset(new mc::WorldCache(*block_registry, world));
     render_mode.reset(createRenderMode(world_config, map_config, world.getRotation()));
-    tile_renderer.reset(render_view->createTileRenderer(*block_registry,
-                                                        block_images,
-                                                        map_config.getTileWidth(),
-                                                        world_cache.get(),
-                                                        render_mode.get()));
+    tile_renderer.reset(render_view->createTileRenderer(
+        *block_registry,
+        block_images,
+        map_config.getTileWidth(),
+        world_cache.get(),
+        render_mode.get()
+    ));
     render_view->configureTileRenderer(tile_renderer.get(), world_config, map_config);
 }
 
-TileRenderWorker::TileRenderWorker() : progress(nullptr) {}
+TileRenderWorker::TileRenderWorker()
+    : progress(nullptr) {}
 
 TileRenderWorker::~TileRenderWorker() {}
 
@@ -79,9 +82,11 @@ void TileRenderWorker::saveTile(const TilePath &tile, const RGBAImage &image) {
         LOG(WARNING) << "Unable to write '" << file.string() << "'.";
 
     config::Color bg = render_context.background_color;
-    if (!png && !image.writeJPEG(file.string(),
-                                 render_context.map_config.getJPEGQuality(),
-                                 rgba(bg.red, bg.green, bg.blue, 255)))
+    if (!png && !image.writeJPEG(
+                    file.string(),
+                    render_context.map_config.getJPEGQuality(),
+                    rgba(bg.red, bg.green, bg.blue, 255)
+                ))
         LOG(WARNING) << "Unable to write '" << file.string() << "'.";
 }
 
@@ -93,8 +98,9 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
                         (tile.toString() + "." + render_context.map_config.getImageFormatSuffix());
         if ((png && image.readPNG(file.string())) || (!png && image.readJPEG(file.string()))) {
             if (render_work.tiles_skip.count(tile) && progress != nullptr)
-                progress->setValue(progress->getValue() +
-                                   render_context.tile_set->getContainingRenderTiles(tile));
+                progress->setValue(
+                    progress->getValue() + render_context.tile_set->getContainingRenderTiles(tile)
+                );
             return;
         }
 
@@ -105,7 +111,8 @@ void TileRenderWorker::renderRecursive(const TilePath &tile, RGBAImage &image) {
     if (tile.getDepth() == render_context.tile_set->getDepth()) {
         // this tile is a render tile, render it
         render_context.tile_renderer->renderTile(
-            tile.getTilePos() + render_context.tile_set->getTileOffset(), image);
+            tile.getTilePos() + render_context.tile_set->getTileOffset(), image
+        );
         render_work_result.tiles_rendered++;
 
         /*

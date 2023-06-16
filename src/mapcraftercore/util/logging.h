@@ -39,12 +39,14 @@
 
 #define LOGN(level, logger)                                                                        \
     mapcrafter::util::Logging::getInstance().getLogger((logger)).log(                              \
-        mapcrafter::util::LogLevel::level, __FILE__, __LINE__)
+        mapcrafter::util::LogLevel::level, __FILE__, __LINE__                                      \
+    )
 #define LOG(level) LOGN(level, DEFAULT_LOGGER)
 
 #define LOGNK_ONCE(level, logger, key)                                                             \
     mapcrafter::util::Logging::getInstance().getLogger((logger)).logOnce(                          \
-        (key), mapcrafter::util::LogLevel::level, __FILE__, __LINE__)
+        (key), mapcrafter::util::LogLevel::level, __FILE__, __LINE__                               \
+    )
 #define LOGN_ONCE(level, logger) LOGNK_ONCE(level, logger, DEFAULT_LOGKEY)
 #define LOGK_ONCE(level, key) LOGNK_ONCE(level, DEFAULT_LOGGER, std::string("key__") + (key))
 #define LOG_ONCE(level) LOGN_ONCE(level, DEFAULT_LOGGER)

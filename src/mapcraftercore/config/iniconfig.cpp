@@ -29,7 +29,8 @@ namespace mapcrafter {
 namespace config {
 
 INIConfigSection::INIConfigSection(const std::string &type, const std::string &name)
-    : type(type), name(name) {}
+    : type(type),
+      name(name) {}
 
 INIConfigSection::~INIConfigSection() {}
 
@@ -113,8 +114,9 @@ void INIConfig::load(std::istream &in) {
         // a line with a new section
         else if (line[0] == '[') {
             if (line[line.size() - 1] != ']') {
-                throw INIConfigError("Expecting ']' at end of line " + util::str(line_number) +
-                                     ".");
+                throw INIConfigError(
+                    "Expecting ']' at end of line " + util::str(line_number) + "."
+                );
                 return;
             }
 
@@ -129,8 +131,9 @@ void INIConfig::load(std::istream &in) {
             }
 
             if (name.empty()) {
-                throw INIConfigError("Invalid section name on line " + util::str(line_number) +
-                                     ".");
+                throw INIConfigError(
+                    "Invalid section name on line " + util::str(line_number) + "."
+                );
                 return;
             }
 
@@ -203,8 +206,8 @@ INIConfigSection &INIConfig::getRootSection() { return root; }
 
 const std::vector<INIConfigSection> &INIConfig::getSections() const { return sections; }
 
-const INIConfigSection &INIConfig::getSection(const std::string &type,
-                                              const std::string &name) const {
+const INIConfigSection &
+INIConfig::getSection(const std::string &type, const std::string &name) const {
     int index = getSectionIndex(type, name);
     if (index == -1)
         return empty_section;

@@ -98,8 +98,8 @@ class RenderBehaviors {
     /**
      * Parses the render behaviors of the maps from the command line arguments.
      */
-    static RenderBehaviors fromRenderOpts(const config::MapcrafterConfig &config,
-                                          const RenderOpts &render_opts);
+    static RenderBehaviors
+    fromRenderOpts(const config::MapcrafterConfig &config, const RenderOpts &render_opts);
 
   private:
     // default behavior for maps if nothing specified
@@ -164,8 +164,9 @@ class RenderManager {
      * Copies a file from the template directory to the output directory and replaces the
      * variables from the map (every "{key}" in the file becomes "value").
      */
-    bool copyTemplateFile(const std::string &filename,
-                          const std::map<std::string, std::string> &vars) const;
+    bool copyTemplateFile(
+        const std::string &filename, const std::map<std::string, std::string> &vars
+    ) const;
 
     /**
      * Copes a file from the template directory to the output directory.

@@ -24,9 +24,12 @@
 namespace mapcrafter {
 namespace renderer {
 
-TextureImage::TextureImage() : frame_count(1) {}
+TextureImage::TextureImage()
+    : frame_count(1) {}
 
-TextureImage::TextureImage(const std::string &name) : name(name), frame_count(1) {}
+TextureImage::TextureImage(const std::string &name)
+    : name(name),
+      frame_count(1) {}
 
 TextureImage::~TextureImage() {}
 

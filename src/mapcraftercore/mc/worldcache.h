@@ -62,7 +62,12 @@ const int GET_LIGHT = GET_BLOCK_LIGHT | GET_SKY_LIGHT;
  * Maybe add a set of corrupt chunks/regions to dump them at the end of the rendering.
  */
 struct CacheStats {
-    CacheStats() : hits(0), misses(0), region_not_found(0), not_found(0), invalid(0) {}
+    CacheStats()
+        : hits(0),
+          misses(0),
+          region_not_found(0),
+          not_found(0),
+          invalid(0) {}
 
     void print(const std::string &name) const {
         std::cout << name << ":" << std::endl;

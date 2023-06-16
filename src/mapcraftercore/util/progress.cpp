@@ -70,7 +70,9 @@ std::string format_eta(int eta) {
     return str_seconds;
 }
 
-MultiplexingProgressHandler::MultiplexingProgressHandler() : max(0), value(0) {}
+MultiplexingProgressHandler::MultiplexingProgressHandler()
+    : max(0),
+      value(0) {}
 
 MultiplexingProgressHandler::~MultiplexingProgressHandler() {}
 
@@ -94,7 +96,9 @@ void MultiplexingProgressHandler::setValue(int value) {
         (*handler_it)->setValue(value);
 }
 
-DummyProgressHandler::DummyProgressHandler() : max(0), value(0) {}
+DummyProgressHandler::DummyProgressHandler()
+    : max(0),
+      value(0) {}
 
 DummyProgressHandler::~DummyProgressHandler() {}
 
@@ -107,7 +111,10 @@ int DummyProgressHandler::getValue() const { return value; }
 void DummyProgressHandler::setValue(int value) { this->value = value; }
 
 AbstractOutputProgressHandler::AbstractOutputProgressHandler()
-    : start(std::time(nullptr)), last_update(0), last_value(0), last_percentage(0) {}
+    : start(std::time(nullptr)),
+      last_update(0),
+      last_value(0),
+      last_percentage(0) {}
 
 AbstractOutputProgressHandler::~AbstractOutputProgressHandler() {}
 
@@ -142,7 +149,8 @@ void AbstractOutputProgressHandler::setValue(int value) {
 
 void AbstractOutputProgressHandler::update(double percentage, double average_speed, int eta) {}
 
-LogOutputProgressHandler::LogOutputProgressHandler() : last_step(0) {}
+LogOutputProgressHandler::LogOutputProgressHandler()
+    : last_step(0) {}
 
 LogOutputProgressHandler::~LogOutputProgressHandler() {}
 
@@ -160,7 +168,8 @@ void LogOutputProgressHandler::update(double percentage, double average_speed, i
         log << " ETA " << util::format_eta(eta) << ".";
 }
 
-ProgressBar::ProgressBar() : last_output_len(0) {}
+ProgressBar::ProgressBar()
+    : last_output_len(0) {}
 
 ProgressBar::~ProgressBar() {}
 
@@ -224,7 +233,8 @@ std::string ProgressBar::createProgressBar(int width, double percentage) const {
 }
 
 std::string ProgressBar::createProgressStats(
-    double percentage, int value, int max, double speed_average, int eta) const {
+    double percentage, int value, int max, double speed_average, int eta
+) const {
     std::string stats;
     char formatted_percent[20], formatted_speed_average[20];
     sprintf(&formatted_percent[0], "%.2f%%", percentage);

@@ -34,21 +34,27 @@ BlockImages *SideRenderView::createBlockImages(mc::BlockStateRegistry &block_reg
 
 TileSet *SideRenderView::createTileSet(int tile_width) const { return new SideTileSet(tile_width); }
 
-TileRenderer *SideRenderView::createTileRenderer(mc::BlockStateRegistry &block_registry,
-                                                 BlockImages *images,
-                                                 int tile_width,
-                                                 mc::WorldCache *world,
-                                                 RenderMode *render_mode) const {
+TileRenderer *SideRenderView::createTileRenderer(
+    mc::BlockStateRegistry &block_registry,
+    BlockImages *images,
+    int tile_width,
+    mc::WorldCache *world,
+    RenderMode *render_mode
+) const {
     return new SideTileRenderer(this, block_registry, images, tile_width, world, render_mode);
 }
 
-void SideRenderView::configureBlockImages(BlockImages *images,
-                                          const config::WorldSection &world_config,
-                                          const config::MapSection &map_config) const {}
+void SideRenderView::configureBlockImages(
+    BlockImages *images,
+    const config::WorldSection &world_config,
+    const config::MapSection &map_config
+) const {}
 
-void SideRenderView::configureTileRenderer(TileRenderer *tile_renderer,
-                                           const config::WorldSection &world_config,
-                                           const config::MapSection &map_config) const {
+void SideRenderView::configureTileRenderer(
+    TileRenderer *tile_renderer,
+    const config::WorldSection &world_config,
+    const config::MapSection &map_config
+) const {
     assert(tile_renderer != nullptr);
     RenderView::configureTileRenderer(tile_renderer, world_config, map_config);
 

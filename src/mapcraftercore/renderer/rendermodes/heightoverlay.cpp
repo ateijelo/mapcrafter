@@ -25,7 +25,8 @@
 namespace mapcrafter {
 namespace renderer {
 
-HeightOverlay::HeightOverlay() : OverlayRenderMode(OverlayMode::PER_BLOCK) {}
+HeightOverlay::HeightOverlay()
+    : OverlayRenderMode(OverlayMode::PER_BLOCK) {}
 
 RGBAPixel HeightOverlay::getBlockColor(const mc::BlockPos &pos, uint16_t id, uint16_t data) {
     // TODO make the gradient configurable

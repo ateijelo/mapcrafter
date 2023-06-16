@@ -24,7 +24,8 @@
 namespace mapcrafter {
 namespace config {
 
-ConfigSection::ConfigSection() : global(false) {}
+ConfigSection::ConfigSection()
+    : global(false) {}
 
 ConfigSection::~ConfigSection() {}
 
@@ -59,9 +60,9 @@ ValidationList ConfigSection::parse(const INIConfigSection &section) {
 
 void ConfigSection::preParse(const INIConfigSection &section, ValidationList &validation) {}
 
-bool ConfigSection::parseField(const std::string key,
-                               const std::string value,
-                               ValidationList &validation) {
+bool ConfigSection::parseField(
+    const std::string key, const std::string value, ValidationList &validation
+) {
     return false;
 }
 

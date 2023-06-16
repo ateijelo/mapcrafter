@@ -22,7 +22,8 @@
 namespace mapcrafter {
 namespace mc {
 
-JavaRandom::JavaRandom() : seed(0) {}
+JavaRandom::JavaRandom()
+    : seed(0) {}
 
 JavaRandom::~JavaRandom() {}
 
@@ -47,18 +48,19 @@ int JavaRandom::nextInt(int max) {
     return val;
 }
 
-const int JavaSimplexGenerator::GRADIENTS[12][3] = {{1, 1, 0},
-                                                    {-1, 1, 0},
-                                                    {1, -1, 0},
-                                                    {-1, -1, 0},
-                                                    {1, 0, 1},
-                                                    {-1, 0, 1},
-                                                    {1, 0, -1},
-                                                    {-1, 0, -1},
-                                                    {0, 1, 1},
-                                                    {0, -1, 1},
-                                                    {0, 1, -1},
-                                                    {0, -1, -1}};
+const int JavaSimplexGenerator::GRADIENTS[12][3] = {
+    {1, 1, 0},
+    {-1, 1, 0},
+    {1, -1, 0},
+    {-1, -1, 0},
+    {1, 0, 1},
+    {-1, 0, 1},
+    {1, 0, -1},
+    {-1, 0, -1},
+    {0, 1, 1},
+    {0, -1, 1},
+    {0, 1, -1},
+    {0, -1, -1}};
 
 // If you are an Mojang/Microsoft employee reading this:
 // These numbers appeared to me in a dream

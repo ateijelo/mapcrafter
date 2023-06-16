@@ -77,12 +77,14 @@ class setcolor {
 
 class setfgcolor : public setcolor {
   public:
-    setfgcolor(int color) : setcolor(setcolor::foreground, color) {}
+    setfgcolor(int color)
+        : setcolor(setcolor::foreground, color) {}
 };
 
 class setbgcolor : public setcolor {
   public:
-    setbgcolor(int color) : setcolor(setcolor::background, color) {}
+    setbgcolor(int color)
+        : setcolor(setcolor::background, color) {}
 };
 
 std::ostream &operator<<(std::ostream &out, const setcolor &color);

@@ -41,9 +41,11 @@ BOOST_AUTO_TEST_CASE(pos_test_region) {
     BOOST_CHECK_EQUAL(mc::RegionPos::byFilename("r.42.-12.mca"), mc::RegionPos(42, -12));
 
     BOOST_CHECK_EXCEPTION(
-        mc::RegionPos::byFilename("r.42..-12.mca"), std::runtime_error, is_critical);
+        mc::RegionPos::byFilename("r.42..-12.mca"), std::runtime_error, is_critical
+    );
     BOOST_CHECK_EXCEPTION(
-        mc::RegionPos::byFilename("r.f42.-12.mca"), std::runtime_error, is_critical);
+        mc::RegionPos::byFilename("r.f42.-12.mca"), std::runtime_error, is_critical
+    );
 }
 
 BOOST_AUTO_TEST_CASE(pos_test_chunk) {
@@ -63,10 +65,14 @@ BOOST_AUTO_TEST_CASE(pos_test_chunk) {
 }
 
 BOOST_AUTO_TEST_CASE(pos_test_block) {
-    BOOST_CHECK_EQUAL(mc::ChunkPos(mc::LocalBlockPos(3, 4, 64).toGlobalPos(mc::ChunkPos(42, 73))),
-                      mc::ChunkPos(42, 73));
-    BOOST_CHECK_EQUAL(mc::ChunkPos(mc::LocalBlockPos(1, 2, 3).toGlobalPos(mc::ChunkPos(-4, 10))),
-                      mc::ChunkPos(-4, 10));
+    BOOST_CHECK_EQUAL(
+        mc::ChunkPos(mc::LocalBlockPos(3, 4, 64).toGlobalPos(mc::ChunkPos(42, 73))),
+        mc::ChunkPos(42, 73)
+    );
+    BOOST_CHECK_EQUAL(
+        mc::ChunkPos(mc::LocalBlockPos(1, 2, 3).toGlobalPos(mc::ChunkPos(-4, 10))),
+        mc::ChunkPos(-4, 10)
+    );
 
     std::set<mc::BlockPos> blocks;
     for (int y = 0; y < 256; y++)

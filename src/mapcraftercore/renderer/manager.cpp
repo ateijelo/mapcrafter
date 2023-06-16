@@ -56,9 +56,9 @@ void RenderBehaviors::setRenderBehavior(const std::string &map, RenderBehavior b
         render_behaviors[map][rotation] = behavior;
 }
 
-void RenderBehaviors::setRenderBehavior(const std::string &map,
-                                        int rotation,
-                                        RenderBehavior behavior) {
+void RenderBehaviors::setRenderBehavior(
+    const std::string &map, int rotation, RenderBehavior behavior
+) {
     // set whole map to default behavior if setting the first rotation
     if (!render_behaviors.count(map))
         setRenderBehavior(map, default_behavior);
@@ -76,10 +76,12 @@ bool RenderBehaviors::isCompleteRenderSkip(const std::string &map) const {
 
 namespace {
 
-void parseRenderBehaviorMaps(const std::vector<std::string> &maps,
-                             RenderBehavior behavior,
-                             RenderBehaviors &behaviors,
-                             const config::MapcrafterConfig &config) {
+void parseRenderBehaviorMaps(
+    const std::vector<std::string> &maps,
+    RenderBehavior behavior,
+    RenderBehaviors &behaviors,
+    const config::MapcrafterConfig &config
+) {
     for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
         std::string map = *map_it;
         std::string rotation;
@@ -128,8 +130,9 @@ void parseRenderBehaviorMaps(const std::vector<std::string> &maps,
 
 } // namespace
 
-RenderBehaviors RenderBehaviors::fromRenderOpts(const config::MapcrafterConfig &config,
-                                                const RenderOpts &render_opts) {
+RenderBehaviors RenderBehaviors::fromRenderOpts(
+    const config::MapcrafterConfig &config, const RenderOpts &render_opts
+) {
     RenderBehaviors behaviors;
 
     if (render_opts.skip_all)
@@ -144,7 +147,9 @@ RenderBehaviors RenderBehaviors::fromRenderOpts(const config::MapcrafterConfig &
 }
 
 RenderManager::RenderManager(const config::MapcrafterConfig &config)
-    : config(config), web_config(config), time_started_scanning(0) {}
+    : config(config),
+      web_config(config),
+      time_started_scanning(0) {}
 
 void RenderManager::setRenderBehaviors(const RenderBehaviors &render_behaviors) {
     this->render_behaviors = render_behaviors;
@@ -271,10 +276,9 @@ bool RenderManager::scanWorlds() {
     return true;
 }
 
-void RenderManager::renderMap(const std::string &map,
-                              int rotation,
-                              int threads,
-                              util::IProgressHandler *progress) {
+void RenderManager::renderMap(
+    const std::string &map, int rotation, int threads, util::IProgressHandler *progress
+) {
     // make sure this map/rotation actually exists and should be rendered
     if (!config.hasMap(map) || !config.getMap(map).getRotations().count(rotation) ||
         render_behaviors.getRenderBehavior(map, rotation) == RenderBehavior::SKIP)
@@ -331,10 +335,12 @@ void RenderManager::renderMap(const std::string &map,
 
     RenderedBlockImages *new_block_images = dynamic_cast<RenderedBlockImages *>(block_images.get());
     if (new_block_images != nullptr) {
-        if (!new_block_images->loadBlockImages(map_config.getBlockDir().string(),
-                                               util::str(map_config.getRenderView()),
-                                               rotation,
-                                               map_config.getTextureSize())) {
+        if (!new_block_images->loadBlockImages(
+                map_config.getBlockDir().string(),
+                util::str(map_config.getRenderView()),
+                rotation,
+                map_config.getTextureSize()
+            )) {
             LOG(ERROR) << "Skipping remaining rotations.";
             return;
         }
@@ -408,7 +414,8 @@ bool RenderManager::run(int threads, bool batch) {
                       << "Rendering rotation " << config::ROTATION_NAMES[*rotation_it] << "...";
 
             std::shared_ptr<util::MultiplexingProgressHandler> progress(
-                new util::MultiplexingProgressHandler);
+                new util::MultiplexingProgressHandler
+            );
             util::ProgressBar *progress_bar = nullptr;
             if (batch || !util::isOutTTY()) {
                 util::Logging::getInstance().setSinkLogProgress("__output__", true);
@@ -447,8 +454,9 @@ const std::vector<std::pair<std::string, std::set<int>>> &RenderManager::getRequ
     return required_maps;
 }
 
-bool RenderManager::copyTemplateFile(const std::string &filename,
-                                     const std::map<std::string, std::string> &vars) const {
+bool RenderManager::copyTemplateFile(
+    const std::string &filename, const std::map<std::string, std::string> &vars
+) const {
     std::ifstream file(config.getTemplatePath(filename).string().c_str());
     if (!file)
         return false;
@@ -557,9 +565,8 @@ void RenderManager::initializeMap(const std::string &map) {
  * This method increases the max zoom of a rendered map and makes the necessary changes
  * on the tile tree.
  */
-void RenderManager::increaseMaxZoom(const fs::path &dir,
-                                    std::string image_format,
-                                    int jpeg_quality) const {
+void RenderManager::increaseMaxZoom(const fs::path &dir, std::string image_format, int jpeg_quality)
+    const {
     // find out tile size by reading old base.png image
     RGBAImage old_base;
     if (image_format == "png") {
@@ -577,8 +584,9 @@ void RenderManager::increaseMaxZoom(const fs::path &dir,
         // then move the old tile trees one zoom level deeper
         util::moveFile(dir / "1_", dir / "1/4");
         // also move the images of the directories
-        util::moveFile(dir / (std::string("1.") + image_format),
-                       dir / (std::string("1/4.") + image_format));
+        util::moveFile(
+            dir / (std::string("1.") + image_format), dir / (std::string("1/4.") + image_format)
+        );
     }
 
     // do the same for the other directories
@@ -586,24 +594,27 @@ void RenderManager::increaseMaxZoom(const fs::path &dir,
         util::moveFile(dir / "2", dir / "2_");
         fs::create_directories(dir / "2");
         util::moveFile(dir / "2_", dir / "2/3");
-        util::moveFile(dir / (std::string("2.") + image_format),
-                       dir / (std::string("2/3.") + image_format));
+        util::moveFile(
+            dir / (std::string("2.") + image_format), dir / (std::string("2/3.") + image_format)
+        );
     }
 
     if (fs::exists(dir / "3")) {
         util::moveFile(dir / "3", dir / "3_");
         fs::create_directories(dir / "3");
         util::moveFile(dir / "3_", dir / "3/2");
-        util::moveFile(dir / (std::string("3.") + image_format),
-                       dir / (std::string("3/2.") + image_format));
+        util::moveFile(
+            dir / (std::string("3.") + image_format), dir / (std::string("3/2.") + image_format)
+        );
     }
 
     if (fs::exists(dir / "4")) {
         util::moveFile(dir / "4", dir / "4_");
         fs::create_directories(dir / "4");
         util::moveFile(dir / "4_", dir / "4/1");
-        util::moveFile(dir / (std::string("4.") + image_format),
-                       dir / (std::string("4/1.") + image_format));
+        util::moveFile(
+            dir / (std::string("4.") + image_format), dir / (std::string("4/1.") + image_format)
+        );
     }
 
     // now read the images, which belong to the new directories

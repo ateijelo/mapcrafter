@@ -33,8 +33,8 @@
 namespace mapcrafter {
 namespace renderer {
 
-BlockImages *
-NewIsometricRenderView::createBlockImages(mc::BlockStateRegistry &block_registry) const {
+BlockImages *NewIsometricRenderView::createBlockImages(mc::BlockStateRegistry &block_registry
+) const {
     return new RenderedBlockImages(block_registry);
 }
 
@@ -42,18 +42,23 @@ TileSet *NewIsometricRenderView::createTileSet(int tile_width) const {
     return new NewIsometricTileSet(tile_width);
 }
 
-TileRenderer *NewIsometricRenderView::createTileRenderer(mc::BlockStateRegistry &block_registry,
-                                                         BlockImages *images,
-                                                         int tile_width,
-                                                         mc::WorldCache *world,
-                                                         RenderMode *render_mode) const {
+TileRenderer *NewIsometricRenderView::createTileRenderer(
+    mc::BlockStateRegistry &block_registry,
+    BlockImages *images,
+    int tile_width,
+    mc::WorldCache *world,
+    RenderMode *render_mode
+) const {
     return new NewIsometricTileRenderer(
-        this, block_registry, images, tile_width, world, render_mode);
+        this, block_registry, images, tile_width, world, render_mode
+    );
 }
 
-void NewIsometricRenderView::configureBlockImages(BlockImages *block_images,
-                                                  const config::WorldSection &world_config,
-                                                  const config::MapSection &map_config) const {
+void NewIsometricRenderView::configureBlockImages(
+    BlockImages *block_images,
+    const config::WorldSection &world_config,
+    const config::MapSection &map_config
+) const {
     assert(block_images != nullptr);
     RenderView::configureBlockImages(block_images, world_config, map_config);
 
@@ -79,9 +84,11 @@ void NewIsometricRenderView::configureBlockImages(BlockImages *block_images,
     */
 }
 
-void NewIsometricRenderView::configureTileRenderer(TileRenderer *tile_renderer,
-                                                   const config::WorldSection &world_config,
-                                                   const config::MapSection &map_config) const {
+void NewIsometricRenderView::configureTileRenderer(
+    TileRenderer *tile_renderer,
+    const config::WorldSection &world_config,
+    const config::MapSection &map_config
+) const {
     assert(tile_renderer != nullptr);
     RenderView::configureTileRenderer(tile_renderer, world_config, map_config);
 

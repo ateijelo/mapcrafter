@@ -31,12 +31,14 @@ namespace renderer {
 
 class SideTileRenderer : public TileRenderer {
   public:
-    SideTileRenderer(const RenderView *render_view,
-                     mc::BlockStateRegistry &block_registry,
-                     BlockImages *images,
-                     int tile_width,
-                     mc::WorldCache *world,
-                     RenderMode *render_mode);
+    SideTileRenderer(
+        const RenderView *render_view,
+        mc::BlockStateRegistry &block_registry,
+        BlockImages *images,
+        int tile_width,
+        mc::WorldCache *world,
+        RenderMode *render_mode
+    );
     ~SideTileRenderer();
 
     virtual int getTileSize() const;

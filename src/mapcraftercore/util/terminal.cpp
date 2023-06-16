@@ -42,7 +42,9 @@ bool isOutTTY() {
 #endif
 }
 
-setcolor::setcolor(int type, int color) : type(type), color(color) {}
+setcolor::setcolor(int type, int color)
+    : type(type),
+      color(color) {}
 
 std::ostream &setcolor::operator()(std::ostream &out) const {
     if (!isEnabled())

@@ -42,9 +42,11 @@ template <> mc::BlockPos as<mc::BlockPos>(const std::string &from) {
     mc::BlockPos pos;
     ss >> pos.x >> pos.z >> pos.y;
     if (!ss || !ss.eof())
-        throw std::invalid_argument("Invalid block coordinates '" + from +
-                                    "', "
-                                    "must be of the format '<x>,<z>,<y>'!");
+        throw std::invalid_argument(
+            "Invalid block coordinates '" + from +
+            "', "
+            "must be of the format '<x>,<z>,<y>'!"
+        );
     return pos;
 }
 
@@ -128,15 +130,17 @@ void WorldSection::preParse(const INIConfigSection &section, ValidationList &val
     crop_unpopulated_chunks.setDefault(false);
 }
 
-bool WorldSection::parseField(const std::string key,
-                              const std::string value,
-                              ValidationList &validation) {
+bool WorldSection::parseField(
+    const std::string key, const std::string value, ValidationList &validation
+) {
     if (key == "input_dir") {
         if (input_dir.load(key, value, validation)) {
             input_dir.setValue(BOOST_FS_ABSOLUTE(input_dir.getValue(), config_dir));
             if (!fs::is_directory(input_dir.getValue()))
-                validation.error("'input_dir' must be an existing directory! '" +
-                                 input_dir.getValue().string() + "' does not exist!");
+                validation.error(
+                    "'input_dir' must be an existing directory! '" + input_dir.getValue().string() +
+                    "' does not exist!"
+                );
         }
     } else if (key == "dimension")
         dimension.load(key, value, validation);
@@ -226,8 +230,9 @@ void WorldSection::postParse(const INIConfigSection &section, ValidationList &va
         try {
             world_crop.loadBlockMask(block_mask.getValue());
         } catch (std::invalid_argument &exception) {
-            validation.error(std::string("There is a problem parsing the block mask: ") +
-                             exception.what());
+            validation.error(
+                std::string("There is a problem parsing the block mask: ") + exception.what()
+            );
         }
     }
 

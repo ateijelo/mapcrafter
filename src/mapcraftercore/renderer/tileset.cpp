@@ -35,7 +35,9 @@
 namespace mapcrafter {
 namespace renderer {
 
-TilePos::TilePos(int x, int y) : x(x), y(y) {}
+TilePos::TilePos(int x, int y)
+    : x(x),
+      y(y) {}
 
 int TilePos::getX() const { return x; }
 
@@ -148,8 +150,10 @@ TilePath TilePath::byTilePos(const TilePos &tile, int depth) {
     // check if the tile is in this bounds
     if (tile.getX() > radius || tile.getY() > radius || tile.getX() < -radius ||
         tile.getY() < -radius)
-        throw std::runtime_error("Invalid tile position " + util::str(tile.getX()) + ":" +
-                                 util::str(tile.getY()) + " on depth " + util::str(depth));
+        throw std::runtime_error(
+            "Invalid tile position " + util::str(tile.getX()) + ":" + util::str(tile.getY()) +
+            " on depth " + util::str(depth)
+        );
     // the tactic is here to calculate the bounds where the tile is inside
     int bounds_left = -radius;
     int bounds_right = radius;
@@ -197,7 +201,10 @@ TilePath TilePath::byTilePos(const TilePos &tile, int depth) {
     return path;
 }
 
-TileSet::TileSet(int tile_width) : tile_width(tile_width), min_depth(0), depth(0) {}
+TileSet::TileSet(int tile_width)
+    : tile_width(tile_width),
+      min_depth(0),
+      depth(0) {}
 
 TileSet::~TileSet() {}
 
@@ -282,8 +289,9 @@ void TileSet::findRenderTiles(const mc::World &world, bool auto_center, TilePos 
     }
 }
 
-void TileSet::findRequiredCompositeTiles(const std::set<TilePos> &render_tiles,
-                                         std::set<TilePath> &tiles) {
+void TileSet::findRequiredCompositeTiles(
+    const std::set<TilePos> &render_tiles, std::set<TilePath> &tiles
+) {
 
     // iterate through the render tiles on the max zoom level
     // add their parent composite tiles

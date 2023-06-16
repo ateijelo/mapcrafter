@@ -42,11 +42,13 @@ BOOST_AUTO_TEST_CASE(nbt_testIO) {
         nbt::Compression::NO_COMPRESSION, nbt::Compression::GZIP, nbt::Compression::ZLIB};
     for (size_t i = 0; i < 3; i++) {
         nbt::Compression compression = compressions[i];
-        BOOST_TEST_MESSAGE(std::string("Testing NBT with") +
-                           (compression == nbt::Compression::NO_COMPRESSION
-                                ? "out compression."
-                                : (compression == nbt::Compression::GZIP ? " Gzip compression."
-                                                                         : " Zlib compression.")));
+        BOOST_TEST_MESSAGE(
+            std::string("Testing NBT with") +
+            (compression == nbt::Compression::NO_COMPRESSION
+                 ? "out compression."
+                 : (compression == nbt::Compression::GZIP ? " Gzip compression."
+                                                          : " Zlib compression."))
+        );
 
         std::stringstream stream;
 
@@ -83,8 +85,9 @@ BOOST_AUTO_TEST_CASE(nbt_testIO) {
         REQUIRE_TAG(in.hasTag<nbt::TagDouble>("double"), "double");
         REQUIRE_TAG(in.hasTag<nbt::TagString>("string"), "string");
         REQUIRE_TAG(in.hasList<nbt::TagString>("list", list_data.size()), "list");
-        REQUIRE_TAG(in.hasArray<nbt::TagByteArray>("bytearray", bytearray_data.size()),
-                    "bytearray");
+        REQUIRE_TAG(
+            in.hasArray<nbt::TagByteArray>("bytearray", bytearray_data.size()), "bytearray"
+        );
         REQUIRE_TAG(in.hasArray<nbt::TagIntArray>("intarray", intarray_data.size()), "intarray");
 
         BOOST_CHECK_EQUAL(in.findTag<nbt::TagByte>("byte").payload, 42);

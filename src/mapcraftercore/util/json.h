@@ -29,7 +29,8 @@ namespace util {
 
 class JSONError : public std::runtime_error {
   public:
-    JSONError(const std::string &message = "") : std::runtime_error(message) {}
+    JSONError(const std::string &message = "")
+        : std::runtime_error(message) {}
 };
 
 template <typename T> T json_get(const picojson::object &object, const std::string &key) {
@@ -39,8 +40,8 @@ template <typename T> T json_get(const picojson::object &object, const std::stri
 }
 
 template <>
-inline picojson::value json_get<picojson::value>(const picojson::object &object,
-                                                 const std::string &key) {
+inline picojson::value
+json_get<picojson::value>(const picojson::object &object, const std::string &key) {
     if (object.count(key))
         return object.at(key);
     throw JSONError("Unable to find/convert '" + key + "' of json object!");

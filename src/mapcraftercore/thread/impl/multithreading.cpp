@@ -28,7 +28,8 @@
 namespace mapcrafter {
 namespace thread {
 
-ThreadManager::ThreadManager() : finished(false) {}
+ThreadManager::ThreadManager()
+    : finished(false) {}
 
 ThreadManager::~ThreadManager() {}
 
@@ -63,8 +64,9 @@ bool ThreadManager::getWork(renderer::RenderWork &work) {
     return true;
 }
 
-void ThreadManager::workFinished(const renderer::RenderWork &work,
-                                 const renderer::RenderWorkResult &result) {
+void ThreadManager::workFinished(
+    const renderer::RenderWork &work, const renderer::RenderWorkResult &result
+) {
     thread_ns::unique_lock<thread_ns::mutex> lock(mutex);
     if (!result_queue.empty())
         result_queue.push(result);
@@ -84,9 +86,12 @@ bool ThreadManager::getResult(renderer::RenderWorkResult &result) {
     return true;
 }
 
-ThreadWorker::ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
-                           const renderer::RenderContext &context)
-    : manager(manager), render_context(context) {
+ThreadWorker::ThreadWorker(
+    WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
+    const renderer::RenderContext &context
+)
+    : manager(manager),
+      render_context(context) {
     render_worker.setRenderContext(context);
 }
 
@@ -103,12 +108,14 @@ void ThreadWorker::operator()() {
     }
 }
 
-MultiThreadingDispatcher::MultiThreadingDispatcher(int threads) : thread_count(threads) {}
+MultiThreadingDispatcher::MultiThreadingDispatcher(int threads)
+    : thread_count(threads) {}
 
 MultiThreadingDispatcher::~MultiThreadingDispatcher() {}
 
-void MultiThreadingDispatcher::dispatch(const renderer::RenderContext &context,
-                                        util::IProgressHandler *progress) {
+void MultiThreadingDispatcher::dispatch(
+    const renderer::RenderContext &context, util::IProgressHandler *progress
+) {
     auto tiles = context.tile_set->getRequiredCompositeTiles();
     if (tiles.size() == 0)
         return;

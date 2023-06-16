@@ -26,7 +26,10 @@
 namespace mapcrafter {
 namespace mc {
 
-BlockState::BlockState(std::string name) : name(name) { updateVariantDescription(); }
+BlockState::BlockState(std::string name)
+    : name(name) {
+    updateVariantDescription();
+}
 
 std::string BlockState::getName() const { return name; }
 
@@ -66,7 +69,8 @@ void BlockState::updateVariantDescription() {
     }
 }
 
-BlockStateRegistry::BlockStateRegistry() : unknown_block("mapcrafter:unknown") {}
+BlockStateRegistry::BlockStateRegistry()
+    : unknown_block("mapcrafter:unknown") {}
 
 uint16_t BlockStateRegistry::getBlockID(const BlockState &block) {
     std::lock_guard<std::mutex> guard(mutex);

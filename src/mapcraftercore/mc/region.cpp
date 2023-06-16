@@ -27,9 +27,12 @@
 namespace mapcrafter {
 namespace mc {
 
-RegionFile::RegionFile() : rotation(0) {}
+RegionFile::RegionFile()
+    : rotation(0) {}
 
-RegionFile::RegionFile(const std::string &filename) : filename(filename), rotation(0) {
+RegionFile::RegionFile(const std::string &filename)
+    : filename(filename),
+      rotation(0) {
     regionpos_original = RegionPos::byFilename(filename);
     regionpos = regionpos_original;
 }
@@ -258,9 +261,9 @@ uint8_t RegionFile::getChunkDataCompression(const ChunkPos &chunk) const {
     return chunk_data_compression[getChunkIndex(chunk)];
 }
 
-void RegionFile::setChunkData(const ChunkPos &chunk,
-                              const std::vector<uint8_t> &data,
-                              uint8_t compression) {
+void RegionFile::setChunkData(
+    const ChunkPos &chunk, const std::vector<uint8_t> &data, uint8_t compression
+) {
     size_t index = getChunkIndex(chunk);
     chunk_data[index] = data;
     chunk_data_compression[index] = compression;
@@ -299,7 +302,8 @@ int RegionFile::loadChunk(const ChunkPos &pos, BlockStateRegistry &block_registr
     // try to load the chunk
     try {
         if (!chunk.readNBT(
-                block_registry, reinterpret_cast<char *>(&chunk_data[index][0]), size, comp))
+                block_registry, reinterpret_cast<char *>(&chunk_data[index][0]), size, comp
+            ))
             return CHUNK_DATA_INVALID;
     } catch (const nbt::NBTError &err) {
         LOG(ERROR) << "Unable to read chunk at " << pos << ": " << err.what();

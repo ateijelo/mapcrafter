@@ -32,7 +32,8 @@ namespace config {
 
 class INIConfigError : public std::runtime_error {
   public:
-    INIConfigError(const std::string &what) : std::runtime_error(what) {}
+    INIConfigError(const std::string &what)
+        : std::runtime_error(what) {}
 };
 
 typedef std::pair<std::string, std::string> INIConfigEntry;

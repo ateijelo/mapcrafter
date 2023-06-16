@@ -85,7 +85,9 @@ std::string parseJSONLine(const std::string &line) {
 SignEntity::SignEntity() {}
 
 SignEntity::SignEntity(const mc::BlockPos &pos, const Lines &lines)
-    : pos(pos), lines(lines), text() {
+    : pos(pos),
+      lines(lines),
+      text() {
     // check if the lines of this sign are in the new json format (>= mc 1.8)
     // if yes, extract actual text
     if (isJSONLine(lines[0]) && isJSONLine(lines[1]) && isJSONLine(lines[2]) &&
@@ -115,7 +117,8 @@ const SignEntity::Lines &SignEntity::getLines() const { return lines; }
 const std::string &SignEntity::getText() const { return text; }
 
 WorldEntitiesCache::WorldEntitiesCache(const World &world)
-    : world(world), cache_file(world.getRegionDir() / "entities.nbt.gz") {}
+    : world(world),
+      cache_file(world.getRegionDir() / "entities.nbt.gz") {}
 
 WorldEntitiesCache::~WorldEntitiesCache() {}
 
@@ -223,7 +226,8 @@ void WorldEntitiesCache::update(util::IProgressHandler *progress) {
             mc::nbt::NBTFile nbt;
             const std::vector<uint8_t> &data = region.getChunkData(*chunk_it);
             nbt.readNBT(
-                reinterpret_cast<const char *>(&data[0]), data.size(), mc::nbt::Compression::ZLIB);
+                reinterpret_cast<const char *>(&data[0]), data.size(), mc::nbt::Compression::ZLIB
+            );
 
             // nbt::TagCompound& level = nbt.findTag<nbt::TagCompound>("Level");
             if (!nbt.hasTag<nbt::TagList>("block_entities")) {
@@ -262,17 +266,20 @@ std::vector<SignEntity> WorldEntitiesCache::getSigns(WorldCrop world_crop) const
                     entity.findTag<nbt::TagString>("id").payload != "minecraft:sign")
                     continue;
 
-                mc::BlockPos pos(entity.findTag<nbt::TagInt>("x").payload,
-                                 entity.findTag<nbt::TagInt>("z").payload,
-                                 entity.findTag<nbt::TagInt>("y").payload);
+                mc::BlockPos pos(
+                    entity.findTag<nbt::TagInt>("x").payload,
+                    entity.findTag<nbt::TagInt>("z").payload,
+                    entity.findTag<nbt::TagInt>("y").payload
+                );
 
                 if (!world_crop.isBlockContainedXZ(pos) || !world_crop.isBlockContainedY(pos))
                     continue;
 
-                mc::SignEntity::Lines lines = {{entity.findTag<nbt::TagString>("Text1").payload,
-                                                entity.findTag<nbt::TagString>("Text2").payload,
-                                                entity.findTag<nbt::TagString>("Text3").payload,
-                                                entity.findTag<nbt::TagString>("Text4").payload}};
+                mc::SignEntity::Lines lines = {
+                    {entity.findTag<nbt::TagString>("Text1").payload,
+                     entity.findTag<nbt::TagString>("Text2").payload,
+                     entity.findTag<nbt::TagString>("Text3").payload,
+                     entity.findTag<nbt::TagString>("Text4").payload}};
 
                 signs.push_back(mc::SignEntity(pos, lines));
             }

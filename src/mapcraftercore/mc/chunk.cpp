@@ -182,8 +182,9 @@ void readPackedShorts(const std::vector<int64_t> &data, std::array<uint16_t, 409
 }
 
 template <std::size_t PALETTE_SIZE = 4096>
-void readPackedShorts_v116(const std::vector<int64_t> &data,
-                           std::array<uint16_t, PALETTE_SIZE> &palette) {
+void readPackedShorts_v116(
+    const std::vector<int64_t> &data, std::array<uint16_t, PALETTE_SIZE> &palette
+) {
     uint32_t shorts_per_long = (PALETTE_SIZE + data.size() - 1) / data.size();
     uint32_t bits_per_value = 64 / shorts_per_long;
     palette.fill(0);
@@ -202,7 +203,12 @@ void readPackedShorts_v116(const std::vector<int64_t> &data,
 
 } // namespace
 
-Chunk::Chunk() : chunkpos(42, 42), rotation(0), air_id(0) { clear(); }
+Chunk::Chunk()
+    : chunkpos(42, 42),
+      rotation(0),
+      air_id(0) {
+    clear();
+}
 
 Chunk::~Chunk() {}
 
@@ -227,8 +233,9 @@ bool Chunk::readNBT117(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
         LOG(ERROR) << "Corrupt chunk: No x/z position found!";
         return false;
     }
-    chunkpos_original = ChunkPos(level.findTag<nbt::TagInt>("xPos").payload,
-                                 level.findTag<nbt::TagInt>("zPos").payload);
+    chunkpos_original = ChunkPos(
+        level.findTag<nbt::TagInt>("xPos").payload, level.findTag<nbt::TagInt>("zPos").payload
+    );
     chunkpos = chunkpos_original;
     if (rotation)
         chunkpos.rotate(rotation);
@@ -257,11 +264,9 @@ bool Chunk::readNBT117(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
     } else if (level.hasArray<nbt::TagIntArray>("Biomes", 1024)) {
         const nbt::TagIntArray &biomes_tag = level.findTag<nbt::TagIntArray>("Biomes");
         std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
-    } else if (level.hasArray<nbt::TagByteArray>("Biomes", 0) ||
-               level.hasArray<nbt::TagLongArray>("Biomes", 0)) {
+    } else if (level.hasArray<nbt::TagByteArray>("Biomes", 0) || level.hasArray<nbt::TagLongArray>("Biomes", 0)) {
         std::fill(biomes, biomes + BIOMES_ARRAY_SIZE, 0);
-    } else if (level.hasArray<nbt::TagByteArray>("Biomes", 256) ||
-               level.hasArray<nbt::TagIntArray>("Biomes", 256)) {
+    } else if (level.hasArray<nbt::TagByteArray>("Biomes", 256) || level.hasArray<nbt::TagIntArray>("Biomes", 256)) {
         LOG(WARNING) << "Out dated chunk " << chunkpos << ": Old biome data found!";
     } else {
         LOG(WARNING) << "Corrupt chunk " << chunkpos << ": No biome data found!";
@@ -385,8 +390,9 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
         LOG(ERROR) << "Corrupt chunk: No x/z position found!";
         return false;
     }
-    chunkpos_original = ChunkPos(nbt.findTag<nbt::TagInt>("xPos").payload,
-                                 nbt.findTag<nbt::TagInt>("zPos").payload);
+    chunkpos_original = ChunkPos(
+        nbt.findTag<nbt::TagInt>("xPos").payload, nbt.findTag<nbt::TagInt>("zPos").payload
+    );
     chunkpos = chunkpos_original;
     if (rotation)
         chunkpos.rotate(rotation);
@@ -468,9 +474,11 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
                 auto it = biome_resource_ids.find(biome_name);
                 if (it != biome_resource_ids.end())
                     biome_id = it->second;
-                std::fill(biomes + biomes_base_index,
-                          biomes + biomes_base_index + biomes_per_section,
-                          biome_id);
+                std::fill(
+                    biomes + biomes_base_index,
+                    biomes + biomes_base_index + biomes_per_section,
+                    biome_id
+                );
             }
         }
 
@@ -553,10 +561,12 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
     return true;
 }
 
-bool Chunk::readNBT(mc::BlockStateRegistry &block_registry,
-                    const char *data,
-                    size_t len,
-                    nbt::Compression compression) {
+bool Chunk::readNBT(
+    mc::BlockStateRegistry &block_registry,
+    const char *data,
+    size_t len,
+    nbt::Compression compression
+) {
     clear();
 
     air_id = block_registry.getBlockID(mc::BlockState("minecraft:air"));

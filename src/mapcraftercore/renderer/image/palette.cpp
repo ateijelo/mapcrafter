@@ -26,7 +26,8 @@ Palette::~Palette() {}
 
 SimplePalette::SimplePalette() {}
 
-SimplePalette::SimplePalette(const std::vector<RGBAPixel> &colors) : colors(colors) {}
+SimplePalette::SimplePalette(const std::vector<RGBAPixel> &colors)
+    : colors(colors) {}
 
 SimplePalette::~SimplePalette() {}
 

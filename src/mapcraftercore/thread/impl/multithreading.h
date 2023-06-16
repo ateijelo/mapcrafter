@@ -43,8 +43,8 @@ class ThreadManager : public WorkerManager<renderer::RenderWork, renderer::Rende
     void setFinished();
 
     virtual bool getWork(renderer::RenderWork &work);
-    virtual void workFinished(const renderer::RenderWork &work,
-                              const renderer::RenderWorkResult &result);
+    virtual void
+    workFinished(const renderer::RenderWork &work, const renderer::RenderWorkResult &result);
 
     bool getResult(renderer::RenderWorkResult &result);
 
@@ -59,8 +59,10 @@ class ThreadManager : public WorkerManager<renderer::RenderWork, renderer::Rende
 
 class ThreadWorker {
   public:
-    ThreadWorker(WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
-                 const renderer::RenderContext &context);
+    ThreadWorker(
+        WorkerManager<renderer::RenderWork, renderer::RenderWorkResult> &manager,
+        const renderer::RenderContext &context
+    );
     ~ThreadWorker();
 
     void operator()();

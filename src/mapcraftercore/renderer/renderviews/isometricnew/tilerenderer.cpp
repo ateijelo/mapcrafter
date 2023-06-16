@@ -42,7 +42,8 @@ namespace renderer {
 namespace old {
 
 TileTopBlockIterator::TileTopBlockIterator(const TilePos &tile, int block_size, int tile_width)
-    : block_size(block_size), is_end(false) {
+    : block_size(block_size),
+      is_end(false) {
     // row/col 0,0 are the top left chunk of the tile 0,0
     // each tile is four rows high, two columns wide
 
@@ -126,12 +127,14 @@ bool RenderBlock::operator<(const RenderBlock &other) const { return pos < other
 
 } // namespace old
 
-NewIsometricTileRenderer::NewIsometricTileRenderer(const RenderView *render_view,
-                                                   mc::BlockStateRegistry &block_registry,
-                                                   BlockImages *images,
-                                                   int tile_width,
-                                                   mc::WorldCache *world,
-                                                   RenderMode *render_mode)
+NewIsometricTileRenderer::NewIsometricTileRenderer(
+    const RenderView *render_view,
+    mc::BlockStateRegistry &block_registry,
+    BlockImages *images,
+    int tile_width,
+    mc::WorldCache *world,
+    RenderMode *render_mode
+)
     : TileRenderer(render_view, block_registry, images, tile_width, world, render_mode) {}
 
 NewIsometricTileRenderer::~NewIsometricTileRenderer() {}
@@ -379,8 +382,9 @@ int NewIsometricTileRenderer::getTileSize() const {
     return images->getBlockSize() * 16 * tile_width;
 }
 
-void NewIsometricTileRenderer::renderTopBlocks(const TilePos &tile_pos,
-                                               std::set<TileImage> &tile_images) {
+void NewIsometricTileRenderer::renderTopBlocks(
+    const TilePos &tile_pos, std::set<TileImage> &tile_images
+) {
     int block_size = images->getBlockSize();
     for (old::TileTopBlockIterator it(tile_pos, block_size, tile_width); !it.end(); it.next()) {
         renderBlocks(it.draw_x, it.draw_y, it.current, mc::BlockPos(1, -1, -1), tile_images);

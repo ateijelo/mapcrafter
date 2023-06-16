@@ -33,8 +33,12 @@ namespace renderer {
 const mc::JavaSimplexGenerator Biome::SWAMP_GRASS_NOISE;
 
 Biome::Biome(
-    uint16_t id, double temperature, double rainfall, uint32_t green_tint, uint32_t water_tint)
-    : id(id), temperature(temperature), rainfall(rainfall), green_tint(green_tint),
+    uint16_t id, double temperature, double rainfall, uint32_t green_tint, uint32_t water_tint
+)
+    : id(id),
+      temperature(temperature),
+      rainfall(rainfall),
+      green_tint(green_tint),
       water_tint(water_tint) {}
 
 /**
@@ -45,9 +49,9 @@ uint16_t Biome::getID() const { return id; }
 /**
  * Calculates the color of the biome with a biome color image.
  */
-uint32_t Biome::getColor(const mc::BlockPos &pos,
-                         const ColorMapType &color_type,
-                         const ColorMap &color_map) const {
+uint32_t Biome::getColor(
+    const mc::BlockPos &pos, const ColorMapType &color_type, const ColorMap &color_map
+) const {
     // handle special cases first
     // water is hardcoded
     if (color_type == ColorMapType::WATER) {

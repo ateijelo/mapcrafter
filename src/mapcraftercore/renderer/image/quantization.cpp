@@ -26,7 +26,13 @@ namespace mapcrafter {
 namespace renderer {
 
 Octree::Octree(Octree *parent, int level)
-    : parent(parent), level(level), reference(0), red(0), green(0), blue(0), alpha(0),
+    : parent(parent),
+      level(level),
+      reference(0),
+      red(0),
+      green(0),
+      blue(0),
+      alpha(0),
       color_id(-1) {
     for (int i = 0; i < 16; i++)
         children[i] = nullptr;
@@ -192,7 +198,8 @@ int Octree::findNearestColor(const Octree *octree, RGBAPixel color) {
 }
 
 SubPalette::SubPalette(const std::vector<RGBAPixel> &palette_colors)
-    : initialized(false), palette_colors(palette_colors) {}
+    : initialized(false),
+      palette_colors(palette_colors) {}
 
 int SubPalette::getNearestColor(const RGBAPixel &color) {
     if (!initialized)
@@ -216,11 +223,12 @@ int SubPalette::getNearestColor(const RGBAPixel &color) {
 }
 
 void SubPalette::initialize(const RGBAPixel &c) {
-    RGBAPixel center =
-        rgba((OctreePalette2::BIN_FOR_COLOR(rgba_red(c)) * 256 + 128) / OctreePalette2::BINS,
-             (OctreePalette2::BIN_FOR_COLOR(rgba_green(c)) * 256 + 128) / OctreePalette2::BINS,
-             (OctreePalette2::BIN_FOR_COLOR(rgba_blue(c)) * 256 + 128) / OctreePalette2::BINS,
-             (OctreePalette2::BIN_FOR_COLOR(rgba_alpha(c)) * 256 + 128) / OctreePalette2::BINS);
+    RGBAPixel center = rgba(
+        (OctreePalette2::BIN_FOR_COLOR(rgba_red(c)) * 256 + 128) / OctreePalette2::BINS,
+        (OctreePalette2::BIN_FOR_COLOR(rgba_green(c)) * 256 + 128) / OctreePalette2::BINS,
+        (OctreePalette2::BIN_FOR_COLOR(rgba_blue(c)) * 256 + 128) / OctreePalette2::BINS,
+        (OctreePalette2::BIN_FOR_COLOR(rgba_alpha(c)) * 256 + 128) / OctreePalette2::BINS
+    );
 
     int nearest = 256 * 256 * 4;
     for (size_t i = 0; i < palette_colors.size(); i++) {
@@ -242,7 +250,8 @@ void SubPalette::initialize(const RGBAPixel &c) {
     initialized = true;
 }
 
-OctreePalette::OctreePalette(const std::vector<RGBAPixel> &colors) : colors(colors) {
+OctreePalette::OctreePalette(const std::vector<RGBAPixel> &colors)
+    : colors(colors) {
     // add each color to the octree, assign a palette index and update parents
     for (size_t i = 0; i < colors.size(); i++) {
         RGBAPixel color = colors[i];
@@ -262,7 +271,8 @@ int OctreePalette::getNearestColor(const RGBAPixel &color) {
     return Octree::findNearestColor(&octree, color);
 }
 
-OctreePalette2::OctreePalette2(const std::vector<RGBAPixel> &colors) : colors(colors) {
+OctreePalette2::OctreePalette2(const std::vector<RGBAPixel> &colors)
+    : colors(colors) {
     sub_palettes.resize(OctreePalette2::BINS_ALL, nullptr);
 }
 
@@ -307,10 +317,9 @@ struct NodeComparator {
 /**
  * Simple octree color quantization: Similar to http://rosettacode.org/wiki/Color_quantization#C
  */
-void octreeColorQuantize(const RGBAImage &image,
-                         size_t max_colors,
-                         std::vector<RGBAPixel> &colors,
-                         Octree **octree) {
+void octreeColorQuantize(
+    const RGBAImage &image, size_t max_colors, std::vector<RGBAPixel> &colors, Octree **octree
+) {
     assert(max_colors > 0);
 
     // have an octree with the colors as leaves

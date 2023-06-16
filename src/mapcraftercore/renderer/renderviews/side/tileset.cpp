@@ -25,7 +25,8 @@
 namespace mapcrafter {
 namespace renderer {
 
-SideTileSet::SideTileSet(int tile_width) : TileSet(tile_width) {}
+SideTileSet::SideTileSet(int tile_width)
+    : TileSet(tile_width) {}
 
 SideTileSet::~SideTileSet() {}
 

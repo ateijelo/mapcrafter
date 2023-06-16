@@ -16,7 +16,10 @@
 /// An accumulating option value to handle multiple incrementing options.
 template <typename T> class accumulator_type : public boost::program_options::value_semantic {
   public:
-    accumulator_type(T *store) : _store(store), _interval(1), _default(0) {}
+    accumulator_type(T *store)
+        : _store(store),
+          _interval(1),
+          _default(0) {}
 
     /// Set the notifier function.
     accumulator_type *notifier(boost::function1<void, const T &> f) {
@@ -56,9 +59,9 @@ template <typename T> class accumulator_type : public boost::program_options::va
     /// Every appearance of the option simply increments the value
     //
     /// There should never be any tokens.
-    virtual void parse(boost::any &value_store,
-                       const std::vector<std::string> &new_tokens,
-                       bool /*utf8*/) const {
+    virtual void
+    parse(boost::any &value_store, const std::vector<std::string> &new_tokens, bool /*utf8*/)
+        const {
         if (value_store.empty())
             value_store = T();
         boost::any_cast<T &>(value_store) += _interval;

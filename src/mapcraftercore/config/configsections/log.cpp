@@ -37,7 +37,8 @@ template <> util::LogLevel as<util::LogLevel>(const std::string &from) {
     if (level != util::LogLevel::UNKNOWN)
         return level;
     throw std::invalid_argument(
-        "Must be 'EMERGENCY', 'ALERT', 'FATAL', 'ERROR', 'WARNING', 'NOTICE', 'INFO' or 'DEBUG'!");
+        "Must be 'EMERGENCY', 'ALERT', 'FATAL', 'ERROR', 'WARNING', 'NOTICE', 'INFO' or 'DEBUG'!"
+    );
 }
 
 } // namespace util
@@ -144,9 +145,9 @@ void LogSection::preParse(const INIConfigSection &section, ValidationList &valid
     // it is overwritten in the logging class then
 }
 
-bool LogSection::parseField(const std::string key,
-                            const std::string value,
-                            ValidationList &validation) {
+bool LogSection::parseField(
+    const std::string key, const std::string value, ValidationList &validation
+) {
     if (key == "type")
         type.load(key, value, validation);
     else if (key == "verbosity")
@@ -170,9 +171,11 @@ void LogSection::postParse(const INIConfigSection &section, ValidationList &vali
     std::string section_name = getSectionName();
     // "__<name>__" as name is reserved for special builtin sinks
     if (!section_name.empty() && section_name[0] == '_')
-        validation.error("Invalid section name '" + section_name +
-                         "'! "
-                         "Log section names must not start with an underscore!");
+        validation.error(
+            "Invalid section name '" + section_name +
+            "'! "
+            "Log section names must not start with an underscore!"
+        );
     if (!type.require(validation, "You have to specify a log sink type ('type')!"))
         return;
 #ifndef HAVE_SYSLOG_H

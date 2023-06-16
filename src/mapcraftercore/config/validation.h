@@ -181,7 +181,9 @@ template <typename T> class Field {
     bool loaded;
 
   public:
-    Field(T value = T()) : value(value), loaded(false) {}
+    Field(T value = T())
+        : value(value),
+          loaded(false) {}
     ~Field() {}
 
     /**

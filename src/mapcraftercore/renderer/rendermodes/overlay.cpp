@@ -26,14 +26,14 @@
 namespace mapcrafter {
 namespace renderer {
 
-OverlayRenderMode::OverlayRenderMode(OverlayMode overlay_mode) : overlay_mode(overlay_mode) {}
+OverlayRenderMode::OverlayRenderMode(OverlayMode overlay_mode)
+    : overlay_mode(overlay_mode) {}
 
 OverlayRenderMode::~OverlayRenderMode() {}
 
-void OverlayRenderMode::draw(RGBAImage &image,
-                             const BlockImage &block_image,
-                             const mc::BlockPos &pos,
-                             uint16_t id) {
+void OverlayRenderMode::draw(
+    RGBAImage &image, const BlockImage &block_image, const mc::BlockPos &pos, uint16_t id
+) {
     // TODO handle some special cases, for example: colorize blocks under water?
     if (overlay_mode == OverlayMode::PER_BLOCK) {
         // simple mode where we just tint whole blocks
@@ -64,10 +64,12 @@ void OverlayRenderMode::draw(RGBAImage &image,
                 blockImageTintHighContrast(image, block_image.uv_image, FACE_UP_INDEX, color_top);
             if (rgba_alpha(color_left) != 0)
                 blockImageTintHighContrast(
-                    image, block_image.uv_image, FACE_LEFT_INDEX, color_left);
+                    image, block_image.uv_image, FACE_LEFT_INDEX, color_left
+                );
             if (rgba_alpha(color_right) != 0)
                 blockImageTintHighContrast(
-                    image, block_image.uv_image, FACE_RIGHT_INDEX, color_right);
+                    image, block_image.uv_image, FACE_RIGHT_INDEX, color_right
+                );
         }
     }
 }

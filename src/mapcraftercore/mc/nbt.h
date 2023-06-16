@@ -38,17 +38,20 @@ namespace nbt {
 
 class NBTError : public std::runtime_error {
   public:
-    NBTError(const std::string &message = "") : std::runtime_error(message) {}
+    NBTError(const std::string &message = "")
+        : std::runtime_error(message) {}
 };
 
 class InvalidTagCast : public NBTError {
   public:
-    InvalidTagCast(const std::string &message = "") : NBTError(message) {}
+    InvalidTagCast(const std::string &message = "")
+        : NBTError(message) {}
 };
 
 class TagNotFound : public NBTError {
   public:
-    TagNotFound(const std::string &message = "") : NBTError(message) {}
+    TagNotFound(const std::string &message = "")
+        : NBTError(message) {}
 };
 
 // only for reference
@@ -152,14 +155,17 @@ class Tag {
 
 class TagEnd : public Tag {
   public:
-    TagEnd() : Tag(TAG_TYPE) {}
+    TagEnd()
+        : Tag(TAG_TYPE) {}
 
     static const int8_t TAG_TYPE = (int8_t)TagType::TAG_END;
 };
 
 template <typename T, TagType tag_type> class ScalarTag : public Tag {
   public:
-    ScalarTag(T payload = 0) : Tag(TAG_TYPE), payload(payload) {}
+    ScalarTag(T payload = 0)
+        : Tag(TAG_TYPE),
+          payload(payload) {}
 
     virtual Tag &read(std::istream &stream) {
         payload = nbtstream::read<T>(stream);
@@ -194,8 +200,11 @@ typedef ScalarTag<double, TagType::TAG_DOUBLE> TagDouble;
 
 template <typename T, TagType tag_type> class TagArray : public Tag {
   public:
-    TagArray() : Tag(TAG_TYPE) {}
-    TagArray(const std::vector<T> &payload) : Tag(TAG_TYPE), payload(payload) {}
+    TagArray()
+        : Tag(TAG_TYPE) {}
+    TagArray(const std::vector<T> &payload)
+        : Tag(TAG_TYPE),
+          payload(payload) {}
 
     virtual Tag &read(std::istream &stream) {
         int32_t length = nbtstream::read<int32_t>(stream);
@@ -237,8 +246,11 @@ typedef TagArray<int64_t, TagType::TAG_LONG_ARRAY> TagLongArray;
 
 class TagString : public Tag {
   public:
-    TagString() : Tag(TAG_TYPE) {}
-    TagString(const std::string &payload) : Tag(TAG_TYPE), payload(payload) {}
+    TagString()
+        : Tag(TAG_TYPE) {}
+    TagString(const std::string &payload)
+        : Tag(TAG_TYPE),
+          payload(payload) {}
 
     virtual Tag &read(std::istream &stream);
     virtual void write(std::ostream &stream) const;
@@ -304,7 +316,8 @@ class TagCompound : public Tag {
         static_assert(
             std::is_same<T, TagByteArray>::value || std::is_same<T, TagIntArray>::value ||
                 std::is_same<T, TagLongArray>::value,
-            "Only TagByteArray, TagIngArray and TagLongArray are allowed as template argument!");
+            "Only TagByteArray, TagIngArray and TagLongArray are allowed as template argument!"
+        );
         if (!hasTag<T>(name))
             return false;
         T &tag = payload.at(name)->cast<T>();
@@ -336,13 +349,14 @@ class TagCompound : public Tag {
 
 class NBTFile : public TagCompound {
   private:
-    void decompressStream(std::istream &stream,
-                          std::stringstream &decompressed,
-                          Compression compression);
+    void decompressStream(
+        std::istream &stream, std::stringstream &decompressed, Compression compression
+    );
 
   public:
     NBTFile();
-    NBTFile(const std::string name) : TagCompound(name) {}
+    NBTFile(const std::string name)
+        : TagCompound(name) {}
     ~NBTFile();
 
     void readCompressed(std::istream &stream, Compression compression = Compression::GZIP);

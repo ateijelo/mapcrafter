@@ -25,7 +25,8 @@
 namespace mapcrafter {
 namespace renderer {
 
-NewIsometricTileSet::NewIsometricTileSet(int tile_width) : TileSet(tile_width) {}
+NewIsometricTileSet::NewIsometricTileSet(int tile_width)
+    : TileSet(tile_width) {}
 
 namespace {
 

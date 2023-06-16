@@ -84,11 +84,13 @@ void testOctreeWithImage(const RGBAImage &image) {
     BOOST_CHECK_EQUAL(average1, average2);
 
     BOOST_TEST_MESSAGE("Overall colors: " << colors.size());
-    BOOST_TEST_MESSAGE("Pixels per color: " << (double)(image.getWidth() * image.getHeight()) /
-                                                   colors.size());
-    BOOST_TEST_MESSAGE("Average color: " << (int)rgba_red(average1) << ","
-                                         << (int)rgba_green(average1) << ","
-                                         << (int)rgba_blue(average1));
+    BOOST_TEST_MESSAGE(
+        "Pixels per color: " << (double)(image.getWidth() * image.getHeight()) / colors.size()
+    );
+    BOOST_TEST_MESSAGE(
+        "Average color: " << (int)rgba_red(average1) << "," << (int)rgba_green(average1) << ","
+                          << (int)rgba_blue(average1)
+    );
 }
 
 RGBAPixel randomColor() { return rgba(rand() % 256, rand() % 256, rand() % 256, rand() % 256); }

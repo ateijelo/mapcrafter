@@ -51,38 +51,41 @@ int main(int argc, char **argv) {
 
     po::options_description general("General options");
     general.add_options()("help,h", "shows this help message")(
-        "version,v", "shows the version of Mapcrafter")("mc-version",
-                                                        "shows the required Minecraft version");
+        "version,v", "shows the version of Mapcrafter"
+    )("mc-version", "shows the required Minecraft version");
 
     po::options_description logging("Logging/output options");
-    logging.add_options()("logging-config",
-                          po::value<fs::path>(&opts.logging_config),
-                          "the path to the global logging configuration file to use (automatically "
-                          "determined if not specified)")(
-        "color",
-        po::value<std::string>(&arg_color)->default_value("auto"),
-        "whether terminal output is colored (true, false or auto)")(
-        "batch,b", "deactivates the animated progress bar and enables the progress logger instead");
+    logging.add_options()(
+        "logging-config",
+        po::value<fs::path>(&opts.logging_config),
+        "the path to the global logging configuration file to use (automatically "
+        "determined if not specified)"
+    )("color",
+      po::value<std::string>(&arg_color)->default_value("auto"),
+      "whether terminal output is colored (true, false or auto)"
+    )("batch,b", "deactivates the animated progress bar and enables the progress logger instead");
 
     po::options_description renderer("Renderer options");
-    renderer.add_options()("find-resources",
-                           "shows available resource paths, for example template/texture directory "
-                           "and global logging configuration file")(
-        "config,c",
-        po::value<std::string>(&arg_config),
-        "the path to the configuration file to use (required)")(
-        "render-skip,s",
-        po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
-        "skips rendering the specified map(s)")("render-reset,r", "skips rendering all maps")(
+    renderer.add_options()(
+        "find-resources",
+        "shows available resource paths, for example template/texture directory "
+        "and global logging configuration file"
+    )("config,c",
+      po::value<std::string>(&arg_config),
+      "the path to the configuration file to use (required)"
+    )("render-skip,s",
+      po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
+      "skips rendering the specified map(s)")("render-reset,r", "skips rendering all maps")(
         "render-auto,a",
         po::value<std::vector<std::string>>(&opts.render_auto)->multitoken(),
-        "renders the specified map(s)")(
-        "render-force,f",
-        po::value<std::vector<std::string>>(&opts.render_force)->multitoken(),
-        "renders the specified map(s) completely")("render-force-all,F", "force renders all maps")(
-        "jobs,j",
-        po::value<int>(&opts.jobs)->default_value(1),
-        "the count of jobs to use when rendering the map");
+        "renders the specified map(s)"
+    )("render-force,f",
+      po::value<std::vector<std::string>>(&opts.render_force)->multitoken(),
+      "renders the specified map(s) completely"
+    )("render-force-all,F", "force renders all maps"
+    )("jobs,j",
+      po::value<int>(&opts.jobs)->default_value(1),
+      "the count of jobs to use when rendering the map");
 
     po::options_description all("Allowed options");
     all.add(general).add(logging).add(renderer);

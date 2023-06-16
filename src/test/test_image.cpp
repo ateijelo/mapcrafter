@@ -31,7 +31,8 @@ BOOST_AUTO_TEST_CASE(image_testIO) {
     for (int x = 0; x < src.getWidth(); x++) {
         for (int y = 0; y < src.getHeight(); y++) {
             src.setPixel(
-                x, y, renderer::rgba(rand() % 256, rand() % 256, rand() % 256, rand() % 256));
+                x, y, renderer::rgba(rand() % 256, rand() % 256, rand() % 256, rand() % 256)
+            );
         }
     }
 

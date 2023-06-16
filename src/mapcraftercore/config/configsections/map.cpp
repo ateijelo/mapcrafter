@@ -79,12 +79,15 @@ namespace mapcrafter {
 namespace config {
 
 TileSetGroupID::TileSetGroupID()
-    : render_view(renderer::RenderViewType::ISOMETRIC), tile_width(1) {}
+    : render_view(renderer::RenderViewType::ISOMETRIC),
+      tile_width(1) {}
 
-TileSetGroupID::TileSetGroupID(const std::string &world_name,
-                               renderer::RenderViewType render_view,
-                               int tile_width)
-    : world_name(world_name), render_view(render_view), tile_width(tile_width) {}
+TileSetGroupID::TileSetGroupID(
+    const std::string &world_name, renderer::RenderViewType render_view, int tile_width
+)
+    : world_name(world_name),
+      render_view(render_view),
+      tile_width(tile_width) {}
 
 std::string TileSetGroupID::toString() const {
     std::string repr = "";
@@ -98,16 +101,22 @@ bool TileSetGroupID::operator<(const TileSetGroupID &other) const {
     return toString() < other.toString();
 }
 
-TileSetID::TileSetID() : TileSetGroupID(), rotation(0) {}
+TileSetID::TileSetID()
+    : TileSetGroupID(),
+      rotation(0) {}
 
-TileSetID::TileSetID(const std::string &world_name,
-                     renderer::RenderViewType render_view,
-                     int tile_width,
-                     int rotation)
-    : TileSetGroupID(world_name, render_view, tile_width), rotation(rotation) {}
+TileSetID::TileSetID(
+    const std::string &world_name,
+    renderer::RenderViewType render_view,
+    int tile_width,
+    int rotation
+)
+    : TileSetGroupID(world_name, render_view, tile_width),
+      rotation(rotation) {}
 
 TileSetID::TileSetID(const TileSetGroupID &group, int rotation)
-    : TileSetGroupID(group.world_name, group.render_view, group.tile_width), rotation(rotation) {}
+    : TileSetGroupID(group.world_name, group.render_view, group.tile_width),
+      rotation(rotation) {}
 
 std::string TileSetID::toString() const {
     return TileSetGroupID::toString() + "_r" + util::str(rotation);
@@ -123,7 +132,9 @@ std::ostream &operator<<(std::ostream &out, ImageFormat image_format) {
     return out;
 }
 
-MapSection::MapSection() : texture_size(12), render_biomes(false) {}
+MapSection::MapSection()
+    : texture_size(12),
+      render_biomes(false) {}
 
 MapSection::~MapSection() {}
 
@@ -232,9 +243,9 @@ void MapSection::preParse(const INIConfigSection &section, ValidationList &valid
     use_image_mtimes.setDefault(true);
 }
 
-bool MapSection::parseField(const std::string key,
-                            const std::string value,
-                            ValidationList &validation) {
+bool MapSection::parseField(
+    const std::string key, const std::string value, ValidationList &validation
+) {
     if (key == "name") {
         name_long = value;
     } else if (key == "world") {
@@ -259,8 +270,10 @@ bool MapSection::parseField(const std::string key,
         if (block_dir.load(key, value, validation)) {
             block_dir.setValue(BOOST_FS_ABSOLUTE(block_dir.getValue(), config_dir));
             if (!fs::is_directory(block_dir.getValue())) {
-                validation.error("'block_dir' must be an existing directory! '" +
-                                 block_dir.getValue().string() + "' does not exist!");
+                validation.error(
+                    "'block_dir' must be an existing directory! '" + block_dir.getValue().string() +
+                    "' does not exist!"
+                );
             }
         }
     } else if (key == "texture_blur") {

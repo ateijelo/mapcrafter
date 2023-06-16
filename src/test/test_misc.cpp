@@ -84,9 +84,11 @@ BOOST_AUTO_TEST_CASE(misc_testSlimeOverlay2) {
     };
 
     for (auto it = slimes.begin(); it != slimes.end(); ++it)
-        BOOST_CHECK_MESSAGE(SlimeOverlay::isSlimeChunk(*it, world_seed),
-                            *it << " must be a slime chunk!");
+        BOOST_CHECK_MESSAGE(
+            SlimeOverlay::isSlimeChunk(*it, world_seed), *it << " must be a slime chunk!"
+        );
     for (auto it = not_slimes.begin(); it != not_slimes.end(); ++it)
-        BOOST_CHECK_MESSAGE(!SlimeOverlay::isSlimeChunk(*it, world_seed),
-                            *it << " must not be a slime chunk!");
+        BOOST_CHECK_MESSAGE(
+            !SlimeOverlay::isSlimeChunk(*it, world_seed), *it << " must not be a slime chunk!"
+        );
 }

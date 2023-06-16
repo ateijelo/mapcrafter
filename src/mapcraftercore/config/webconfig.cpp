@@ -25,7 +25,8 @@
 namespace mapcrafter {
 namespace config {
 
-WebConfig::WebConfig(const MapcrafterConfig &config) : config(config) {
+WebConfig::WebConfig(const MapcrafterConfig &config)
+    : config(config) {
     auto maps = config.getMaps();
     for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
         std::string map_name = map_it->getShortName();
@@ -179,8 +180,9 @@ renderer::TilePos WebConfig::getTileSetTileOffset(const TileSetID &tile_set) con
     return tile_set_tile_offset.at(tile_set);
 }
 
-void WebConfig::setTileSetTileOffset(const TileSetID &tile_set,
-                                     const renderer::TilePos &tile_offset) {
+void WebConfig::setTileSetTileOffset(
+    const TileSetID &tile_set, const renderer::TilePos &tile_offset
+) {
     tile_set_tile_offset[tile_set] = tile_offset;
 }
 

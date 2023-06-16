@@ -115,7 +115,8 @@ class ConfigSection {
 std::ostream &operator<<(std::ostream &out, const ConfigSection &section);
 
 template <typename T>
-ConfigDirSectionFactory<T>::ConfigDirSectionFactory(fs::path config_dir) : config_dir(config_dir) {}
+ConfigDirSectionFactory<T>::ConfigDirSectionFactory(fs::path config_dir)
+    : config_dir(config_dir) {}
 
 template <typename T> ConfigDirSectionFactory<T>::~ConfigDirSectionFactory() {}
 

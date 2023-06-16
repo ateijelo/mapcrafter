@@ -97,12 +97,14 @@ struct RenderBlock {
  */
 class NewIsometricTileRenderer : public TileRenderer {
   public:
-    NewIsometricTileRenderer(const RenderView *render_view,
-                             mc::BlockStateRegistry &block_registry,
-                             BlockImages *images,
-                             int tile_width,
-                             mc::WorldCache *world,
-                             RenderMode *render_mode);
+    NewIsometricTileRenderer(
+        const RenderView *render_view,
+        mc::BlockStateRegistry &block_registry,
+        BlockImages *images,
+        int tile_width,
+        mc::WorldCache *world,
+        RenderMode *render_mode
+    );
     virtual ~NewIsometricTileRenderer();
 
     // virtual void renderTile(const TilePos& tile_pos, RGBAImage& tile);

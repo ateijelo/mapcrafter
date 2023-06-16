@@ -54,11 +54,13 @@ void imageResizeBilinear(const RGBAImage &image, RGBAImage &dest, int width, int
             uint8_t red =
                 interpolate(rgba_red(a), rgba_red(b), rgba_red(c), rgba_red(d), x_diff, y_diff);
             uint8_t green = interpolate(
-                rgba_green(a), rgba_green(b), rgba_green(c), rgba_green(d), x_diff, y_diff);
+                rgba_green(a), rgba_green(b), rgba_green(c), rgba_green(d), x_diff, y_diff
+            );
             uint8_t blue =
                 interpolate(rgba_blue(a), rgba_blue(b), rgba_blue(c), rgba_blue(d), x_diff, y_diff);
             uint8_t alpha = interpolate(
-                rgba_alpha(a), rgba_alpha(b), rgba_alpha(c), rgba_alpha(d), x_diff, y_diff);
+                rgba_alpha(a), rgba_alpha(b), rgba_alpha(c), rgba_alpha(d), x_diff, y_diff
+            );
 
             // make sure that that no transparency (aka alpha=254) sneaks into images
             // caused by weird interpolation bugses, otherwise shit hits the fan

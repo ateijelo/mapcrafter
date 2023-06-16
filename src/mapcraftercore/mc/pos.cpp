@@ -31,9 +31,13 @@ namespace fs = boost::filesystem;
 namespace mapcrafter {
 namespace mc {
 
-RegionPos::RegionPos() : x(0), z(0) {}
+RegionPos::RegionPos()
+    : x(0),
+      z(0) {}
 
-RegionPos::RegionPos(int x, int z) : x(x), z(z) {}
+RegionPos::RegionPos(int x, int z)
+    : x(x),
+      z(z) {}
 
 bool RegionPos::operator==(const RegionPos &other) const { return x == other.x && z == other.z; }
 
@@ -62,9 +66,13 @@ void RegionPos::rotate(int count) {
     }
 }
 
-ChunkPos::ChunkPos() : x(0), z(0) {}
+ChunkPos::ChunkPos()
+    : x(0),
+      z(0) {}
 
-ChunkPos::ChunkPos(int x, int z) : x(x), z(z) {}
+ChunkPos::ChunkPos(int x, int z)
+    : x(x),
+      z(z) {}
 
 ChunkPos::ChunkPos(const BlockPos &block) {
     x = util::floordiv(block.x, 16);
@@ -102,9 +110,15 @@ void ChunkPos::rotate(int count) {
     }
 }
 
-BlockPos::BlockPos() : x(0), z(0), y(0) {}
+BlockPos::BlockPos()
+    : x(0),
+      z(0),
+      y(0) {}
 
-BlockPos::BlockPos(int x, int z, int y) : x(x), z(z), y(y) {}
+BlockPos::BlockPos(int x, int z, int y)
+    : x(x),
+      z(z),
+      y(y) {}
 
 int BlockPos::getRow() const { return z - x + (CHUNK_TOP * 16 - y) * 4; }
 
@@ -156,11 +170,20 @@ extern const mc::BlockPos DIR_WEST(-1, 0, 0);
 extern const mc::BlockPos DIR_TOP(0, 0, 1);
 extern const mc::BlockPos DIR_BOTTOM(0, 0, -1);
 
-LocalBlockPos::LocalBlockPos() : x(0), z(0), y(0) {}
+LocalBlockPos::LocalBlockPos()
+    : x(0),
+      z(0),
+      y(0) {}
 
-LocalBlockPos::LocalBlockPos(int x, int z, int y) : x(x), z(z), y(y) {}
+LocalBlockPos::LocalBlockPos(int x, int z, int y)
+    : x(x),
+      z(z),
+      y(y) {}
 
-LocalBlockPos::LocalBlockPos(const BlockPos &pos) : x(pos.x & 15), z(pos.z & 15), y(pos.y) {}
+LocalBlockPos::LocalBlockPos(const BlockPos &pos)
+    : x(pos.x & 15),
+      z(pos.z & 15),
+      y(pos.y) {}
 
 int LocalBlockPos::getRow() const { return z - x + (CHUNK_TOP * 16 - y) * 4; }
 

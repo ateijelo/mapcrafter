@@ -118,7 +118,9 @@ std::ostream &operator<<(std::ostream &out, LogLevel level) {
 }
 
 LogStream::LogStream(LogLevel level, const std::string &logger, const std::string &file, int line)
-    : fake(false), message({level, logger, file, line, ""}), ss(new std::stringstream) {
+    : fake(false),
+      message({level, logger, file, line, ""}),
+      ss(new std::stringstream) {
     if (message.file.find('/') != std::string::npos)
         message.file = message.file.substr(message.file.find_last_of('/') + 1);
 }
@@ -132,7 +134,8 @@ LogStream::~LogStream() {
 
 void LogStream::setFake(bool fake) { this->fake = fake; }
 
-Logger::Logger(const std::string &name) : name(name) {}
+Logger::Logger(const std::string &name)
+    : name(name) {}
 
 Logger::~Logger() {}
 
@@ -159,7 +162,8 @@ LogSink::~LogSink() {}
 void LogSink::sink(const LogMessage &message) {}
 
 FormattedLogSink::FormattedLogSink()
-    : format("%(date) [%(level)] [%(logger)] %(message)"), date_format("%Y-%m-%d %H:%M:%S") {}
+    : format("%(date) [%(level)] [%(logger)] %(message)"),
+      date_format("%Y-%m-%d %H:%M:%S") {}
 
 FormattedLogSink::~FormattedLogSink() {}
 
@@ -228,8 +232,10 @@ LogSyslogSink::LogSyslogSink() { openlog("mapcrafter", 0, LOG_USER); }
 LogSyslogSink::~LogSyslogSink() { closelog(); }
 
 void LogSyslogSink::sink(const LogMessage &message) {
-    syslog(LogLevelHelper::levelToSyslog(message.level),
-           util::replaceAll(message.message, "%", "%%").c_str());
+    syslog(
+        LogLevelHelper::levelToSyslog(message.level),
+        util::replaceAll(message.message, "%", "%%").c_str()
+    );
 }
 
 #endif
@@ -237,7 +243,9 @@ void LogSyslogSink::sink(const LogMessage &message) {
 thread_ns::mutex Logging::instance_mutex;
 std::shared_ptr<Logging> Logging::instance;
 
-Logging::Logging() : default_verbosity(LogLevel::INFO), maximum_verbosity(default_verbosity) {
+Logging::Logging()
+    : default_verbosity(LogLevel::INFO),
+      maximum_verbosity(default_verbosity) {
     reset();
 }
 

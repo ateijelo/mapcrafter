@@ -65,10 +65,12 @@ class RenderMode {
      * The render view is required because some render modes need render view specific
      * methods to modify the block images.
      */
-    virtual void initialize(const RenderView *render_view,
-                            BlockImages *images,
-                            mc::WorldCache *world,
-                            mc::Chunk **current_chunk) = 0;
+    virtual void initialize(
+        const RenderView *render_view,
+        BlockImages *images,
+        mc::WorldCache *world,
+        mc::Chunk **current_chunk
+    ) = 0;
 
     /**
      * This method is called by the tile renderer to check if a block should be hidden.
@@ -101,10 +103,12 @@ class BaseRenderMode : public RenderMode {
      * Stores the supplied stuff from the tile renderer and creates the render mode
      * renderer with the render view.
      */
-    virtual void initialize(const RenderView *render_view,
-                            BlockImages *images,
-                            mc::WorldCache *world,
-                            mc::Chunk **current_chunk);
+    virtual void initialize(
+        const RenderView *render_view,
+        BlockImages *images,
+        mc::WorldCache *world,
+        mc::Chunk **current_chunk
+    );
 
     /**
      * Dummy implementation of interface method. Returns false as default.
@@ -141,10 +145,12 @@ class MultiplexingRenderMode : public RenderMode {
     /**
      * Passes the supplied render data to the render modes.
      */
-    virtual void initialize(const RenderView *render_view,
-                            BlockImages *images,
-                            mc::WorldCache *world,
-                            mc::Chunk **current_chunk);
+    virtual void initialize(
+        const RenderView *render_view,
+        BlockImages *images,
+        mc::WorldCache *world,
+        mc::Chunk **current_chunk
+    );
 
     /**
      * Calls this method of each render mode and returns true if one render mode returns
@@ -185,9 +191,9 @@ std::ostream &operator<<(std::ostream &out, OverlayType overlay);
 /**
  * Creates the render mode for a map config section.
  */
-RenderMode *createRenderMode(const config::WorldSection &world_config,
-                             const config::MapSection &map_config,
-                             int rotation);
+RenderMode *createRenderMode(
+    const config::WorldSection &world_config, const config::MapSection &map_config, int rotation
+);
 
 } // namespace renderer
 } /* namespace mapcrafter */

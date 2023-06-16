@@ -80,7 +80,8 @@ struct RenderWork {
 };
 
 struct RenderWorkResult {
-    RenderWorkResult() : tiles_rendered(0) {}
+    RenderWorkResult()
+        : tiles_rendered(0) {}
 
     RenderWork render_work;
 

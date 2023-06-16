@@ -37,28 +37,39 @@ bool TileImage::operator<(const TileImage &other) const {
     return pos < other.pos;
 }
 
-TileRenderer::TileRenderer(const RenderView *render_view,
-                           mc::BlockStateRegistry &block_registry,
-                           BlockImages *images,
-                           int tile_width,
-                           mc::WorldCache *world,
-                           RenderMode *render_mode)
-    : block_registry(block_registry), images(images),
-      block_images(dynamic_cast<RenderedBlockImages *>(images)), tile_width(tile_width),
-      world(world), current_chunk(nullptr), render_mode(render_mode), render_biomes(true),
-      use_preblit_water(false), shadow_edges({0, 0, 0, 0, 0}) {
+TileRenderer::TileRenderer(
+    const RenderView *render_view,
+    mc::BlockStateRegistry &block_registry,
+    BlockImages *images,
+    int tile_width,
+    mc::WorldCache *world,
+    RenderMode *render_mode
+)
+    : block_registry(block_registry),
+      images(images),
+      block_images(dynamic_cast<RenderedBlockImages *>(images)),
+      tile_width(tile_width),
+      world(world),
+      current_chunk(nullptr),
+      render_mode(render_mode),
+      render_biomes(true),
+      use_preblit_water(false),
+      shadow_edges({0, 0, 0, 0, 0}) {
     assert(block_images);
     render_mode->initialize(render_view, images, world, &current_chunk);
 
     // TODO can we make this somehow less hardcoded?
     full_water_ids.insert(
-        block_registry.getBlockID(mc::BlockState::parse("minecraft:water", "level=0")));
+        block_registry.getBlockID(mc::BlockState::parse("minecraft:water", "level=0"))
+    );
     full_water_ids.insert(
-        block_registry.getBlockID(mc::BlockState::parse("minecraft:water", "level=8")));
+        block_registry.getBlockID(mc::BlockState::parse("minecraft:water", "level=8"))
+    );
+    full_water_like_ids.insert(block_registry.getBlockID(mc::BlockState::parse("minecraft:ice", ""))
+    );
     full_water_like_ids.insert(
-        block_registry.getBlockID(mc::BlockState::parse("minecraft:ice", "")));
-    full_water_like_ids.insert(
-        block_registry.getBlockID(mc::BlockState::parse("minecraft:packed_ice", "")));
+        block_registry.getBlockID(mc::BlockState::parse("minecraft:packed_ice", ""))
+    );
 
     for (uint8_t i = 0; i < 8; i++) {
         bool up = i & 0x1;
@@ -130,7 +141,8 @@ int TileRenderer::getTileWidth() const { return getTileSize(); }
 int TileRenderer::getTileHeight() const { return getTileSize(); }
 
 void TileRenderer::renderBlocks(
-    int x, int y, mc::BlockPos top, const mc::BlockPos &dir, std::set<TileImage> &tile_images) {
+    int x, int y, mc::BlockPos top, const mc::BlockPos &dir, std::set<TileImage> &tile_images
+) {
     for (; top.y >= mc::CHUNK_LOW * 16; top += dir) {
         // get current chunk position
         mc::ChunkPos current_chunk_pos(top);
@@ -202,7 +214,8 @@ void TileRenderer::renderBlocks(
         }
 
         auto addTileImage = [this, x, y, top, &tile_images](
-                                uint16_t id, const BlockImage &block_image, int z_index) {
+                                uint16_t id, const BlockImage &block_image, int z_index
+                            ) {
             TileImage tile_image;
             tile_image.x = x;
             tile_image.y = y;
@@ -257,14 +270,17 @@ void TileRenderer::renderBlocks(
                     tile_image.image.data[i] = p;
                 }
             } else {
-                std::copy(block_image.image.data.begin(),
-                          block_image.image.data.end(),
-                          tile_image.image.data.begin());
+                std::copy(
+                    block_image.image.data.begin(),
+                    block_image.image.data.end(),
+                    tile_image.image.data.begin()
+                );
             }
 
             if (block_image.is_biome) {
                 block_images->prepareBiomeBlockImage(
-                    tile_image.image, block_image, getBiomeColor(top, block_image, current_chunk));
+                    tile_image.image, block_image, getBiomeColor(top, block_image, current_chunk)
+                );
             }
 
             if (block_image.has_water_top) {
@@ -274,7 +290,8 @@ void TileRenderer::renderBlocks(
                 block_images->prepareBiomeBlockImage(
                     waterlog,
                     *waterlog_block_image,
-                    getBiomeColor(top, *waterlog_block_image, current_chunk));
+                    getBiomeColor(top, *waterlog_block_image, current_chunk)
+                );
 
                 // blend waterlog water surface on top of block
                 blockImageBlendTop(tile_image.image, block_image.uv_image, waterlog, waterlog_uv);
@@ -300,7 +317,8 @@ void TileRenderer::renderBlocks(
                     west *= shadow_edges[3] * f;
                     bottom *= shadow_edges[4] * f;
                     blockImageShadowEdges(
-                        tile_image.image, block_image.uv_image, north, south, east, west, bottom);
+                        tile_image.image, block_image.uv_image, north, south, east, west, bottom
+                    );
                 }
             }
 
@@ -324,9 +342,9 @@ mc::Block TileRenderer::getBlock(const mc::BlockPos &pos, int get) {
     return world->getBlock(pos, current_chunk, get);
 }
 
-uint32_t TileRenderer::getBiomeColor(const mc::BlockPos &pos,
-                                     const BlockImage &block,
-                                     const mc::Chunk *chunk) {
+uint32_t TileRenderer::getBiomeColor(
+    const mc::BlockPos &pos, const BlockImage &block, const mc::Chunk *chunk
+) {
     const int radius = 2;
     float f = ((2 * radius + 1) * (2 * radius + 1));
     float r = 0.0, g = 0.0, b = 0.0;

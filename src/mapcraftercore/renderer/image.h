@@ -147,10 +147,12 @@ class RGBAImage : public Image<RGBAPixel> {
     RGBAImage flip(bool flip_x, bool flip_y) const;
     RGBAImage move(int x_off, int y_off) const;
 
-    void resize(RGBAImage &dest,
-                int width,
-                int height,
-                InterpolationType interpolation = InterpolationType::AUTO) const;
+    void resize(
+        RGBAImage &dest,
+        int width,
+        int height,
+        InterpolationType interpolation = InterpolationType::AUTO
+    ) const;
 
     RGBAImage
     resize(int width, int height, InterpolationType interpolation = InterpolationType::AUTO) const;
@@ -183,13 +185,15 @@ class RGBAImage : public Image<RGBAPixel> {
     writeIndexedPNG(const std::string &filename, int palette_bits = 8, bool dithered = true) const;
 
     bool readJPEG(const std::string &filename);
-    bool writeJPEG(const std::string &filename,
-                   int quality,
-                   RGBAPixel background = rgba(255, 255, 255, 255)) const;
+    bool writeJPEG(
+        const std::string &filename, int quality, RGBAPixel background = rgba(255, 255, 255, 255)
+    ) const;
 };
 
 template <typename Pixel>
-Image<Pixel>::Image(int width, int height) : width(width), height(height) {
+Image<Pixel>::Image(int width, int height)
+    : width(width),
+      height(height) {
     data.resize(width * height);
 }
 

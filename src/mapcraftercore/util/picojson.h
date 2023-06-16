@@ -169,9 +169,11 @@ class value {
 typedef value::array array;
 typedef value::object object;
 
-inline value::value() : type_(null_type) {}
+inline value::value()
+    : type_(null_type) {}
 
-inline value::value(int type, bool) : type_(type) {
+inline value::value(int type, bool)
+    : type_(type) {
     switch (type) {
 #define INIT(p, v)                                                                                 \
     case p##type:                                                                                  \
@@ -191,13 +193,20 @@ inline value::value(int type, bool) : type_(type) {
     }
 }
 
-inline value::value(bool b) : type_(boolean_type) { u_.boolean_ = b; }
+inline value::value(bool b)
+    : type_(boolean_type) {
+    u_.boolean_ = b;
+}
 
 #ifdef PICOJSON_USE_INT64
-inline value::value(int64_t i) : type_(int64_type) { u_.int64_ = i; }
+inline value::value(int64_t i)
+    : type_(int64_type) {
+    u_.int64_ = i;
+}
 #endif
 
-inline value::value(double n) : type_(number_type) {
+inline value::value(double n)
+    : type_(number_type) {
     if (
 #ifdef _MSC_VER
         !_finite(n)
@@ -212,15 +221,28 @@ inline value::value(double n) : type_(number_type) {
     u_.number_ = n;
 }
 
-inline value::value(const std::string &s) : type_(string_type) { u_.string_ = new std::string(s); }
+inline value::value(const std::string &s)
+    : type_(string_type) {
+    u_.string_ = new std::string(s);
+}
 
-inline value::value(const array &a) : type_(array_type) { u_.array_ = new array(a); }
+inline value::value(const array &a)
+    : type_(array_type) {
+    u_.array_ = new array(a);
+}
 
-inline value::value(const object &o) : type_(object_type) { u_.object_ = new object(o); }
+inline value::value(const object &o)
+    : type_(object_type) {
+    u_.object_ = new object(o);
+}
 
-inline value::value(const char *s) : type_(string_type) { u_.string_ = new std::string(s); }
+inline value::value(const char *s)
+    : type_(string_type) {
+    u_.string_ = new std::string(s);
+}
 
-inline value::value(const char *s, size_t len) : type_(string_type) {
+inline value::value(const char *s, size_t len)
+    : type_(string_type) {
     u_.string_ = new std::string(s, len);
 }
 
@@ -239,7 +261,8 @@ inline value::~value() {
     }
 }
 
-inline value::value(const value &x) : type_(x.type_) {
+inline value::value(const value &x)
+    : type_(x.type_) {
     switch (type_) {
 #define INIT(p, v)                                                                                 \
     case p##type:                                                                                  \
@@ -379,10 +402,12 @@ inline std::string value::to_str() const {
     case number_type: {
         char buf[256];
         double tmp;
-        SNPRINTF(buf,
-                 sizeof(buf),
-                 fabs(u_.number_) < (1ULL << 53) && modf(u_.number_, &tmp) == 0 ? "%.f" : "%.17g",
-                 u_.number_);
+        SNPRINTF(
+            buf,
+            sizeof(buf),
+            fabs(u_.number_) < (1ULL << 53) && modf(u_.number_, &tmp) == 0 ? "%.f" : "%.17g",
+            u_.number_
+        );
 #if PICOJSON_USE_LOCALE
         char *decimal_point = localeconv()->decimal_point;
         if (strcmp(decimal_point, ".") != 0) {
@@ -539,7 +564,11 @@ template <typename Iter> class input {
 
   public:
     input(const Iter &first, const Iter &last)
-        : cur_(first), end_(last), last_ch_(-1), ungot_(false), line_(1) {}
+        : cur_(first),
+          end_(last),
+          last_ch_(-1),
+          ungot_(false),
+          line_(1) {}
     int getc() {
         if (ungot_) {
             ungot_ = false;
@@ -831,7 +860,8 @@ class default_parse_context {
     value *out_;
 
   public:
-    default_parse_context(value *out) : out_(out) {}
+    default_parse_context(value *out)
+        : out_(out) {}
     bool set_null() {
         *out_ = value();
         return true;
@@ -1089,10 +1119,12 @@ int main(void) {
     TEST("1.7976931348623157e+308", double, DBL_MAX, false);
     TEST("\"hello\"", string, string("hello"), true);
     TEST("\"\\\"\\\\\\/\\b\\f\\n\\r\\t\"", string, string("\"\\/\b\f\n\r\t"), true);
-    TEST("\"\\u0061\\u30af\\u30ea\\u30b9\"",
-         string,
-         string("a\xe3\x82\xaf\xe3\x83\xaa\xe3\x82\xb9"),
-         false);
+    TEST(
+        "\"\\u0061\\u30af\\u30ea\\u30b9\"",
+        string,
+        string("a\xe3\x82\xaf\xe3\x83\xaa\xe3\x82\xb9"),
+        false
+    );
     TEST("\"\\ud840\\udc0b\"", string, string("\xf0\xa0\x80\x8b"), false);
 #ifdef PICOJSON_USE_INT64
     TEST("0", int64_t, 0, true);

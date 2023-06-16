@@ -67,11 +67,13 @@ class RenderView {
     /**
      * Creates an instance of the render view specific tile renderer class.
      */
-    virtual TileRenderer *createTileRenderer(mc::BlockStateRegistry &block_registry,
-                                             BlockImages *images,
-                                             int tile_width,
-                                             mc::WorldCache *world,
-                                             RenderMode *render_mode) const = 0;
+    virtual TileRenderer *createTileRenderer(
+        mc::BlockStateRegistry &block_registry,
+        BlockImages *images,
+        int tile_width,
+        mc::WorldCache *world,
+        RenderMode *render_mode
+    ) const = 0;
 
     /**
      * Configures a block images object by calling some (eventually per render view
@@ -87,9 +89,11 @@ class RenderView {
      * were created by this render view (because the render view might rely on using
      * the BlockImages* as an IsometricBlockImages* like it was created for example).
      */
-    virtual void configureBlockImages(BlockImages *block_images,
-                                      const config::WorldSection &world_config,
-                                      const config::MapSection &map_config) const;
+    virtual void configureBlockImages(
+        BlockImages *block_images,
+        const config::WorldSection &world_config,
+        const config::MapSection &map_config
+    ) const;
 
     /**
      * Configures a tile renderer object just like the configureBlockImages() method.
@@ -99,9 +103,11 @@ class RenderView {
      * It is also very important that you pass only TileRenderer*'s to this method which
      * were created by this render view.
      */
-    virtual void configureTileRenderer(TileRenderer *tile_renderer,
-                                       const config::WorldSection &world_config,
-                                       const config::MapSection &map_config) const;
+    virtual void configureTileRenderer(
+        TileRenderer *tile_renderer,
+        const config::WorldSection &world_config,
+        const config::MapSection &map_config
+    ) const;
 };
 
 enum class RenderViewType { ISOMETRIC, ISOMETRICNEW, TOPDOWN, SIDE };

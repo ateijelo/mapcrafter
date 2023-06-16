@@ -22,7 +22,8 @@
 namespace mapcrafter {
 namespace config {
 
-ConfigParser::ConfigParser(const INIConfig &config) : config(config) {}
+ConfigParser::ConfigParser(const INIConfig &config)
+    : config(config) {}
 
 ConfigParser::~ConfigParser() {}
 

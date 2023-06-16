@@ -25,7 +25,8 @@
 namespace mapcrafter {
 namespace renderer {
 
-TopdownTileSet::TopdownTileSet(int tile_width) : TileSet(tile_width) {}
+TopdownTileSet::TopdownTileSet(int tile_width)
+    : TileSet(tile_width) {}
 
 TopdownTileSet::~TopdownTileSet() {}
 

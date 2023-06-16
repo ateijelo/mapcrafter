@@ -130,7 +130,8 @@ class ProgressBar : public AbstractOutputProgressHandler {
 
     std::string createProgressBar(int width, double percentage) const;
     std::string createProgressStats(
-        double percentage, int value, int max, double speed_average, int eta = -1) const;
+        double percentage, int value, int max, double speed_average, int eta = -1
+    ) const;
 };
 
 } /* namespace util */

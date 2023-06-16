@@ -43,9 +43,9 @@ namespace config {
 class TileSetGroupID {
   public:
     TileSetGroupID();
-    TileSetGroupID(const std::string &world_name,
-                   renderer::RenderViewType render_view,
-                   int tile_width);
+    TileSetGroupID(
+        const std::string &world_name, renderer::RenderViewType render_view, int tile_width
+    );
 
     std::string toString() const;
     bool operator<(const TileSetGroupID &other) const;
@@ -65,10 +65,12 @@ class TileSetGroupID {
 class TileSetID : public TileSetGroupID {
   public:
     TileSetID();
-    TileSetID(const std::string &world_name,
-              renderer::RenderViewType render_view,
-              int tile_width,
-              int rotation);
+    TileSetID(
+        const std::string &world_name,
+        renderer::RenderViewType render_view,
+        int tile_width,
+        int rotation
+    );
     TileSetID(const TileSetGroupID &group, int rotation);
 
     std::string toString() const;
