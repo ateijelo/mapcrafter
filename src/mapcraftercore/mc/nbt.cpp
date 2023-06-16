@@ -323,7 +323,8 @@ NBTFile::NBTFile() {}
 
 NBTFile::~NBTFile() {}
 
-void NBTFile::decompressStream(std::istream &stream, std::stringstream &decompressed,
+void NBTFile::decompressStream(std::istream &stream,
+                               std::stringstream &decompressed,
                                Compression compression) {
     if (compression == Compression::NO_COMPRESSION) {
         decompressed << stream.rdbuf();

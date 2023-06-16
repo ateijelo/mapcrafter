@@ -142,8 +142,8 @@ LogStream Logger::log(LogLevel level, const std::string &file, int line) {
 
 std::set<std::string> logged = std::set<std::string>();
 
-LogStream Logger::logOnce(const std::string &key, LogLevel level, const std::string &file,
-                          int line) {
+LogStream
+Logger::logOnce(const std::string &key, LogLevel level, const std::string &file, int line) {
     LogStream log_stream(level, name, file, line);
     if (!logged.count(key))
         logged.insert(key);

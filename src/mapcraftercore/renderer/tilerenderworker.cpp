@@ -35,9 +35,11 @@ namespace renderer {
 void RenderContext::initializeTileRenderer() {
     world_cache.reset(new mc::WorldCache(*block_registry, world));
     render_mode.reset(createRenderMode(world_config, map_config, world.getRotation()));
-    tile_renderer.reset(render_view->createTileRenderer(*block_registry, block_images,
+    tile_renderer.reset(render_view->createTileRenderer(*block_registry,
+                                                        block_images,
                                                         map_config.getTileWidth(),
-                                                        world_cache.get(), render_mode.get()));
+                                                        world_cache.get(),
+                                                        render_mode.get()));
     render_view->configureTileRenderer(tile_renderer.get(), world_config, map_config);
 }
 
@@ -77,7 +79,8 @@ void TileRenderWorker::saveTile(const TilePath &tile, const RGBAImage &image) {
         LOG(WARNING) << "Unable to write '" << file.string() << "'.";
 
     config::Color bg = render_context.background_color;
-    if (!png && !image.writeJPEG(file.string(), render_context.map_config.getJPEGQuality(),
+    if (!png && !image.writeJPEG(file.string(),
+                                 render_context.map_config.getJPEGQuality(),
                                  rgba(bg.red, bg.green, bg.blue, 255)))
         LOG(WARNING) << "Unable to write '" << file.string() << "'.";
 }

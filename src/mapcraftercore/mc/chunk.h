@@ -80,7 +80,9 @@ class Chunk {
      * Reads the NBT data of the chunk from a buffer. You need to specify a compression
      * type of the raw data.
      */
-    bool readNBT(BlockStateRegistry &block_registry, const char *data, size_t len,
+    bool readNBT(BlockStateRegistry &block_registry,
+                 const char *data,
+                 size_t len,
                  nbt::Compression compression = nbt::Compression::ZLIB);
 
     /**

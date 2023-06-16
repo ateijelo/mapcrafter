@@ -136,7 +136,8 @@ void MultiThreadingDispatcher::dispatch(const renderer::RenderContext &context,
     while (manager.getResult(result)) {
         progress->setValue(progress->getValue() + result.tiles_rendered);
         for (auto tile_it = result.render_work.tiles.begin();
-             tile_it != result.render_work.tiles.end(); ++tile_it) {
+             tile_it != result.render_work.tiles.end();
+             ++tile_it) {
             rendered_tiles.insert(*tile_it);
             if (*tile_it == renderer::TilePath()) {
                 manager.setFinished();

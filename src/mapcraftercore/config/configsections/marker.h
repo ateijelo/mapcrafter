@@ -53,8 +53,8 @@ class MarkerSection : public ConfigSection {
 
   protected:
     virtual void preParse(const INIConfigSection &section, ValidationList &validation);
-    virtual bool parseField(const std::string key, const std::string value,
-                            ValidationList &validation);
+    virtual bool
+    parseField(const std::string key, const std::string value, ValidationList &validation);
     virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
   private:

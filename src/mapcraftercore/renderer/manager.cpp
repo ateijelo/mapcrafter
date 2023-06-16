@@ -56,7 +56,8 @@ void RenderBehaviors::setRenderBehavior(const std::string &map, RenderBehavior b
         render_behaviors[map][rotation] = behavior;
 }
 
-void RenderBehaviors::setRenderBehavior(const std::string &map, int rotation,
+void RenderBehaviors::setRenderBehavior(const std::string &map,
+                                        int rotation,
                                         RenderBehavior behavior) {
     // set whole map to default behavior if setting the first rotation
     if (!render_behaviors.count(map))
@@ -75,8 +76,10 @@ bool RenderBehaviors::isCompleteRenderSkip(const std::string &map) const {
 
 namespace {
 
-void parseRenderBehaviorMaps(const std::vector<std::string> &maps, RenderBehavior behavior,
-                             RenderBehaviors &behaviors, const config::MapcrafterConfig &config) {
+void parseRenderBehaviorMaps(const std::vector<std::string> &maps,
+                             RenderBehavior behavior,
+                             RenderBehaviors &behaviors,
+                             const config::MapcrafterConfig &config) {
     for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
         std::string map = *map_it;
         std::string rotation;
@@ -268,7 +271,9 @@ bool RenderManager::scanWorlds() {
     return true;
 }
 
-void RenderManager::renderMap(const std::string &map, int rotation, int threads,
+void RenderManager::renderMap(const std::string &map,
+                              int rotation,
+                              int threads,
                               util::IProgressHandler *progress) {
     // make sure this map/rotation actually exists and should be rendered
     if (!config.hasMap(map) || !config.getMap(map).getRotations().count(rotation) ||
@@ -327,7 +332,8 @@ void RenderManager::renderMap(const std::string &map, int rotation, int threads,
     RenderedBlockImages *new_block_images = dynamic_cast<RenderedBlockImages *>(block_images.get());
     if (new_block_images != nullptr) {
         if (!new_block_images->loadBlockImages(map_config.getBlockDir().string(),
-                                               util::str(map_config.getRenderView()), rotation,
+                                               util::str(map_config.getRenderView()),
+                                               rotation,
                                                map_config.getTextureSize())) {
             LOG(ERROR) << "Skipping remaining rotations.";
             return;
@@ -551,7 +557,8 @@ void RenderManager::initializeMap(const std::string &map) {
  * This method increases the max zoom of a rendered map and makes the necessary changes
  * on the tile tree.
  */
-void RenderManager::increaseMaxZoom(const fs::path &dir, std::string image_format,
+void RenderManager::increaseMaxZoom(const fs::path &dir,
+                                    std::string image_format,
                                     int jpeg_quality) const {
     // find out tile size by reading old base.png image
     RGBAImage old_base;

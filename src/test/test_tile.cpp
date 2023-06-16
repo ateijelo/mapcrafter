@@ -37,7 +37,8 @@ BOOST_AUTO_TEST_CASE(test_tilepos) {
     tiles[renderer::TilePos(-5, 6)] = PATH(3, 3, 4, 2);
 
     for (std::map<renderer::TilePos, renderer::TilePath>::const_iterator it = tiles.begin();
-         it != tiles.end(); ++it) {
+         it != tiles.end();
+         ++it) {
         BOOST_CHECK_EQUAL(it->first, it->second.getTilePos());
         BOOST_CHECK_EQUAL(it->second, renderer::TilePath::byTilePos(it->first, 4));
     }

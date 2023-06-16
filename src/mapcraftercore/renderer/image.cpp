@@ -45,8 +45,10 @@ uint8_t clamp(int c) {
 }
 
 RGBAPixel rgba_add_clamp(RGBAPixel value, int r, int g, int b, int a) {
-    return rgba(clamp(r + rgba_red(value)), clamp(g + rgba_green(value)),
-                clamp(b + rgba_blue(value)), clamp(a + rgba_alpha(value)));
+    return rgba(clamp(r + rgba_red(value)),
+                clamp(g + rgba_green(value)),
+                clamp(b + rgba_blue(value)),
+                clamp(a + rgba_alpha(value)));
 }
 
 RGBAPixel rgba_add_clamp(RGBAPixel value, const std::tuple<int, int, int> &values) {
@@ -319,7 +321,9 @@ RGBAImage RGBAImage::move(int xOffset, int yOffset) const {
     return img;
 }
 
-void RGBAImage::resize(RGBAImage &dest, int width, int height,
+void RGBAImage::resize(RGBAImage &dest,
+                       int width,
+                       int height,
                        InterpolationType interpolation) const {
     if (width == getWidth() && height == getHeight()) {
         dest = *this;
@@ -520,8 +524,15 @@ bool RGBAImage::writePNG(const std::string &filename) const {
     }
 
     png_set_write_fn(png, (png_voidp)&file, pngWriteData, NULL);
-    png_set_IHDR(png, info, width, height, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
-                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_set_IHDR(png,
+                 info,
+                 width,
+                 height,
+                 8,
+                 PNG_COLOR_TYPE_RGB_ALPHA,
+                 PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_DEFAULT,
+                 PNG_FILTER_TYPE_DEFAULT);
 
     png_bytep *rows = (png_bytep *)png_malloc(png, height * sizeof(png_bytep));
     const uint32_t *p = &data[0];
@@ -566,7 +577,8 @@ void setRowPixel(png_byte *line, int bit_depth, int x, uint8_t index) {
 
 } // namespace
 
-bool RGBAImage::writeIndexedPNG(const std::string &filename, int palette_bits,
+bool RGBAImage::writeIndexedPNG(const std::string &filename,
+                                int palette_bits,
                                 bool dithered) const {
     std::ofstream file(filename.c_str(), std::ios::binary);
     if (!file) {
@@ -590,8 +602,15 @@ bool RGBAImage::writeIndexedPNG(const std::string &filename, int palette_bits,
 
     int palette_size = 1 << palette_bits;
     png_set_write_fn(png, (png_voidp)&file, pngWriteData, NULL);
-    png_set_IHDR(png, info, width, height, palette_bits, PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
-                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_set_IHDR(png,
+                 info,
+                 width,
+                 height,
+                 palette_bits,
+                 PNG_COLOR_TYPE_PALETTE,
+                 PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_DEFAULT,
+                 PNG_FILTER_TYPE_DEFAULT);
 
     // std::cout << "Doing quantization." << std::endl;
     Octree *octree;

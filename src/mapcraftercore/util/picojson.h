@@ -301,9 +301,10 @@ GET(std::string, *u_.string_)
 GET(array, *u_.array_)
 GET(object, *u_.object_)
 #ifdef PICOJSON_USE_INT64
-GET(double, (type_ == int64_type && (const_cast<value *>(this)->type_ = number_type,
-                                     const_cast<value *>(this)->u_.number_ = u_.int64_),
-             u_.number_))
+GET(double,
+    (type_ == int64_type && (const_cast<value *>(this)->type_ = number_type,
+                             const_cast<value *>(this)->u_.number_ = u_.int64_),
+     u_.number_))
 GET(int64_t, u_.int64_)
 #else
 GET(double, u_.number_)
@@ -378,7 +379,8 @@ inline std::string value::to_str() const {
     case number_type: {
         char buf[256];
         double tmp;
-        SNPRINTF(buf, sizeof(buf),
+        SNPRINTF(buf,
+                 sizeof(buf),
                  fabs(u_.number_) < (1ULL << 53) && modf(u_.number_, &tmp) == 0 ? "%.f" : "%.17g",
                  u_.number_);
 #if PICOJSON_USE_LOCALE
@@ -949,7 +951,9 @@ inline std::string parse(value &out, std::istream &is) {
     return err;
 }
 
-template <typename T> struct last_error_t { static std::string s; };
+template <typename T> struct last_error_t {
+    static std::string s;
+};
 template <typename T> std::string last_error_t<T>::s;
 
 inline void set_last_error(const std::string &s) { last_error_t<bool>::s = s; }
@@ -1085,8 +1089,10 @@ int main(void) {
     TEST("1.7976931348623157e+308", double, DBL_MAX, false);
     TEST("\"hello\"", string, string("hello"), true);
     TEST("\"\\\"\\\\\\/\\b\\f\\n\\r\\t\"", string, string("\"\\/\b\f\n\r\t"), true);
-    TEST("\"\\u0061\\u30af\\u30ea\\u30b9\"", string,
-         string("a\xe3\x82\xaf\xe3\x83\xaa\xe3\x82\xb9"), false);
+    TEST("\"\\u0061\\u30af\\u30ea\\u30b9\"",
+         string,
+         string("a\xe3\x82\xaf\xe3\x83\xaa\xe3\x82\xb9"),
+         false);
     TEST("\"\\ud840\\udc0b\"", string, string("\xf0\xa0\x80\x8b"), false);
 #ifdef PICOJSON_USE_INT64
     TEST("0", int64_t, 0, true);

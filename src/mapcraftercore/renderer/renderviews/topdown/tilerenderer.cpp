@@ -41,7 +41,9 @@ namespace renderer {
 
 TopdownTileRenderer::TopdownTileRenderer(const RenderView *render_view,
                                          mc::BlockStateRegistry &block_registry,
-                                         BlockImages *images, int tile_width, mc::WorldCache *world,
+                                         BlockImages *images,
+                                         int tile_width,
+                                         mc::WorldCache *world,
                                          RenderMode *render_mode)
     : TileRenderer(render_view, block_registry, images, tile_width, world, render_mode) {}
 
@@ -64,7 +66,10 @@ void TopdownTileRenderer::renderTopBlocks(const TilePos &tile_pos,
                 for (int z = 0; z < 16; z++) {
                     int px = dx + x * block_size;
                     int py = dz + z * block_size;
-                    renderBlocks(px, py, blockpos + mc::BlockPos(x, z, 0), mc::BlockPos(0, 0, -1),
+                    renderBlocks(px,
+                                 py,
+                                 blockpos + mc::BlockPos(x, z, 0),
+                                 mc::BlockPos(0, 0, -1),
                                  tile_images);
                 }
             }

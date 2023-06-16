@@ -40,8 +40,11 @@ namespace mapcrafter {
 namespace renderer {
 
 SideTileRenderer::SideTileRenderer(const RenderView *render_view,
-                                   mc::BlockStateRegistry &block_registry, BlockImages *images,
-                                   int tile_width, mc::WorldCache *world, RenderMode *render_mode)
+                                   mc::BlockStateRegistry &block_registry,
+                                   BlockImages *images,
+                                   int tile_width,
+                                   mc::WorldCache *world,
+                                   RenderMode *render_mode)
     : TileRenderer(render_view, block_registry, images, tile_width, world, render_mode) {}
 
 SideTileRenderer::~SideTileRenderer() {}
@@ -75,7 +78,10 @@ void SideTileRenderer::renderTopBlocks(const TilePos &tile_pos, std::set<TileIma
                 for (int x = 0; x < 16; x++) {
                     int px = dx + x * block_width;
                     int py = dz + z * block_height / 2 - block_height / 2;
-                    renderBlocks(px, py, blockpos + mc::BlockPos(x, z, 0), mc::BlockPos(0, -1, -1),
+                    renderBlocks(px,
+                                 py,
+                                 blockpos + mc::BlockPos(x, z, 0),
+                                 mc::BlockPos(0, -1, -1),
                                  tile_images);
                 }
             }

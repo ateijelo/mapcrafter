@@ -72,9 +72,19 @@ enum class TagType : int8_t {
 enum class Compression { NO_COMPRESSION = 0, GZIP = 1, ZLIB = 2 };
 
 static const char *TAG_NAMES[] = {
-    "TAG_End",      "TAG_Byte",      "TAG_Short",      "TAG_Int",    "TAG_Long",
-    "TAG_Float",    "TAG_Double",    "TAG_Byte_Array", "TAG_String", "TAG_List",
-    "TAG_Compound", "TAG_Int_Array", "TAG_Long_Array",
+    "TAG_End",
+    "TAG_Byte",
+    "TAG_Short",
+    "TAG_Int",
+    "TAG_Long",
+    "TAG_Float",
+    "TAG_Double",
+    "TAG_Byte_Array",
+    "TAG_String",
+    "TAG_List",
+    "TAG_Compound",
+    "TAG_Int_Array",
+    "TAG_Long_Array",
 };
 
 template <typename T> void dumpTag(std::ostream &stream, const std::string &indendation, T tag) {
@@ -326,7 +336,8 @@ class TagCompound : public Tag {
 
 class NBTFile : public TagCompound {
   private:
-    void decompressStream(std::istream &stream, std::stringstream &decompressed,
+    void decompressStream(std::istream &stream,
+                          std::stringstream &decompressed,
                           Compression compression);
 
   public:

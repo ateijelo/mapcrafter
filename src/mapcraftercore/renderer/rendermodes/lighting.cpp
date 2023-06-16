@@ -56,7 +56,8 @@ extern const FaceCorners CORNERS_BOTTOM = FaceCorners(CornerNeighbors(
 
 CornerNeighbors::CornerNeighbors() {}
 
-CornerNeighbors::CornerNeighbors(const mc::BlockPos &pos1, const mc::BlockPos &dir1,
+CornerNeighbors::CornerNeighbors(const mc::BlockPos &pos1,
+                                 const mc::BlockPos &dir1,
                                  const mc::BlockPos &dir2)
     : pos1(pos1), pos2(pos1 + dir1), pos3(pos1 + dir2), pos4(pos1 + dir1 + dir2),
 
@@ -125,8 +126,10 @@ bool isSpecialTransparent(uint16_t id) {
 
 } // namespace
 
-LightingData LightingData::estimate(const mc::Block &block, RenderedBlockImages *block_images,
-                                    mc::WorldCache *world, mc::Chunk *current_chunk) {
+LightingData LightingData::estimate(const mc::Block &block,
+                                    RenderedBlockImages *block_images,
+                                    mc::WorldCache *world,
+                                    mc::Chunk *current_chunk) {
     // estimate the light if this is a special block
     /*
     if (!isSpecialTransparent(block.id))
@@ -166,7 +169,8 @@ LightingData LightingData::estimate(const mc::Block &block, RenderedBlockImages 
         for (int dz = -1; dz <= 1; dz++)
             for (int dy = -1; dy <= 1; dy++) {
                 mc::Block other = world->getBlock(block.pos + mc::BlockPos(dx, dz, dy),
-                                                  current_chunk, mc::GET_ID | mc::GET_BLOCK_LIGHT);
+                                                  current_chunk,
+                                                  mc::GET_ID | mc::GET_BLOCK_LIGHT);
                 const BlockImage &other_block = block_images->getBlockImage(other.id);
                 /*
                 if ((other.id == 0
@@ -188,8 +192,10 @@ LightingData LightingData::estimate(const mc::Block &block, RenderedBlockImages 
     return LightingData(block_light, sky_light);
 }
 
-LightingRenderMode::LightingRenderMode(bool day, double lighting_intensity,
-                                       double lighting_water_intensity, bool simulate_sun_light)
+LightingRenderMode::LightingRenderMode(bool day,
+                                       double lighting_intensity,
+                                       double lighting_water_intensity,
+                                       bool simulate_sun_light)
     : day(day), lighting_intensity(lighting_intensity),
       lighting_water_intensity(lighting_water_intensity), simulate_sun_light(simulate_sun_light) {}
 
@@ -199,8 +205,10 @@ bool LightingRenderMode::isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t
     return false;
 }
 
-void LightingRenderMode::draw(RGBAImage &image, const BlockImage &block_image,
-                              const mc::BlockPos &pos, uint16_t id) {
+void LightingRenderMode::draw(RGBAImage &image,
+                              const BlockImage &block_image,
+                              const mc::BlockPos &pos,
+                              uint16_t id) {
 
     // void blockImageMultiply(RGBAImage& block, const RGBAImage& uv_mask,
     //		const CornerValues& factors_left, const CornerValues& factors_right, const
@@ -280,7 +288,8 @@ LightingColor LightingRenderMode::getLightingColor(const mc::BlockPos &pos, doub
 }
 
 LightingColor LightingRenderMode::getCornerColor(const mc::BlockPos &pos,
-                                                 const CornerNeighbors &corner, double intensity) {
+                                                 const CornerNeighbors &corner,
+                                                 double intensity) {
     LightingColor color = 0;
     color += getLightingColor(pos + corner.pos1, intensity) * 0.25;
     color += getLightingColor(pos + corner.pos2, intensity) * 0.25;
@@ -290,7 +299,8 @@ LightingColor LightingRenderMode::getCornerColor(const mc::BlockPos &pos,
 }
 
 CornerColors LightingRenderMode::getCornerColors(const mc::BlockPos &pos,
-                                                 const FaceCorners &corners, double intensity) {
+                                                 const FaceCorners &corners,
+                                                 double intensity) {
     if (intensity < 0)
         intensity = lighting_intensity;
     CornerColors colors = {{
@@ -302,8 +312,10 @@ CornerColors LightingRenderMode::getCornerColors(const mc::BlockPos &pos,
     return colors;
 }
 
-void LightingRenderMode::doSmoothLight(RGBAImage &image, const BlockImage &block_image,
-                                       const mc::BlockPos &pos, uint16_t id,
+void LightingRenderMode::doSmoothLight(RGBAImage &image,
+                                       const BlockImage &block_image,
+                                       const mc::BlockPos &pos,
+                                       uint16_t id,
                                        bool use_bottom_corners) {
 
     // TODO adapt
@@ -327,22 +339,25 @@ void LightingRenderMode::doSmoothLight(RGBAImage &image, const BlockImage &block
     CornerValues up = {1.0, 1.0, 1.0, 1.0};
 
     if (side_mask[0]) {
-        left = getCornerColors(pos, CORNERS_LEFT,
-                               under_water[0] ? lighting_water_intensity : lighting_intensity);
+        left = getCornerColors(
+            pos, CORNERS_LEFT, under_water[0] ? lighting_water_intensity : lighting_intensity);
     }
     if (side_mask[1]) {
-        right = getCornerColors(pos, CORNERS_RIGHT,
-                                under_water[1] ? lighting_water_intensity : lighting_intensity);
+        right = getCornerColors(
+            pos, CORNERS_RIGHT, under_water[1] ? lighting_water_intensity : lighting_intensity);
     }
     if (side_mask[2]) {
-        up = getCornerColors(pos, use_bottom_corners ? CORNERS_BOTTOM : CORNERS_TOP,
+        up = getCornerColors(pos,
+                             use_bottom_corners ? CORNERS_BOTTOM : CORNERS_TOP,
                              under_water[2] ? lighting_water_intensity : lighting_intensity);
     }
     blockImageMultiply(image, block_image.uv_image, left, right, up);
 }
 
-void LightingRenderMode::doSimpleLight(RGBAImage &image, const BlockImage &block_image,
-                                       const mc::BlockPos &pos, uint16_t id) {
+void LightingRenderMode::doSimpleLight(RGBAImage &image,
+                                       const BlockImage &block_image,
+                                       const mc::BlockPos &pos,
+                                       uint16_t id) {
     // TODO adapt how to consider underwater with waterlogged blocks?
     // (some waterlogged blocks are rendered as if they weren't)
 

@@ -55,10 +55,12 @@ int main(int argc, char **argv) {
                                                         "shows the required Minecraft version");
 
     po::options_description logging("Logging/output options");
-    logging.add_options()("logging-config", po::value<fs::path>(&opts.logging_config),
+    logging.add_options()("logging-config",
+                          po::value<fs::path>(&opts.logging_config),
                           "the path to the global logging configuration file to use (automatically "
                           "determined if not specified)")(
-        "color", po::value<std::string>(&arg_color)->default_value("auto"),
+        "color",
+        po::value<std::string>(&arg_color)->default_value("auto"),
         "whether terminal output is colored (true, false or auto)")(
         "batch,b", "deactivates the animated progress bar and enables the progress logger instead");
 
@@ -66,15 +68,20 @@ int main(int argc, char **argv) {
     renderer.add_options()("find-resources",
                            "shows available resource paths, for example template/texture directory "
                            "and global logging configuration file")(
-        "config,c", po::value<std::string>(&arg_config),
+        "config,c",
+        po::value<std::string>(&arg_config),
         "the path to the configuration file to use (required)")(
-        "render-skip,s", po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
+        "render-skip,s",
+        po::value<std::vector<std::string>>(&opts.render_skip)->multitoken(),
         "skips rendering the specified map(s)")("render-reset,r", "skips rendering all maps")(
-        "render-auto,a", po::value<std::vector<std::string>>(&opts.render_auto)->multitoken(),
+        "render-auto,a",
+        po::value<std::vector<std::string>>(&opts.render_auto)->multitoken(),
         "renders the specified map(s)")(
-        "render-force,f", po::value<std::vector<std::string>>(&opts.render_force)->multitoken(),
+        "render-force,f",
+        po::value<std::vector<std::string>>(&opts.render_force)->multitoken(),
         "renders the specified map(s) completely")("render-force-all,F", "force renders all maps")(
-        "jobs,j", po::value<int>(&opts.jobs)->default_value(1),
+        "jobs,j",
+        po::value<int>(&opts.jobs)->default_value(1),
         "the count of jobs to use when rendering the map");
 
     po::options_description all("Allowed options");

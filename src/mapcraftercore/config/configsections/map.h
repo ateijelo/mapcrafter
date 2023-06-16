@@ -43,7 +43,8 @@ namespace config {
 class TileSetGroupID {
   public:
     TileSetGroupID();
-    TileSetGroupID(const std::string &world_name, renderer::RenderViewType render_view,
+    TileSetGroupID(const std::string &world_name,
+                   renderer::RenderViewType render_view,
                    int tile_width);
 
     std::string toString() const;
@@ -64,7 +65,9 @@ class TileSetGroupID {
 class TileSetID : public TileSetGroupID {
   public:
     TileSetID();
-    TileSetID(const std::string &world_name, renderer::RenderViewType render_view, int tile_width,
+    TileSetID(const std::string &world_name,
+              renderer::RenderViewType render_view,
+              int tile_width,
               int rotation);
     TileSetID(const TileSetGroupID &group, int rotation);
 
@@ -120,8 +123,8 @@ class MapSection : public ConfigSection {
 
   protected:
     virtual void preParse(const INIConfigSection &section, ValidationList &validation);
-    virtual bool parseField(const std::string key, const std::string value,
-                            ValidationList &validation);
+    virtual bool
+    parseField(const std::string key, const std::string value, ValidationList &validation);
     virtual void postParse(const INIConfigSection &section, ValidationList &validation);
 
   private:

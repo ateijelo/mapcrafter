@@ -60,11 +60,15 @@ class Biome {
     static const mc::JavaSimplexGenerator SWAMP_GRASS_NOISE;
 
   public:
-    Biome(uint16_t id = 0, double temperature = 0, double rainfall = 0, uint32_t green_tint = one,
+    Biome(uint16_t id = 0,
+          double temperature = 0,
+          double rainfall = 0,
+          uint32_t green_tint = one,
           uint32_t water_tint = default_water);
 
     uint16_t getID() const;
-    uint32_t getColor(const mc::BlockPos &pos, const ColorMapType &color_type,
+    uint32_t getColor(const mc::BlockPos &pos,
+                      const ColorMapType &color_type,
                       const ColorMap &color_map) const;
 };
 
@@ -139,7 +143,10 @@ static const Biome BIOMES[] = {
     {133, 0.05, 0.8, one, default_water}, // Taiga Mountains
     //{134, 0.8, 0.9, 205, 128, 255}, // Swampland M (= Swampland)
     //{134, 0.8, 0.9, 0x4C, 0x76, 0x3C}, // Swampland M (= Swampland) (greenish)
-    {134, 0.8, 0.9, rgba(0x6a, 0x70, 0x39, 0xff),
+    {134,
+     0.8,
+     0.9,
+     rgba(0x6a, 0x70, 0x39, 0xff),
      rgba(0x6A, 0x70, 0x39, 0xff)}, // Swamp Hills (brownish)
 
     {140, 0.0, 0.5}, // Ice Spikes
@@ -177,7 +184,10 @@ static const Biome BIOMES[] = {
     {180, 0.8, 0.4, one, default_water}, // minecraft:frozen_peaks
     {181, 0.8, 0.4, one, default_water}, // minecraft:jagged_peaks
     {182, 0.8, 0.4, one, default_water}, // minecraft:stony_peaks
-    {183, 0.8, 0.9, rgba(0x8d, 0xb1, 0x27, 0xff),
+    {183,
+     0.8,
+     0.9,
+     rgba(0x8d, 0xb1, 0x27, 0xff),
      rgba(0x3a, 0x7a, 0x6a, 0xff)}, // minecraft:mangrove_swamp
 
     {210, 0.0, 0.0, unknown_tint, unknown_tint}, // "Unknown" biome

@@ -29,7 +29,8 @@ ConfigParser::~ConfigParser() {}
 bool ConfigParser::validate() {
     auto config_sections = config.getSections();
     for (auto config_section_it = config_sections.begin();
-         config_section_it != config_sections.end(); ++config_section_it) {
+         config_section_it != config_sections.end();
+         ++config_section_it) {
         std::string type = config_section_it->getType();
         std::string name = config_section_it->getName();
         if ((type == "global" && parsed_section_types.count(name)) ||

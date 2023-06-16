@@ -35,11 +35,11 @@ namespace nbt = mapcrafter::mc::nbt;
 BOOST_AUTO_TEST_CASE(nbt_testIO) {
     std::vector<std::string> list_data = {"This", "is", "a", "test", "list", "."};
     std::vector<int32_t> intarray_data = {1, 1, 2, 3, 5, 8, 13, 21};
-    std::vector<int8_t> bytearray_data = {'H', 'e', 'l', 'l', 'o', ' ',
-                                          'W', 'o', 'r', 'l', 'd', '!'};
+    std::vector<int8_t> bytearray_data = {
+        'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!'};
 
-    nbt::Compression compressions[] = {nbt::Compression::NO_COMPRESSION, nbt::Compression::GZIP,
-                                       nbt::Compression::ZLIB};
+    nbt::Compression compressions[] = {
+        nbt::Compression::NO_COMPRESSION, nbt::Compression::GZIP, nbt::Compression::ZLIB};
     for (size_t i = 0; i < 3; i++) {
         nbt::Compression compression = compressions[i];
         BOOST_TEST_MESSAGE(std::string("Testing NBT with") +

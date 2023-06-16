@@ -37,8 +37,11 @@ bool TileImage::operator<(const TileImage &other) const {
     return pos < other.pos;
 }
 
-TileRenderer::TileRenderer(const RenderView *render_view, mc::BlockStateRegistry &block_registry,
-                           BlockImages *images, int tile_width, mc::WorldCache *world,
+TileRenderer::TileRenderer(const RenderView *render_view,
+                           mc::BlockStateRegistry &block_registry,
+                           BlockImages *images,
+                           int tile_width,
+                           mc::WorldCache *world,
                            RenderMode *render_mode)
     : block_registry(block_registry), images(images),
       block_images(dynamic_cast<RenderedBlockImages *>(images)), tile_width(tile_width),
@@ -126,8 +129,8 @@ int TileRenderer::getTileWidth() const { return getTileSize(); }
 
 int TileRenderer::getTileHeight() const { return getTileSize(); }
 
-void TileRenderer::renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockPos &dir,
-                                std::set<TileImage> &tile_images) {
+void TileRenderer::renderBlocks(
+    int x, int y, mc::BlockPos top, const mc::BlockPos &dir, std::set<TileImage> &tile_images) {
     for (; top.y >= mc::CHUNK_LOW * 16; top += dir) {
         // get current chunk position
         mc::ChunkPos current_chunk_pos(top);
@@ -254,7 +257,8 @@ void TileRenderer::renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockP
                     tile_image.image.data[i] = p;
                 }
             } else {
-                std::copy(block_image.image.data.begin(), block_image.image.data.end(),
+                std::copy(block_image.image.data.begin(),
+                          block_image.image.data.end(),
                           tile_image.image.data.begin());
             }
 
@@ -268,7 +272,8 @@ void TileRenderer::renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockP
                 RGBAImage waterlog = waterlog_block_image->image;
                 const RGBAImage &waterlog_uv = waterlog_block_image->uv_image;
                 block_images->prepareBiomeBlockImage(
-                    waterlog, *waterlog_block_image,
+                    waterlog,
+                    *waterlog_block_image,
                     getBiomeColor(top, *waterlog_block_image, current_chunk));
 
                 // blend waterlog water surface on top of block
@@ -294,8 +299,8 @@ void TileRenderer::renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockP
                     east *= shadow_edges[2] * f;
                     west *= shadow_edges[3] * f;
                     bottom *= shadow_edges[4] * f;
-                    blockImageShadowEdges(tile_image.image, block_image.uv_image, north, south,
-                                          east, west, bottom);
+                    blockImageShadowEdges(
+                        tile_image.image, block_image.uv_image, north, south, east, west, bottom);
                 }
             }
 
@@ -319,7 +324,8 @@ mc::Block TileRenderer::getBlock(const mc::BlockPos &pos, int get) {
     return world->getBlock(pos, current_chunk, get);
 }
 
-uint32_t TileRenderer::getBiomeColor(const mc::BlockPos &pos, const BlockImage &block,
+uint32_t TileRenderer::getBiomeColor(const mc::BlockPos &pos,
+                                     const BlockImage &block,
                                      const mc::Chunk *chunk) {
     const int radius = 2;
     float f = ((2 * radius + 1) * (2 * radius + 1));

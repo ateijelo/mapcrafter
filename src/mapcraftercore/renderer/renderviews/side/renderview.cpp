@@ -35,7 +35,8 @@ BlockImages *SideRenderView::createBlockImages(mc::BlockStateRegistry &block_reg
 TileSet *SideRenderView::createTileSet(int tile_width) const { return new SideTileSet(tile_width); }
 
 TileRenderer *SideRenderView::createTileRenderer(mc::BlockStateRegistry &block_registry,
-                                                 BlockImages *images, int tile_width,
+                                                 BlockImages *images,
+                                                 int tile_width,
                                                  mc::WorldCache *world,
                                                  RenderMode *render_mode) const {
     return new SideTileRenderer(this, block_registry, images, tile_width, world, render_mode);

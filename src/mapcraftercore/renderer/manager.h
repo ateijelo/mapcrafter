@@ -142,8 +142,8 @@ class RenderManager {
      * the progress handler. It renders the map only if it is specified as auto-render or
      * force-render in the render behaviors.
      */
-    void renderMap(const std::string &map, int rotation, int threads,
-                   util::IProgressHandler *progress);
+    void
+    renderMap(const std::string &map, int rotation, int threads, util::IProgressHandler *progress);
 
     /**
      * Does the whole rendering work by calling initialize, scanWorlds and renderMap
@@ -192,8 +192,8 @@ class RenderManager {
     /**
      * Increases the max zoom level of a map (given as directory, the one with base.png).
      */
-    void increaseMaxZoom(const fs::path &dir, std::string image_format,
-                         int jpeg_quality = 85) const;
+    void
+    increaseMaxZoom(const fs::path &dir, std::string image_format, int jpeg_quality = 85) const;
 
     config::MapcrafterConfig config;
     config::WebConfig web_config;

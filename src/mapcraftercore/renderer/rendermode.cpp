@@ -45,8 +45,10 @@ BaseRenderMode::BaseRenderMode()
 
 BaseRenderMode::~BaseRenderMode() {}
 
-void BaseRenderMode::initialize(const RenderView *render_view, BlockImages *images,
-                                mc::WorldCache *world, mc::Chunk **current_chunk) {
+void BaseRenderMode::initialize(const RenderView *render_view,
+                                BlockImages *images,
+                                mc::WorldCache *world,
+                                mc::Chunk **current_chunk) {
     this->images = images;
     this->block_images = dynamic_cast<RenderedBlockImages *>(images);
     assert(this->block_images != nullptr);
@@ -71,8 +73,10 @@ void MultiplexingRenderMode::addRenderMode(RenderMode *render_mode) {
     render_modes.push_back(render_mode);
 }
 
-void MultiplexingRenderMode::initialize(const RenderView *render_view, BlockImages *images,
-                                        mc::WorldCache *world, mc::Chunk **current_chunk) {
+void MultiplexingRenderMode::initialize(const RenderView *render_view,
+                                        BlockImages *images,
+                                        mc::WorldCache *world,
+                                        mc::Chunk **current_chunk) {
     for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
         (*it)->initialize(render_view, images, world, current_chunk);
 }
@@ -91,14 +95,18 @@ bool MultiplexingRenderMode::isHidden(const mc::BlockPos &pos, const BlockImage 
     return false;
 }
 
-void MultiplexingRenderMode::draw(RGBAImage &image, const mc::BlockPos &pos, uint16_t id,
+void MultiplexingRenderMode::draw(RGBAImage &image,
+                                  const mc::BlockPos &pos,
+                                  uint16_t id,
                                   uint16_t data) {
     for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
         (*it)->draw(image, pos, id, data);
 }
 
-void MultiplexingRenderMode::draw(RGBAImage &image, const BlockImage &block_image,
-                                  const mc::BlockPos &pos, uint16_t id) {
+void MultiplexingRenderMode::draw(RGBAImage &image,
+                                  const BlockImage &block_image,
+                                  const mc::BlockPos &pos,
+                                  uint16_t id) {
     for (auto it = render_modes.begin(); it != render_modes.end(); ++it)
         (*it)->draw(image, block_image, pos, id);
 }
@@ -134,7 +142,8 @@ std::ostream &operator<<(std::ostream &out, OverlayType overlay) {
 }
 
 RenderMode *createRenderMode(const config::WorldSection &world_config,
-                             const config::MapSection &map_config, int rotation) {
+                             const config::MapSection &map_config,
+                             int rotation) {
     RenderModeType type = map_config.getRenderMode();
     OverlayType overlay = map_config.getOverlay();
     MultiplexingRenderMode *render_mode = new MultiplexingRenderMode();
@@ -152,17 +161,23 @@ RenderMode *createRenderMode(const config::WorldSection &world_config,
         // if we want some shadows, then simulate the sun light because it's dark in caves
         if (type == RenderModeType::CAVELIGHT)
             render_mode->addRenderMode(
-                new LightingRenderMode(true, map_config.getLightingIntensity(),
-                                       map_config.getLightingWaterIntensity(), true));
+                new LightingRenderMode(true,
+                                       map_config.getLightingIntensity(),
+                                       map_config.getLightingWaterIntensity(),
+                                       true));
         render_mode->addRenderMode(new HeightOverlay());
     } else if (type == RenderModeType::DAYLIGHT) {
-        render_mode->addRenderMode(new LightingRenderMode(
-            true, map_config.getLightingIntensity(), map_config.getLightingWaterIntensity(),
-            world_config.getDimension() == mc::Dimension::END));
+        render_mode->addRenderMode(
+            new LightingRenderMode(true,
+                                   map_config.getLightingIntensity(),
+                                   map_config.getLightingWaterIntensity(),
+                                   world_config.getDimension() == mc::Dimension::END));
     } else if (type == RenderModeType::NIGHTLIGHT) {
-        render_mode->addRenderMode(new LightingRenderMode(
-            false, map_config.getLightingIntensity(), map_config.getLightingWaterIntensity(),
-            world_config.getDimension() == mc::Dimension::END));
+        render_mode->addRenderMode(
+            new LightingRenderMode(false,
+                                   map_config.getLightingIntensity(),
+                                   map_config.getLightingWaterIntensity(),
+                                   world_config.getDimension() == mc::Dimension::END));
     } else {
         // this shouldn't happen
         delete render_mode;

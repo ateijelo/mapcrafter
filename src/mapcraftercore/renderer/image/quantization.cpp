@@ -307,7 +307,9 @@ struct NodeComparator {
 /**
  * Simple octree color quantization: Similar to http://rosettacode.org/wiki/Color_quantization#C
  */
-void octreeColorQuantize(const RGBAImage &image, size_t max_colors, std::vector<RGBAPixel> &colors,
+void octreeColorQuantize(const RGBAImage &image,
+                         size_t max_colors,
+                         std::vector<RGBAPixel> &colors,
                          Octree **octree) {
     assert(max_colors > 0);
 

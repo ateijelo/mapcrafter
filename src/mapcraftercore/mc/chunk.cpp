@@ -469,7 +469,8 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
                 if (it != biome_resource_ids.end())
                     biome_id = it->second;
                 std::fill(biomes + biomes_base_index,
-                          biomes + biomes_base_index + biomes_per_section, biome_id);
+                          biomes + biomes_base_index + biomes_per_section,
+                          biome_id);
             }
         }
 
@@ -552,7 +553,9 @@ bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
     return true;
 }
 
-bool Chunk::readNBT(mc::BlockStateRegistry &block_registry, const char *data, size_t len,
+bool Chunk::readNBT(mc::BlockStateRegistry &block_registry,
+                    const char *data,
+                    size_t len,
                     nbt::Compression compression) {
     clear();
 

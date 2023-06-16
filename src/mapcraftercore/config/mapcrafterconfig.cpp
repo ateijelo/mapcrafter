@@ -90,7 +90,8 @@ void MapcrafterConfigRootSection::preParse(const INIConfigSection &section,
     background_color.setDefault({"#DDDDDD", 0xDD, 0xDD, 0xDD});
 }
 
-bool MapcrafterConfigRootSection::parseField(const std::string key, const std::string value,
+bool MapcrafterConfigRootSection::parseField(const std::string key,
+                                             const std::string value,
                                              ValidationList &validation) {
     if (key == "output_dir") {
         if (output_dir.load(key, value, validation))

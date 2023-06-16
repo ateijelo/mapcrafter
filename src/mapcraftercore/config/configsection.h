@@ -90,8 +90,8 @@ class ConfigSection {
      *
      * Should return false if the configuration key is unknown.
      */
-    virtual bool parseField(const std::string key, const std::string value,
-                            ValidationList &validation);
+    virtual bool
+    parseField(const std::string key, const std::string value, ValidationList &validation);
 
     /**
      * This method is called after parsing the section entries. The method can output

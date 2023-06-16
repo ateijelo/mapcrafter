@@ -92,7 +92,8 @@ void MarkerSection::preParse(const INIConfigSection &section, ValidationList &va
     show_default.setDefault(true);
 }
 
-bool MarkerSection::parseField(const std::string key, const std::string value,
+bool MarkerSection::parseField(const std::string key,
+                               const std::string value,
                                ValidationList &validation) {
     if (key == "name")
         name_long.load(key, value, validation);

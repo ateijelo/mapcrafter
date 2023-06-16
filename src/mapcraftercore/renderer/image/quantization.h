@@ -259,7 +259,9 @@ class OctreePalette2 : public Palette {
  * colors in the supplied vector and also the used octree to quantize the colors in the
  * octree pointer pointer if you need it.
  */
-void octreeColorQuantize(const RGBAImage &image, size_t max_colors, std::vector<RGBAPixel> &colors,
+void octreeColorQuantize(const RGBAImage &image,
+                         size_t max_colors,
+                         std::vector<RGBAPixel> &colors,
                          Octree **octree = nullptr);
 
 } // namespace renderer

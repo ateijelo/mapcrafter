@@ -40,10 +40,10 @@ BOOST_AUTO_TEST_CASE(pos_test_region) {
 
     BOOST_CHECK_EQUAL(mc::RegionPos::byFilename("r.42.-12.mca"), mc::RegionPos(42, -12));
 
-    BOOST_CHECK_EXCEPTION(mc::RegionPos::byFilename("r.42..-12.mca"), std::runtime_error,
-                          is_critical);
-    BOOST_CHECK_EXCEPTION(mc::RegionPos::byFilename("r.f42.-12.mca"), std::runtime_error,
-                          is_critical);
+    BOOST_CHECK_EXCEPTION(
+        mc::RegionPos::byFilename("r.42..-12.mca"), std::runtime_error, is_critical);
+    BOOST_CHECK_EXCEPTION(
+        mc::RegionPos::byFilename("r.f42.-12.mca"), std::runtime_error, is_critical);
 }
 
 BOOST_AUTO_TEST_CASE(pos_test_chunk) {

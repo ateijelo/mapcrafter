@@ -126,8 +126,11 @@ void blockImageTest(RGBAImage &block, const RGBAImage &uv_mask) {
     }
 }
 
-void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask, float factor_left,
-                        float factor_right, float factor_up) {
+void blockImageMultiply(RGBAImage &block,
+                        const RGBAImage &uv_mask,
+                        float factor_left,
+                        float factor_right,
+                        float factor_up) {
     assert(block.getWidth() == uv_mask.getWidth());
     assert(block.getHeight() == uv_mask.getHeight());
 
@@ -153,7 +156,9 @@ void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask, float factor
     }
 }
 
-void blockImageMultiplyExcept(RGBAImage &block, const RGBAImage &uv_mask, uint8_t except_face,
+void blockImageMultiplyExcept(RGBAImage &block,
+                              const RGBAImage &uv_mask,
+                              uint8_t except_face,
                               float factor) {
     assert(block.getWidth() == uv_mask.getWidth());
     assert(block.getHeight() == uv_mask.getHeight());
@@ -190,8 +195,10 @@ inline uint32_t mix(uint32_t x, uint32_t y, uint32_t a) {
 
 } // namespace
 
-void blockImageMultiply(RGBAImage &block, const RGBAImage &uv_mask,
-                        const CornerValues &factors_left, const CornerValues &factors_right,
+void blockImageMultiply(RGBAImage &block,
+                        const RGBAImage &uv_mask,
+                        const CornerValues &factors_left,
+                        const CornerValues &factors_right,
                         const CornerValues &factors_up) {
     assert(block.getWidth() == uv_mask.getWidth());
     assert(block.getHeight() == uv_mask.getHeight());
@@ -374,7 +381,9 @@ void blockImageTintHighContrast(RGBAImage &block, const RGBAImage &mask, int fac
     }
 }
 
-void blockImageBlendTop(RGBAImage &block, const RGBAImage &uv_mask, const RGBAImage &top,
+void blockImageBlendTop(RGBAImage &block,
+                        const RGBAImage &uv_mask,
+                        const RGBAImage &top,
                         const RGBAImage &top_uv_mask) {
     assert(block.getWidth() == uv_mask.getWidth());
     assert(block.getHeight() == uv_mask.getHeight());
@@ -407,8 +416,13 @@ void blockImageBlendTop(RGBAImage &block, const RGBAImage &uv_mask, const RGBAIm
     }
 }
 
-void blockImageShadowEdges(RGBAImage &block, const RGBAImage &uv_mask, uint8_t north, uint8_t south,
-                           uint8_t east, uint8_t west, uint8_t bottom) {
+void blockImageShadowEdges(RGBAImage &block,
+                           const RGBAImage &uv_mask,
+                           uint8_t north,
+                           uint8_t south,
+                           uint8_t east,
+                           uint8_t west,
+                           uint8_t bottom) {
     assert(block.getWidth() == uv_mask.getWidth());
     assert(block.getHeight() == uv_mask.getHeight());
 
@@ -525,7 +539,9 @@ void RenderedBlockImages::setBlockSideDarkening(float darken_left, float darken_
     this->darken_right = darken_right;
 }
 
-bool RenderedBlockImages::loadBlockImages(fs::path path, std::string view, int rotation,
+bool RenderedBlockImages::loadBlockImages(fs::path path,
+                                          std::string view,
+                                          int rotation,
                                           int texture_size) {
     LOG(INFO) << "I will load block images from " << path << " now";
 
@@ -750,7 +766,8 @@ const BlockImage &RenderedBlockImages::getBlockImage(uint16_t id) {
     return *block_images[id];
 }
 
-void RenderedBlockImages::prepareBiomeBlockImage(RGBAImage &image, const BlockImage &block,
+void RenderedBlockImages::prepareBiomeBlockImage(RGBAImage &image,
+                                                 const BlockImage &block,
                                                  uint32_t color) {
 
     if (block.is_masked_biome) {

@@ -68,7 +68,8 @@ class RenderView {
      * Creates an instance of the render view specific tile renderer class.
      */
     virtual TileRenderer *createTileRenderer(mc::BlockStateRegistry &block_registry,
-                                             BlockImages *images, int tile_width,
+                                             BlockImages *images,
+                                             int tile_width,
                                              mc::WorldCache *world,
                                              RenderMode *render_mode) const = 0;
 

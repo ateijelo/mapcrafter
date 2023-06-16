@@ -223,8 +223,8 @@ std::string ProgressBar::createProgressBar(int width, double percentage) const {
     return progressbar + "]";
 }
 
-std::string ProgressBar::createProgressStats(double percentage, int value, int max,
-                                             double speed_average, int eta) const {
+std::string ProgressBar::createProgressStats(
+    double percentage, int value, int max, double speed_average, int eta) const {
     std::string stats;
     char formatted_percent[20], formatted_speed_average[20];
     sprintf(&formatted_percent[0], "%.2f%%", percentage);

@@ -128,7 +128,8 @@ void WorldSection::preParse(const INIConfigSection &section, ValidationList &val
     crop_unpopulated_chunks.setDefault(false);
 }
 
-bool WorldSection::parseField(const std::string key, const std::string value,
+bool WorldSection::parseField(const std::string key,
+                              const std::string value,
                               ValidationList &validation) {
     if (key == "input_dir") {
         if (input_dir.load(key, value, validation)) {

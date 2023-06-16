@@ -147,11 +147,13 @@ class RGBAImage : public Image<RGBAPixel> {
     RGBAImage flip(bool flip_x, bool flip_y) const;
     RGBAImage move(int x_off, int y_off) const;
 
-    void resize(RGBAImage &dest, int width, int height,
+    void resize(RGBAImage &dest,
+                int width,
+                int height,
                 InterpolationType interpolation = InterpolationType::AUTO) const;
 
-    RGBAImage resize(int width, int height,
-                     InterpolationType interpolation = InterpolationType::AUTO) const;
+    RGBAImage
+    resize(int width, int height, InterpolationType interpolation = InterpolationType::AUTO) const;
 
     /**
      * (In-place) Shearing along the x-axis by a specific factor.
@@ -177,11 +179,12 @@ class RGBAImage : public Image<RGBAPixel> {
 
     bool readPNG(const std::string &filename);
     bool writePNG(const std::string &filename) const;
-    bool writeIndexedPNG(const std::string &filename, int palette_bits = 8,
-                         bool dithered = true) const;
+    bool
+    writeIndexedPNG(const std::string &filename, int palette_bits = 8, bool dithered = true) const;
 
     bool readJPEG(const std::string &filename);
-    bool writeJPEG(const std::string &filename, int quality,
+    bool writeJPEG(const std::string &filename,
+                   int quality,
                    RGBAPixel background = rgba(255, 255, 255, 255)) const;
 };
 

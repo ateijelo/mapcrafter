@@ -69,7 +69,8 @@ class ConfigParser {
      * directory for relative paths) to the section objects.
      */
     template <typename Section, typename SectionFactory = GenericSectionFactory<Section>>
-    void parseSections(std::vector<Section> &sections, const std::string &type,
+    void parseSections(std::vector<Section> &sections,
+                       const std::string &type,
                        SectionFactory section_factory = GenericSectionFactory<Section>());
 
     /**
@@ -77,7 +78,8 @@ class ConfigParser {
      * sections into a map with section name -> section object.
      */
     template <typename Section, typename SectionFactory = GenericSectionFactory<Section>>
-    void parseSections(std::map<std::string, Section> &sections, const std::string &type,
+    void parseSections(std::map<std::string, Section> &sections,
+                       const std::string &type,
                        SectionFactory section_factory = GenericSectionFactory<Section>());
 
     /**
@@ -111,7 +113,8 @@ template <typename T> void ConfigParser::parseRootSection(T &section) {
 }
 
 template <typename Section, typename SectionFactory>
-void ConfigParser::parseSections(std::vector<Section> &sections, const std::string &type,
+void ConfigParser::parseSections(std::vector<Section> &sections,
+                                 const std::string &type,
                                  SectionFactory section_factory) {
     parsed_section_types.insert(type);
 
@@ -134,7 +137,8 @@ void ConfigParser::parseSections(std::vector<Section> &sections, const std::stri
     // go through all config sections with the specified type and try to parse it
     auto config_sections = config.getSections();
     for (auto config_section_it = config_sections.begin();
-         config_section_it != config_sections.end(); ++config_section_it) {
+         config_section_it != config_sections.end();
+         ++config_section_it) {
         if (config_section_it->getType() != type)
             continue;
 
@@ -160,7 +164,8 @@ void ConfigParser::parseSections(std::vector<Section> &sections, const std::stri
 }
 
 template <typename Section, typename SectionFactory>
-void ConfigParser::parseSections(std::map<std::string, Section> &sections, const std::string &type,
+void ConfigParser::parseSections(std::map<std::string, Section> &sections,
+                                 const std::string &type,
                                  SectionFactory section_factory) {
     std::vector<Section> sections_list;
     parseSections(sections_list, type, section_factory);

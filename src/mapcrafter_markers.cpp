@@ -135,7 +135,8 @@ std::string createMarkersJSON(const config::MapcrafterConfig &config,
         }
 
         for (auto world_it = markers_found.at(group).begin();
-             world_it != markers_found.at(group).end(); ++world_it) {
+             world_it != markers_found.at(group).end();
+             ++world_it) {
             ss << "      \"" << world_it->first << "\" : [" << std::endl;
             for (auto marker_it = world_it->second.begin(); marker_it != world_it->second.end();
                  ++marker_it) {
@@ -160,9 +161,11 @@ int main(int argc, char **argv) {
     all.add_options()("help,h", "shows this help message")(
         "verbose,v", accumulator<int>(&verbosity), "verbose blah blah")
 
-        ("config,c", po::value<std::string>(&config_file),
+        ("config,c",
+         po::value<std::string>(&config_file),
          "the path to the configuration file (required)")(
-            "output-file,o", po::value<std::string>(&output_file),
+            "output-file,o",
+            po::value<std::string>(&output_file),
             "file to write the generated markers to, "
             "defaults to markers-generated.js in the output directory.");
 

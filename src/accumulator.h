@@ -56,7 +56,8 @@ template <typename T> class accumulator_type : public boost::program_options::va
     /// Every appearance of the option simply increments the value
     //
     /// There should never be any tokens.
-    virtual void parse(boost::any &value_store, const std::vector<std::string> &new_tokens,
+    virtual void parse(boost::any &value_store,
+                       const std::vector<std::string> &new_tokens,
                        bool /*utf8*/) const {
         if (value_store.empty())
             value_store = T();

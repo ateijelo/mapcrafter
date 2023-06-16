@@ -31,8 +31,11 @@ namespace renderer {
 
 class TopdownTileRenderer : public TileRenderer {
   public:
-    TopdownTileRenderer(const RenderView *render_view, mc::BlockStateRegistry &block_registry,
-                        BlockImages *images, int tile_width, mc::WorldCache *world,
+    TopdownTileRenderer(const RenderView *render_view,
+                        mc::BlockStateRegistry &block_registry,
+                        BlockImages *images,
+                        int tile_width,
+                        mc::WorldCache *world,
                         RenderMode *render_mode);
     ~TopdownTileRenderer();
 

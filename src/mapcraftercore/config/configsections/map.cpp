@@ -81,7 +81,8 @@ namespace config {
 TileSetGroupID::TileSetGroupID()
     : render_view(renderer::RenderViewType::ISOMETRIC), tile_width(1) {}
 
-TileSetGroupID::TileSetGroupID(const std::string &world_name, renderer::RenderViewType render_view,
+TileSetGroupID::TileSetGroupID(const std::string &world_name,
+                               renderer::RenderViewType render_view,
                                int tile_width)
     : world_name(world_name), render_view(render_view), tile_width(tile_width) {}
 
@@ -99,8 +100,10 @@ bool TileSetGroupID::operator<(const TileSetGroupID &other) const {
 
 TileSetID::TileSetID() : TileSetGroupID(), rotation(0) {}
 
-TileSetID::TileSetID(const std::string &world_name, renderer::RenderViewType render_view,
-                     int tile_width, int rotation)
+TileSetID::TileSetID(const std::string &world_name,
+                     renderer::RenderViewType render_view,
+                     int tile_width,
+                     int rotation)
     : TileSetGroupID(world_name, render_view, tile_width), rotation(rotation) {}
 
 TileSetID::TileSetID(const TileSetGroupID &group, int rotation)
@@ -229,7 +232,8 @@ void MapSection::preParse(const INIConfigSection &section, ValidationList &valid
     use_image_mtimes.setDefault(true);
 }
 
-bool MapSection::parseField(const std::string key, const std::string value,
+bool MapSection::parseField(const std::string key,
+                            const std::string value,
                             ValidationList &validation) {
     if (key == "name") {
         name_long = value;

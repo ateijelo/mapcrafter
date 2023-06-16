@@ -144,7 +144,8 @@ void LogSection::preParse(const INIConfigSection &section, ValidationList &valid
     // it is overwritten in the logging class then
 }
 
-bool LogSection::parseField(const std::string key, const std::string value,
+bool LogSection::parseField(const std::string key,
+                            const std::string value,
                             ValidationList &validation) {
     if (key == "type")
         type.load(key, value, validation);

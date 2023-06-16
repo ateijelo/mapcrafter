@@ -59,8 +59,11 @@ struct TileImage {
 
 class TileRenderer {
   public:
-    TileRenderer(const RenderView *render_view, mc::BlockStateRegistry &block_registry,
-                 BlockImages *images, int tile_width, mc::WorldCache *world,
+    TileRenderer(const RenderView *render_view,
+                 mc::BlockStateRegistry &block_registry,
+                 BlockImages *images,
+                 int tile_width,
+                 mc::WorldCache *world,
                  RenderMode *render_mode);
     virtual ~TileRenderer();
 
@@ -75,13 +78,13 @@ class TileRenderer {
     virtual int getTileHeight() const;
 
   protected:
-    void renderBlocks(int x, int y, mc::BlockPos top, const mc::BlockPos &dir,
-                      std::set<TileImage> &tile_images);
+    void renderBlocks(
+        int x, int y, mc::BlockPos top, const mc::BlockPos &dir, std::set<TileImage> &tile_images);
     virtual void renderTopBlocks(const TilePos &tile_pos, std::set<TileImage> &tile_images) {}
 
     mc::Block getBlock(const mc::BlockPos &pos, int get = mc::GET_ID);
-    uint32_t getBiomeColor(const mc::BlockPos &pos, const BlockImage &block,
-                           const mc::Chunk *chunk);
+    uint32_t
+    getBiomeColor(const mc::BlockPos &pos, const BlockImage &block, const mc::Chunk *chunk);
 
     mc::BlockStateRegistry &block_registry;
 

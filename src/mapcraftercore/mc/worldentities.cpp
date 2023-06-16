@@ -222,8 +222,8 @@ void WorldEntitiesCache::update(util::IProgressHandler *progress) {
 
             mc::nbt::NBTFile nbt;
             const std::vector<uint8_t> &data = region.getChunkData(*chunk_it);
-            nbt.readNBT(reinterpret_cast<const char *>(&data[0]), data.size(),
-                        mc::nbt::Compression::ZLIB);
+            nbt.readNBT(
+                reinterpret_cast<const char *>(&data[0]), data.size(), mc::nbt::Compression::ZLIB);
 
             // nbt::TagCompound& level = nbt.findTag<nbt::TagCompound>("Level");
             if (!nbt.hasTag<nbt::TagList>("block_entities")) {
