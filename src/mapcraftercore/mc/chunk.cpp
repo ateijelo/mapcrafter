@@ -377,7 +377,7 @@ bool Chunk::readNBT117(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
     return true;
 }
 
-bool Chunk::simulateSunLight() const { return (this->chunk_status != "full"); }
+bool Chunk::simulateSunLight() const { return (this->chunk_status != "minecraft:full"); }
 
 bool Chunk::readNBT118(mc::BlockStateRegistry &block_registry, const nbt::NBTFile &nbt) {
     int data_version = nbt.findTag<nbt::TagInt>("DataVersion").payload;

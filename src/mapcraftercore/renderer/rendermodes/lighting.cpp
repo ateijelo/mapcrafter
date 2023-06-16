@@ -21,7 +21,6 @@
 
 #include "../../mc/chunk.h"
 #include "../../mc/pos.h"
-#include "../../util.h"
 #include "../blockimages.h"
 #include "../image.h"
 
