@@ -28,7 +28,7 @@ namespace thread {
  */
 template <typename Work, typename WorkResult> class WorkerManager {
   public:
-    virtual ~WorkerManager(){};
+    virtual ~WorkerManager() {};
 
     virtual bool getWork(Work &work) = 0;
     virtual void workFinished(const Work &work, const WorkResult &result) = 0;

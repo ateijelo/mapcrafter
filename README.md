@@ -114,9 +114,7 @@ See the [CHANGELOG](./CHANGELOG.md) for details.
 
 ### Generating textures with Blockcrafter
 
-Blockcrafter is a separate from Mapcrafter, it uses the jar files from minecraft, or other asset directories to generate the textures
-for all blocks so Mapcrafter can render the map. This step is necessary when new Minecraft versions come out, but if you're compiling
-a version of Mapcrafter that already includes those, skip this step and go to (next section)[###building-mapcrafter]
+Blockcrafter is a separate tool from Mapcrafter [http://github.com/mapcrafter/blockcrafter], it uses the jar files from minecraft, or other asset directories to generate the textures for all blocks so Mapcrafter can render the map. This step is necessary when new Minecraft versions come out, but if you're compiling a version of Mapcrafter that already includes those, skip this step and go to (next section)[###building-mapcrafter]
 
 Until I figure out how to let Docker use my GPU, using the docker container with --osmesa is not an option. It would take ages.
 
@@ -138,10 +136,16 @@ python -m venv env
 python setup.py install
 ```
 
+Get the assets from your launcher. I use PrismLauncher and get my assets like this:
+
+```bash
+unar  ~/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.20.6/minecraft-1.20.6-client.jar
+```
+
 Now this should work:
 
 ```bash
-echo -n -e "" "-r"{0,1,2,3}" -v"{isometric,side,topdown}" -t"{12,16}"\n" |\
+echo -n -e "" "-r"{0,1,2,3}" -v"{isometric,side,topdown}" -t"{12,16}"\n" |
     xargs -IOPTS -P16 sh -c 'blockcrafter-export \
     -a blockcrafter/custom_assets/ \
     -a minecraft-1.16.5-client/ \
@@ -151,10 +155,15 @@ echo -n -e "" "-r"{0,1,2,3}" -v"{isometric,side,topdown}" -t"{12,16}"\n" |\
     -a minecraft-1.18.1-client/ \
     -a minecraft-1.18.1-client/assets/ \
     -a minecraft-1.19-client/ \
-    -a minecraft-1.19-client/assets/ OPTS -o blocks/'
+    -a minecraft-1.19-client/assets/ \
+    -a minecraft-1.20.6-client/ \
+    -a minecraft-1.20.6-client/assets/ \
+    OPTS -o blocks/'
 ```
 
 Change -P16 to how many tasks you want to run in parallel. The more the better, but more than your CPU's actual concurrency won't make a difference.
+
+I started my world in Minecraft 1.15. Sometimes, a chunk has block ids that are old, and have been replaced by different IDs in more recent versions. To deal with that, I pass assets from all the versions I've used, as you'll see above. If you started your world more recently, you can skip older assets.
 
 Bring the generated images and txt files to Mapcrafter's src/data/blocks directory.
 

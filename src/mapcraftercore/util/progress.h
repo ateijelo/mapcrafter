@@ -33,7 +33,7 @@ std::string format_eta(int eta);
  */
 class IProgressHandler {
   public:
-    virtual ~IProgressHandler(){};
+    virtual ~IProgressHandler() {};
 
     virtual int getMax() const = 0;
     virtual void setMax(int max) = 0;

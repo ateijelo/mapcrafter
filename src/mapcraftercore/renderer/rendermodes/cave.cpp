@@ -35,7 +35,8 @@ bool CaveRenderMode::isHidden(const mc::BlockPos &pos, uint16_t id, uint16_t dat
 
 bool CaveRenderMode::isHidden(const mc::BlockPos &pos, const BlockImage &block_image) {
     mc::BlockPos directions[6] = {
-        mc::DIR_NORTH, mc::DIR_SOUTH, mc::DIR_EAST, mc::DIR_WEST, mc::DIR_TOP, mc::DIR_BOTTOM};
+        mc::DIR_NORTH, mc::DIR_SOUTH, mc::DIR_EAST, mc::DIR_WEST, mc::DIR_TOP, mc::DIR_BOTTOM
+    };
     // check if this block touches sky light
     for (int i = 0; i < 6; i++) {
         if (getBlock(pos + directions[i], mc::GET_SKY_LIGHT).sky_light > 0) {

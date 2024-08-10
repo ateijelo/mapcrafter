@@ -158,17 +158,16 @@ int main(int argc, char **argv) {
     int verbosity = 0;
 
     po::options_description all("Allowed options");
-    all.add_options()("help,h", "shows this help message")(
-        "verbose,v", accumulator<int>(&verbosity), "verbose blah blah"
-    )
+    all.add_options()("help,h", "shows this help message")("verbose,v", accumulator<int>(&verbosity), "verbose blah blah")
 
         ("config,c",
          po::value<std::string>(&config_file),
-         "the path to the configuration file (required)"
-        )("output-file,o",
-          po::value<std::string>(&output_file),
-          "file to write the generated markers to, "
-          "defaults to markers-generated.js in the output directory.");
+         "the path to the configuration file (required)")(
+            "output-file,o",
+            po::value<std::string>(&output_file),
+            "file to write the generated markers to, "
+            "defaults to markers-generated.js in the output directory."
+        );
 
     po::variables_map vm;
     try {

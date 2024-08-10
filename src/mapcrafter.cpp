@@ -50,9 +50,10 @@ int main(int argc, char **argv) {
     std::string arg_color, arg_config;
 
     po::options_description general("General options");
-    general.add_options()("help,h", "shows this help message")(
-        "version,v", "shows the version of Mapcrafter"
-    )("mc-version", "shows the required Minecraft version");
+    general
+        .add_options()("help,h", "shows this help message")("version,v", "shows the version of Mapcrafter")(
+            "mc-version", "shows the required Minecraft version"
+        );
 
     po::options_description logging("Logging/output options");
     logging.add_options()(

@@ -264,9 +264,11 @@ bool Chunk::readNBT117(mc::BlockStateRegistry &block_registry, const nbt::NBTFil
     } else if (level.hasArray<nbt::TagIntArray>("Biomes", 1024)) {
         const nbt::TagIntArray &biomes_tag = level.findTag<nbt::TagIntArray>("Biomes");
         std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
-    } else if (level.hasArray<nbt::TagByteArray>("Biomes", 0) || level.hasArray<nbt::TagLongArray>("Biomes", 0)) {
+    } else if (level.hasArray<nbt::TagByteArray>("Biomes", 0) ||
+               level.hasArray<nbt::TagLongArray>("Biomes", 0)) {
         std::fill(biomes, biomes + BIOMES_ARRAY_SIZE, 0);
-    } else if (level.hasArray<nbt::TagByteArray>("Biomes", 256) || level.hasArray<nbt::TagIntArray>("Biomes", 256)) {
+    } else if (level.hasArray<nbt::TagByteArray>("Biomes", 256) ||
+               level.hasArray<nbt::TagIntArray>("Biomes", 256)) {
         LOG(WARNING) << "Out dated chunk " << chunkpos << ": Old biome data found!";
     } else {
         LOG(WARNING) << "Corrupt chunk " << chunkpos << ": No biome data found!";

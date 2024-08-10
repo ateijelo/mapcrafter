@@ -124,7 +124,8 @@ void MarkerSection::postParse(const INIConfigSection &section, ValidationList &v
     // check if the old placeholders are used, just search for %placeholder
     // they are still supported, but show a warning
     std::vector<std::string> placeholders = {
-        "text", "textp", "prefix", "postfix", "line1", "line2", "line3", "line4", "x", "y", "z"};
+        "text", "textp", "prefix", "postfix", "line1", "line2", "line3", "line4", "x", "y", "z"
+    };
     for (auto it = placeholders.begin(); it != placeholders.end(); ++it) {
         std::string placeholder = "%" + *it;
         if (title_format.getValue().find(placeholder) != std::string::npos ||

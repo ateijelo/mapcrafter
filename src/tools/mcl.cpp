@@ -18,7 +18,7 @@
  */
 
 #include "../mapcraftercore/mc/blockstate.h"
-//#include "../mapcraftercore/mc/chunk.h"
+// #include "../mapcraftercore/mc/chunk.h"
 #include "../mapcraftercore/mc/world.h"
 #include "../mapcraftercore/util.h"
 #include "../mapcraftercore/version.h"
@@ -111,8 +111,9 @@ void dumpHeightMaps(const RegionFile &region_file) {
 }
 
 template <std::size_t PALETTE_SIZE>
-void readPackedShorts_v116(const std::vector<int64_t> &data,
-                           std::array<uint16_t, PALETTE_SIZE> &palette) {
+void readPackedShorts_v116(
+    const std::vector<int64_t> &data, std::array<uint16_t, PALETTE_SIZE> &palette
+) {
     uint32_t shorts_per_long = (PALETTE_SIZE + data.size() - 1) / data.size();
     uint32_t bits_per_value = 64 / shorts_per_long;
     palette.fill(0);
@@ -129,8 +130,12 @@ void readPackedShorts_v116(const std::vector<int64_t> &data,
     }
 }
 
-void dumpBlockStates(const RegionFile &region_file, const ChunkPos &chunkPos,
-                     const nbt::NBTFile &chunk, const Limits &limits) {
+void dumpBlockStates(
+    const RegionFile &region_file,
+    const ChunkPos &chunkPos,
+    const nbt::NBTFile &chunk,
+    const Limits &limits
+) {
     const nbt::TagList &sections = chunk.findTag<nbt::TagList>("sections");
     for (auto it = sections.payload.begin(); it != sections.payload.end(); ++it) {
         const nbt::TagCompound &section = (*it)->cast<nbt::TagCompound>();
@@ -155,7 +160,8 @@ void dumpBlockStates(const RegionFile &region_file, const ChunkPos &chunkPos,
             const auto entry = palette.payload.at(i)->cast<nbt::TagCompound>();
             const auto name = entry.findTag<nbt::TagString>("Name").payload;
             cout << "\"" << name << "\"";
-            if (i < palette.payload.size() - 1) cout << ", ";
+            if (i < palette.payload.size() - 1)
+                cout << ", ";
         }
         cout << "], ";
 
@@ -167,15 +173,20 @@ void dumpBlockStates(const RegionFile &region_file, const ChunkPos &chunkPos,
             readPackedShorts_v116(block_states_data.payload, blocks);
             for (int i = 0; i < 4096; i++) {
                 cout << blocks.at(i);
-                if (i < 4095) cout << ",";
+                if (i < 4095)
+                    cout << ",";
             }
         }
         cout << "]}\n";
     }
 }
 
-void dumpContainers(const RegionFile &region_file, const ChunkPos &chunkPos,
-                    const nbt::NBTFile &chunk, const Limits &limits) {
+void dumpContainers(
+    const RegionFile &region_file,
+    const ChunkPos &chunkPos,
+    const nbt::NBTFile &chunk,
+    const Limits &limits
+) {
     if (!chunk.hasTag<nbt::TagList>("block_entities")) {
         return;
     }
@@ -277,8 +288,9 @@ void scanRegion(const RegionFile &region_file, const Limits &limits, const strin
         const std::vector<uint8_t> &data = region_file.getChunkData(chunkPos);
 
         nbt::NBTFile chunk;
-        chunk.readNBT(reinterpret_cast<const char *>(&data[0]), data.size(),
-                      nbt::Compression::ZLIB);
+        chunk.readNBT(
+            reinterpret_cast<const char *>(&data[0]), data.size(), nbt::Compression::ZLIB
+        );
 
         if (action == "containers") {
             dumpContainers(region_file, chunkPos, chunk, limits);
@@ -300,8 +312,9 @@ void scanRegion(const RegionFile &region_file, const Limits &limits, const strin
     // }
 }
 
-void scanWorld(const string &world_dir, const Limits &limits, const string &dimension,
-               const string &action) {
+void scanWorld(
+    const string &world_dir, const Limits &limits, const string &dimension, const string &action
+) {
     Dimension d = Dimension::OVERWORLD;
     if (dimension == "nether")
         d = Dimension::NETHER;
@@ -339,8 +352,9 @@ int main(int argc, char **argv) {
     opts = opts("region,r", po::value<string>(), "search block entities in region");
     opts = opts("dump", po::value<string>(), "dump region nbt in human readable format");
     opts = opts("sections", po::value<string>(), "write region sections data in raw nbt format");
-    opts = opts("block-states", po::bool_switch(&block_states),
-                "write region block data in raw nbt format");
+    opts = opts(
+        "block-states", po::bool_switch(&block_states), "write region block data in raw nbt format"
+    );
     opts =
         opts("height-maps", po::value<string>(), "write region height-map data in raw nbt format");
 
@@ -397,8 +411,9 @@ int main(int argc, char **argv) {
         region_file.read();
         dumpRegion(region_file);
     } else if (block_states) {
-        scanWorld(vm["world_dir"].as<string>(), limits, vm["dimension"].as<string>(),
-                  "block_states");
+        scanWorld(
+            vm["world_dir"].as<string>(), limits, vm["dimension"].as<string>(), "block_states"
+        );
     } else if (vm.count("height-maps")) {
         auto filename = vm["height-maps"].as<string>();
         RegionFile region_file(filename);

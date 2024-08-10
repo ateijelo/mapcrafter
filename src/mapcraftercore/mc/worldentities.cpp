@@ -279,7 +279,8 @@ std::vector<SignEntity> WorldEntitiesCache::getSigns(WorldCrop world_crop) const
                     {entity.findTag<nbt::TagString>("Text1").payload,
                      entity.findTag<nbt::TagString>("Text2").payload,
                      entity.findTag<nbt::TagString>("Text3").payload,
-                     entity.findTag<nbt::TagString>("Text4").payload}};
+                     entity.findTag<nbt::TagString>("Text4").payload}
+                };
 
                 signs.push_back(mc::SignEntity(pos, lines));
             }
