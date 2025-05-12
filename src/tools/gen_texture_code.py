@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 # developer stuff:
 # lists the block textures in the 'blocks' dir and generates the c++ texture code
@@ -90,7 +90,7 @@ if __name__ == "__main__":
 	if len(sys.argv) < 3 or sys.argv[1] not in ("--header", "--source"):
 		print("Usage: %s [--header|--source] [directory]" % sys.argv[0])
 		sys.exit(1)
-	
+
 	files = []
 	for filename in os.listdir(sys.argv[2]):
 		if not filename.endswith(".png"):
@@ -98,9 +98,9 @@ if __name__ == "__main__":
 		name = filename.replace(".png", "")
 		const_name = lowercase(name).upper()
 		files.append((name, const_name))
-	
+
 	files.sort()
-	
+
 	if sys.argv[1] == "--header":
 		texture_objects = ",\n\t\t".join(map(lambda name: "%s" % name[1], files))
 		print(HEADER_TEMPLATE.replace("%(texture_objects)", texture_objects))
@@ -110,14 +110,14 @@ if __name__ == "__main__":
 		print(SOURCE_TEMPLATE.replace("%(texture_objects)", texture_objects).replace("%(texture_object_references)", texture_object_references))
 
 	# code for textures.h
-	
+
 	#print "\tTextureImage %s;" % ", ".join(map(lambda f: f[1], files))
 	#print "\tstd::vector<TextureImage*> textures;"
-	
+
 	#print ""
-	
+
 	# code for textures.cpp
-	
+
 	#print ""
 	#print ": " + ", ".join(map(lambda f: "%s(\"%s\")" % (f[1], f[0]), files)) \
 	#		 + ", textures({" + ", ".join(map(lambda f: "&%s" % f[1], files)) + "}) {"

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
 import errno
@@ -70,7 +70,7 @@ def has_imagemagick():
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Extracts from a Minecraft Jar file the textures required for mapcrafter.")
-	parser.add_argument("-f", "--force", 
+	parser.add_argument("-f", "--force",
 					help="forces overwriting eventually already existing textures",
 					action="store_true")
 	parser.add_argument("jarfile",
@@ -80,13 +80,13 @@ if __name__ == "__main__":
 					help="the output texture directory",
 					metavar="<outdir>")
 	args = vars(parser.parse_args())
-	
+
 	jar = zipfile.ZipFile(args["jarfile"])
-	
+
 	for dir in dirs:
 		if not os.path.exists(os.path.join(args["outdir"], dir)):
 			os.mkdir(os.path.join(args["outdir"], dir))
-	
+
 	print("Extracting block images:")
 	found, extracted, skipped = 0, 0, 0
 	for info in jar.infolist():
@@ -102,25 +102,25 @@ if __name__ == "__main__":
 
 			filename = os.path.join(args["outdir"], filename)
 			found += 1
-			
+
 			if os.path.exists(filename) and not args["force"]:
 				skipped += 1
 				continue
-			
+
 			fin = jar.open(info)
 			fout = open(filename, "wb")
 			fout.write(fin.read())
 			fin.close()
 			fout.close()
 			extracted += 1
-	
+
 	print(" - Found %d block images." % found)
 	print(" - Extracted %d." % extracted)
 	print(" - Skipped %d (Use -f to force overwrite)." % skipped)
-	
+
 	print("")
 	print("Extracting other textures:")
-	
+
 	for filename, zipname in files:
 		filename = os.path.join(args["outdir"], filename)
 		try:
@@ -136,7 +136,7 @@ if __name__ == "__main__":
 				print(" - Extracting %s ... extracted." % filename)
 		except KeyError:
 			print(" - Extracting %s ... not found!" % filename)
-	
+
 	if not has_imagemagick():
 		print("")
 		print("Warning: imagemagick is not installed (command 'convert' not found).")
@@ -145,11 +145,11 @@ if __name__ == "__main__":
 		for filename in glob.glob(os.path.join(args["outdir"], "blocks", "hardened_clay*.png")):
 			if os.path.exists(filename):
 				subprocess.check_call(["convert", filename, filename])
-		
+
 		filename = os.path.join(args["outdir"], "blocks", "red_sand.png")
 		if os.path.exists(filename):
 			subprocess.check_call(["convert", filename, filename])
-		
+
 		filename = os.path.join(args["outdir"], "blocks", "glass_pane_top_white.png")
 		if os.path.exists(filename):
 			subprocess.check_call(["convert", filename, "-type", "TrueColorMatte", "-define", "png:color-type=6", filename])

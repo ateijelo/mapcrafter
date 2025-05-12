@@ -165,13 +165,13 @@ Change -P16 to how many tasks you want to run in parallel. The more the better, 
 
 I started my world in Minecraft 1.15. Sometimes, a chunk has block ids that are old, and have been replaced by different IDs in more recent versions. To deal with that, I pass assets from all the versions I've used, as you'll see above. If you started your world more recently, you can skip older assets.
 
-Bring the generated images and txt files to Mapcrafter's src/data/blocks directory.
+- Bring the generated images and txt files to Mapcrafter's src/data/blocks directory.
 
-Generate texture files:
+- Generate texture files:
 
 ```
 ./src/tools/mapcrafter_textures.py \
-    -f ~/.local/share/multimc/libraries/com/mojang/minecraft/1.19/minecraft-1.19-client.jar \
+    -f ~/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21/minecraft-1.21-client.jar \
     ./src/data/textures/
 ```
 
